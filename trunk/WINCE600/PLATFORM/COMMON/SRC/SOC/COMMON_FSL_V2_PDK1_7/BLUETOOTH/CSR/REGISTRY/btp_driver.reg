@@ -1,0 +1,32 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Debug]
+    "OutputMethod"=dword:3
+    "OutputMask"=dword:7FFFFFFF
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\BCHSDRV]
+   "Prefix"="CSR"
+   "Dll"="btp_driver.dll"
+   "Order"=dword:14
+   
+[HKEY_LOCAL_MACHINE\Software\CSR\Device]
+    "LoadModules"=dword:1
+    "AlwaysLoaded"=dword:1
+    "BluetoothMode"=dword:1
+    "InitialState"=dword:0
+    "BCHSFilename"="btp_bchs.dll" 
+    "ModulesFilename"="btp_modules.dll"
+   
+[HKEY_LOCAL_MACHINE\System\Events]
+    "BCHS/DriverReady"="Bluetooth Profile Pack is ready"
+
+[HKEY_LOCAL_MACHINE\init]
+    "Launch98"="btp_notification_ui.exe"
+
+[HKEY_CLASSES_ROOT\CLSID\{9A870BCC-D423-4FB9-9432-EA4C36C11B4B}]
+    @="obex_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{9A870BCC-D423-4FB9-9432-EA4C36C11B4B}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+
+[HKEY_LOCAL_MACHINE\software\microsoft\shell\extensions\controls folder\bluetooth\shellex\propertysheethandlers\{9A870BCC-D423-4FB9-9432-EA4C36C11B4B}]
+    @=""

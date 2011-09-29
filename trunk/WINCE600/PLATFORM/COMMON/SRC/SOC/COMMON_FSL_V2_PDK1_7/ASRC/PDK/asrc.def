@@ -1,0 +1,24 @@
+;   Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;   Use of this source code is subject to the terms of the Microsoft end-user
+;   license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+;   If you did not accept the terms of the EULA, you are not authorized to use
+;   this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+;   install media.
+;
+;      Copyright 2008 Freescale Semiconductor, Inc. All Rights Reserved.
+
+LIBRARY     ASRC
+
+EXPORTS
+  DllEntry
+   ARC_Init
+   ARC_Deinit
+   ARC_Open
+   ARC_Close
+   ARC_Read
+   ARC_Write
+   ARC_Seek
+   ARC_PowerDown
+   ARC_PowerUp
+   ARC_IOControl

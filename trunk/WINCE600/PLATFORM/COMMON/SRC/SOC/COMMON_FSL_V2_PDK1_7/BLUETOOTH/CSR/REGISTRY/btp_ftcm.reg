@@ -1,0 +1,64 @@
+[HKEY_CLASSES_ROOT\.btp]
+    @="bluetoothneighborhood"
+
+[HKEY_CLASSES_ROOT\.btpconn]
+    @="bluetoothconnecting"
+
+[HKEY_CLASSES_ROOT\.btpfail]
+    @="bluetoothconnectfail"
+
+[HKEY_CLASSES_ROOT\.btppair]
+    @="bluetoothnopaired"
+
+[HKEY_CLASSES_ROOT\.btpwait]
+    @="bluetoothwaiting"
+
+[HKEY_CLASSES_ROOT\.btprefresh]
+    @="bluetoothrefresh"
+
+[HKEY_CLASSES_ROOT\bluetoothneighborhood\DefaultIcon]
+    @="btp_ui_ext.dll,-300"
+
+[HKEY_CLASSES_ROOT\bluetoothconnecting\DefaultIcon]
+    @="btp_ui_ext.dll,-301"
+
+[HKEY_CLASSES_ROOT\bluetoothconnectfail\DefaultIcon]
+    @="btp_ui_ext.dll,-302"
+    
+[HKEY_CLASSES_ROOT\bluetoothnopaired\DefaultIcon]
+    @="btp_ui_ext.dll,-303" 
+
+[HKEY_CLASSES_ROOT\bluetoothwaiting\DefaultIcon]
+    @="btp_ui_ext.dll,-304" 
+
+[HKEY_CLASSES_ROOT\bluetoothrefresh\DefaultIcon]
+    @="btp_ui_ext.dll,-305" 
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\FTCM]
+    "Filename"="btp_ftcm.dll"
+    "obexAuthentication"=dword:0
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\bluetooth\services\00001106-0000-1000-8000-00805F9B34FB]
+    @="OBEX File Transfer"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\FTCM]
+    "State"="Idle"
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\BtFsd]
+    "Dll"="btp_btfsd.dll"
+    "Prefix"="DSK"
+    "IClass"="{A4E7EDDA-E575-4252-9D6B-4195D48BB865}"
+    "Profile"="BtProfile"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\BtProfile]
+    "DefaultFileSystem"="BtFsd"
+    "PartitionDriver"=""
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\BtProfile\PartitionTable]
+    @="default"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\BtFsd]
+    "Dll"="btp_btfsd.dll"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\BtProfile]
+    "Name"="Bluetooth(NO Operation)"

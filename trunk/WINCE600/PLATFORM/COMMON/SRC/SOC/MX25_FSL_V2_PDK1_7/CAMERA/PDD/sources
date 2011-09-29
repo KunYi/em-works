@@ -1,0 +1,30 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+SYNCHRONIZE_DRAIN=1
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=campdd_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+INCLUDES=\
+    ..\INC; \
+    ..\..\INC;\
+    ..\..\..\$(_COMMONSOCDIR)\INC;
+        
+SOURCES= \
+    pdd_intf.cpp \
+    CsiClass.cpp \
+    SensorPDD.cpp \
+    CamBuffer.cpp \
+    CamBufferManager.cpp \    
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\INC\CsiClass.h \
+    SensorPDD.h \
+    ..\INC\CamBuffer.h \
+    ..\INC\CamBufferManager.h

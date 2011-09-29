@@ -1,0 +1,7 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Applications\HIDD\DefaultProfileSelect]
+    "Select"=dword:0
+    "Profile"=dword:0
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Applications\HIDD\Device]
+    "Select"=dword:0
+

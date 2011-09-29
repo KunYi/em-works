@@ -1,0 +1,20 @@
+!if 0
+Copyright (C) 2006-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=gpt_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+
+INCLUDES=\
+    ..\inc; \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\inc; \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\GPT\PDK
+
+SOURCES=\
+    gptpdd.c

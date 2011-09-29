@@ -1,0 +1,258 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this sample source code is subject to the terms of the Microsoft
+; license agreement under which you licensed this sample source code. If
+; you did not accept the terms of the license agreement, you are not
+; authorized to use this sample source code. For the terms of the license,
+; please see the license agreement between you and Microsoft or, if applicable,
+; see the LICENSE.RTF on your install media or the root of your tools installation.
+; THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
+;
+;;-----------------------------------------------------------------------------
+;;
+;;  File:  startup.src
+;;
+;;  This file implements initial platform initialization code and few additional
+;;  utility functions.
+;;
+;;-----------------------------------------------------------------------------
+
+        .list       OFF
+        .include    "kxshx.h"
+        .include    "shx.inc"
+        .list       ON
+
+        .import     KernelStart
+
+;;------------------------------------------------------------------------------
+;;  Function:  StartUp
+;;
+;;  This code is run after hardware reset, runtime reset and when system wakes
+;;  from sleep. The current hardware state depends on event type but - most
+;;  hardware must be initialized there. The function does necessary hardware
+;;  initialization and detect if it is wakeup. In such case it gets saved
+;;  address and jump on it. Otherwise the bootloader is copied to memory
+;;  and is run.
+;;------------------------------------------------------------------------------
+
+        LEAF_ENTRY _StartUp
+
+        ;;----------------------------------------------------------------------
+        ;; CPU Initialization
+        ;;----------------------------------------------------------------------
+
+        ;; Make sure that we are running in privilaged mode
+
+        mov.l   #TM_SR, r0
+        ldc     r0, sr
+        
+        ;; Clear out the vector base register
+
+        mov.l   #h'00000000, r0
+        ldc     r0, vbr
+
+        ;;----------------------------------------------------------------------
+        ;; Clock Initialization
+        ;;----------------------------------------------------------------------
+
+        ;; Halt the Watchdog Timer
+
+        mov.l   #CPG_WTCSR, r1
+        mov.w   #ZERO_TME, r0
+        mov.w   r0, @r1
+        nop
+
+        ;; Zero the Watchdog Timer Count
+
+        mov.l   #CPG_WTCNT, r1
+        mov.w   #COUNT_INIT, r0
+        mov.w   r0, @r1
+        nop
+
+        ;;----------------------------------------------------------------------
+        ;; Jump to KernelStart
+        ;;
+        ;; NOTE: If we are starting up the bootloader, KernelStart is a routine
+        ;;       that is defined by the platform that will continue to
+        ;;       initialize the hardware and then jump to BootloaderMain.
+        ;;----------------------------------------------------------------------
+        
+        mov.l   #KernelStart, r0
+        mov.l   #Base, r1
+        sub     r1, r0
+        mov.l   #4, r1
+        sub     r1, r0
+
+Base:   braf    r0
+        nop
+
+Halt:   bra     Halt
+        nop
+
+        ENTRY_END   _StartUp
+
+;;------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+;;  Function:  BusInit
+;;
+;;  This function can be called by the bootloader or the OAL to initialize
+;;  registers that allow the CPU to communicate to the PCMCIA bus as well as
+;;  system memory such as SDRAM, ROM, etc.
+;;
+;;  Note: This implementation is not generic. It sets up communication for a
+;;        144-pin SODIMM 64 Mbyte SDRAM memory module.
+;;------------------------------------------------------------------------------
+
+        LEAF_ENTRY _BusInit
+
+        ;;----------------------------------------------------------------------
+        ;; Bus Initialization
+        ;;----------------------------------------------------------------------
+
+        ;; Save link register
+        sts.l   pr, r2
+
+        mov.l   #BSC_BCR1, r1
+        mov.l   #BSC_BCR1_MEMORY_MAP_SDRAM, r0
+        mov.l   r0, @r1
+
+        ;; Setup the bus width to access memory
+
+        mov.l   #BSC_BCR2, r1
+        mov.w   #BSC_BCR2_BUS_WIDTHS, r0
+        mov.w   r0, @r1
+
+        ;; Specify the the idle states necessary for memory access
+
+        mov.l   #BSC_WCR1, r1
+        mov.l   #BSC_WCR1_IDLE_STATES, r0
+        mov.l   r0, @r1
+
+        mov.l   #BSC_WCR2, r1
+        mov.l   #BSC_WCR2_WAIT_STATES, r0		
+        mov.l   r0, @r1
+
+        mov.l   #BSC_WCR3, r1
+        mov.l   #BSC_WCR3_WAIT_INSERTED, r0
+        mov.l   r0, @r1
+
+		mov.l	#BSC_MCR, r1
+		mov.l	#BSC_MCR_SDRAM, r0
+		mov.l	r0, @r1
+		mov.l	#BSC_SDMR3, r1
+		mov.b	r1, @r1
+
+        mov.l   #BSC_PCR, r1
+        mov.w   #BSC_PCR_WAIT_INSERTED, r0
+        mov.w   r0, @r1
+
+        ;;----------------------------------------------------------------------
+        ;; Refresh Timer Setup
+        ;;----------------------------------------------------------------------
+
+        mov.l   #BSC_RTCSR, r1
+        mov.w   #BSC_RTCSR_SETTINGS, r0
+        mov.w   r0, @r1
+
+        mov.l   #BSC_RTCNT, r1
+        mov.w   #BSC_RTCNT_START, r0
+        mov.w   r0, @r1
+
+        mov.l   #BSC_RTCOR, r1
+        mov.w   #BSC_RTCOR_MAX_COUNT, r0
+        mov.w   r0, @r1
+
+        ;; Allow time for the register settings to propagate 
+
+        mov.l   #h'0000fff0, r0
+
+RfrshLoop:
+        dt      r0
+        bf      RfrshLoop
+
+        ;;----------------------------------------------------------------------
+        ;; Enable the use of SDRAM
+        ;;----------------------------------------------------------------------
+
+        mov.l   #BSC_MCR, r1
+		mov.l   #BSC_MCR_SDRAM_MRSET, r0
+        mov.l   r0, @r1
+		mov.l	#BSC_SDMR3, r1
+		mov.b	r1, @r1
+
+        lds.l   r2, pr
+        rts
+        nop
+
+        ENTRY_END _BusInit
+        
+;;------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+;;  Function: _BootRelocate 
+;;
+;;  Simply a memcopy from one location to another for a given amount of size
+;;
+;;  VOID _BootRelocate(UINT32 *dest, UINT32 *src, UINT32 size)
+;;  R4 - dest, R5 - src, R6 - size
+;;------------------------------------------------------------------------------
+
+        LEAF_ENTRY _BootRelocate
+
+        shlr2   r6                      ; Size / 4
+        add     #1, r6
+
+RelLp:  dt      r6
+        bt      RelEx
+        nop     
+
+        mov.l   @r5, r0
+        mov.l   r0, @r4
+        add     #4, r5
+        add     #4, r4
+        bra     RelLp
+        nop
+
+RelEx:  rts
+        nop
+
+        ENTRY_END _BootRelocate
+
+;;------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+;;  Function:  JumpTo
+;;
+;; 	Hardware assisted jump to a specific address. Register 4 will contain 
+;;  that address.
+;;------------------------------------------------------------------------------
+
+        LEAF_ENTRY  _JumpTo
+        jmp     @r4
+        nop
+		ENTRY_END   _JumpTo
+
+;;------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+;; _OEMNMI - non-maskable interrupt handler
+;;
+;; This routine is called when a non-maskable interrupt occurs. It should always
+;; return SYSINTR_NOP as NMI signaling IST is not supported.
+;;
+SYSINTR_NOP     .equ    0
+
+        LEAF_ENTRY _OEMNMI
+
+        mov	#SYSINTR_NOP, r0
+        rts
+        nop
+
+        ENTRY_END _OEMNMI
+
+;;------------------------------------------------------------------------------
+
+        .end

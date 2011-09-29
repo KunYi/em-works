@@ -1,0 +1,22 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=ddi_dcp_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+
+TARGETDEFNAME=$(TARGETNAME)
+
+SOURCES = ddi_dcp.c           \
+        ddi_dcp_common.c    \
+        ddi_dcp_csc.c       \
+        ddi_dcp_init.c      \
+        ddi_dcp_isr_win32.c \
+        ddi_dcp_main.c      \
+        ddi_dcp_os_win32.c
+

@@ -1,0 +1,18 @@
+;------------------------------------------------------------------------------
+; 
+;   Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;   THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;   AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+; 
+;------------------------------------------------------------------------------
+
+LIBRARY PMICPDK
+
+EXPORTS
+   PMI_Init
+   PMI_Deinit
+   PMI_Open
+   PMI_Close
+   PMI_PowerUp
+   PMI_PowerDown
+   PMI_IOControl

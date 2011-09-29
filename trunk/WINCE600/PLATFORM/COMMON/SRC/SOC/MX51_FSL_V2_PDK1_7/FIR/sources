@@ -1,0 +1,23 @@
+!if 0
+Copyright (C) 2004-2008,2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=irfir_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SOURCELIBS=\
+    $(TARGETPATH)\irfir_$(_COMMONSOCDIR).lib
+
+INCLUDES=\
+    ..\inc; \
+    ..\..\$(_COMMONSOCDIR)\inc
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+SOURCES=\
+    cspfir.c       \
+    cspserial.c

@@ -1,0 +1,28 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;------------------------------------------------------------------------------
+
+LIBRARY HSI2CSDK
+
+EXPORTS
+    HSI2COpenHandle
+    HSI2CCloseHandle
+    HSI2CSetSlaveMode
+    HSI2CSetMasterMode
+    HSI2CIsMaster
+    HSI2CIsSlave
+    HSI2CGetClockRate
+    HSI2CSetClockRate
+    HSI2CSetFrequency
+    HSI2CSetSelfAddr
+    HSI2CGetSelfAddr
+    HSI2CTransfer
+    HSI2CReset
+    HSI2CEnableSlave
+    HSI2CDisableSlave
+    HSI2CGetSlaveSize
+    HSI2CSetSlaveSize
+    HSI2CGetSlaveText
+    HSI2CSetSlaveText

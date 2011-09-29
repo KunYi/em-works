@@ -1,0 +1,28 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;------------------------------------------------------------------------------
+
+LIBRARY I2CSDK
+
+EXPORTS
+    I2COpenHandle
+    I2CCloseHandle
+    I2CSetSlaveMode
+    I2CSetMasterMode
+    I2CIsMaster
+    I2CIsSlave
+    I2CGetClockRate
+    I2CSetClockRate
+    I2CSetFrequency
+    I2CSetSelfAddr
+    I2CGetSelfAddr
+    I2CTransfer
+    I2CReset
+    I2CEnableSlave
+    I2CDisableSlave
+    I2CGetSlaveSize
+    I2CSetSlaveSize
+    I2CGetSlaveText
+    I2CSetSlaveText
