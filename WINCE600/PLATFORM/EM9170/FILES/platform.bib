@@ -1,0 +1,455 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;-------------------------------------------------------------------------------
+; 
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+; 
+;-------------------------------------------------------------------------------
+;
+; CS&ZHL MAY-20-2011: add macro for BinFS
+;
+IF BSP_SUPPORT_DEMAND_PAGING !
+	#define XIPKERNEL	NK
+ENDIF
+
+IF BSP_SUPPORT_DEMAND_PAGING
+	#define XIPKERNEL	XIPKERNEL
+ENDIF
+
+
+MODULES
+;   Name            Path                                            Memory Type
+;   --------------  ---------------------------------------------   ------------
+
+;******************************************************************************
+; Device Manager Begin
+;******************************************************************************
+
+; @CESYSGEN IF CE_MODULES_DEVICE
+
+;------------------------------------------------------------------------------
+; CSPDDK Driver
+;
+; @CESYSGEN IF CE_MODULES_CEDDK
+IF BSP_NOCSPDDK !
+    cspddk.dll      $(_FLATRELEASEDIR)\cspddk.dll                   $(XIPKERNEL)  SHK
+ENDIF ; BSP_NOCSPDDK !
+; @CESYSGEN ENDIF CE_MODULES_CEDDK
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; I2C Driver
+;
+#if (defined BSP_I2CBUS1 || defined BSP_I2CBUS2 || defined BSP_I2CBUS3)
+    i2c.dll         $(_FLATRELEASEDIR)\i2c.dll                      $(XIPKERNEL)  SHK
+    i2csdk.dll      $(_FLATRELEASEDIR)\i2csdk.dll                   $(XIPKERNEL)  SHQ
+#endif
+;------------------------------------------------------------------------------
+
+;----------------------------------------------------------------------------
+; ADC Driver
+;
+IF BSP_ADC
+    adc.dll     $(_FLATRELEASEDIR)\adc.dll          NK  SHK
+    adcsdk.dll  $(_FLATRELEASEDIR)\adcsdk.dll           NK  SHQ
+ENDIF ;BSP_ADC
+;----------------------------------------------------------------------------
+
+;----------------------------------------------------------------------------
+; Display Driver
+;
+; @CESYSGEN IF CE_MODULES_DISPLAY
+IF BSP_NODISPLAY !
+    lcdc.dll             $(_FLATRELEASEDIR)\lcdc.dll                 $(XIPKERNEL)  SHK
+ENDIF ; BSP_NODISPLAY !
+; @CESYSGEN ENDIF CE_MODULES_DISPLAY
+;----------------------------------------------------------------------------
+
+;
+;CS&ZHL JUN-21-2011: copy from EM9180 platform.bib
+;
+;-- Keyboard drivers -----------------------------------------------------------
+; @CESYSGEN IF CE_MODULES_KEYBD
+IF BSP_NOKEYBD !
+
+IF LOCALE=0411 !
+IF LOCALE=0412 !
+; @CESYSGEN IF CE_MODULES_NOPKEYBOARD
+    kbdmouse.dll        $(_FLATRELEASEDIR)\KbdNopUS.dll                   NK SHK
+; @CESYSGEN ENDIF CE_MODULES_NOPKEYBOARD
+ENDIF LOCALE=0412 !
+ENDIF LOCALE=0411 !
+
+IF LOCALE=0411
+IF BSP_KEYBD_JPN1
+; @CESYSGEN IF CE_MODULES_NOPKEYBOARD
+    kbdmouse.dll        $(_FLATRELEASEDIR)\KbdNopJpn1.dll                 NK SHK
+; @CESYSGEN ENDIF CE_MODULES_NOPKEYBOARD
+ENDIF BSP_KEYBD_JPN1
+IF BSP_KEYBD_JPN1 !
+; @CESYSGEN IF CE_MODULES_NOPKEYBOARD
+    kbdmouse.dll        $(_FLATRELEASEDIR)\KbdNopJpn2.dll                 NK SHK
+; @CESYSGEN ENDIF CE_MODULES_NOPKEYBOARD
+ENDIF BSP_KEYBD_JPN1 !
+ENDIF LOCALE=0411
+
+IF LOCALE=0412
+; @CESYSGEN IF CE_MODULES_NOPKEYBOARD
+    kbdmouse.dll        $(_FLATRELEASEDIR)\KbdNopKor.dll                  NK SHK
+; @CESYSGEN ENDIF CE_MODULES_NOPKEYBOARD
+ENDIF LOCALE=0412
+
+ENDIF BSP_NOKEYBD !
+; @CESYSGEN ENDIF CE_MODULES_KEYBD
+;-------------------------------------------------------------------------------
+;
+;CS&ZHL JUN-21-2011: end of copy from EM9180 platform.bib
+;
+
+;------------------------------------------------------------------------------
+; Keypad driver
+;
+; @CESYSGEN IF CE_MODULES_KEYBD
+IF BSP_IMX25PDK_KEYPAD 
+    KbdUs.dll    $(_FLATRELEASEDIR)\KbdUs.dll                    NK  SHK
+ENDIF ; BSP_KEYPAD 
+
+IF BSP_EM9170_KEYPAD
+    isa_keypad.dll			$(_FLATRELEASEDIR)\isa_keypad.dll				NK  SHK
+    imx257_keypad.dll    $(_FLATRELEASEDIR)\imx257_keypad.dll		NK  SHK
+ENDIF
+; @CESYSGEN ENDIF CE_MODULES_KEYBD
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; SERIAL Driver
+;
+; @CESYSGEN IF CE_MODULES_SERIAL
+IF BSP_SERIAL_UART2
+    csp_serial.dll      $(_FLATRELEASEDIR)\csp_serial.dll           NK  SHK
+ENDIF ;BSP_SERIAL_UART2
+; @CESYSGEN ENDIF CE_MODULES_SERIAL
+;------------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; Backlight
+;
+; @CESYSGEN IF CE_MODULES_BATTDRVR
+IF BSP_BACKLIGHT
+    backlight.dll        $(_FLATRELEASEDIR)\lcdcbacklight.dll           NK  SHK
+; @CESYSGEN IF CE_MODULES_COMMCTRL
+; Backlight advanced Control Panel Applet
+    AdvBacklight.dll    $(_FLATRELEASEDIR)\AdvBacklight.dll         NK  S
+; @CESYSGEN ENDIF CE_MODULES_COMMCTRL
+ENDIF ;BSP_BACKLIGHT
+; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
+;-------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------
+; DVFC Driver
+;
+IF BSP_EM9170 !
+IF BSP_DVFC
+IF BSP_I2CBUS1
+    dvfc_MC34704.dll    $(_FLATRELEASEDIR)\dvfc_MC34704.dll                     $(XIPKERNEL)  SHK 
+ENDIF ;BSP_I2CBUS1  
+ENDIF ;BSP_DVFC
+ENDIF ;BSP_EM9170 !
+;-------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; Power Button
+;
+IF BSP_PWRBTN
+    pwrbtn.dll              $(_FLATRELEASEDIR)\pwrbtn.dll               NK  SHK
+ENDIF ;BSP_PWRBTN
+;-----------------------------------------------------------------------------------
+
+;----------------------------------------------------------------------------
+; Camera Driver
+;
+; @CESYSGEN IF CE_MODULES_DISPLAY
+IF BSP_CAMERA
+IF BSP_ESAI !
+IF BSP_NOSIM
+IF BSP_I2CBUS1
+    camera.dll              $(_FLATRELEASEDIR)\camera.dll           NK  SHK
+ENDIF ;BSP_I2CBUS1  
+ENDIF ;BSP_NOSIM
+ENDIF ;BSP_ESAI !
+ENDIF ;BSP_CAMERA
+; @CESYSGEN ENDIF CE_MODULES_DISPLAY  
+;----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; SD Driver
+;
+; @CESYSGEN IF CE_MODULES_SDBUS
+IF BSP_NOESDHC !
+    esdhc.dll       $(_FLATRELEASEDIR)\esdhc.dll            NK  SHK
+ENDIF ;BSP_NOESDHC !
+; @CESYSGEN ENDIF CE_MODULES_SDBUS
+;----------------------------------------------------------------------------
+
+IF BSP_NOUSB !
+; -----------------------------------------------------------------------------
+; USB OTG Function Driver
+;
+; @CESYSGEN IF CE_MODULES_USBFN
+IF BSP_USB_HSOTG_CLIENT
+    usbfn.dll $(_FLATRELEASEDIR)\usbfn.dll                          NK SHK
+ENDIF ; BSP_USB_HSOTG_CLIENT
+; @CESYSGEN ENDIF CE_MODULES_USBFN
+; -----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; USB OTG Transceiver Driver
+;
+; @CESYSGEN IF CE_MODULES_USBHOST && CE_MODULES_USBFN
+IF BSP_USB_HSOTG_XVC
+    imx_xvc.dll $(_FLATRELEASEDIR)\imx_xvc.dll                      NK SHK
+ENDIF ; BSP_USB_HSOTG_XVC
+; @CESYSGEN ENDIF CE_MODULES_USBHOST && CE_MODULES_USBFN
+; -----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; USB OTG Host Driver
+;
+; @CESYSGEN IF CE_MODULES_USBHOST
+IF BSP_USB_HSOTG_HOST
+    hcd_hsotg.dll $(_FLATRELEASEDIR)\hcd_hsotg.dll                  NK SHK
+ENDIF ; BSP_USB_HSOTG_HOST
+; @CESYSGEN ENDIF CE_MODULES_USBHOST
+; -----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
+; USB H2 Host Driver
+;
+; @CESYSGEN IF CE_MODULES_USBHOST
+IF BSP_USB_HSH2
+    hcd_hsh2.dll $(_FLATRELEASEDIR)\hcd_hsh2.dll                    NK SHK
+ENDIF ; BSP_USB_HSH2
+; @CESYSGEN ENDIF CE_MODULES_USBHOST
+; -----------------------------------------------------------------------------
+ENDIF ; BSP_NOUSB !
+
+;------------------------------------------------------------------------------
+; Universal update tool Driver
+;
+; @CESYSGEN IF CE_MODULES_USBMSFN
+IF BSP_UUT
+    UUT.dll    $(_FLATRELEASEDIR)\UUT.dll     NK  SHK
+ENDIF ; BSP_UUT
+; @CESYSGEN ENDIF CE_MODULES_USBMSFN
+;------------------------------------------------------------------------------
+
+;----------------------------------------------------------------------------
+; Touch panel driver
+;
+; @CESYSGEN IF CE_MODULES_POINTER
+IF BSP_NOTOUCH !
+IF BSP_ADC
+    touch.dll           $(_FLATRELEASEDIR)\touch.dll                $(XIPKERNEL)  SHK
+    touchc.exe          $(_FLATRELEASEDIR)\touchc.exe               NK  S
+ENDIF ;BSP_ADC
+ENDIF ;BSP_NOTOUCH !
+; @CESYSGEN ENDIF CE_MODULES_POINTER
+;----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; CSPI Driver
+;
+#if (defined BSP_CSPIBUS1 || defined BSP_CSPIBUS2 || defined BSP_CSPIBUS3)
+    cspi.dll    $(_FLATRELEASEDIR)\cspi.dll                         NK  SHK 
+    spisdk.dll  $(_FLATRELEASEDIR)\spisdk.dll                       NK  SHQ 
+#endif
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; Audio SGTL5000 Driver
+;
+; @CESYSGEN IF CE_MODULES_WAVEAPI
+IF BSP_EM9170 !
+IF BSP_NOAUDIO !
+IF BSP_I2CBUS1
+    wavedev2_sgtl5000.dll   $(_FLATRELEASEDIR)\wavedev2_sgtl5000.dll            NK  SHK 
+ENDIF ;BSP_I2CBUS1
+ENDIF ;BSP_NOAUDIO !
+ENDIF ;BSP_EM9170 !
+; @CESYSGEN ENDIF CE_MODULES_WAVEAPI
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; Audio ESAI Driver
+;
+; @CESYSGEN IF CE_MODULES_WAVEAPI
+IF BSP_ESAI
+IF BSP_NOSIM
+IF BSP_CAMERA !
+IF BSP_CSPIBUS1
+IF BSP_I2CBUS1
+    esai_wm8580.dll     $(_FLATRELEASEDIR)\esai_wm8580.dll          NK  SHK 
+ENDIF ;BSP_I2CBUS1
+ENDIF ;BSP_CSPIBUS1
+ENDIF ;BSP_CAMERA !
+ENDIF ;BSP_NOSIM
+ENDIF ;BSP_ESAI
+; @CESYSGEN ENDIF CE_MODULES_WAVEAPI 
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; SIM driver
+;
+; @CESYSGEN IF CE_MODULES_SCARD
+IF BSP_NOSIM !
+IF BSP_ESAI !
+IF BSP_CAMERA !
+    sim.dll         $(_FLATRELEASEDIR)\sim.dll                      NK  SHK
+ENDIF ;BSP_CAMERA !
+ENDIF ;BSP_ESAI !
+ENDIF ;BSP_NOSIM !
+; @CESYSGEN ENDIF CE_MODULES_SCARD 
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; Fake Battery Driver
+;
+; @CESYSGEN IF CE_MODULES_BATTDRVR
+IF BSP_NOBATTERY !
+    battdrvr.dll    $(_FLATRELEASEDIR)\battdrvr.dll         NK  SHK 
+ENDIF ;BSP_NOBATTERY !
+; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; General Purpose Timer
+;
+#if (defined BSP_GPT1 || defined BSP_GPT2 || defined BSP_GPT3 || defined BSP_GPT4)
+    gpt.dll $(_FLATRELEASEDIR)\gpt.dll                              NK  SHK 
+#endif
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; Fast Ethernet Controller
+;
+; @CESYSGEN IF CE_MODULES_NDIS
+IF BSP_NOFEC !
+    FEC.dll             $(_FLATRELEASEDIR)\FEC.dll              NK   SHK
+ENDIF ;BSP_NOFEC !
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+;-----------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; PWM
+;
+#if (defined BSP_PWM1 || defined BSP_PWM2 || defined BSP_PWM3 || defined BSP_PWM4)
+    pwm.dll             $(_FLATRELEASEDIR)\pwm.dll              NK  SHK
+#endif
+;-----------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Nand Flash Driver
+;
+; @CESYSGEN IF CE_MODULES_FLASHMDD
+IF BSP_NONANDFMD !
+;#if !(defined BSP_NAND_K9LAG08U0M && defined BSP_NAND_K9LBG08U0M && defined BSP_NAND_K9LBG08U0D)
+;    flashpdd_nand.dll       $(_FLATRELEASEDIR)\flashpdd_nand.dll    NK  SHK
+;#endif
+IF BSP_NAND_PDD
+	multipartition_flashpdd.dll			$(_FLATRELEASEDIR)\multipartition_flashpdd.dll    $(XIPKERNEL)  SHK
+ELSE
+	flashpdd_nand.dll						$(_FLATRELEASEDIR)\flashpdd_nand.dll    NK  SHK
+ENDIF	;BSP_NAND_PDD
+ENDIF	;BSP_NONANDFMD !
+; @CESYSGEN ENDIF CE_MODULES_FLASHMDD
+;-----------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Nand Disk Driver for BinFS
+;
+IF BSP_SUPPORT_DEMAND_PAGING
+IF BSP_NONANDDISK !
+	NandDisk.dll								$(_FLATRELEASEDIR)\NandDisk.dll    $(XIPKERNEL)  SHK
+ENDIF
+ENDIF  ;BSP_SUPPORT_DEMAND_PAGING
+
+; -----------------------------------------------------------------------------
+; CAN Bus  Driver
+;
+#if (defined BSP_CANBUS1 || defined BSP_CANBUS2)
+	can.dll        $(_FLATRELEASEDIR)\can.dll                     NK  SHK
+	cansdk.dll      $(_FLATRELEASEDIR)\cansdk.dll                   NK  SHQ
+#endif
+; -----------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; WaterMark Driver
+;
+IF BSP_WATERMARK
+    wmd.dll      $(_FLATRELEASEDIR)\wmd.dll           NK  SHK
+ENDIF ; BSP_WATERMARK
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; EM9170 specified Drivers
+;
+IF BSP_EM9170
+    isa.dll      $(_FLATRELEASEDIR)\isa.dll					NK  SHK
+    wdt.dll      $(_FLATRELEASEDIR)\wdt.dll					NK  SHK
+ENDIF ; BSP_EM9170
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; ISA_IRQ Drivers
+;
+IF BSP_ISA_IRQ
+    isa_irq.dll      $(_FLATRELEASEDIR)\isa_irq.dll					NK  SHK
+ENDIF ; BSP_ISA_IRQ
+;------------------------------------------------------------------------------
+
+; @CESYSGEN ENDIF CE_MODULES_DEVICE
+
+
+FILES
+; Name                  Path                                    Memory  Type
+; --------------------  --------------------------------------  ------  ----
+IF BSP_NOTOUCH !
+  ETCHA.exe             $(_FLATRELEASEDIR)\ETCHA.exe            NK      U
+  ETCHA.lnk             $(_FLATRELEASEDIR)\ETCHA.lnk            NK      U
+  tcal.exe              $(_FLATRELEASEDIR)\tcal.exe             NK      U
+ENDIF
+ 
+; @CESYSGEN IF CE_MODULES_XAMLRUNTIME
+    SilverlightClock.exe    $(_FLATRELEASEDIR)\SilverlightClock.exe     NK      U
+    SilverlightClock.lnk    $(_FLATRELEASEDIR)\SilverlightClock.lnk     NK      U
+    SilverlightClock.xaml   $(_FLATRELEASEDIR)\SilverlightClock.xaml    NK      U
+; @CESYSGEN ENDIF
+
+IF BSP_USB_HSOTG_CLIENT
+  switchusb2msc.exe     $(_FLATRELEASEDIR)\switchusb2msc.exe    NK      U
+  switchusb2rndis.exe   $(_FLATRELEASEDIR)\switchusb2rndis.exe  NK      U
+  switchusb2serial.exe  $(_FLATRELEASEDIR)\switchusb2serial.exe NK      U
+ENDIF
+
+IF BSP_CAMERA
+  camapp.exe            $(_FLATRELEASEDIR)\camapp.exe           NK      U
+ENDIF
+
+IF BSP_NOSIM !
+  simapp.exe            $(_FLATRELEASEDIR)\simapp.exe           NK      U       
+ENDIF
+
+IF BSP_ESAI
+  m_player.exe          $(_FLATRELEASEDIR)\m_player.exe         NK      U       
+  m_recorder.exe        $(_FLATRELEASEDIR)\m_recorder.exe       NK      U   
+ENDIF

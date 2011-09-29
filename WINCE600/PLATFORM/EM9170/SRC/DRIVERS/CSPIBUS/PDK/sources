@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_CSPIBUS1)" == "" && "$(BSP_CSPIBUS2)" == "" && "$(BSP_CSPIBUS3)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=cspi
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllMainCRTStartup
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_bus.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_dma.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_map.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cspi_$(_SOCDIR).lib
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\cspiv2_$(_COMMONSOCDIR).def
+
+SOURCES= \
+    bspcspi.c \
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ..\mx25_cspi.reg \
+

@@ -1,0 +1,42 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_NOESDHC)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=esdhc
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DLLENTRY=DllEntry
+
+INCLUDES=$(INCLUDES); \
+               $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_COMMONSOCDIR)\ESDHC; \
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+
+SOURCELIBS= \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdcardlib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdhclib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdbus.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\esdhcbase_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\esdhcbase_$(_SOCDIR).lib
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_esdhc.def \
+    mx25_esdhc.reg \
+
+DEFFILE=mx25_esdhc.def
+
+SOURCES=\
+    bspesdhc.cpp \
+    bspesdhcdma.cpp \
+    
+
+

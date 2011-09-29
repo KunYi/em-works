@@ -1,0 +1,41 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_NOTOUCH)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_ADC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=touch
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=TouchPanelDllEntry
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+    
+
+SOURCELIBS= \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\tch_cal.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\tchmdd.lib
+   
+PREPROCESSDEFFILE=1
+DEFFILE=$(_COMMONOAKROOT)\inc\touch.def
+
+SOURCES=\
+    touch.cpp
+    
+    
+FILE_VIEW_INCLUDES_FOLDER=
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_touchscreen.reg \
+

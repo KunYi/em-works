@@ -1,0 +1,13 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Backlight]
+    "Dll" = "backLight.Dll"
+    "Prefix" = "BKL"
+    "Index" = dword:1
+    "Order" = dword:1
+    "IClass" = "{A32942B7-920C-486b-B0E6-92A702A99B35}" ; GUID for generic power-managed devices.

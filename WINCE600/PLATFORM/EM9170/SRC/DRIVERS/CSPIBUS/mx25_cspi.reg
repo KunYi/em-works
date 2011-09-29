@@ -1,0 +1,31 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+IF BSP_CSPIBUS1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CSPI1]
+   "Prefix"="SPI"
+   "Dll"="cspi.dll"
+   "Index"=dword:1
+   "Order"=dword:1   
+ENDIF
+
+IF BSP_CSPIBUS2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CSPI2]
+   "Prefix"="SPI"
+   "Dll"="cspi.dll"
+   "Index"=dword:2
+   "Order"=dword:1    
+ENDIF
+
+IF BSP_CSPIBUS3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CSPI3]
+   "Prefix"="SPI"
+   "Dll"="cspi.dll"
+   "Index"=dword:1		;"SPI1:"
+   "DeviceID"=dword:3	;->CSPI3
+   "Order"=dword:1    
+ENDIF

@@ -1,0 +1,17 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+[HKEY_CURRENT_USER\ControlPanel\Backlight]
+    "BattBacklightLevel"=dword:7F  ; Backlight level settings. 0xFF = Full On
+    "ACBacklightLevel"=dword:7F    ; Backlight level settings. 0xFF = Full On
+
+; Backlight control default settings for WinCE.
+    "UseExt"=dword:0             ; Enable timeout when on external power
+    "UseBattery"=dword:0         ; Enable timeout when on battery
+    "AdvancedCPL"="AdvBacklight" ; Enable Advanced Backlight control panel dialog
+    "BatteryTimeout"=dword:1E    ; 30 Seconds
+    "ACTimeout"=dword:78         ; 2 Minutes

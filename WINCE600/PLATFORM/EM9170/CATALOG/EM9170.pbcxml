@@ -1,0 +1,685 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatalogFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RequiredVersion="6.00" xsi:schemaLocation="urn:Microsoft.PlatformBuilder/Catalog PbcXml600.xsd" xmlns="urn:Microsoft.PlatformBuilder/Catalog">
+  <FileInformation Id="FileInformation:Emtronix:EM9170">
+    <Title>EM9170</Title>
+    <Description>EM9170 BSP Catalog Items</Description>
+    <Vendor>Emtronix</Vendor>
+    <OSVersion>6.00</OSVersion>
+    <FileVersion>1.0</FileVersion>
+  </FileInformation>
+  <Bsp Id="Bsp:Emtronix:EM9170:ARMV4I">
+    <Title>EM9170: ARMV4I</Title>
+    <Description>BSP EM9170</Description>
+    <PlatformDirectory>EM9170</PlatformDirectory>
+    <CpuId>Cpu:ARMV4I</CpuId>
+    <BspItemId>Item:Emtronix:EthernetBootloader:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:KBDMOUSE_EVBKPD:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:I2CBUS1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:I2CBUS2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:I2CBUS3:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:BACKLIGHT LCDC:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:ESDHC1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:LCDC CHUNGHWA CLAA057VA01CT(VGA):im25-3ds_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:ADC:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:TOUCH:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:UART1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:UART2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:UART3:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:UART4:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:UART5:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Full OTG Function:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Pure Client Function:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Pure Host Function:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed Host:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:DVFC:im25-3ds_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:CSPIBUS1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:CSPIBUS2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:CSPIBUS3:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:AUDIO:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:BATTERY:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:Camera:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:GPT1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:GPT2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:GPT3:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:GPT4:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:FEC:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:PWRBTN:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:PWM1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:PWM2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:PWM3:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:PWM4:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:K9LAG08U0M:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:K9LBG08U0M:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:K9LBG08U0D:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:ESDHC2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:CANBUS1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:CANBUS2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:ESAI:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:SIM1:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Item:Emtronix:SIM2:iMX25-3DS-PDK1_7_EM9170</BspItemId>
+    <BspItemId>Emtronix:K9F2G08U0A</BspItemId>
+    <BspItemId>Emtronix:K9F1G08U0A</BspItemId>
+    <BspItemId>EM9170:ISA_ETA503</BspItemId>
+    <BspItemId>EM9170:ISA_ETA718</BspItemId>
+    <BspItemId>EM9170:ISA_IRQ</BspItemId>
+    <BspItemId>Item:DefaultVendor:DefaultCatalogItemName</BspItemId>
+  </Bsp>
+  <Item Id="Item:Emtronix:EthernetBootloader:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:EthernetBootloader:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:EthernetBootloader:Description</Description>
+    <Type>BspSpecific</Type>
+    <Location />
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\BOOTLOADER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\BOOTLOADER</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:KBDMOUSE_EVBKPD:iMX25-3DS-PDK1_7_EM9170">
+    <Title>IMX25PDK US/Keypad</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:KBDMOUSE_EVBKPD:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_IMX25PDK_KEYPAD</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Location>Device Drivers\Input Devices</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\KBDUS</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\KBDUS</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\KEYPAD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\KEYPAD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:I2CBUS1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:I2CBUS1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:I2CBUS1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_I2CBUS1</Variable>
+    <Module>i2c.dll</Module>
+    <Location>Device Drivers\I2C Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:I2CBUS2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:I2CBUS2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:I2CBUS2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_I2CBUS2</Variable>
+    <Module>i2c.dll</Module>
+    <Location>Device Drivers\I2C Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:I2CBUS3:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:I2CBUS3:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:I2CBUS3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_I2CBUS3</Variable>
+    <Module>i2c.dll</Module>
+    <Location>Device Drivers\I2C Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\I2C</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:BACKLIGHT LCDC:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:BACKLIGHT LCDC:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:BACKLIGHT LCDC:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_BACKLIGHT</Variable>
+    <Module>lcdcbacklight.dll</Module>
+    <Module>advbacklight.dll</Module>
+    <Location>Device Drivers\Backlight</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BACKLIGHT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BACKLIGHT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ESDHC1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:ESDHC1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:ESDHC1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ESDHC1</Variable>
+    <Module>esdhc.dll</Module>
+    <Location>Device Drivers\SD Controller</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESDHC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESDHC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:LCDC CHUNGHWA CLAA057VA01CT(VGA):im25-3ds_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CLAA057VA01CT:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CLAA057VA01CT:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>lcdc.dll</Module>
+    <Location>Device Drivers\Display</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\LCDC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\LCDC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:UART1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:UART1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART1</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location>Device Drivers\Serial</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:UART2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:UART2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART2</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location>Device Drivers\Serial</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART3:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:UART3:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:UART3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART3</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location>Device Drivers\Serial</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART4:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:UART4:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:UART4:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART4</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location>Device Drivers\Serial</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART5:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:UART5:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:UART5:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART5</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location>Device Drivers\Serial</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX25-3DS-PDK1_7_EM9170">
+    <Title>High Speed OTG Port Full OTG Function</Title>
+    <Description>USB High Speed OTG Port Full OTG Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_CLIENT</Variable>
+    <Variable>BSP_USB_HSOTG_HOST</Variable>
+    <Variable>BSP_USB_HSOTG_XVC</Variable>
+    <Module>imx_xvc.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB FUNCTION DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBD</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>USB HOST DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBH\HSOTG</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>USB TRANSCEIVER DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBXVR</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Pure Client Function:iMX25-3DS-PDK1_7_EM9170">
+    <Title>High Speed OTG Port Pure Client Function</Title>
+    <Description>USB High Speed OTG Port Pure Client Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_CLIENT</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>usbfn.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB FUNCTION DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Pure Host Function:iMX25-3DS-PDK1_7_EM9170">
+    <Title>High Speed OTG Port Pure Host Function</Title>
+    <Description>USB High Speed OTG Port Pure Host Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_HOST</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>hcd_hsotg.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB HOST DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBH\HSOTG</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed Host:iMX25-3DS-PDK1_7_EM9170">
+    <Title>High Speed Host Port Function</Title>
+    <Description>USB High Speed Host Port Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSH2</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>hcd_hsh2.dll</Module>
+    <Location>Device Drivers\USB Devices\USB Host Device</Location>
+    <SourceCode>
+      <Title>USB HOST DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\USBH\HSH2</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ADC:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:ADC:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:ADC:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ADC</Variable>
+    <Module>adc.dll</Module>
+    <Location>Device Drivers\ADC</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ADC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ADC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:TOUCH:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:TOUCH:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:TOUCH:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>touch.dll</Module>
+    <Location>Device Drivers\Touch</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\TOUCH</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\TOUCH</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:DVFC:im25-3ds_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:DVFC:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:DVFC:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_DVFC</Variable>
+    <Module>dvfc_MC34704.dll</Module>
+    <Location>Device Drivers\DVFC</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\DVFC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\DVFC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CSPIBUS1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CSPIBUS1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CSPIBUS1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CSPIBUS1</Variable>
+    <Module>cspi.dll</Module>
+    <Location>Device Drivers\CSPI Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CSPIBUS2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CSPIBUS2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CSPIBUS2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CSPIBUS2</Variable>
+    <Module>cspi.dll</Module>
+    <Location>Device Drivers\CSPI Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CSPIBUS3:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CSPIBUS3:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CSPIBUS3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CSPIBUS3</Variable>
+    <Module>cspi.dll</Module>
+    <Location>Device Drivers\CSPI Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CSPIBUS\PDK</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:AUDIO:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:AUDIO:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:AUDIO:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>wavedev2_sgtl5000.dll</Module>
+    <Location>Device Drivers\Audio</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\WAVEDEV2</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\WAVEDEV2</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:BATTERY:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:BATTERY:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:BATTERY:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>battdrvr.dll</Module>
+    <Location>Device Drivers\Battery</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BATTDRVR</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BATTDRVR</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Camera:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:Camera:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:Camera:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CAMERA</Variable>
+    <Module>camera.dll</Module>
+    <Location>Device Drivers\Camera</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CAMERA</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CAMERA</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:GPT1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:GPT1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:GPT1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_GPT1</Variable>
+    <Module>GPT.dll</Module>
+    <Location>Device Drivers\GPT</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:GPT2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:GPT2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:GPT2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_GPT2</Variable>
+    <Module>GPT.dll</Module>
+    <Location>Device Drivers\GPT</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:GPT3:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:GPT3:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:GPT3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_GPT3</Variable>
+    <Module>GPT.dll</Module>
+    <Location>Device Drivers\GPT</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:GPT4:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:GPT4:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:GPT4:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_GPT4</Variable>
+    <Module>GPT.dll</Module>
+    <Location>Device Drivers\GPT</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\GPT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:FEC:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:FEC:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:FEC:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>FEC.dll</Module>
+    <Location>Device Drivers\FEC</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\FEC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\FEC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PWRBTN:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:PWRBTN:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:PWRBTN:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_PWRBTN</Variable>
+    <Module>pwrbtn.dll</Module>
+    <Location>Device Drivers\Power Button</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWRBTN</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWRBTN</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PWM1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:PWM1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:PWM1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_PWM1</Variable>
+    <Module>pwm.dll</Module>
+    <Location>Device Drivers\PWM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PWM2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:PWM2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:PWM2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_PWM2</Variable>
+    <Module>pwm.dll</Module>
+    <Location>Device Drivers\PWM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PWM3:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:PWM3:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:PWM3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_PWM3</Variable>
+    <Module>pwm.dll</Module>
+    <Location>Device Drivers\PWM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PWM4:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:PWM4:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:PWM4:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_PWM4</Variable>
+    <Module>pwm.dll</Module>
+    <Location>Device Drivers\PWM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\PWM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:K9LAG08U0M:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:K9LAG08U0M:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:K9LAG08U0M:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_K9LAG08U0M</Variable>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Storage Drivers\MSFlash Drivers</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:K9LBG08U0M:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:K9LBG08U0M:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:K9LBG08U0M:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_K9LBG08U0M</Variable>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Storage Drivers\MSFlash Drivers</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:K9LBG08U0D:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:K9LBG08U0D:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:K9LBG08U0D:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_K9LBG08U0D</Variable>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Storage Drivers\MSFlash Drivers</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ESDHC2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:ESDHC2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:ESDHC2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ESDHC2</Variable>
+    <Module>esdhc.dll</Module>
+    <Location>Device Drivers\SD Controller</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESDHC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESDHC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CANBUS1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CANBUS1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CANBUS1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CANBUS1</Variable>
+    <Location>Device Drivers\CAN Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CANBUS</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CANBUS</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CANBUS2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:CANBUS2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:CANBUS2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CANBUS2</Variable>
+    <Location>Device Drivers\CAN Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CANBUS</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\CANBUS</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ESAI:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:ESAI:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:ESAI:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ESAI</Variable>
+    <Module>esai_wm8580.dll</Module>
+    <Location>Device Drivers\ESAI</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESAI</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ESAI</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SIM1:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:SIM1:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:SIM1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SMARTCARD_SIM1</Variable>
+    <Module>sim.dll</Module>
+    <Location>Device Drivers\SIM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SIM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SIM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SIM2:iMX25-3DS-PDK1_7_EM9170">
+    <Title>#FSL:iMX25-3DS-PDK1_7:SIM2:Title</Title>
+    <Description>#FSL:iMX25-3DS-PDK1_7:SIM2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SMARTCARD_SIM2</Variable>
+    <Module>sim.dll</Module>
+    <Location>Device Drivers\SIM</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SIM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\SIM</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Emtronix:K9F2G08U0A">
+    <Title>Samsung K9F1G08U0A NAND Flash</Title>
+    <Description>Samsung K9F1G08U0A NAND Flash</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_K9F1G08U0A</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Storage Drivers\MSFlash Drivers</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Emtronix:K9F1G08U0A">
+    <Title>Samsung K9F2G08U0A NAND Flash</Title>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_K9F2G08U0A</Variable>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Storage Drivers\MSFlash Drivers</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\BLOCK\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="EM9170:ISA_IRQ">
+    <Title>ISA_IRQ</Title>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ISA_IRQ</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Location ConditionLocation="">Device Drivers\ISA</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ISA_IRQ</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\ISA_IRQ</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="EM9170:ISA_ETA503">
+    <Title>ISA_ETA503</Title>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ISA_ETA503</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Location>Device Drivers\ISA</Location>
+  </Item>
+  <Item Id="EM9170:ISA_ETA718">
+    <Title>ISA_ETA718</Title>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ISA_ETA718</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Location ConditionLocation="">Device Drivers\ISA</Location>
+  </Item>
+  <Item Id="Item:DefaultVendor:DefaultCatalogItemName">
+    <Title>EM9170 Keypad</Title>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_EM9170_KEYPAD</Variable>
+    <Location>Device Drivers\Input Devices</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\IMX257_KEYPAD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\IMX257_KEYPAD</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\ISA_KEYPAD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9170\SRC\DRIVERS\KEYBD\ISA_KEYPAD</Path>
+    </SourceCode>
+  </Item>
+</CatalogFile>

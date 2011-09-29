@@ -1,0 +1,6 @@
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CAN1]
+   "Prefix"="CAN"
+   "Dll"="can.dll"
+   "Index"=dword:1
+   "Order"=dword:9
+ ;  "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}" 

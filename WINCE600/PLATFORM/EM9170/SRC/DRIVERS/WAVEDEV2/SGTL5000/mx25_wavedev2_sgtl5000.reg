@@ -1,0 +1,20 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Audio]
+   "Dll"="wavedev2_sgtl5000.dll"
+   "Prefix"="WAV"
+   "Index"=dword:1
+   "Order"=dword:10
+   ; publish mixer interface
+   "IClass"=multi_sz:"{A32942B7-920C-486b-B0E6-92A702A99B35}",
+                     "{37168569-61C4-45fd-BD54-9442C7DBA46F}"
+
+; Override wave API load order to follow audio driver
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WAPIMAN]
+   "Order"=dword:11

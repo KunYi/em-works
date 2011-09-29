@@ -1,0 +1,230 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;------------------------------------------------------------------------------
+;
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;
+;------------------------------------------------------------------------------
+;
+;         OS MEMORY MAP                       BOOTLOADER MEMORY MAP
+;
+;                       +---- 8000.0000 ----+
+;           ARGS (4 KB) |                   | ARGS (4 KB)
+;                       +---- 8000.1000 ----+
+;       CSPDDK (32 KB)  |                   |
+;                       +---- 8000.9000     | XLDR Image / Bootloader Stack (236 KB)
+;                       |                   |
+;                       |     8003.C000 ----+
+;                       |                   | Bootloader Page Table (16 KB)
+;                       |     8004.0000 ----+
+;                       |                   | Bootloader Image (256 KB)
+;                       |     8008.0000 ----+
+;                       |                   | Bootloader RAM (256 KB)
+;                       +---- 800C.0000 ----+
+; USB KITL DMA (240 KB) |                   | USB KITL DMA (240 KB)
+;                       +---- 800F.C000 ----+
+;       FEC DMA (16 KB) |                   | FEC DMA (16 KB) 
+;                       +---- 8010.0000 ----+
+;                       |                   |
+;                       |                   |
+;      NK Image (16 MB) |                   |
+;                       |                   |
+;                       |                   |
+;        **auto-size**  +---- 8110.0000     | Flash Cache
+;                       |                   | 
+;                       |                   |
+;                       |                   |
+;       NK RAM (47 MB)  |                   |
+;                       |                   |
+;                       |                   |
+;                       |                   |
+;                       +---- 8400.0000 ----+
+;
+;------------------------------------------------------------------------------
+
+;**************************** MEMORY SECTION ***************************
+MEMORY
+
+IF BSP_SUPPORT_DEMAND_PAGING !
+; --------------------------- RAM image --------------------------------
+;   Start Addr      End Addr        Mem Type    Region Name     Size
+;   0x80000000      0x80100000      SDRAM       reserved         1 MB
+;   0x80100000      0x81100000      SDRAM       NK              16 MB
+;   0x81100000      0x84000000      SDRAM       RAM             47 MB
+; ----------------------------------------------------------------------
+;                 Name               Address          Size             Type
+;		BOOT_AND_OTHER	80000000    00100000    RESERVED
+;        NK							80100000    01000000    RAMIMAGE
+;		RAM							81100000    02F00000    RAM
+;
+; CS&ZHL MAY-6-2011: move NK -> 80200000
+;
+;               Name                Address           Size            Type
+; ----------------------------------------------------------------------
+        BOOT_AND_OTHER   80000000    00200000    RESERVED
+        NK                            80200000    02000000    RAMIMAGE
+        RAM                          82200000    01E00000    RAM
+ENDIF 
+
+;
+; CS&ZHL MAY-18-2011: create bib for BinFS
+;
+IF BSP_SUPPORT_DEMAND_PAGING
+;               Name                Address           Size            Type
+; ----------------------------------------------------------------------
+        BOOT_AND_OTHER   80000000    00200000    RESERVED
+        XIPKERNEL				80200000	004C0000	RAMIMAGE
+        CHAIN      					806C0000	00040000	RESERVED
+        NK							80700000    02000000    NANDIMAGE
+        RAM							82700000    01900000    RAM
+ENDIF
+
+IF IMGFLASH
+    ; no support for NOR flash available
+ENDIF
+
+
+;**************************** CONFIG SECTION ***************************
+CONFIG
+
+; ---------------------- All Image Types Settings ----------------------
+;   KERNELFIXUPS = ON (sections to which the kernel can write are 
+;                      relocated to the start of RAM)
+;   SRE = ON (Romimage.exe produces an .sre file)
+; ----------------------------------------------------------------------
+    KERNELFIXUPS=ON
+
+; --------------------------- RAM image --------------------------------
+;   AUTOSIZE = ON (allows NK and RAM space to resize automatically)
+;   ROMSIZE  = 0x02000000 (32 MB)
+;   ROMSTART = 0x80200000 (NK virtual address base)
+;   ROMWIDTH = 32 (32-bit wide memory, entire image in one file)
+; ----------------------------------------------------------------------
+IF IMGFLASH !
+
+    IF BSP_SUPPORT_DEMAND_PAGING;
+;
+; CS&ZHL MAY-21-2011: the following config are required by BinFS
+;
+;AUTOSIZE=ON
+;COMPRESSION=ON
+;DLLADDR_AUTOSIZE=ON
+;KERNELFIXUPS=ON
+;PROFILE=OFF
+;RAM_AUTOSIZE=OFF
+;ROMFLAGS=0
+;ROMSIZE=01E00000
+;ROMSTART=800B8000
+;ROMWIDTH=32
+;ROM_AUTOSIZE=OFF
+;XIPSCHAIN=813B8000
+;
+;		RAM_AUTOSIZE=OFF
+;		ROM_AUTOSIZE=OFF
+; RAM_AUTOSIZE -> adjust the start address of RAM to the end of the last XIP region.   
+;
+		RAM_AUTOSIZE=ON
+		ROM_AUTOSIZE=ON
+		DLLADDR_AUTOSIZE=ON
+		XIPSCHAIN=806C0000
+    ENDIF
+
+    AUTOSIZE=ON
+    
+    ROMSTART=80200000
+    ROMWIDTH=32
+    
+    IF IMGTINY
+        ROMSIZE= 00500000
+    ENDIF
+    
+    IF IMGTINY !
+        ;ROMSIZE= 02000000
+        ; CS&ZHL MAY-26-2011: -> 37MB
+        ;ROMSIZE= 02500000
+        ; CS&ZHL AUG-12-2011: -> 39.5MB
+        ROMSIZE= 02780000
+    ENDIF    
+    
+    IF IMGNAND
+        ; ROMOFFSET = (FLASH LOGICAL ADDRESS - NK START ADDRESS) % 0x100000000
+        ;           = ( 0x91300000 + 0x00280000  -  0x80200000 ) % 0x100000000 = 
+        ROMOFFSET=11380000
+    ENDIF
+    
+    IF IMGSDMMC
+        ; ROMOFFSET = (SD/MMC LOGICAL ADDRESS - NK START ADDRESS) % 0x100000000
+        ;           = ( 0x93700000 + 0x00080000  -  0x80200000 ) % 0x100000000 = 
+        ROMOFFSET=13580000
+    ENDIF
+    
+ENDIF
+
+IF IMGFLASH
+    ; no support for NOR flash available
+ENDIF
+
+; ------------------------------ COMPRESSION ---------------------------
+;   NK COMPRESSION
+; ----------------------------------------------------------------------
+; @CESYSGEN IF !NK_NKNOCOMP
+    COMPRESSION=ON
+; @CESYSGEN ENDIF !NK_NKNOCOMP
+; @CESYSGEN IF NK_NKNOCOMP
+    COMPRESSION=OFF
+; @CESYSGEN ENDIF NK_NKNOCOMP
+
+; ---------------------- Profiling-enabled kernel ----------------------
+;   PROFILE = ON (includes profiler structure and symbols in image)
+; ----------------------------------------------------------------------
+IF IMGPROFILER
+   PROFILE=ON
+ENDIF
+
+; --------------------- Profiling-disabled kernel ----------------------
+;   PROFILE = OFF (does not include profiler structure and symbols)
+; ----------------------------------------------------------------------
+IF IMGPROFILER !
+   PROFILE=OFF
+ENDIF
+
+;
+; ROMFLAGS is a bitmask of options for the kernel
+;   ROMFLAGS    0x0001  Disallow Paging
+;   ROMFLAGS    0x0002  Not all KMode
+;   ROMFLAGS    0x0010  Trust Module only
+;
+IF IMGTRUSTROMONLY
+    IF IMGNOTALLKMODE
+       ROMFLAGS=12
+    ENDIF
+    IF IMGNOTALLKMODE !
+       ROMFLAGS=10
+    ENDIF
+ENDIF
+
+IF IMGTRUSTROMONLY !
+    IF IMGNOTALLKMODE
+       ROMFLAGS=2
+    ENDIF
+    IF IMGNOTALLKMODE !
+       ROMFLAGS=0
+    ENDIF
+ENDIF
+
+; FSRAMPERCENT is used to select the percentage of the RAM dedicated to the file system
+; check http://msdn.microsoft.com/en-us/library/aa908688.aspx for more info.
+; FSRAMPERCENT=0x10101010 => 6.25 % of RAM is used for the file system
+FSRAMPERCENT=0x10101010 
+
+; EOF config.bib

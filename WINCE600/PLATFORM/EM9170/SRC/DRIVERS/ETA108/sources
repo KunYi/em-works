@@ -1,0 +1,50 @@
+
+#!IF0
+#!IF "$(BSP_ETA108)" == "" 
+#SKIPBUILD=1
+#!ENDIF
+#!ENDIF
+
+
+TARGETNAME=ETA108
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DLLENTRY=ETA108_DllEntry
+
+#$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+#$(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+
+TARGETLIBS= \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_bus.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_dma.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_map.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+   
+SOURCELIBS=\
+   $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cspi_$(_SOCDIR).lib
+   
+SOURCES= \
+    ETA108_io.cpp \
+    ETA108Class.cpp \
+    SPIClass.cpp \
+    bspcspi.c \
+    #..\CSPIBUS\PDK\bspcspi.c \
+    
+
+DEFFILE= ETA108.def
+
+FILE_VIEW_ROOT_FOLDER= \
+    
+
+FILE_VIEW_RESOURCE_FOLDER= \
+	ETA108.def \
+    ETA108.reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+	ETA108.h \
+	SPIClass.h \
+	ETA108Class.H \
+	..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\INC\cspibus.h \
+	..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\CSPIBUSV2\PDK\cspiClass.h \

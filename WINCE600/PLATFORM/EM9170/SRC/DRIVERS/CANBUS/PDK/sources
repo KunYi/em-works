@@ -1,0 +1,44 @@
+!if 0
+Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+!endif
+
+
+!IF "$(BSP_CANBUS1)" == "" && "$(BSP_CANBUS2)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=can
+WINCEOEM=1
+
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+TARGETLIBS=  \
+   $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+   $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+   $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  
+    
+!IF "$(BSP_EM9170)" == "1"
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\flexcan_$(_COMMONSOCDIR).lib    
+!ELSE 
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\can_$(_COMMONSOCDIR).lib    
+!ENDIF
+
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\can_$(_COMMONSOCDIR).def
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+SOURCES= \
+    bspcan.c
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    can2.reg \
+    can1.reg \
+

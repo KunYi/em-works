@@ -1,0 +1,3 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000079:WARNN ] serial_common_fsl_v2_pdk1_7.lib(serial.obj) : warning LNK4099: PDB 'serial_common_fsl_v2_pdk1_7.pdb' was not found with 'D:\WINCE600\platform\common\lib\ARMV4I\retail\serial_common_fsl_v2_pdk1_7.lib' or at 'D:\WINCE600\platform\EM9170\target\ARMV4I\retail\serial_common_fsl_v2_pdk1_7.pdb'; linking object as if no debug info
+BUILD: [01:0000000080:WARNN ] serial_common_fsl_v2_pdk1_7.lib(serialhw.obj) : warning LNK4099: PDB 'serial_common_fsl_v2_pdk1_7.pdb' was not found with 'D:\WINCE600\platform\common\lib\ARMV4I\retail\serial_common_fsl_v2_pdk1_7.lib' or at 'D:\WINCE600\platform\EM9170\target\ARMV4I\retail\serial_common_fsl_v2_pdk1_7.pdb'; linking object as if no debug info

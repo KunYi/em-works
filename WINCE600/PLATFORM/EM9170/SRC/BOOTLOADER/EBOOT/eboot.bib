@@ -1,0 +1,111 @@
+;------------------------------------------------------------------------------
+; 
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+; 
+;------------------------------------------------------------------------------
+;
+;
+;         OS MEMORY MAP                       BOOTLOADER MEMORY MAP
+;
+;                       +---- 8000.0000 ----+
+;           ARGS (4 KB) |                   | ARGS (4 KB)
+;                       +---- 8000.1000 ----+
+;       CSPDDK (32 KB)  |                   |
+;                       +---- 8000.9000     | XLDR Image / Bootloader Stack (236 KB)
+;                       |                   |
+;                       |     8003.C000 ----+
+;                       |                   | Bootloader Page Table (16 KB)
+;                       |     8004.0000 ----+
+;                       |                   | Bootloader Image (256 KB)
+;                       |     8008.0000 ----+
+;                       |                   | Bootloader RAM (256 KB)
+;                       +---- 800C.0000 ----+
+; USB KITL DMA (240 KB) |                   | USB KITL DMA (240 KB)
+;                       +---- 800F.C000 ----+
+;       FEC DMA (16 KB) |                   | FEC DMA (16 KB) 
+;                       +---- 8010.0000 ----+
+;                       |                   |
+;                       |                   |
+;      NK Image (16 MB) |                   |
+;                       |                   |
+;                       |                   |
+;        **auto-size**  +---- 8110.0000     | Flash Cache
+;                       |                   | 
+;                       |                   |
+;                       |                   |
+;       NK RAM (47 MB)  |                   |
+;                       |                   |
+;                       |                   |
+;                       |                   |
+;                       +---- 8400.0000 ----+
+;
+;------------------------------------------------------------------------------
+
+MEMORY
+; Driver globals area (used to pass config info to kernel, don't change unless 
+; you update config.bib) NOTE: We're using physical addresses here.
+;       Name					Start			   Size                  Type
+;       -------				   --------       --------             --------
+        ARGS				80000000	00001000		RESERVED
+        XLDR_STACK		80001000	0003B000		RESERVED
+        PAGE_TABLE		8003C000	00004000		RESERVED
+        EBOOT				80040000	00040000		RAMIMAGE
+;        RAM					80080000	00040000		RAM
+;        USBKITL			800C0000	0003C000		RESERVED
+;        FECBUF				800FC000	00004000		RESERVED
+;
+; CS&ZHL MAY-4-2011: add 512KB for store bmp data read from NandFlash
+;
+;       Name					Start			   Size                  Type
+;       -------				   --------       --------             --------
+        RAM					80080000	000C0000		RAM
+        USBKITL			80140000	0003C000		RESERVED
+        FECBUF				8017C000	00004000		RESERVED
+; Flash cache (used to store eboot.bin or nk.bin before flashing)
+        FCACHE			80200000	03E00000			RESERVED
+       
+CONFIG
+    COMPRESSION=OFF
+    KERNELFIXUPS=ON
+
+; Eboot is build to run out of RAM, so ROMSTART and ROMSIZE correspond to the
+; RAM address range specified above.
+;
+    ROMSIZE =00040000
+    ROMSTART=80040000
+    ROMWIDTH=32
+;
+; ROMOFFSET applies to the BIN file sections and is used to "move" the image
+; into flash.  The bootloader image already on the system will be able to tell
+; that the BIN file is destined for flash (versus RAM) based on the address
+; formed by RAMIMAGE Start plus ROMOFFSET.
+;
+
+
+; (0x91300000 + 0x00180000) = (0x80040000 + ROMOFFSET) & 0xFFFFFFFF 
+; ==> ROMOFFSET = 0x11440000
+    ROMOFFSET=11440000
+
+
+
+IF IMGCSPIFLASH
+; (0x97E00000 + 0x00010000) = (0x80040000 + ROMOFFSET) & 0xFFFFFFFF
+; ==> ROMOFFSET = 0x17DD0000
+    ROMOFFSET=0x17DD0000
+ENDIF
+
+
+IF IMGSDMMC
+; (0x93700000 + 0x00020000) = (0x80040000 + ROMOFFSET) & 0xFFFFFFFF
+; ==> ROMOFFSET = 0x136E0000
+    ROMOFFSET=0x136E0000
+ENDIF
+
+
+
+MODULES
+;   Name            Path                                                             Memory Type
+;   --------------  ----------------------------------------------                   -----------
+    nk.exe          $(_TARGETPLATROOT)\target\$(_TGTCPU)\$(WINCEDEBUG)\eboot.exe        EBOOT

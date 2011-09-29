@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Canvas x:Name="MyCanvas" 
+    xmlns="http://schemas.microsoft.com/client/2007" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    Width="160" Height="160" Background="White">
+    <!-- Transforms -->
+    <Canvas.Resources>
+        <Storyboard x:Name="clockStoryboard">
+            <!-- This animation targets the hour hand transform -->
+            <DoubleAnimation x:Name="hourAnimation"
+                Storyboard.TargetName="hourHandTransform"
+                Storyboard.TargetProperty="Angle"
+                Duration="12:0:0" RepeatBehavior="Forever"/>
+            <!-- This animation targets the minute hand transform -->
+            <DoubleAnimation x:Name="minuteAnimation"
+                Storyboard.TargetName="minuteHandTransform" 
+                Storyboard.TargetProperty="Angle"
+                Duration="1:0:0" RepeatBehavior="Forever"/>
+            <!-- This animation targets the second hand transform  -->
+            <DoubleAnimation x:Name="secondAnimation"
+                Storyboard.TargetName="secondHandTransform" 
+                Storyboard.TargetProperty="Angle"
+                Duration="0:1:0" RepeatBehavior="Forever"/>
+        </Storyboard>
+    </Canvas.Resources>
+    <!-- Clock Shadow -->
+    <Ellipse Width="132" Height="132" Canvas.Left="16" 
+        Canvas.Top="16" Fill="Black" Opacity="0.5"/>
+    <!-- Outer rim -->
+    <Ellipse Stroke="#FF000000" x:Name="outerCircle" Width="132" Height="132" 
+        Canvas.Left="12" Canvas.Top="12">
+        <Ellipse.Fill>
+        <!--This linear gradient creates a subtle shadow effect on the outer rim. -->
+        <LinearGradientBrush EndPoint="0.196,0.127" StartPoint="0.852,0.814">
+            <GradientStop Color="#FFC0C0C0" Offset="0.788"/>
+            <GradientStop Color="#FFE4E5F4" Offset="0.995"/>
+            </LinearGradientBrush>
+        </Ellipse.Fill>
+    </Ellipse>
+    <!-- Bevel -->
+    <Ellipse Stroke="#FF000000" Width="116" Height="112" Canvas.Left="20" 
+        Canvas.Top="22">
+        <Ellipse.Fill>
+            <!-- This linear gradient creates a subtle shadow effect on the outer rim. -->
+            <LinearGradientBrush EndPoint="0.867,0.848" StartPoint="0.232,0.126">
+                <GradientStop Color="Black" Offset="0.1"/>
+                <GradientStop Color="#FFE4E5F4" Offset="0.995"/>
+            </LinearGradientBrush>
+        </Ellipse.Fill>
+    </Ellipse>
+    <!-- Clock Face -->
+    <Ellipse Stroke="#FF000000" Width="106" Height="103"  
+        Canvas.Left="25" Canvas.Top="27" Fill="#FF000000"/>
+    <!-- Central Clock Circle -->
+    <Ellipse Fill="#FF000000" Stroke="#FF008000" StrokeThickness="3" 
+        Width="12" Height="11" Canvas.Left="72" Canvas.Top="76"/>
+     <!-- Second Hand -->
+    <Rectangle Fill="Red" Width="2" Height="32" Canvas.Left="77" Canvas.Top="90"
+        RenderTransformOrigin="0.65,-0.26" x:Name="SecondHand" >
+        <Rectangle.RenderTransform>
+            <RotateTransform x:Name="secondHandTransform"/>
+        </Rectangle.RenderTransform>
+    </Rectangle>
+   <!-- Minute Hand -->
+    <Rectangle Fill="Blue" Width="3" Height="32" Canvas.Left="77" Canvas.Top="90"
+        RenderTransformOrigin="0.41,-0.26" x:Name="MinutedHand">
+        <Rectangle.RenderTransform>
+            <RotateTransform x:Name="minuteHandTransform"/>
+        </Rectangle.RenderTransform>
+    </Rectangle>
+    <!-- Hour Hand -->
+    <Rectangle Fill="Green" Width="4" Height="24" Canvas.Left="77" Canvas.Top="90"
+        RenderTransformOrigin="0.35,-0.35" x:Name="HourHand">
+        <Rectangle.RenderTransform>
+            <RotateTransform x:Name="hourHandTransform"/>
+        </Rectangle.RenderTransform>
+    </Rectangle>
+</Canvas>
+

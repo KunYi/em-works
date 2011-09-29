@@ -1,0 +1,46 @@
+;
+; CS&ZHL Aug-5-2011: add registry for ETA503
+;
+;
+; The registry for ISA based four 16C550s with a shared interrupt line
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial6]
+   "DeviceArrayIndex"=dword:6
+   "Prefix"="COM"
+   "Dll"="isa_serial.dll"
+   "DeviceID"=dword:69							; EXT_INT5 -> EM9170_GPIO10
+   "IOBaseAddress"=dword:BF800060		; virtual uncached base address of UART0 => ISA_CS1#
+   "StartDeviceIndex"=dword:6					; start COM logical number
+   "Order"=dword:8
+   "TrueInstall"=dword:0							; install option -> = 0: quit install, = 1: true install 
+
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial7]
+;   "DeviceArrayIndex"=dword:7
+;   "Prefix"="COM"
+;   "Dll"="isa_serial.dll"
+;   "DeviceID"=dword:29							; ETA503_UART1 => AT91C_ID_PIOB = 0x03
+;   "IOBaseAddress"=dword:BF800068		; virtual uncached base address of UART1 => ISA_CS1#
+;   "StartDeviceIndex"=dword:6					; start COM logical number
+;   "Order"=dword:9
+;   "TrueInstall"=dword:0							; install option -> = 0: quit install, = 1: true install 
+
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial8]
+;   "DeviceArrayIndex"=dword:8
+;   "Prefix"="COM"
+;   "Dll"="isa_serial.dll"
+;   "DeviceID"=dword:2a								; ETA503_UART2 => AT91C_ID_PIOB = 0x03
+;   "IOBaseAddress"=dword:BF800070		; virtual uncached base address of UART2 => ISA_CS1#
+;   "StartDeviceIndex"=dword:6					; start COM logical number
+;   "Order"=dword:10
+;   "TrueInstall"=dword:0							; install option -> = 0: quit install, = 1: true install 
+
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial9]
+;   "DeviceArrayIndex"=dword:9
+;   "Prefix"="COM"
+;   "Dll"="isa_serial.dll"
+;   "DeviceID"=dword:2b								; ETA503_UART3 => AT91C_ID_PIOB = 0x03
+;   "IOBaseAddress"=dword:BF800078		; virtual uncached base address of UART3 => ISA_CS1#
+;   "StartDeviceIndex"=dword:6					; start COM logical number
+;  "Order"=dword:11
+;  "TrueInstall"=dword:0							; install option -> = 0: quit install, = 1: true install 
+

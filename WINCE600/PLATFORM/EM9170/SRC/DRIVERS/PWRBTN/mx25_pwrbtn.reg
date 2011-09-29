@@ -1,0 +1,14 @@
+;------------------------------------------------------------------------------
+; 
+; Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+; 
+;------------------------------------------------------------------------------
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWRBUTTON]
+    "Prefix"="PWR"
+    "Dll"="pwrbtn.dll"
+    "Order"=dword:2
+    "debouncePeriod"=dword:64   ; -> 100ms, The minimum duration of the press. If the pressure 
+                                ; doesn't last at least "debounce" milliseconds, 
+                                ; it's not taken in account. Setting to 0, disables the power button.

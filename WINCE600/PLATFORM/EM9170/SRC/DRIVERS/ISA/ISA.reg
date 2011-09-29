@@ -1,0 +1,10 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;//------------------------------------------------------------------------------
+IF BSP_EM9170
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ISA1]
+   "Prefix"="ISA"
+   "Dll"="isa.dll"
+   "Index"=dword:1
+   "Order"=dword:10
+ENDIF ; BSP_EM9170

@@ -1,0 +1,33 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000008:WARNS ] USBMSFN is not a subdirectory of D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\.
+BUILD: [00:0000000009:WARNS ] USBCLASS is not a subdirectory of D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\.
+BUILD: [00:0000000033:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\BLOCK\NANDPDD\Build.err does not exist (2).
+BUILD: [00:0000000034:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\BLOCK\NANDPDD\Build.wrn does not exist (2).
+BUILD: [00:0000000045:WARNS ] Directory: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\inc\ does not exist.
+BUILD: [00:0000000109:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\TOUCH\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\tchmdd.lib.
+BUILD: [00:0000000132:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\ESDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdcardlib.lib.
+BUILD: [00:0000000133:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\ESDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdbus.lib.
+BUILD: [00:0000000157:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\UUT\: Missing source file: D:\WINCE600\platform\common\lib\ARMV4I\retail\uut_common_fsl_v2_pdk1_7.lib.
+BUILD: [00:0000000158:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\UUT\obj\ARMV4I\retail\bspuut.obj does not exist (2).
+BUILD: [00:0000000172:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\ESAI\obj\ARMV4I\retail\wm8580.obj does not exist (2).
+BUILD: [00:0000000173:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\ESAI\obj\ARMV4I\retail\ak5702.obj does not exist (2).
+BUILD: [00:0000000174:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\ESAI\obj\ARMV4I\retail\bsphwctxt.obj does not exist (2).
+BUILD: [00:0000000192:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000193:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\esai_wm8580.lib does not exist (2).
+BUILD: [00:0000000194:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\BLOCK\NANDFMD\obj\ARMV4I\retail\nfc_sys.obj does not exist (2).
+BUILD: [00:0000000213:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000214:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\esai_wm8580.lib does not exist (2).
+BUILD: [00:0000000215:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\flashpdd_nand.lib does not exist (2).
+BUILD: [00:0000000216:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\CAMERA\obj\ARMV4I\retail\bspcsi.obj does not exist (2).
+BUILD: [00:0000000217:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\CAMERA\obj\ARMV4I\retail\cameraov2640.obj does not exist (2).
+BUILD: [00:0000000233:WARNN ] File: D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\obj\ARMV4I\retail\bsppwm.obj does not exist (2).
+BUILD: [00:0000000247:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000248:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\esai_wm8580.lib does not exist (2).
+BUILD: [00:0000000249:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\flashpdd_nand.lib does not exist (2).
+BUILD: [00:0000000250:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\camera.lib does not exist (2).
+BUILD: [00:0000000251:WARNN ] File: D:\WINCE600\platform\EM9170\lib\ARMV4I\retail\pwm.lib does not exist (2).
+BUILD: [00:0000000252:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWRBTN\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
+BUILD: [00:0000000253:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWRBTN\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.
+BUILD: [00:0000000378:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\UUT\: Missing source file: D:\WINCE600\platform\common\lib\ARMV4I\retail\uut_common_fsl_v2_pdk1_7.def.
+BUILD: [00:0000000443:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\FEC\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\ndis.lib.
+BUILD: [00:0000000507:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\ceosutil.lib.

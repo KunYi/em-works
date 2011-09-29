@@ -1,0 +1,37 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+IF BSP_PWM1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM1]
+   "Prefix"="PWM"
+   "Dll"="pwm.Dll"
+   "Order"=dword:1
+   "Index"=dword:1
+ENDIF  ; BSP_PWM1
+
+IF BSP_PWM2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM2]
+   "Prefix"="PWM"
+   "Dll"="pwm.Dll"
+   "Order"=dword:1
+   "Index"=dword:2
+ENDIF  ; BSP_PWM2
+
+IF BSP_PWM3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM3]
+   "Prefix"="PWM"
+   "Dll"="pwm.Dll"
+   "Order"=dword:1
+   "Index"=dword:3
+ENDIF  ; BSP_PWM3
+
+IF BSP_PWM4
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM4]
+   "Prefix"="PWM"
+   "Dll"="pwm.Dll"
+   "Order"=dword:1
+   "Index"=dword:4
+ENDIF  ; BSP_PWM4

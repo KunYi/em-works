@@ -1,0 +1,50 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+
+
+IF BSP_ESDHC1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ESDHC1_MX25]
+	"Order"=dword:21
+	"Dll"="esdhc.dll"
+	"Prefix"="SHC"
+	"Index"=dword:1
+	"DisableDMA"=dword:0											; Use this reg setting to disable internal DMA
+	"MaximumClockFrequency"=dword:3197500			; 52 MHz max clock speed
+	;"WakeupSource"=dword:1                                  ; this will enable system wakeup when card is inserted or removed during suspend state
+
+[HKEY_LOCAL_MACHINE\Comm\PegasSDN1\Parms]
+    "SdioBitMode"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\Comm\PegasSDN1\Parms]
+   "DisablePowerManagement"=dword:1
+   "ResetOnResume"=dword:0
+   "RebindOnResume"=dword:1
+ENDIF ;BSP_ESDHC1  
+
+
+IF BSP_ESDHC2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ESDHC2_MX25]
+    "Order"=dword:21
+    "Dll"="esdhc.dll"
+    "Prefix"="SHC"
+    "Index"=dword:2
+    "DisableDMA"=dword:0                          ; Use this reg setting to disable internal DMA
+    "MaximumClockFrequency"=dword:3197500         ; 52 MHz max clock speed
+    ;"WakeupSource"=dword:1 
+ENDIF ;BSP_ESDHC2  
+
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\MMC]
+    "Name"="MMC Card"
+    "Folder"="MMCMemory"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory]
+    "Name"="SD Memory Card"
+    "Folder"="SDMemory"
+
+

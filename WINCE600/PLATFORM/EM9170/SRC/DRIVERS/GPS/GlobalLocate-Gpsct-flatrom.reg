@@ -1,0 +1,93 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Global Locate\Lto Manager]
+"ForceDownloadOnExpiration"=hex:00
+"AlwaysOptimize"=hex:00
+"OptimizeData"=hex:01
+"ShowTrayIcon"=hex:00
+"OEMProductName"="Freescale i.MX35 high-performance A-GPS system"
+"LtoBrandName"="Express GPS Connect"
+"AssistanceWarningTime"=dword:0000000c
+"LtoFile"="0"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Global Locate\Lto Manager\Files]
+"Server"="http://gllto.glpals.com"
+"LocalPath_0"="Gpsct\\lto.dat"
+"RemotePath_0"="7day/latest/lto.dat"
+"LastDownloadTime_0"="1601-01-01T00:00:00"
+"RefreshCycle_0"="172800"
+"MinRefreshCycle_0"="21600"
+"Priority_0"=dword:00000064
+"LocalPath_1"="Gpsct\\svstatus.txt"
+"RemotePath_1"="7day/latest/svstatus.txt"
+"LastDownloadTime_1"="1601-01-01T00:00:00"
+"RefreshCycle_1"="172800"
+"MinRefreshCycle_1"="21600"
+"Priority_1"=dword:00000065
+"LocalPath_2"="Lto Manager\\NtpList.txt"
+"RemotePath_2"="ntp.txt"
+"LastDownloadTime_2"="1601-01-01T00:00:00"
+"RefreshCycle_2"="15724800"
+"MinRefreshCycle_2"="7862400"
+"Priority_2"=dword:000000c8
+"LocalPath_3"="Lto Manager\\DownloadTime.txt"
+"RemotePath_3"="cgi-bin/now"
+"LastDownloadTime_3"="1601-01-01T00:00:00"
+"RefreshCycle_3"="172800"
+"MinRefreshCycle_3"="21600"
+"Priority_3"=dword:00000065
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Apps\Global Locate Gpsct]
+"InstallDir"="\\Windows"
+
+[HKEY_LOCAL_MACHINE\System\State\GPS]
+"GPSRadioState"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Global Locate\Gpsct]
+"ShowExpirationWarnings"=hex:0
+"NmeaComPort"="NAV1:"
+"GpsComPort"="COM2:"
+"GpsControlPort"="GPS2:"
+"Configuration"="HABI"
+"BusType"="BUS_UART"
+"3rdPartyGpsApp"="\\Windows\\VisualGpsCE.exe" 
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Global Locate\Gpsct\Uart]
+"GpsComSpeed"=dword:0001c200
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Global Locate\Gpsct\Rtc]
+"UpdateSystemTime"=hex:0
+
+[HKEY_LOCAL_MACHINE\Services\GpsctController]
+"DLL"="GpsctService.dll"
+"Prefix"="GPS"
+"FriendlyName"="Global Locate A-GPS task controller"
+"Index"=dword:00000000
+"Order"=dword:00000009
+"ServiceContext"=dword:00000000
+"Flags"=dword:00000000
+@="Global Locate A-GPS Controller "
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\glvc_pub]
+"FriendlyName"="Internal AGPS NMEA"
+"DeviceType"=dword:00000000
+"Index"=dword:00000008
+"Order"=dword:00000002
+"Prefix"="COM"
+"DLL"="GlvcDriver.dll"
+"Flags"=dword:00000012
+"UserProcGroup"=dword:00000003
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\glvc_nav]
+"DeviceType"=dword:00000000
+"Index"=dword:00000001
+"Order"=dword:00000002
+"Prefix"="NAV"
+"DLL"="GlvcDriver.dll"
+"Flags"=dword:00000012
+"UserProcGroup"=dword:00000003
+
+
+; --- dmar01 --- : Make VisualGPS chose UART8 as default
+[HKEY_CURRENT_USER\Software\VGPS\VisualGPSce\Serial Port Commmunications]
+"Port"=dword:00000008

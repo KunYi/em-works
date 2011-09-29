@@ -1,0 +1,50 @@
+;
+; The registry for eight ISA based 16C550 with a shared interrupt line
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_5]
+   "DeviceArrayIndex"=dword:5
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_6]
+   "DeviceArrayIndex"=dword:6
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_7]
+   "DeviceArrayIndex"=dword:7
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_8]
+   "DeviceArrayIndex"=dword:8
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_9]
+   "DeviceArrayIndex"=dword:9
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_10]
+   "DeviceArrayIndex"=dword:a
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_11]
+   "DeviceArrayIndex"=dword:b
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_12]
+   "DeviceArrayIndex"=dword:c
+   "Prefix"="COM"
+   "Dll"="pl010serial.Dll"
+   "Order"=dword:0

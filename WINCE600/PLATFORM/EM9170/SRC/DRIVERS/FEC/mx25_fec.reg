@@ -1,0 +1,88 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Comm\FEC]
+   "DisplayName"="FEC Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="fec.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\FEC\Linkage]
+   "Route"=multi_sz:"FEC1"
+
+[HKEY_LOCAL_MACHINE\Comm\FEC1]
+   "DisplayName"="FEC Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="fec.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\FEC1\Parms]
+   "BusNumber"=dword:0
+   "BusType"=dword:0
+   ; DuplexMode: 0:AutoDetect; 1:HalfDuplex; 2:FullDuplex.
+   "DuplexMode"=dword:0
+   ; The Ethernet Physical Address. For example,
+   ; Ethernet Address 00:24:20:10:bf:03 is MACAddress1=0024,
+   ; MACAddress2=2010,and MACAddress3=bf03.
+   "MACAddress1"=dword:1213
+   "MACAddress2"=dword:1728
+   "MACAddress3"=dword:3120
+
+[HKEY_LOCAL_MACHINE\Comm\FEC1\Parms\TcpIp]
+;   ; This should be MULTI_SZ
+;   "DefaultGateway"=""
+;   ; This should be SZ... If null it means use LAN, else WAN and Interface.
+;   "LLInterface"=""
+;   ; Use zero for broadcast address? (or 255.255.255.255)
+;   "UseZeroBroadcast"=dword:0
+;   ; Thus should be MULTI_SZ, the IP address list
+;   "IpAddress"="0.0.0.0"
+;   ; This should be MULTI_SZ, the subnet masks for the above IP addresses
+;   "Subnetmask"="0.0.0.0"
+;   "EnableDHCP"=dword:1
+;
+; CS&ZHL JUN-2-2011
+;
+	"EnableDHCP"=dword:0
+	"UseZeroBroadcast"=dword:0
+	"DefaultGateway"="192.168.201.19"
+	"IpAddress"="192.168.201.176"
+	"Subnetmask"="255.255.255.0"
+	"DNS"="61.139.2.69"
+	"WINS"="0.0.0.0"
+
+[HKEY_LOCAL_MACHINE\Comm\TcpIp\Parms]
+
+   ;Set to True to keep the device from entering idle mode if there's network adapter 
+    ;;"NoIdleIfAdapter"=dword:1
+    ;Set to True to keep the device from entering idle mode while communicating/loop back 
+    "NoIdleIfConnected"=dword:1
+
+
+[HKEY_LOCAL_MACHINE\Comm\Tcpip\Linkage]
+   ; This should be MULTI_SZ
+   ; This is the list of llip drivers to load
+   "Bind"=multi_sz:"FEC1"
+
+; CS&ZHL JUN-2-2011: 
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\NDIS]
+	"Dll"="NDIS.Dll"
+	"Prefix"="NDS"
+	"Index"=dword:0
+	"Order"=dword:1
+	; Indicate NDS is a power manageable interface
+	"IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"
+
+;[HKEY_LOCAL_MACHINE\Drivers\Virtual]
+;    "Dll"="RegEnum.dll"
+;    "Order"=dword:1
+;    "Flags"=dword:1
+;
+;[HKEY_LOCAL_MACHINE\Drivers\Virtual\NDIS]
+;    "Dll"="NDIS.dll"
+;    "Order"=dword:1
+;    "Prefix"="NDS"
+;    "Index"=dword:0
+
