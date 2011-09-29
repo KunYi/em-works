@@ -1,0 +1,43 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this sample source code is subject to the terms of the Microsoft
+license agreement under which you licensed this sample source code. If
+you did not accept the terms of the license agreement, you are not
+authorized to use this sample source code. For the terms of the license,
+please see the license agreement between you and Microsoft or, if applicable,
+see the LICENSE.RTF on your install media or the root of your tools installation.
+THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
+!endif
+
+TARGETNAME=pxa27x_ms_v1_xllp
+TARGETTYPE=LIBRARY
+
+INCLUDES=$(INCLUDES);..\inc
+
+CDEFINES= $(CDEFINES) -DWinCE_BUILD
+
+!IF "$(SDRAM_SIZE_64_MB)" == "1"
+CDEFINES=$(CDEFINES) -DSDRAM_SIZE_64_MB
+ADEFINES=$(ADEFINES) -pd "SDRAM_SIZE_64_MB SETS \"1\""
+!ENDIF
+
+SOURCES=\
+    xllp_ci.c \
+    xllp_ac97.c \
+    xllp_gpio.c \
+    xllp_i2c.c \
+    xllp_keypad.c \
+    xllp_lcd.c \
+    xllp_ost.c \
+    xllp_pccardsocket.c \
+    xllp_serialization.c \
+    xllp_pm_sleepcontext.c
+
+ARM_SOURCES=\
+    xlli_lowlev_init.s \
+    xllp_pm_sleepfwa.s \
+    xllp_pm_sleepcontexta.s \
+    xllp_cpdvm.s \
+    xllp_wmmx.s

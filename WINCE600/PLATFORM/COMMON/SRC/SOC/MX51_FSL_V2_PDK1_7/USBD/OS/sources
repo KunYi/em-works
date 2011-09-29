@@ -1,0 +1,23 @@
+!if 0
+Copyright (C) 2005-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=usb_usbfn_os_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO -DSUSPEND_WITH_ATA -DCFG_BURST -DEP_MIRROR_CFG -DUSBCV_FIX
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\USBD\OS; \
+    $(_PLATFORMROOT)\common\src\inc; \
+    $(INCLUDES) \
+    ..\common
+
+
+SOURCES=\
+    i_os.c \
+    i_registry.c

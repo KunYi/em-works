@@ -1,0 +1,20 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=wavedev_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+SOURCES= \
+    devctxt.cpp \
+    hwctxt.cpp \
+    midinote.cpp \
+    midistrm.cpp \
+    output.cpp \
+    strmctxt.cpp \
+    wavemain.cpp \
+    mixerdrv.cpp

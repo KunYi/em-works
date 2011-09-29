@@ -1,0 +1,43 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=oal_cache_armv7_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+NOMIPS16CODE=1
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\inc;\
+    $(INCLUDES)
+
+SOURCELIBS= \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\flushic.obj         \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\flushuc.obj         \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\flushuclines.obj    \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\cleanuc.obj         \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\cleanuclines.obj    \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\cleardtlb.obj       \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\clearitlb.obj       \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\clearutlb.obj       \
+    $(_PLATFORMROOT)\COMMON\SRC\ARM\COMMON\CACHE\obj\$(_CPUDEPPATH)\clearutlbentry.obj  \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_cache.lib
+
+SOURCES=               \
+    flush.c
+
+ARM_SOURCES=            \
+    cleandc.s           \
+    cleandclines.s      \
+    cleardtlbentry.s    \
+    clearitlbentry.s    \
+    flushdc.s           \
+    flushdclines.s      \
+    flushiclines.s      \
+    init.s              \
+    cachemode.s

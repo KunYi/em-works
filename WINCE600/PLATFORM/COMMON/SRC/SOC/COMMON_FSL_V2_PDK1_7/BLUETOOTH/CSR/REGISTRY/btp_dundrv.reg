@@ -1,0 +1,23 @@
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\BchsDunDrv]
+   "Index"=dword:9
+   "Prefix"="COM"
+   "Dll"="btp_duncdrv.dll"
+   "Order"=dword:15
+   "BluetoothAddress"=""
+   
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\BchsDunDrv\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:6
+   "FriendlyName"="Bluetooth DUN"
+   "DevConfig"=hex: 10,00, 00,00, 02,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+   
+[HKEY_LOCAL_MACHINE\ExtModems\BluetoothDUN]
+   "Port"="COM9:"
+   "DeviceType"=dword:1
+   "FriendlyName"="Bluetooth DUN"
+   "Index"=dword:3
+   "IClass"="{CC5195AC-BA49-48a0-BE17-DF6D1B0173DD}"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\DUNC]
+   "State"=dword:0
+   "BluetoothAddress"=""

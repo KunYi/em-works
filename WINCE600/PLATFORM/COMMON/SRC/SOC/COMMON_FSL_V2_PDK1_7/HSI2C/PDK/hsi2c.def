@@ -1,0 +1,19 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;------------------------------------------------------------------------------
+
+LIBRARY HIC
+
+EXPORTS
+   HIC_Init
+   HIC_Deinit
+   HIC_Open
+   HIC_Close
+   HIC_Read
+   HIC_Write
+   HIC_Seek
+   HIC_PowerDown
+   HIC_PowerUp
+   HIC_IOControl

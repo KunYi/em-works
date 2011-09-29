@@ -1,0 +1,25 @@
+!if 0
+Copyright (C) 2005-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=usb_usbfn_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO -DSUSPEND_WITH_ATA -DCFG_BURST -DRESET_PHY -DUSBCV_FIX -DUSBCV_MSC
+
+#USBCV_FIX  : fix USBCV test suspend resume problem
+#USBCV_MSC  : fix the 0 length transfer in USBCV MSC Tests
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\inc; \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\USBD\COMMON; \
+    $(INCLUDES)
+
+
+SOURCES=\
+    i_pdd.c \
+    
