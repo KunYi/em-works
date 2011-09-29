@@ -1,0 +1,29 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+IF BSP_I2CBUS1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2C1]
+   "Prefix"="I2C"
+   "Dll"="i2c.dll"
+   "Index"=dword:1
+   "Order"=dword:0
+ENDIF ; BSP_I2CBUS1
+
+IF BSP_I2CBUS2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2C2]
+   "Prefix"="I2C"
+   "Dll"="i2c.dll"
+   "Index"=dword:2
+   "Order"=dword:0
+ENDIF ; BSP_I2CBUS2
+
+IF BSP_I2CBUS3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2C3]
+   "Prefix"="I2C"
+   "Dll"="i2c.dll"
+   "Index"=dword:3
+   "Order"=dword:0
+ENDIF ; BSP_I2CBUS3

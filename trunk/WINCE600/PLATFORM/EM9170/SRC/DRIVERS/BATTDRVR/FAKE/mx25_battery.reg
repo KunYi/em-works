@@ -1,0 +1,31 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+; These registry entries load the battery driver.  The IClass value must match
+; the BATTERY_DRIVER_CLASS definition in battery.h -- this is how the system
+; knows which device is the battery driver.  Note that we are using 
+; DEVFLAGS_NAKEDENTRIES with this driver.  This tells the device manager
+; to instantiate the device with the prefix named in the registry but to look
+; for DLL entry points without the prefix.  For example, it will look for Init
+; instead of BAT_Init.  This allows the prefix to be changed in the registry (if
+; desired) without editing the driver code.
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Battery]
+   "Prefix"="BAT"
+;IF BSP_PMIC_MC13783
+   "Dll"="battdrvr.dll"
+;ENDIF
+   "Flags"=dword:8                      ; DEVFLAGS_NAKEDENTRIES
+   "IClass"="{DD176277-CD34-4980-91EE-67DBEF3D8913}"
+   "BattFullLiftTime" = dword:8         ;Batt Spec defined: in unit of hr, here 8hr is assumed
+   "BattFullCapacity"=dword:320     ;Batt Spec defined: in unit of mAh, here 800mAhr is assumed
+   "BattMaxVoltage"=dword:1068     ;Batt Spec defined: in unit of mV, here 4200mV is assumed
+   "BattMinVoltage"=dword:BB8     ;Batt Spec defined: in unit of mV, here 3000mV is assumed
+   "BattPeukertNumber"=dword:73     ;Batt Spec defined, here 1.15 is assumed
+   "BattChargeEff"=dword:50     ;Batt Spec defined, here 0.80 is assumed
+
+[HKEY_LOCAL_MACHINE\System\Events]
+    "SYSTEM/BatteryAPIsReady"="Battery Interface APIs"

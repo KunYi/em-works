@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_NOBATTERY)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+
+TARGETNAME=battdrvr
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+PREPROCESSDEFFILE=1
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    
+    
+
+SOURCELIBS= \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\battdrvr_lib.lib
+    
+DEFFILE=battdrvr.def
+
+INCLUDES= \
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\INC
+    
+
+SOURCES= \
+    battdrvr.cpp\
+    
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_battery.reg \
+

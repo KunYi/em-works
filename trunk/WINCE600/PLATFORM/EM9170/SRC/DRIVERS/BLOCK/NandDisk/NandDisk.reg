@@ -1,0 +1,37 @@
+; HIVE BOOT SECTION
+
+[HKEY_LOCAL_MACHINE\Drivers\BlockDevice\NandDisk]
+	"Prefix"="DSK"
+	"Dll"="NandDisk.dll"
+	"Order"=dword:0
+	"Ioctl"=dword:4
+	"Profile"="NandDisk"
+	"FriendlyName"="BINFS Flash Driver"
+	"MountFlags"=dword:11
+	"BootPhase"=dword:0
+	"Flags"=dword:1000
+
+; Bind BINFS to the block driver
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\NandDisk]
+	"DefaultFileSystem"="BINFS"
+	"PartitionDriver"="mspart.dll"
+	"AutoMount"=dword:1
+	;"AutoPart"=dword:1
+	;"MountFlags"=dword:0
+	"BootPhase"=dword:0
+	"Folder"="BINFS"
+	"Name"="BINFS Flash Disk"
+	"MountAsROM"=dword:1
+	"MountHidden"=dword:1
+	"MountFlags"=dword:11
+	"MountPermanent"=dword:1
+	"Flags"=dword:1000
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\AutoLoad\NSDisk]
+	"DriverPath"="Drivers\\BlockDevice\\NandDisk"
+	"LoadFlags"=dword:1
+	;"MountFlags"=dword:11
+	"BootPhase"=dword:0
+	"Flags"=dword:1000
+
+; END HIVE BOOT SECTION

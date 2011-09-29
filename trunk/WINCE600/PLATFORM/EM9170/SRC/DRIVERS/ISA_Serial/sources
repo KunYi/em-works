@@ -1,0 +1,52 @@
+# Copyright (c) Microsoft Corporation.  All rights reserved.
+# Use of this source code is subject to the terms of the Microsoft end-user
+# license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+# If you did not accept the terms of the EULA, you are not authorized to use
+# this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+# install media.
+# ------------------------------------------------------------------------------
+# IDE display files
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# SDK files
+# ------------------------------------------------------------------------------
+# Use this to automaticaly add new files to generated SDKs
+# For libraries, use $(TARGETNAME).lib in SDK_LIB_FILES list to add the
+# genrated lib to the SDK
+# Enable copy to the SDK directory
+# Hearder files
+# Lib files
+# 
+#  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\com_mdd2.lib \
+# 
+
+!IF "$(BSP_EM9170)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+RELEASETYPE=PLATFORM
+TARGETNAME=isa_serial
+TARGETTYPE=DYNLINK
+DLLENTRY=DllEntry
+CDEFINES=$(CDEFINES) -DUSE_NEW_SERIAL_MODEL
+TARGETLIBS= \
+  $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+
+SOURCELIBS= \
+  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+
+SOURCES= \
+  isa_16550.c \
+  isa_com.c \
+  isa_mdd.c \
+
+DEFFILE=isa_serial.def
+FILE_VIEW_RESOURCE_FOLDER= \
+  isa_serial.def \
+  isa_uart_x4.reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    isa_com.h \
+    isa_16550.h \
+    serpriv.h \
+

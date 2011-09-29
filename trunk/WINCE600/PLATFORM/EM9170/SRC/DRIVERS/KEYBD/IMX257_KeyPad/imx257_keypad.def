@@ -1,0 +1,25 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+LIBRARY         IMX257_KEYPAD 
+
+EXPORTS
+	DllMain
+	KBD_Init=Init
+	KBD_Deinit=Deinit
+	KBD_PowerDown=PowerDown
+	KBD_PowerUp=PowerUp
+; Dummy functions
+	KBD_Open=Open
+	KBD_Close=Close
+	KBD_Read=Read
+	KBD_Write=Write
+	KBD_Seek=Seek
+	KBD_IOControl=IOControl

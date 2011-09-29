@@ -1,0 +1,14 @@
+;------------------------------------------------------------------------------
+;
+; Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\DVFC]
+   "Prefix" = "DVF"
+   "Index" = dword:1
+   "Dll"="dvfc_MC34704.dll"
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"    ; PMCLASS_GENERIC_DEVICE
+   "order"=dword:1

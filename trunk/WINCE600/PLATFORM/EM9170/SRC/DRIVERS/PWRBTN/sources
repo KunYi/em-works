@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+!endif
+
+!IF "$(BSP_PWRBTN)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=pwrbtn
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DLLENTRY=DllEntry
+
+TARGETLIBS= \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=
+
+DEFFILE=pwrbtn.def
+
+SOURCES= pwrbtn.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_pwrbtn.reg\
+    pwrbtn.def
+
+
+
+

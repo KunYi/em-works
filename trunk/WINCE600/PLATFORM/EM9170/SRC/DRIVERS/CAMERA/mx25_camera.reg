@@ -1,0 +1,24 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Camera]
+   "Prefix"="CAM"
+   "Dll"="camera.dll"
+   "Order"=dword:20
+   "Index"=dword:1 
+   "CameraId"=dword:0 ; Default sensor is Omnivision OV2640
+   "IClass"=multi_sz: "{CB998A05-122C-4166-846A-933E4D7E3C86}","{A32942B7-920C-486b-B0E6-92A702A99B35}"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\Capture]
+   "Prefix"="PIN"
+   "Dll"="camera.dll"
+   "Order"=dword:20
+   "Index"=dword:1
+   "PinCount"=dword:3 ;Pin count. Max = 3; default = 2
+   "MemoryModel"=dword:1 ; Pin memory mode.
+   "IClass"=multi_sz:"{C9D092D6-827A-45E2-8144-DE1982BFC3A8}",
+                     "{A32942B7-920C-486b-B0E6-92A702A99B35}"

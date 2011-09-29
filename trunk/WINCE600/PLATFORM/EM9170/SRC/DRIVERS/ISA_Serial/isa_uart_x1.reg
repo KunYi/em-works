@@ -1,0 +1,11 @@
+;
+; Registries of one UART ports on EM9161 ISA bus
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial4]
+   "DeviceArrayIndex"=dword:5			; COM port number, -> COM5
+   "Prefix"="COM"						; COM
+   "Dll"="isa_serial.dll"				; 
+   "Order"=dword:3						;
+   "DeviceID"=dword:1f					; = 31 => AT91C_ID_IRQ2
+   "IOBaseAddress"=dword:BF800020		; virtual uncached base address of UART0
+

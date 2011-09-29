@@ -1,0 +1,34 @@
+!IF "$(BSP_EM9170)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=WDT
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=WDT_DllEntry
+
+DEFFILE=WDT.def
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+	$(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    WDT.reg \
+    WDT.def \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\..\INC\bsp_drivers.h \
+    ..\..\..\..\COMMON\SRC\SOC\MX25_FSL_V2_PDK1_7\INC\mx25_ddk.h \
+    ..\..\INC\em9170_cpld.h \
+
+SOURCES= \
+    wdt_io.cpp \
+

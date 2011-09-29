@@ -1,0 +1,24 @@
+;  Copyright (C) 2005-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+; 
+
+; This file is to be included in platform.reg if required.
+;
+
+; USB - EHCI driver
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\HCD_HSH2]
+   "Prefix"="HCD"
+   "Dll"="hcd_hsh2.dll"
+   "Order"=dword:15
+   "Class"=dword:0c
+   "SubClass"=dword:03
+   "ProgIF"=dword:20
+   "MemBase"=dword:53FF4000
+   "MemLen"=dword:00001000
+   "irq"=dword:23
+   "IsrDll"="giisr.dll"
+   "IsrHandler"="ISRHandler"
+   "HcdCapability"=dword:4      ;HCD_SUSPEND_ON_REQUEST
+   "OTGSupport"=dword:0
+   "OTGGroup"="02"

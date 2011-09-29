@@ -1,0 +1,48 @@
+# Copyright (c) Microsoft Corporation.  All rights reserved.
+# Use of this source code is subject to the terms of the Microsoft end-user
+# license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+# If you did not accept the terms of the EULA, you are not authorized to use
+# this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+# install media.
+# 
+#  Copyright  1999 Intel Corp.
+# 
+
+!IF "$(BSP_EM9170_KEYPAD)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=imx257_keypad
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+TARGETDEFNAME=keypad
+DEFFILE=imx257_keypad.def
+PREPROCESSDEFFILE=1
+DLLENTRY=DllMain
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\Keypad_$(_SOCDIR).lib 
+
+
+SOURCES= \
+  keypad.cpp\
+  custom_keypad.cpp \
+
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    keypad.hpp \
+    custom_keypad.hpp \
+    ..\..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\INC\common_kpp.h \
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    imx257_keypad.reg \
+    imx257_keypad.def \
+
+

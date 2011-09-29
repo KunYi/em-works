@@ -1,0 +1,2 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000079:WARNN ] Keypad_mx25_fsl_v2_pdk1_7.lib(soc_keypad.obj) : warning LNK4099: PDB 'keypad_mx25_fsl_v2_pdk1_7.pdb' was not found with 'D:\WINCE600\platform\common\lib\ARMV4I\retail\Keypad_mx25_fsl_v2_pdk1_7.lib' or at 'D:\WINCE600\platform\EM9170\target\ARMV4I\retail\keypad_mx25_fsl_v2_pdk1_7.pdb'; linking object as if no debug info

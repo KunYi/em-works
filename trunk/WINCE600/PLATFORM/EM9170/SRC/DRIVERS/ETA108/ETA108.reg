@@ -1,0 +1,12 @@
+
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ADS1]
+   "Prefix"="ADS"									 
+   "Dll"="ETA108.dll"								 
+   "Index" = dword:1		;"ADS1:"
+   "CSPIChannel" = dword:1      ; use CSPI1
+   "PWMChannel"  = dword:1      ; use PWM1
+   "DMASize"	= dword:5120
+   
+
+

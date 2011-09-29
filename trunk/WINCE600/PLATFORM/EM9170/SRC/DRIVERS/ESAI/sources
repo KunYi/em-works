@@ -1,0 +1,57 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+
+!IF "$(BSP_ESAI)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_CSPIBUS1)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_I2CBUS1)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=esai_wm8580
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=DllEntry
+
+#DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\esai_wm8580.def
+DEFFILE=esai.def
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\mmtimer.lib \
+    $(_PLATFORMROOT)\COMMON\lib\$(_CPUINDPATH)\spisdk_$(_COMMONSOCDIR).lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\i2csdk.lib \
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\esai_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\esai_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\asrcbase_$(_SOCDIR)_stub.lib        
+    
+INCLUDES=\
+    $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_COMMONSOCDIR)\ESAI; \
+    $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_COMMONSOCDIR)\INC; \
+    $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_COMMONSOCDIR)\ASRC\INC; \
+    $(INCLUDES)     
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_esai.reg \
+
+SOURCES=\
+    wm8580.cpp \
+    ak5702.cpp \
+    bsphwctxt.cpp 
+
+
+

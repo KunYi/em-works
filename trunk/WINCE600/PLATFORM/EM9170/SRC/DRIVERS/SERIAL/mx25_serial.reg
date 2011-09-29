@@ -1,0 +1,73 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+
+IF BSP_SERIAL_UART1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial1]
+   "DeviceArrayIndex"=dword:1
+   "IoBase"=dword:43F94000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:1
+   "Order"=dword:4
+   
+ENDIF ; BSP_SERIAL_UART1
+
+
+IF BSP_SERIAL_UART2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial2]
+   "DeviceArrayIndex"=dword:2
+   "IoBase"=dword:43F94000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:2
+   "Order"=dword:4
+   
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial2\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="EM9170 COM2 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF ; BSP_SERIAL_UART2
+
+IF BSP_SERIAL_UART5
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial3]
+   "DeviceArrayIndex"=dword:3
+   "IoBase"=dword:5002C000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:3
+   "Order"=dword:5
+ 
+ENDIF ; BSP_SERIAL_UART5
+
+IF BSP_SERIAL_UART4
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial4]
+   "DeviceArrayIndex"=dword:4
+   "IoBase"=dword:50008000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:4
+   "Order"=dword:6
+   
+ENDIF ; BSP_SERIAL_UART4
+
+IF BSP_SERIAL_UART3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial5]
+   "DeviceArrayIndex"=dword:5
+   "IoBase"=dword:5000C000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:5
+   "Order"=dword:7
+   
+ENDIF ; BSP_SERIAL_UART3

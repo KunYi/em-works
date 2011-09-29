@@ -1,0 +1,34 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_NOCSPDDK)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=cspddk
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+
+WINCEOEM=1
+SYNCHRONIZE_DRAIN=1
+
+DLLENTRY=_DllEntryCRTStartup
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\ddk_$(_SOCDIR).def
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\ddk_$(_SOCDIR).lib      \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\ddk_clk.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_bus.lib   \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_io.lib    \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_dma.lib   \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_map.lib   \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_time.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\ddk_sdma.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+
+SOURCES=

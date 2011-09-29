@@ -1,0 +1,46 @@
+;
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KEYPAD]
+;
+; CS&ZHL AUG-06-2008: support application loading keypad driver
+;
+[HKEY_LOCAL_MACHINE\Drivers\ISA_KEYPAD]
+    "Dll"="isa_keypad.dll"
+    "Prefix"="KBD"
+    "Order"=dword:4
+	"IClass"=multi_sz:"{CBE6DDF2-F5D4-4e16-9F61-4CCC0B6695F3}","{A32942B7-920C-486b-B0E6-92A702A99B35}"
+	"PollingTimeout"=dword:14	; 20ms in milliseconds
+	"NbOfKOUT"=dword:5			; = 5 -> 4x5 keypad, = 4 -> using default 4x4 keypad
+;
+; CS&ZHL SEP-08-2009: 4x5 matrix keypad configuration
+;
+	"K4X500"=dword:1B			; <VK_ESCAPE>
+	"K4X501"=dword:30			; <VK_0>
+	"K4X502"=dword:BC			; <VK_OEM_COMMA>
+	"K4X503"=dword:08			; <VK_BACK>
+	"K4X510"=dword:6B			; <VK_ADD>
+	"K4X511"=dword:31			; <VK_1>
+	"K4X512"=dword:32			; <VK_2>
+	"K4X513"=dword:33			; <VK_3>
+	"K4X520"=dword:6D			; <VK_SUBTRACT>
+	"K4X521"=dword:34			; <VK_4>
+	"K4X522"=dword:35			; <VK_5>
+	"K4X523"=dword:36			; <VK_6>
+	"K4X530"=dword:6A			; <VK_MULTIPLY>
+	"K4X531"=dword:37			; <VK_7>
+	"K4X532"=dword:38			; <VK_8>
+	"K4X533"=dword:39			; <VK_9>
+	"K4X540"=dword:6F				; <VK_DIVIDE>
+	"K4X541"=dword:20			; <VK_SPACE>
+	"K4X542"=dword:6E				; <VK_DECIMAL>
+	"K4X543"=dword:0D			; <VK_RETURN>
+
+	"KINPortOffset"=dword:0			; default setting: DIN_REG, virtual address, uncached
+	"KOUTPortOffset"=dword:0		; default setting: DOUT_REG, virtual address, uncached
+	
+;[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\KEYBD]
+;	"DriverName"="KbdNopUs.dll"
+;
+;[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Layouts\00000409] 
+;    "Layout File"="KbdNopUs.dll" 
+;    "Layout Text"="US" 
+;    "PS2_AT"="KbdNopUs.dll" 

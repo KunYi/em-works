@@ -1,0 +1,48 @@
+!if 0
+Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_CAMERA)" == ""
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_I2CBUS1)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=camera
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=_DllMainCRTStartup
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\cspddk.lib \
+    
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\camera_$(_SOCDIR).lib     \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\i2csdk.lib    \
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\camera_$(_SOCDIR).def
+
+INCLUDES=\
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\INC; \
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\CAMERA\INC; 
+    
+SOURCES= \
+    bspcsi.cpp \
+    cameraov2640.cpp \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    bspcsi.h \
+    cameraov2640.h \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_camera.reg \
+

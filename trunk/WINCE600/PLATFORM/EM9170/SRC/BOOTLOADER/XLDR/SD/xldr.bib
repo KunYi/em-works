@@ -1,0 +1,62 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;******************************************************************************
+; Copyright (C) 2007-2009 Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;******************************************************************************
+
+MEMORY
+
+;   Name          Start     Size      Type
+;   -------       --------  --------  ----
+    XLDR          00000000  00002000  RAMIMAGE; 8K (4K for extra romimage page + 4K actual XLDR code. Comments below)
+    RAM           00002000  0003E000  RAM     ; romimage wants a RAM section even though we will not use it
+                                              ; just specify 256K
+
+CONFIG
+
+    AUTOSIZE=OFF
+    COMPRESSION=OFF
+    PROFILE=OFF
+    KERNELFIXUPS=ON
+
+    ;ROM* creates xldr.nb0 file
+    ;Notes:
+    ; 1) romimage always adds a 4K page to the beginning of file. To get rid of this 4K page
+    ;    we'll specify additional 4K space for RAMIMAGE (above) and then cut it off from
+    ;    xldr.nb0 by specifying romstart at an offset of 4k.
+    ; 2) since RAMIMAGE compiles with range 0x0->0x01c00 and we chop off first 4K,
+    ;    and flash the remaining 4K at 0x00 on flash; it means we can't have
+    ;    absolute addressing in XLDR code. Only relative addresses should be used.
+    ; 2) if xldr.nb1 is generated you can safely ignore it if it contains only
+    ;    pTOC and other debugging data since we don't need them. Look at the generated
+    ;    file xldr.map to make sure that your code does not overflow beyond 2k boundary.
+    ;
+    ROMSTART=00001000       ; chop off first 4K specified in RAMIMAGE above.
+    ROMWIDTH=32
+    ROMSIZE=00001000        ; XLDR is 4KB.
+
+    ; ROMOFFSET adjusts the .bin file record headers to that they lie in flash 
+    ; (this tells the bootloader already on the device to store the image in flash).
+    ;
+    ; 00000000 + AA70000 = AA700000 (virtual cached) = 00000000 (physical)
+    ; (starting address of bootloader in flash as defined in image_cfg.h)
+    ;
+    ROMOFFSET=0x93700400
+
+
+MODULES
+
+;   Name    Path                                                            Memory Type
+;   ------  ----------------------------------------------                  -----------
+    nk.exe  $(_TARGETPLATROOT)\target\$(_TGTCPU)\$(WINCEDEBUG)\xldr.exe     XLDR
+

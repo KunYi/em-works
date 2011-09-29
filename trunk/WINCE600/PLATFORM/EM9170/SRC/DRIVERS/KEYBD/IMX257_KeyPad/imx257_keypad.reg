@@ -1,0 +1,53 @@
+[HKEY_LOCAL_MACHINE\Drivers\IMX257_KEYPAD]
+    "Dll"="imx257_keypad.dll"
+    "Prefix"="KBD"
+    "Order"=dword:4
+	"IClass"=multi_sz:"{CBE6DDF2-F5D4-4e16-9F61-4CCC0B6695F3}","{A32942B7-920C-486b-B0E6-92A702A99B35}"
+	"PollingTimeout"=dword:14	; in milliseconds
+	"NbOfKOUT"=dword:4			; = 5 -> 4x5 keypad, = 4 -> using default 4x4 keypad
+;
+; CS&ZHL NOV-10-2008: 4x4 matrix keypad
+;
+;	"K4X400"=dword:1B			; <VK_ESCAPE>
+;	"K4X401"=dword:30			; <VK_0>
+;	"K4X402"=dword:6E				; <VK_DECIMAL>
+;	"K4X403"=dword:08			; <VK_BACK>
+;	"K4X410"=dword:14			; <VK_CAPITAL>
+;	"K4X411"=dword:31			; <VK_1>
+;	"K4X412"=dword:32			; <VK_2>
+;	"K4X413"=dword:33			; <VK_3>
+;	"K4X420"=dword:20			; <VK_SPACE>
+;	"K4X421"=dword:34			; <VK_4>
+;	"K4X422"=dword:35			; <VK_5>
+;	"K4X423"=dword:36			; <VK_6>
+;	"K4X430"=dword:0D			; <VK_RETURN>
+;	"K4X431"=dword:37			; <VK_7>
+;	"K4X432"=dword:38			; <VK_8>
+;	"K4X433"=dword:39			; <VK_9>
+;
+; CS&ZHL AUG-11-2011: ROW as input, COL as output in EM9170
+;
+	"K4X400"=dword:1B			; <VK_ESCAPE>
+	"K4X401"=dword:14			; <VK_CAPITAL>
+	"K4X402"=dword:20			; <VK_SPACE>
+	"K4X403"=dword:0D			; <VK_RETURN>
+	"K4X410"=dword:30			; <VK_0>
+	"K4X411"=dword:31			; <VK_1>
+	"K4X412"=dword:34			; <VK_2>
+	"K4X413"=dword:37			; <VK_3>
+	"K4X420"=dword:6E				; <VK_SPACE>
+	"K4X421"=dword:32			; <VK_4>
+	"K4X422"=dword:35			; <VK_5>
+	"K4X423"=dword:38			; <VK_6>
+	"K4X430"=dword:08			; <VK_RETURN>
+	"K4X431"=dword:33			; <VK_7>
+	"K4X432"=dword:36			; <VK_8>
+	"K4X433"=dword:39			; <VK_9>
+	
+;[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\KEYBD]
+;	"DriverName"="KbdNopUs.dll"
+;
+;[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Layouts\00000409] 
+;    "Layout File"="KbdNopUs.dll" 
+;    "Layout Text"="US" 
+;    "PS2_AT"="KbdNopUs.dll" 

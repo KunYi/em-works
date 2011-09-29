@@ -1,0 +1,43 @@
+;//------------------------------------------------------------------------------
+;//
+;// Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;// THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;// AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+; // Registry file for General Purpose Timer module
+
+IF IMGPROFILER ! 
+IF BSP_GPT1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\GPT1]
+   "Prefix"="GPT"
+   "Dll"="gpt.Dll"
+   "Order"=dword:1
+   "Index"=dword:1
+ENDIF  ; BSP_GPT1
+ENDIF  ; IMGPROFILER !
+
+IF BSP_GPT2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\GPT2]
+   "Prefix"="GPT"
+   "Dll"="gpt.Dll"
+   "Order"=dword:1
+   "Index"=dword:2
+ENDIF  ; BSP_GPT2
+
+IF BSP_GPT3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\GPT3]
+   "Prefix"="GPT"
+   "Dll"="gpt.Dll"
+   "Order"=dword:1
+   "Index"=dword:3
+ENDIF  ; BSP_GPT3
+
+IF BSP_GPT4
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\GPT4]
+   "Prefix"="GPT"
+   "Dll"="gpt.Dll"
+   "Order"=dword:1
+   "Index"=dword:4
+ENDIF  ; BSP_GPT4

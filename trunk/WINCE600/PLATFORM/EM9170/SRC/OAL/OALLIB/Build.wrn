@@ -1,0 +1,2 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000026:WARNN ] D:\WINCE600\PLATFORM\EM9170\SRC\OAL\OALLIB\.\ioctl.c(1221) : warning C4013: 'WdogInit' undefined; assuming extern returning int
