@@ -30,7 +30,6 @@ SOURCES= \
     ETA108Class.cpp \
     SPIClass.cpp \
     bspcspi.c \
-    #..\CSPIBUS\PDK\bspcspi.c \
     
 
 DEFFILE= ETA108.def
