@@ -19,7 +19,7 @@ extern "C" {
 
 #include "bsp.h"
 #include "cspibus.h"
-#include "..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\CSPIBUSV2\PDK\cspiClass.h"
+//#include "..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\CSPIBUSV2\PDK\cspiClass.h"
 
 //------------------------------------------------------------------------------
 //Defines
@@ -27,7 +27,7 @@ extern "C" {
 //------------------------------------------------------------------------------
 //Types
 // 
-class spiClass:public cspiClass
+class spiClass
 {
 
 public:
@@ -35,10 +35,27 @@ public:
  	~spiClass();
 	BOOL CspiInitialize(DWORD Index);
 	void CspiRelease(void);
-public:
- 
+
 private:
- 
+	// DMA specific
+	BOOL InitCspiDMA(UINT32 Index);
+	BOOL DeInitCspiDMA(void);
+	BOOL InitChannelDMA(UINT32 Index);
+	BOOL DeinitChannelDMA(void);
+	BOOL UnmapDMABuffers(void);
+	BOOL MapDMABuffers(void);
+	VOID MoveDMABuffer(LPVOID pBuf, DWORD dwLen, BOOL bReceive);
+
+private:
+	UINT32 CspiExchangeSize(PCSPI_XCH_PKT0_T pXchPkt);
+	static UINT32 CspiBufRd8(LPVOID pBuf);
+	static UINT32 CspiBufRd16(LPVOID pBuf);
+	static UINT32 CspiBufRd32(LPVOID pBuf);
+	static void CspiBufWrt8(LPVOID pBuf, UINT32 data);
+	static void CspiBufWrt16(LPVOID pBuf, UINT32 data);
+	static void CspiBufWrt32(LPVOID pBuf, UINT32 data);
+
+	static DWORD WINAPI CspiProcess(LPVOID lpParameter);
 };
  
 
