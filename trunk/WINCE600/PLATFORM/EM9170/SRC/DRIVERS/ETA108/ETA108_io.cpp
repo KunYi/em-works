@@ -84,7 +84,7 @@ DWORD ADS_Init(LPCTSTR pContext)
 
 	// check for errors during RegQueryValueEx
 	if (regError != ERROR_SUCCESS)
-	{
+	{ 
 		RegCloseKey(hKey);
 		DEBUGMSG(ZONE_ERROR, (TEXT("ETA108_Init:  RegQueryValueEx failed!!!\r\n")));
 		return 0;
@@ -131,13 +131,13 @@ DWORD ADS_Init(LPCTSTR pContext)
 	RegCloseKey(hKey);
 
 	//ETA108 initialize
-// 	if( !pETA108->ETA108Initialize())
-// 	{
-// 		RETAILMSG(1, (TEXT("ETA108_Init:  CspiInitialize failed!!!\r\n")));
-// 		return 0;
-// 	}
-// 	
-// 	RETAILMSG(1, (TEXT("ETA108_Init: pETA108=0x%x\r\n"), pETA108));
+ 	if( !pETA108->ETA108Initialize())
+ 	{
+ 		RETAILMSG(1, (TEXT("ETA108_Init:  CspiInitialize failed!!!\r\n")));
+ 		return 0;
+ 	}
+ 	
+ 	RETAILMSG(1, (TEXT("ETA108_Init: pETA108=0x%x\r\n"), pETA108));
 	return (DWORD)pETA108;
 }
 
@@ -156,7 +156,7 @@ BOOL ADS_Deinit(DWORD hDeviceContext)
 
 DWORD ADS_Open(DWORD hDeviceContext, DWORD AccessCode, DWORD ShareMode)
 {
-	//DEBUGMSG (ZONE_OPEN|ZONE_FUNCTION, (TEXT("SPI_Open: hDeviceContext=0x%x\r\n"),hDeviceContext));
+	DEBUGMSG (ZONE_OPEN|ZONE_FUNCTION, (TEXT("SPI_Open: hDeviceContext=0x%x\r\n"),hDeviceContext));
 	// Remove-W4: Warning C4100 workaround
 	UNREFERENCED_PARAMETER(AccessCode);
 	UNREFERENCED_PARAMETER(ShareMode);
