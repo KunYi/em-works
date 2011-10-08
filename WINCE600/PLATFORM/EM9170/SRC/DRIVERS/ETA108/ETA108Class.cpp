@@ -101,13 +101,6 @@ eta108Class::~eta108Class()
 
 BOOL eta108Class::ETA108Initialize()
 {
-	//crate global heap for internal AD buffers
-	m_hHeap = HeapCreate(0, 0, 0);
-	if( m_hHeap == NULL )
-	{
-		goto error_init;
-	}
-
 	// create event for CSPI interrupt signaling
 	m_hCSPIEvent = CreateEvent( NULL, FALSE, FALSE, g_szCSPIEvent );
 	if( m_hCSPIEvent == NULL )
@@ -121,11 +114,11 @@ BOOL eta108Class::ETA108Initialize()
 			goto error_init;
 	}
 
-// 	m_pSpi = new spiClass;
-// 	if (m_pSpi && !m_pSpi->CspiInitialize(1)) 
-// 	{
-// 		goto error_init;
-// 	}
+ 	m_pSpi = new spiClass;
+ 	if (m_pSpi && !m_pSpi->CspiInitialize(1)) 
+ 	{
+ 		goto error_init;
+ 	}
 
 	return TRUE;
 
@@ -136,12 +129,12 @@ error_init:
 
 BOOL eta108Class::ETA108Release()
 {
-// 	if( m_pCspi )
-// 	{
-// 		m_pCspi->CspiRelease( );
-// 		delete m_pCspi;
-// 		m_pCspi = NULL;
-// 	}
+ 	if( m_pSpi )
+ 	{
+ 		m_pSpi->CspiRelease( );
+ 		delete m_pSpi;
+ 		m_pSpi = NULL;
+ 	}
 
 	if( m_hThread != NULL )
 	{
@@ -155,12 +148,6 @@ BOOL eta108Class::ETA108Release()
 
 	if( m_hCSPIEvent != NULL )
 		CloseHandle(m_hCSPIEvent);
-
-	if( m_hHeap != NULL )
-	{
-		HeapDestroy(m_hHeap);
-		m_hHeap = NULL;
-	}
 
 	return TRUE;
 }
@@ -263,7 +250,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 			goto error_cleanup;
 		}
 	}
-	else 	return FALSE;;
+	else 	return FALSE;
 
 	//2.Config CSPI & config ADS8201
 	CSPI_BUSCONFIG_T stCspiConfig;
@@ -285,17 +272,11 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiXchPkt.xchEvent = NULL;
 	stCspiXchPkt.xchEventLength = 0;
 
-	m_dwSamplingLength = pADSConfig->dwSamplingLength;
-	m_dwXchBufLen = m_dwSamplingLength<<1;	//m_dwSamplingLength*2
-	m_pSPITxBuf = (UINT16 *)HeapAlloc( m_hHeap, HEAP_ZERO_MEMORY,  m_dwXchBufLen );
-	if( m_pSPITxBuf == NULL )
-		goto error_cleanup;
-	m_pSPIRxBuf = (UINT16 *)HeapAlloc( m_hHeap, HEAP_ZERO_MEMORY,  m_dwXchBufLen );
-	if( m_pSPIRxBuf == NULL )
-		goto error_cleanup;
 
-	stCspiXchPkt.pTxBuf = (LPVOID)m_pSPITxBuf;
-	stCspiXchPkt.pRxBuf = (LPVOID)m_pSPIRxBuf;
+	UINT16 SPITxBuf[10];
+	UINT16 SPIRxBuf[10];
+	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
+	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
 
 	//ADS8201 Configuration parameter
 	if( pADSConfig->dwContrlWordLength == 0 || pADSConfig->lpContrlWord == NULL )
@@ -304,70 +285,35 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 		memset( &m_stADS8201CFG, 0, sizeof(m_stADS8201CFG));
 	}
 	stCspiXchPkt.xchCnt = 0;
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA0_1_CCR | m_stADS8201CFG.cha0_1_ccr;
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA2_3_CCR | m_stADS8201CFG.cha2_3_ccr;
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA4_5_CCR | m_stADS8201CFG.cha4_5_ccr;
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA6_7_CCR | m_stADS8201CFG.cha6_7_ccr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA0_1_CCR | m_stADS8201CFG.cha0_1_ccr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA2_3_CCR | m_stADS8201CFG.cha2_3_ccr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA4_5_CCR | m_stADS8201CFG.cha4_5_ccr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA6_7_CCR | m_stADS8201CFG.cha6_7_ccr;
 	//Skip ADS8201's Channel Select Register[04h]
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | m_stADS8201CFG.adc_scr;
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_INT_SCR | m_stADS8201CFG.int_scr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | m_stADS8201CFG.adc_scr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_INT_SCR | m_stADS8201CFG.int_scr;
 	//Skip ADS8201's Status SCR[07h]
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_TRIGGER_SCR | m_stADS8201CFG.adc_trigger_scr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_TRIGGER_SCR | m_stADS8201CFG.adc_trigger_scr;
 	//Skip ADS8201's Reset SCR[09h]
-	m_pSPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
 	//ADS8201 configuration
-	if (!DeviceIoControl(m_hCSPI,     // file handle to the driver
-		CSPI_IOCTL_EXCHANGE,         // I/O control code
-		&stCspiXchPkt,               // in buffer
-		sizeof(CSPI_XCH_PKT_T),      // in buffer size
-		NULL,                        // out buffer
-		0,                           // out buffer size
-		NULL,                        // pointer to number of bytes returned
-		NULL))                       // ignored (=NULL)
-	{
-		goto error_cleanup;
-	}	
-
-	//Prepare Sampling Channel
-	for( k=0, i=0; k<8; i++ )
-	{
-		if( pADSConfig->dwSamplingChannel & (0x01<<i))
-			Channle[k++] = (UINT8)i;
-	}
-	//Prepare for TX buffer
-	for( dwIdx=0,i=0; dwIdx<pADSConfig->dwSamplingLength; dwIdx++ )
-	{
-		m_pSPITxBuf[dwIdx] = ADS8201_ADC_READ;			//Read ADC Data
-		m_pSPITxBuf[dwIdx+1] =	ADS8201_REG_WRITE|ADS8021_CHA_SEL_CCR|Channle[i];		//Config channel
-		i++;
-		i %= k;
-	}
-
+	m_pSpi->CspiNonDMADataExchange( &stCspiXchPkt );
+	
 	//Create event for AD conversion completed.
 	m_hADCEvent = CreateEvent( NULL, FALSE, FALSE, pADSConfig->lpADCompleteEvent );
 	if( m_hADCEvent == NULL )
 		goto error_cleanup;
-	
+
 	//Redefine SPI bus configuration
 	stCspiConfig.drctl = 1;			//Use SPI_RDY
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
 
-	//Prepare to AD conversion
-	if (!DeviceIoControl(m_hCSPI,     // file handle to the driver
-		CSPI_IOCTL_EXCHANGE,         // I/O control code
-		&stCspiXchPkt,               // in buffer
-		sizeof(CSPI_XCH_PKT_T),      // in buffer size
-		NULL,                        // out buffer
-		0,                           // out buffer size
-		NULL,                        // pointer to number of bytes returned
-		NULL))                       // ignored (=NULL)
-	{
-		goto error_cleanup;
-	}	
-	//3.Config PWM
+	m_pSpi->CspiADCRun( pADSConfig, &stCspiXchPkt );
+
+	//Config PWM
 	PWMINFO PwmInfo; 
 	DWORD dwNumberOfBytesToWrite; 
 	DWORD dwNumberOfBytesWritten; 
@@ -378,7 +324,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	PwmInfo.dwDuration = 0;			// Remain output till issue a new write operation
 	dwNumberOfBytesToWrite = sizeof(PWMINFO); 
 	dwNumberOfBytesWritten = 0; 
-	//4.Now start AD conversion
+	//Now start AD conversion
 	bRet = WriteFile(m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
 	if( !bRet )
 		goto error_cleanup;

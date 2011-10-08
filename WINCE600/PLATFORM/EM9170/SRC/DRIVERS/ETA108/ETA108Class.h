@@ -40,13 +40,13 @@ extern "C" {
 #define ADS8201_CPLD_WRITE			(0xc000)
 //------------------------------------------------------------------------------
 //Types
-/*typedef struct {
+typedef struct {
 	PVOID  m_pLocalAsync;
 	PVOID  m_pLocalSyncMarshalled;
 	PVOID  m_pCallerUnmarshalled;
 	DWORD  m_cbSize;
 	DWORD  m_ArgumentDescriptor;
-}CALLER_STUB_T, *PCALLER_STUB_T;*/
+}CALLER_STUB_T, *PCALLER_STUB_T;
 
 typedef struct
 {
@@ -86,7 +86,7 @@ public:
 	DWORD  m_dwCSPIChannle;
 	DWORD  m_dwPWMChannle;
 	DWORD  m_dwDMABufSize;
-//	spiClass *m_pSpi;
+	spiClass *m_pSpi;
 private:
 	HANDLE m_hThread;
 	HANDLE m_hHeap;

@@ -19,7 +19,7 @@ extern "C" {
 
 #include "bsp.h"
 #include "cspibus.h"
-//#include "..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\CSPIBUSV2\PDK\cspiClass.h"
+#include "ETA108.h"
 
 //------------------------------------------------------------------------------
 //Defines
@@ -35,6 +35,16 @@ public:
  	~spiClass();
 	BOOL CspiInitialize(DWORD Index);
 	void CspiRelease(void);
+	BOOL CspiIOMux( void );
+	DWORD CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt );
+	DWORD CspiNonDMADataExchange(PCSPI_XCH_PKT_T pXchPkt);
+
+public:
+	UINT32 m_Index;
+	UINT16 *m_pSPITxBuf, *m_pSPIRxBuf;
+	DWORD  m_dwXchBufLen;
+	DWORD  m_dwSamplingLength;
+	
 
 private:
 	// DMA specific
@@ -47,7 +57,24 @@ private:
 	VOID MoveDMABuffer(LPVOID pBuf, DWORD dwLen, BOOL bReceive);
 
 private:
-	UINT32 CspiExchangeSize(PCSPI_XCH_PKT0_T pXchPkt);
+	PCSP_CSPI_REG m_pCSPI;
+	HANDLE m_hHeap;
+	HANDLE m_hIntrEvent;
+	HANDLE m_hEnQEvent;
+	HANDLE m_hThread;
+	BOOL   m_bTerminate;
+	CRITICAL_SECTION m_cspiCs;
+	CRITICAL_SECTION m_cspiDataXchCs;
+
+	PHYSICAL_ADDRESS m_pSpiPhysTxDMABufferAddr, m_pSpiPhysRxDMABufferAddr;
+	PBYTE            m_pSpiVirtTxDMABufferAddr,m_pSpiVirtRxDmaBufferAddr ;
+	UINT8             m_dmaChanCspiRx, m_dmaChanCspiTx; 
+	DDK_DMA_REQ       m_dmaReqTx, m_dmaReqRx ; 
+	DWORD m_dwSysIntr;
+	UINT8			m_nSamplingMode;
+
+private:
+//	UINT32 CspiExchangeSize(PCSPI_XCH_PKT0_T pXchPkt);
 	static UINT32 CspiBufRd8(LPVOID pBuf);
 	static UINT32 CspiBufRd16(LPVOID pBuf);
 	static UINT32 CspiBufRd32(LPVOID pBuf);
