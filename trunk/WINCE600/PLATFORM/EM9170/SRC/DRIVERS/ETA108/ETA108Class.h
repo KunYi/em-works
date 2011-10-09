@@ -83,26 +83,22 @@ public:
 	DWORD ReadSeek( long lAmount, WORD dwType );
 
 public:
-	DWORD  m_dwCSPIChannle;
+	DWORD  m_dwCSPIChannle;	
 	DWORD  m_dwPWMChannle;
 	DWORD  m_dwDMABufSize;
+	DWORD  m_dwMultDmaBufSize;	//Buffer Size of Continuous Sampling 
 	spiClass *m_pSpi;
+
 private:
-	HANDLE m_hThread;
-	HANDLE m_hHeap;
-	HANDLE m_hCSPI;
-	HANDLE m_hPWM;
-	HANDLE m_hADCEvent;
-	HANDLE m_hCSPIEvent;
+	HANDLE m_hPWM;			// PWM:
+	HANDLE m_hThread;		// ADC moniter thread
+	HANDLE m_hADCEvent;		// ADC completed event
+	HANDLE m_hCSPIEvent;	// SPI transfer completed event
 
-
-	UINT16 *m_pSPITxBuf;
-	UINT16 *m_pSPIRxBuf;
-	DWORD  m_dwRxBufSeek;
-	DWORD  m_dwXchBufLen;
+	long  m_dwRxBufSeek;
 	DWORD  m_dwSamplingLength;
 	ADS8201_CFG m_stADS8201CFG;
-	BOOL   m_bTerminate;
+	BOOL   m_bTerminate;	// ADC moniter thread exit event
 	DWORD  dwOpenCount;
 	static DWORD WINAPI ADCEventHandle(LPVOID lpParameter);
 };
