@@ -94,7 +94,6 @@ DWORD ADS_Init(LPCTSTR pContext)
 	dwDataSize = sizeof(DWORD);
 	regError = RegQueryValueEx(
 		hKey,                       // handle to currently open key
-		//REG_DEVINDEX_VAL_NAME,      // string containing value to query
 		TEXT("PWMChannel"),
 		NULL,                       // reserved, set to NULL
 		NULL,                       // type not required, set to NULL
@@ -113,8 +112,7 @@ DWORD ADS_Init(LPCTSTR pContext)
 	dwDataSize = sizeof(DWORD);
 	regError = RegQueryValueEx(
 		hKey,                       // handle to currently open key
-		//REG_DEVINDEX_VAL_NAME,      // string containing value to query
-		TEXT("DMASize"),
+		TEXT("DMABufSize"),
 		NULL,                       // reserved, set to NULL
 		NULL,                       // type not required, set to NULL
 		(LPBYTE)(&pETA108->m_dwDMABufSize ),      // pointer to buffer receiving value
@@ -127,6 +125,25 @@ DWORD ADS_Init(LPCTSTR pContext)
 		DEBUGMSG(ZONE_ERROR, (TEXT("ETA108_Init:  RegQueryValueEx failed!!!\r\n")));
 		return 0;
 	}
+
+	// try to load buffer Size of Continuous Sampling from registry data
+	dwDataSize = sizeof(DWORD);
+	regError = RegQueryValueEx(
+		hKey,                       // handle to currently open key
+		TEXT("MultDMABufSize"),
+		NULL,                       // reserved, set to NULL
+		NULL,                       // type not required, set to NULL
+		(LPBYTE)(&pETA108->m_dwMultDmaBufSize ),      // pointer to buffer receiving value
+		&dwDataSize);    
+
+	// check for errors during RegQueryValueEx
+	if (regError != ERROR_SUCCESS)
+	{
+		RegCloseKey(hKey);
+		DEBUGMSG(ZONE_ERROR, (TEXT("ETA108_Init:  RegQueryValueEx failed!!!\r\n")));
+		return 0;
+	}
+
 	// close handle to open key
 	RegCloseKey(hKey);
 
@@ -149,8 +166,9 @@ BOOL ADS_Deinit(DWORD hDeviceContext)
 	{
 		pETA108->ETA108Release();
 		delete pETA108;
+		pETA108 = NULL;
 	}
-	
+
 	return TRUE;
 }
 

@@ -33,19 +33,27 @@ class spiClass
 public:
  	spiClass();
  	~spiClass();
-	BOOL CspiInitialize(DWORD Index);
-	void CspiRelease(void);
-	BOOL CspiIOMux( void );
-	DWORD CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt );
-	DWORD CspiNonDMADataExchange(PCSPI_XCH_PKT_T pXchPkt);
+	BOOL	CspiInitialize(DWORD Index);
+	void	CspiRelease(void);
+	BOOL	CspiIOMux( void );
+	DWORD	CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt );
+	DWORD	CspiNonDMADataExchange(PCSPI_XCH_PKT_T pXchPkt);
+	void	CspiEnableLoopback(BOOL bEnable);
 
 public:
 	UINT32 m_Index;
-	UINT16 *m_pSPITxBuf, *m_pSPIRxBuf;
-	DWORD  m_dwXchBufLen;
-	DWORD  m_dwSamplingLength;
-	
+	UINT16 *m_pSPIRxBuf;	// RX buffer
 
+	DWORD  m_dwSamplingLength;	//SPI sampling length
+	DWORD  m_dwSpiXchCount;	// SPI transfer count. m_dwSpiXchCount=m_dwSamplingLength*2
+							//set the count in uint16
+
+	DWORD  m_dxSpiDmaCount; // SPI DMA count m_dxSpiDmaCount=m_dwSpiXchCount*2
+							// set the count in bytes
+
+	DWORD  m_dwDMABufferSize;
+	DWORD  m_dwMultDmaBufSize;	//Buffer Size of Continuous Sampling 
+	
 private:
 	// DMA specific
 	BOOL InitCspiDMA(UINT32 Index);
@@ -54,24 +62,29 @@ private:
 	BOOL DeinitChannelDMA(void);
 	BOOL UnmapDMABuffers(void);
 	BOOL MapDMABuffers(void);
-	VOID MoveDMABuffer(LPVOID pBuf, DWORD dwLen, BOOL bReceive);
+	VOID TransferTxBuf( UINT8 nNumBuf );
 
 private:
-	PCSP_CSPI_REG m_pCSPI;
-	HANDLE m_hHeap;
-	HANDLE m_hIntrEvent;
-	HANDLE m_hEnQEvent;
-	HANDLE m_hThread;
-	BOOL   m_bTerminate;
-	CRITICAL_SECTION m_cspiCs;
-	CRITICAL_SECTION m_cspiDataXchCs;
+	PCSP_CSPI_REG		m_pCSPI;
+	HANDLE				m_hHeap;
+	HANDLE				m_hIntrEvent;	// system interrupt event
+	//HANDLE				m_hEnQEvent;	// interrupt handle thread exit event
+	HANDLE				m_hThread;		// interrupt thread handle 
+	BOOL				m_bTerminate;	// interrupt handle thread exit event
+	CRITICAL_SECTION	m_cspiCs;
+	CRITICAL_SECTION	m_cspiDataXchCs;
+	BOOL				m_bUseLoopBack;
 
-	PHYSICAL_ADDRESS m_pSpiPhysTxDMABufferAddr, m_pSpiPhysRxDMABufferAddr;
-	PBYTE            m_pSpiVirtTxDMABufferAddr,m_pSpiVirtRxDmaBufferAddr ;
-	UINT8             m_dmaChanCspiRx, m_dmaChanCspiTx; 
-	DDK_DMA_REQ       m_dmaReqTx, m_dmaReqRx ; 
-	DWORD m_dwSysIntr;
-	UINT8			m_nSamplingMode;
+	PHYSICAL_ADDRESS	m_pSpiPhysTxDMABufferAddr, m_pSpiPhysRxDMABufferAddr;
+	PBYTE				m_pSpiVirtTxDMABufferAddr,m_pSpiVirtRxDmaBufferAddr ;
+	UINT8				m_dmaChanCspiRx, m_dmaChanCspiTx; 
+	UINT8				m_currRxDmaBufIdx, m_currTxDmaBufIdx;
+	DDK_DMA_REQ			m_dmaReqTx, m_dmaReqRx ; 
+	DWORD				m_dwSysIntr;
+	UINT8				m_nSamplingMode;
+	UINT8				m_ADChannle[8];
+	DWORD				m_dwADChannleCount, m_dwADChannleIdx;
+	DWORD				m_dwAvailRxByteCount, m_dwSendByteCount;
 
 private:
 //	UINT32 CspiExchangeSize(PCSPI_XCH_PKT0_T pXchPkt);
