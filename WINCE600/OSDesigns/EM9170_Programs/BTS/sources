@@ -1,0 +1,42 @@
+_COMMONPUBROOT=$(_PROJECTROOT)\cesysgen
+__PROJROOT=$(_PROJECTROOT)
+RELEASETYPE=LOCAL
+_ISVINCPATH=$(_WINCEROOT)\public\common\sdk\inc;
+_OEMINCPATH=$(_WINCEROOT)\public\common\oak\inc;$(_WINCEROOT)\public\common\sdk\inc;
+TARGETNAME=BTS
+FILE_VIEW_ROOT_FOLDER= \
+    ReadMe.txt \
+    StdAfx.cpp \
+    prelink.bat \
+    postlink.bat \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    StdAfx.h \
+
+SOURCES= \
+    BTS.cpp \
+
+INCLUDES= \
+    $(_TARGETPLATROOT)\src\inc; \
+    $(INCLUDES) \
+
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+
+PRECOMPILED_PCH=StdAfx.pch
+PRECOMPILED_CXX=1
+PRECOMPILED_OBJ=StdAfx.obj
+PRECOMPILED_INCLUDE=StdAfx.h
+TARGETTYPE=PROGRAM
+POSTLINK_PASS_CMD=postlink.bat
+PRELINK_PASS_CMD=prelink.bat
+FILE_VIEW_PARAMETER_FOLDER= \
+    BTS.bib \
+    BTS.reg \
+    BTS.dat \
+    BTS.db \
+    ProjSysgen.bat \
+

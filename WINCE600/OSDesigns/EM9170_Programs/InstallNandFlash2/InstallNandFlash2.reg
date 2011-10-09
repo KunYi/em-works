@@ -1,0 +1,3 @@
+[HKEY_LOCAL_MACHINE\init]
+	"Launch129"="InstallNandFlash2.exe"
+	"Depend129"=hex:14,00,1e,00

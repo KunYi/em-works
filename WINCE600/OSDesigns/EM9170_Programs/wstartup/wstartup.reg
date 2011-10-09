@@ -1,0 +1,12 @@
+[HKEY_LOCAL_MACHINE\init]
+    "Launch70"="wstartup.exe"
+    "Depend70"=hex:14,00,1e,00
+    ;"Depend70"=hex:1e,00
+
+[HKEY_LOCAL_MACHINE\Emtronix]
+	"Count"=dword:0
+	"P0"=dword:0
+	"P1"=dword:0
+	"P2"=dword:0
+	"P3"=dword:0
+	"CountofStartFail"=dword:0
