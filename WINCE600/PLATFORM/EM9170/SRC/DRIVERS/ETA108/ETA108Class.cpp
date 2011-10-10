@@ -204,7 +204,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 
 	m_dwRxBufSeek = 0;
 	m_dwSamplingLength = pADSConfig->dwSamplingLength;
-
+	m_pSpi->CspiADCDone();
 	//1.Parameter marshal
 	if( pADSConfig->dwADCompleteEventLength > 0 && pADSConfig->lpADCompleteEvent )
 	{
@@ -277,7 +277,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
 	//ADS8201 configuration
-	m_pSpi->CspiNonDMADataExchange( &stCspiXchPkt );
+	m_pSpi->CspiADCConfig( &stCspiXchPkt );
 	
 	//Redefine SPI bus configuration
 	stCspiConfig.drctl = 1;			//Use SPI_RDY
@@ -313,7 +313,7 @@ error_cleanup:
 
 BOOL eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
 {
-	DWORD i, idx, dwTmp;
+	DWORD idx,dwTmp;
 	BOOL bRet;
 
 	if( dwOpenCount == 0 || pBuffer == NULL )
@@ -343,7 +343,7 @@ BOOL eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
 
 DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
 {
-	long dwSeek;
+	DWORD dwSeek;
 
 	switch( dwType )
 	{
