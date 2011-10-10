@@ -37,19 +37,22 @@ public:
 	void	CspiRelease(void);
 	BOOL	CspiIOMux( void );
 	DWORD	CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt );
-	DWORD	CspiNonDMADataExchange(PCSPI_XCH_PKT_T pXchPkt);
+	void	CspiADCDone( );		//DMA Transfer
+	DWORD	CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt);	//Non DMA transfer
 	void	CspiEnableLoopback(BOOL bEnable);
 
 public:
-	UINT32 m_Index;
 	UINT16 *m_pSPIRxBuf;	// RX buffer
+	UINT16 *m_pSPITxBuf;
 
 	DWORD  m_dwSamplingLength;	//SPI sampling length
 	DWORD  m_dwSpiXchCount;	// SPI transfer count. m_dwSpiXchCount=m_dwSamplingLength*2
-							//set the count in uint16
+							//the count in uint16
 
-	DWORD  m_dxSpiDmaCount; // SPI DMA count m_dxSpiDmaCount=m_dwSpiXchCount*2
-							// set the count in bytes
+	DWORD  m_dwSpiDmaCount; // SPI DMA count m_dxSpiDmaCount=m_dwSpiXchCount*2
+							// the count in bytes
+
+	DWORD  m_dwCurrSpiCount;// Already exchanged SPI DMA bytes. count in bytes
 
 	DWORD  m_dwDMABufferSize;
 	DWORD  m_dwMultDmaBufSize;	//Buffer Size of Continuous Sampling 
@@ -62,9 +65,11 @@ private:
 	BOOL DeinitChannelDMA(void);
 	BOOL UnmapDMABuffers(void);
 	BOOL MapDMABuffers(void);
-	VOID TransferTxBuf( UINT8 nNumBuf );
+	VOID TransferTxBuf( UINT8 nCurrTxDmaBufIdx );
 
 private:
+	UINT32 m_Index;
+	
 	PCSP_CSPI_REG		m_pCSPI;
 	HANDLE				m_hHeap;
 	HANDLE				m_hIntrEvent;	// system interrupt event
