@@ -86,8 +86,6 @@ eta108Class::eta108Class()
 	m_hThread = NULL;
 	m_hADCEvent = NULL;
 	m_hCSPIEvent = NULL;
-
-	dwOpenCount = 0;
 }
 
 eta108Class::~eta108Class()
@@ -112,7 +110,6 @@ BOOL eta108Class::ETA108Initialize()
 	}
 
  	m_pSpi = new spiClass;
-
 	if( m_pSpi == NULL )
 		goto error_init;
 	
@@ -180,6 +177,7 @@ BOOL eta108Class::ETA108Open()
 
 BOOL eta108Class::ETA108Close()
 {
+	m_pSpi->CspiADCDone( );
 	if( m_hADCEvent != NULL )
 	{
 		CloseHandle(m_hADCEvent);
@@ -194,17 +192,22 @@ BOOL eta108Class::ETA108Close()
 	return TRUE;
 }
 
-BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
+DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 {
 	CALLER_STUB_T marshalEventStub;
 	HRESULT result;
 
 	if(m_hPWM == INVALID_HANDLE_VALUE )
-		return FALSE;
+		goto error_cleanup;
 
 	m_dwRxBufSeek = 0;
 	m_dwSamplingLength = pADSConfig->dwSamplingLength;
-	m_pSpi->CspiADCDone();
+	if( m_hADCEvent != NULL )
+	{
+		CloseHandle(m_hADCEvent);
+		m_hADCEvent = NULL;
+	}
+	m_pSpi->CspiADCDone( );
 	//1.Parameter marshal
 	if( pADSConfig->dwADCompleteEventLength > 0 && pADSConfig->lpADCompleteEvent )
 	{
@@ -229,7 +232,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 			goto error_cleanup;
 		}
 	}
-	else 	return FALSE;
+	else 	goto error_cleanup;
 
 	//2.Config CSPI & config ADS8201
 	CSPI_BUSCONFIG_T stCspiConfig;
@@ -242,7 +245,7 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiConfig.pol = FALSE;
 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
 	stCspiConfig.sspol = TRUE;		//SSPOL Active high
-	stCspiConfig.usepolling = FALSE;//Don't polling
+	stCspiConfig.usepolling = FALSE;//polling don't use intterrupt
 	
 	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 	stCspiConfig.usedma = FALSE;	//Don't DMA
@@ -277,7 +280,8 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
 	//ADS8201 configuration
-	m_pSpi->CspiADCConfig( &stCspiXchPkt );
+	if( !m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+		goto error_cleanup;
 	
 	//Redefine SPI bus configuration
 	stCspiConfig.drctl = 1;			//Use SPI_RDY
@@ -285,7 +289,8 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
 
-	m_pSpi->CspiADCRun( pADSConfig, &stCspiXchPkt );
+	if( !m_pSpi->CspiADCRun( pADSConfig, &stCspiXchPkt ))
+		goto error_cleanup;
 
 	//Config PWM
 	PWMINFO PwmInfo; 
@@ -302,45 +307,36 @@ BOOL eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	bRet = WriteFile(m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
 	if( !bRet )
 		goto error_cleanup;
-	dwOpenCount	= 1;
-	return TRUE;
+
+	return DWORD(sizeof(ADS_CONFIG));
 
 error_cleanup:
 	ETA108Close();
-	return FALSE;
+	return DWORD(-1);
 
 }
 
-BOOL eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
+// dwCount count in UINT16
+DWORD eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
 {
-	DWORD idx,dwTmp;
-	BOOL bRet;
+	DWORD idx,dwReadBytes;
 
-	if( dwOpenCount == 0 || pBuffer == NULL )
-		return FALSE;
+	if( m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf )
+		return DWORD(-1);
 
-	dwTmp = m_dwRxBufSeek + dwCount;
-	if(  dwTmp>=0 && dwTmp<= m_dwSamplingLength )
+	dwReadBytes = m_dwRxBufSeek;
+	idx = (m_dwRxBufSeek<<1);
+
+	while( dwCount-- &&  m_dwRxBufSeek<= m_dwSamplingLength )
 	{
-		// fill the output buffer by internal RX buffer of the SPI class.
-		for( idx=0; m_dwRxBufSeek<dwTmp; idx++ )
-		{
-			pBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
-		}
-		bRet = TRUE;
-	}
-	else bRet = FALSE;
-
-	if( m_hADCEvent != NULL )
-	{
-		CloseHandle(m_hADCEvent);
-		m_hADCEvent = NULL;
+		pBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
+		++idx;
 	}
 
-	dwOpenCount = 0;
-	return bRet;
+	return (m_dwRxBufSeek-dwReadBytes);
 }
 
+// lAmount count in UINT16
 DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
 {
 	DWORD dwSeek;
