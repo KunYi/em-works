@@ -6,8 +6,8 @@
    "Index"		 = dword:1		;"ADS1:"
    "CSPIChannel" = dword:1      ; use CSPI1
    "PWMChannel"  = dword:1      ; use PWM1
-   "DMABufSize"	 = dword:5120	; DMA buffer size
-   "MultDMABufSize" = dword:20	; Buffer Size of Continuous Sampling 
+   "DMABufSize"	 = dword:1400	; DMA buffer size. default = 5120. count in bytes.
+   "MultDMABufSize" = dword:14	; Buffer Size of Continuous Sampling  default = 20
    
 
 

@@ -234,7 +234,7 @@ DWORD ADS_Write(DWORD hOpenContext, LPCVOID pBuffer, DWORD dwNumBytes)
 	{
 		return pETA108->ETA108Run((PADS_CONFIG)pBuffer);
 	}
-	return FALSE;
+	return DWORD(-1);
 }
 
 DWORD ADS_Seek(DWORD hOpenContext, long Amount, WORD Type)

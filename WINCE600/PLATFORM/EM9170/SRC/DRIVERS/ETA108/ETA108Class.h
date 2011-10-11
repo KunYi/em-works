@@ -78,8 +78,8 @@ public:
 	BOOL ETA108Release( void );
 	BOOL ETA108Open( );
 	BOOL ETA108Close( );
-	BOOL ETA108Run( PADS_CONFIG pBuffer);
-	BOOL ETA108Read( UINT16* pBuffer, DWORD dwCount );
+	DWORD ETA108Run( PADS_CONFIG pBuffer);
+	DWORD ETA108Read( UINT16* pBuffer, DWORD dwCount );
 	DWORD ReadSeek( long lAmount, WORD dwType );
 
 public:
@@ -99,7 +99,6 @@ private:
 	DWORD  m_dwSamplingLength;
 	ADS8201_CFG m_stADS8201CFG;
 	BOOL   m_bTerminate;	// ADC moniter thread exit event
-	DWORD  dwOpenCount;
 	static DWORD WINAPI ADCEventHandle(LPVOID lpParameter);
 };
 

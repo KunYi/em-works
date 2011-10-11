@@ -36,5 +36,5 @@ DIRS=\
 	ISA\
 	WDT\
 	ISA_IRQ\
-	ETA108
+	ETA108 \
 

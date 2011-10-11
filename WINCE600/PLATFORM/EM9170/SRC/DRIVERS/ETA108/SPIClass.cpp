@@ -53,11 +53,9 @@ extern "C" BOOL BSPCspiAcquireGprBit(UINT8 Index);
 extern "C" BOOL BSPCspiIsAllowPolling(UINT8 Index);
 extern "C" BOOL BSPCspiExchange(VOID *lpInBuf, LPVOID pRxBuf, UINT32 nOutBufSize, LPDWORD BytesReturned);
 
-//lqk Sep 13,2011
 extern "C" void BSPCSPICS2IO( void );
 extern "C" void BSPCSPICSSet(BOOL bVal);
 
-//extern DWORD GetSdmaChannelIRQ(UINT32 chan);
 //
 //-----------------------------------------------------------------------------
 // External Variables
@@ -87,6 +85,7 @@ spiClass::spiClass()
 	m_pCSPI = NULL;
 	m_hHeap = NULL;
 	m_hIntrEvent = NULL;
+	m_hCSPIEvent = NULL;
 	
 	m_pSPITxBuf = NULL;
 	m_pSPIRxBuf = NULL;
@@ -151,14 +150,15 @@ BOOL spiClass::CspiInitialize(DWORD Index)
 	}
 
 	//initialize DMA
-	InitCspiDMA(Index);
-	BSPCspiAcquireGprBit((UINT8)Index);
-
+	if( !InitCspiDMA(Index))
+	{
+		goto Init_Error;
+	}
 
 	irq[0] = (DWORD)-1;
 	irq[1] = 0;
-	//irq[2] = GetSdmaChannelIRQ( m_dmaChanCspiRx );
-	//irq[3] = GetSdmaChannelIRQ( m_dmaChanCspiTx );
+	irq[2] = GetSdmaChannelIRQ( m_dmaChanCspiRx );
+	irq[3] = GetSdmaChannelIRQ( m_dmaChanCspiTx );
 	//Get the IRQ according to Index
 	irq[4] = CspCSPIGetIRQ(Index);
 
@@ -177,11 +177,11 @@ BOOL spiClass::CspiInitialize(DWORD Index)
 		goto Init_Error;
 	}
 
-	// create CSPI critical section
-	InitializeCriticalSection(&m_cspiCs);
+	// create CSPI Tx buffer critical section
+	InitializeCriticalSection(&m_cspiTxBufCs);
 
-	// create CSPI Data Exchange critical section
-	InitializeCriticalSection(&m_cspiDataXchCs);
+	// create CSPI Rx buffer critical section
+	InitializeCriticalSection(&m_cspiRxBufCs);
 
 	DEBUGMSG(ZONE_INIT, (TEXT("CspiInitialize: &m_pCSPI=0x%x\r\n"),&m_pCSPI));
 	// disable CSPI to reset internal logic
@@ -276,15 +276,33 @@ void spiClass::CspiRelease()
 		m_dwSysIntr = (DWORD)SYSINTR_UNDEFINED;
 	}
 
-	// delete the critical section
-	DeleteCriticalSection(&m_cspiCs);
+	// delete the Tx buffer critical section
+	DeleteCriticalSection(&m_cspiTxBufCs);
 
-	// delete the Data Exchange critical section
-	DeleteCriticalSection(&m_cspiDataXchCs);
+	// delete the Rx buffer critical section
+	DeleteCriticalSection(&m_cspiRxBufCs);
 
 	DEBUGMSG(ZONE_CLOSE, (TEXT("CspiRelease -\r\n")));
 }
 
+//-----------------------------------------------------------------------------
+//
+//  Function: GetSdmaChannelIRQ
+//
+//  This function returns the IRQ number of the specified SDMA channel.
+//
+//  Parameters:
+//      chan
+//          [in] The SDMA channel.
+//
+//  Returns:
+//      IRQ number.
+//
+//-----------------------------------------------------------------------------
+DWORD spiClass::GetSdmaChannelIRQ(UINT32 chan)
+{
+	return (IRQ_SDMA_CH0 + chan);
+}
 
 //------------------------------------------------------------------------------
 //
@@ -851,7 +869,7 @@ DWORD spiClass::CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt)
 	UINT8 byParamPHA;
 	UINT8 byParamDRCTL;
 
-	DEBUGMSG(ZONE_THREAD, (TEXT("CspiDataExchange: &m_pCSPI=0x%x\r\n"),&m_pCSPI));
+	DEBUGMSG(ZONE_THREAD, (TEXT("CspiADCConfig: &m_pCSPI=0x%x\r\n"),&m_pCSPI));
 	// check all translated pointers
 	if ((pBusCnfg == NULL) || (pTxBuf == NULL))
 	{
@@ -952,6 +970,7 @@ DWORD spiClass::CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt)
 	// until we are done with requested transfers
 	while(!bXchDone)
 	{
+xch_loop:
 		switch (xchState)
 		{
 		case LOAD_TXFIFO: 
@@ -996,55 +1015,38 @@ DWORD spiClass::CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt)
 			// interrupt for Rx FIFO half-full (RHEN) or Rx FIFO ready 
 			// to ensure we can
 			// read out data that arrived during exchange
-			if (!pBusCnfg->ssctl)
+			// use polling
+			// wait until RR
+			while (!(INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR)))
 			{
-				// wait until RH, but wait RR is also OK. 
-				INSREG32(&m_pCSPI->INTREG, CSP_BITFMASK(CSPI_INTREG_RHEN), 
-					CSP_BITFVAL(CSPI_INTREG_RHEN, CSPI_INTREG_RHEN_ENABLE));
-			}
-			else
-			{
-				// wait until RH, but wait RR is also OK. 
-				INSREG32(&m_pCSPI->INTREG, CSP_BITFMASK(CSPI_INTREG_RREN), 
-					CSP_BITFVAL(CSPI_INTREG_RREN, CSPI_INTREG_RREN_ENABLE));
-			}
-
-			WaitForSingleObject(m_hIntrEvent, INFINITE);
-
-			// disable all interrupts
-			OUTREG32(&m_pCSPI->INTREG, 0);
-
-			while (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
-			{
-				tmp = INREG32(&m_pCSPI->RXDATA);
-
-				// if receive data is not to be discarded
-				if (pRxBuf != NULL)
+				if (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TC))
 				{
-					// get next Rx data from CSPI FIFO
-					pfnRxBufWrt(pRxBuf, tmp);
-
-					// increment Rx Buffer to next data point
-					pRxBuf = (LPVOID) ((UINT) pRxBuf + bufIncr);
-				}
-				// increment Rx exchange counter
-				xchRxCnt++;
-
-				OUTREG32(&m_pCSPI->TXDATA, pfnTxBufRd(pTxBuf));
-
-				// increment Tx Buffer to next data point
-				pTxBuf = (LPVOID) ((UINT) pTxBuf + bufIncr);
-
-				// increment Tx exchange counter
-				xchTxCnt++;
-
-				if (xchTxCnt >= xchCnt)
-				{
-					break;
+					xchState = FETCH_RXFIFO;
+					goto xch_loop;
 				}
 			}
-				// signal that interrupt has been handled
-			InterruptDone(m_dwSysIntr);
+			tmp = INREG32(&m_pCSPI->RXDATA);
+
+			// if receive data is not to be discarded
+			if (pRxBuf != NULL)
+			{
+				// get next Rx data from CSPI FIFO
+				pfnRxBufWrt(pRxBuf, tmp);
+
+				// increment Rx Buffer to next data point
+				pRxBuf = (LPVOID) ((UINT) pRxBuf + bufIncr);
+			}
+
+			// increment Rx exchange counter
+			xchRxCnt++;
+
+			OUTREG32(&m_pCSPI->TXDATA, pfnTxBufRd(pTxBuf));
+
+			// increment Tx Buffer to next data point
+			pTxBuf = (LPVOID) ((UINT) pTxBuf + bufIncr);
+
+			// increment Tx exchange counter
+			xchTxCnt++;
 
 			if (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TC))
 			{
@@ -1073,15 +1075,9 @@ DWORD spiClass::CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt)
 				xchRxCnt++;
 			}
 
-			// Wait all data in the chain exchaged
-			INSREG32(&m_pCSPI->INTREG, CSP_BITFMASK(CSPI_INTREG_TCEN), 
-				CSP_BITFVAL(CSPI_INTREG_TCEN, CSPI_INTREG_TCEN_ENABLE));
-
-			WaitForSingleObject(m_hIntrEvent, INFINITE);
-
-			// disable all interrupts
-			OUTREG32(&m_pCSPI->INTREG, 0);
-
+			// wait until transaction is complete
+			while (!(INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TC)))
+				;
 			while ((INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR)))
 			{
 				tmp = INREG32(&m_pCSPI->RXDATA);
@@ -1103,17 +1099,12 @@ DWORD spiClass::CspiADCConfig(PCSPI_XCH_PKT_T pXchPkt)
 			// acknowledge transfer complete (w1c)
 			OUTREG32(&m_pCSPI->STATREG, CSP_BITFMASK(CSPI_STATREG_TC));
 
-			// signal that interrupt has been handled
-			InterruptDone(m_dwSysIntr);
-	
-
 			if (xchRxCnt >= xchCnt)
 			{
 				//lqk Sep 13, 2011
 				if( !pBusCnfg->ssctl )
 				{
 					BSPCSPICSSet( TRUE );
-					//pBusCnfg->ssctl = FALSE;
 					//RETAILMSG (1, (TEXT("to High\r\n")));
 				}
 				// set flag to indicate requested exchange done
@@ -1152,20 +1143,25 @@ VOID spiClass::TransferTxBuf( UINT8 nCurrTxDmaBufIdx )
 	DWORD dwIdx;
 
 	//To Prepare TX buffer
-	dwIdx = 0;
-	while( m_dwSpiDmaCount )
+	EnterCriticalSection( &m_cspiTxBufCs);
+	if( m_pSPITxBuf )
 	{
-		//Config channel
-		m_pSPITxBuf[dwIdx++] = ADS8201_REG_WRITE|ADS8021_CHA_SEL_CCR|m_ADChannle[m_dwADChannleIdx++];	
-		//Read ADC Data
-		m_pSPITxBuf[dwIdx++] = ADS8201_ADC_READ;
-		m_dwSpiDmaCount -= 4;
-		
-		if( (dwIdx<<1) >= m_dwDMABufferSize )
-			break;
-	}
+		dwIdx = 0;
+		while( m_dwSpiDmaCount )
+		{
+			//Config channel
+			m_pSPITxBuf[dwIdx++] = ADS8201_REG_WRITE|ADS8021_CHA_SEL_CCR|m_ADChannle[m_dwADChannleIdx++];	
+			//Read ADC Data
+			m_pSPITxBuf[dwIdx++] = ADS8201_ADC_READ;
+			m_dwSpiDmaCount -= 4;
+			
+			if( (dwIdx<<1) >= m_dwDMABufferSize )
+				break;
+		}
 
-	memcpy( m_pSpiVirtTxDMABufferAddr+nCurrTxDmaBufIdx*m_dwDMABufferSize, m_pSPITxBuf, dwIdx );
+		memcpy( m_pSpiVirtTxDMABufferAddr+nCurrTxDmaBufIdx*m_dwDMABufferSize, m_pSPITxBuf, dwIdx );
+	}
+	LeaveCriticalSection(&m_cspiTxBufCs);
 }
 
 
@@ -1182,6 +1178,8 @@ DWORD spiClass::CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt )
 
 	DWORD i;
 	UINT32 Mode, tmpCount;
+
+	DEBUGMSG(ZONE_THREAD, (TEXT("CspiADCRun: &m_pCSPI=0x%x\r\n"),&m_pCSPI));
 
 	pBusCnfg = pXchPkt->pBusCnfg;
 	// Enable the clock gating
@@ -1265,6 +1263,10 @@ DWORD spiClass::CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt )
 			m_ADChannle[m_dwADChannleCount++] = (UINT8)i;
 	}
 
+	m_hCSPIEvent = CreateEvent( NULL, FALSE, FALSE, pXchPkt->xchEvent );
+	if( m_hCSPIEvent == NULL )
+		goto error_adcRun;
+
 	// ensure RXFIFO is empty before start DMA
 	while ( INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
 	{
@@ -1331,13 +1333,14 @@ DWORD spiClass::CspiADCRun( PADS_CONFIG pADSConfig, PCSPI_XCH_PKT_T pXchPkt )
 	INSREG32(&m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_XCH), 
 		CSP_BITFVAL(CSPI_CONREG_XCH, CSPI_CONREG_XCH_EN));
 
-	// enable TC interrupts
+	// enable TC interrupt
 	INSREG32(&m_pCSPI->INTREG, CSP_BITFMASK(CSPI_INTREG_TCEN), 
 		CSP_BITFVAL(CSPI_INTREG_TCEN, CSPI_INTREG_TCEN_ENABLE));
 
 	return TRUE;
 
 error_adcRun:
+	CspiADCDone( );
 	return FALSE;
 }
 
@@ -1345,102 +1348,156 @@ DWORD WINAPI spiClass::CspiProcess( LPVOID lpParameter )
 {
 	spiClass *pSpi = (spiClass *)lpParameter;
 	UINT32 dwStatus, dwTmp, Mode;
-
-	while( !pSpi->m_bTerminate )
+	
+//	try
 	{
-		// wait for requested transfer interrupt
-		WaitForSingleObject(pSpi->m_hIntrEvent, INFINITE);
-
-		// disable all CSPI interrupts
-		OUTREG32(&pSpi->m_pCSPI->INTREG, 0);
-
-		//Check TC interrupt
-		//transfer completed if TC interrupt.
-		if( INREG32(&pSpi->m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TE))
+		while( !pSpi->m_bTerminate )
 		{
-			// acknowledge transfer complete (w1c)
-			OUTREG32(&pSpi->m_pCSPI->STATREG, CSP_BITFMASK(CSPI_STATREG_TC));	
+			// wait for requested transfer interrupt
+			WaitForSingleObject(pSpi->m_hIntrEvent, INFINITE);
 
+			// disable all CSPI interrupts
+			OUTREG32(&pSpi->m_pCSPI->INTREG, 0);
 
-			// while there is data in Rx FIFO 
-			while (INREG32(&pSpi->m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
+			//Check TC interrupt
+			//transfer completed if TC interrupt.
+			if( INREG32(&pSpi->m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TE))
 			{
-				// increment Rx Buffer to next data point
-//				pSpi->m_pSPIRxBuf = (LPVOID) ((UINT) pSpi->m_pSPIRxBuf + 2);
-				++pSpi->m_dwAvailRxByteCount;			
-				dwTmp = INREG32(&pSpi->m_pCSPI->RXDATA);
-				CspiBufWrt16(pSpi->m_pSPIRxBuf, dwTmp);			
+				// acknowledge transfer complete (w1c)
+				OUTREG32(&pSpi->m_pCSPI->STATREG, CSP_BITFMASK(CSPI_STATREG_TC));	
+
+
+				// while there is data in Rx FIFO 
+				while (INREG32(&pSpi->m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
+				{
+					// increment Rx Buffer to next data point
+	//				pSpi->m_pSPIRxBuf = (LPVOID) ((UINT) pSpi->m_pSPIRxBuf + 2);
+					++pSpi->m_dwAvailRxByteCount;			
+					dwTmp = INREG32(&pSpi->m_pCSPI->RXDATA);
+					CspiBufWrt16(pSpi->m_pSPIRxBuf, dwTmp);			
+				}
+
+				DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, 0, &dwStatus);
+				DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, 1, &dwStatus);
+				DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, 0, &dwStatus);
+				DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, 1, &dwStatus);
+
+				// disable the CSPI
+				INSREG32(&pSpi->m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_EN), 
+					CSP_BITFVAL(CSPI_CONREG_EN, CSPI_CONREG_EN_DISABLE));
+
+				BSPCSPIEnableClock(pSpi->m_Index,FALSE);
+				SetEvent( pSpi->m_hCSPIEvent );
+				DEBUGMSG(ZONE_THREAD, (TEXT("CspiDataExchange -\r\n")));
 			}
 
-			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, 0, &dwStatus);
-			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, 1, &dwStatus);
-			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, 0, &dwStatus);
-			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, 1, &dwStatus);
+			// Check RX DMA interrupt
+			// attempt to fill the RX Buffer(m_pSPIRxBuf) as much ad possible, by copying from currently  
+			// IDX SDMA buffer. update m_dwAvailRxByteCount and m_currRxDmaBufIdx.
+			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, pSpi->m_currRxDmaBufIdx, &dwStatus);
+			if( (dwStatus & DDK_DMA_FLAGS_BUSY) == 0 )
+			{
+				DDKSdmaClearBufDescStatus(pSpi->m_dmaChanCspiRx, pSpi->m_currRxDmaBufIdx );
+				dwStatus &= 0xFFFF;
+				EnterCriticalSection(&pSpi->m_cspiRxBufCs );
+				if( pSpi->m_pSPIRxBuf )
+				{
+					memcpy( pSpi->m_pSPIRxBuf, pSpi->m_pSpiVirtRxDmaBufferAddr+pSpi->m_currRxDmaBufIdx*pSpi->m_dwDMABufferSize, 
+						dwStatus );
+				}
+				LeaveCriticalSection(&pSpi->m_cspiRxBufCs);
+				pSpi->m_dwAvailRxByteCount += dwStatus;
+				// Circularly advance m_currRxDmaBufIdx.
+				pSpi->m_currRxDmaBufIdx = (pSpi->m_currRxDmaBufIdx + 1) % 2;
+			}
 
-			// disable the CSPI
-			INSREG32(&pSpi->m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_EN), 
-				CSP_BITFVAL(CSPI_CONREG_EN, CSPI_CONREG_EN_DISABLE));
+			// Check TX DMA interrupt
+			// attempt to fill the currently IDX SDMA buffer.update m_dwSendByteCount and m_currTxDmaBufIdx.
+			DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, pSpi->m_currTxDmaBufIdx, &dwStatus);
+			if ((dwStatus & DDK_DMA_FLAGS_BUSY) == 0)
+			{
+				DDKSdmaClearBufDescStatus(pSpi->m_dmaChanCspiTx,pSpi->m_currTxDmaBufIdx);
+				dwTmp = MIN_VAL( pSpi->m_dwSpiDmaCount, pSpi->m_dwDMABufferSize);
+				Mode = pSpi->m_currTxDmaBufIdx ? DDK_DMA_FLAGS_WRAP : DDK_DMA_FLAGS_CONT;
+				DDKSdmaSetBufDesc(pSpi->m_dmaChanCspiTx,
+					pSpi->m_currTxDmaBufIdx,
+					(DDK_DMA_FLAGS_INTR | Mode),
+					(pSpi->m_pSpiPhysTxDMABufferAddr.LowPart) +
+					pSpi->m_currTxDmaBufIdx * pSpi->m_dwDMABufferSize,
+					0,
+					DDK_DMA_ACCESS_16BIT,
+					(UINT16)dwTmp );	// Set the count in bytes
 
-			BSPCSPIEnableClock(pSpi->m_Index,FALSE);
-			DEBUGMSG(ZONE_THREAD, (TEXT("CspiDataExchange -\r\n")));
+				//pSpi->TransferTxBuf( pSpi->m_currTxDmaBufIdx );
+				//TransferTxBuf function
+				EnterCriticalSection(&pSpi->m_cspiTxBufCs );
+				if( pSpi->m_pSPITxBuf )
+				{
+					dwTmp = 0;
+					while( pSpi->m_dwSpiDmaCount )
+					{
+						//Config channel
+						pSpi->m_pSPITxBuf[dwTmp++] = ADS8201_REG_WRITE|ADS8021_CHA_SEL_CCR|pSpi->m_ADChannle[pSpi->m_dwADChannleIdx++];	
+						//Read ADC Data
+						pSpi->m_pSPITxBuf[dwTmp++] = ADS8201_ADC_READ;
+						pSpi->m_dwSpiDmaCount -= 4;
+
+						if( (dwTmp<<1) >= pSpi->m_dwDMABufferSize )
+							break;
+					}
+
+					memcpy( pSpi->m_pSpiVirtTxDMABufferAddr+pSpi->m_currTxDmaBufIdx*pSpi->m_dwDMABufferSize, pSpi->m_pSPITxBuf, dwTmp );
+				}
+				LeaveCriticalSection(&pSpi->m_cspiTxBufCs);
+				// end TransferTxBuf  function
+
+				pSpi->m_dwSpiDmaCount -= dwTmp;
+				// Circularly advance m_currTxDmaBufIdx.
+				pSpi->m_currTxDmaBufIdx = (pSpi->m_currTxDmaBufIdx + 1) % 2;
+
+				// start Tx DMA channel
+				DDKSdmaStartChan(pSpi->m_dmaChanCspiTx);
+			}
+
+			// signal that interrupt has been handled
+			InterruptDone(pSpi->m_dwSysIntr);
 		}
-
-		// Check RX DMA interrupt
-		// attempt to fill the RX Buffer(m_pSPIRxBuf) as much ad possible, by copying from currently  
-		// IDX SDMA buffer. update m_dwAvailRxByteCount and m_currRxDmaBufIdx.
-		DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiRx, pSpi->m_currRxDmaBufIdx, &dwStatus);
-		if( (dwStatus & DDK_DMA_FLAGS_BUSY) == 0 )
-		{
-			DDKSdmaClearBufDescStatus(pSpi->m_dmaChanCspiRx, pSpi->m_currRxDmaBufIdx );
-			dwStatus &= 0xFFFF;
-			memcpy( pSpi->m_pSPIRxBuf, pSpi->m_pSpiVirtRxDmaBufferAddr+pSpi->m_currRxDmaBufIdx*pSpi->m_dwDMABufferSize, 
-				dwStatus );
-			pSpi->m_dwAvailRxByteCount += dwStatus;
-			// Circularly advance m_currRxDmaBufIdx.
-			pSpi->m_currRxDmaBufIdx = (pSpi->m_currRxDmaBufIdx + 1) % 2;
-		}
-
-		// Check TX DMA interrupt
-		// attempt to fill the currently IDX SDMA buffer.update m_dwSendByteCount and m_currTxDmaBufIdx.
-		DDKSdmaGetBufDescStatus(pSpi->m_dmaChanCspiTx, pSpi->m_currTxDmaBufIdx, &dwStatus);
-		if ((dwStatus & DDK_DMA_FLAGS_BUSY) == 0)
-		{
-			DDKSdmaClearBufDescStatus(pSpi->m_dmaChanCspiTx,pSpi->m_currTxDmaBufIdx);
-			dwTmp = MIN_VAL( pSpi->m_dwSpiDmaCount, pSpi->m_dwDMABufferSize);
-			Mode = pSpi->m_currTxDmaBufIdx ? DDK_DMA_FLAGS_WRAP : DDK_DMA_FLAGS_CONT;
-			DDKSdmaSetBufDesc(pSpi->m_dmaChanCspiTx,
-				pSpi->m_currTxDmaBufIdx,
-				(DDK_DMA_FLAGS_INTR | Mode),
-				(pSpi->m_pSpiPhysTxDMABufferAddr.LowPart) +
-				pSpi->m_currTxDmaBufIdx * pSpi->m_dwDMABufferSize,
-				0,
-				DDK_DMA_ACCESS_16BIT,
-				(UINT16)dwTmp );	// Set the count in bytes
-		//	TransferTxBuf( pSpi->m_currTxDmaBufIdx );
-			pSpi->m_dwSpiDmaCount -= dwTmp;
-			// Circularly advance m_currTxDmaBufIdx.
-			pSpi->m_currTxDmaBufIdx = (pSpi->m_currTxDmaBufIdx + 1) % 2;
-
-			// start Tx DMA channel
-			DDKSdmaStartChan(pSpi->m_dmaChanCspiTx);
-		}
-
-		// signal that interrupt has been handled
-		InterruptDone(pSpi->m_dwSysIntr);
 	}
+// 	except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+// 		EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+// 		DEBUGMSG(ZONE_WARN, (TEXT("SL_RxIntrHandler :Exception caught \n")));
+
 	return TRUE;
 }
 
 void spiClass::CspiADCDone()
 {
+	// disable the CSPI
+	INSREG32(&m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_EN), 
+		CSP_BITFVAL(CSPI_CONREG_EN, CSPI_CONREG_EN_DISABLE));
+
+	BSPCSPIEnableClock(m_Index,FALSE);
+
+	EnterCriticalSection( &m_cspiRxBufCs );
 	if( m_pSPIRxBuf != NULL )
 	{
 		HeapFree( m_hHeap, 0, m_pSPIRxBuf );
 		m_pSPIRxBuf = NULL;
 	}
+	LeaveCriticalSection( &m_cspiRxBufCs );
+	
+	EnterCriticalSection( &m_cspiTxBufCs );
 	if( m_pSPITxBuf != NULL )
 	{
+	
 		HeapFree( m_hHeap, 0, m_pSPITxBuf );
 		m_pSPITxBuf = NULL;
+	}
+	LeaveCriticalSection( &m_cspiTxBufCs );
+
+	if( m_hCSPIEvent!= NULL )
+	{
+		CloseHandle( m_hCSPIEvent );
+		m_hCSPIEvent = NULL;
 	}
 }
