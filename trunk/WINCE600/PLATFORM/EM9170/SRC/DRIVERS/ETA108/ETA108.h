@@ -5,6 +5,15 @@
 extern "C" {
 #endif
 
+#define  ADCHA1	1<<0
+#define  ADCHA2	1<<1
+#define  ADCHA3	1<<2
+#define  ADCHA4	1<<3
+#define  ADCHA5	1<<4
+#define  ADCHA6	1<<5
+#define  ADCHA7	1<<6
+#define  ADCHA8	1<<7
+
 typedef struct  
 {
 	DWORD dwSamplingRate;			//Sampling rate

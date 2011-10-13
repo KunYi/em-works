@@ -324,7 +324,7 @@ BOOL SdmaSetChanDesc(DDK_DMA_REQ dmaReq, PSDMA_CHAN_DESC pChanDesc)
         pChanDesc->bExtended = SDMA_EXT_BD;
         break;
 
-    case DDK_DMA_REQ_CSPI3_RX:
+    /*case DDK_DMA_REQ_CSPI3_RX:
         pChanDesc->dmaMask[0] = 1U << DMA_EVENT_CSPI2_RX;
         pChanDesc->dmaMask[1] = 0;
         pChanDesc->perAddr = CSP_BASE_REG_PA_CSPI2 + CSPI_RXDATA_OFFSET;
@@ -338,8 +338,24 @@ BOOL SdmaSetChanDesc(DDK_DMA_REQ dmaReq, PSDMA_CHAN_DESC pChanDesc)
         pChanDesc->perAddr = CSP_BASE_REG_PA_CSPI2 + CSPI_TXDATA_OFFSET;
         pChanDesc->scriptAddr = mcu_2_shp_ADDR;
         pChanDesc->bExtended = SDMA_EXT_BD;
+        break;*/
+    // lqk OCT-13 2011 Fix DMA request for CSPI3
+	case DDK_DMA_REQ_CSPI3_RX:
+        pChanDesc->dmaMask[0] = 0;
+        pChanDesc->dmaMask[1] = 1U << (DMA_EVENT_CSPI3_RX-32);
+        pChanDesc->perAddr = CSP_BASE_REG_PA_CSPI3 + CSPI_RXDATA_OFFSET;
+        pChanDesc->scriptAddr = app_2_mcu_ADDR;
+        pChanDesc->bExtended = SDMA_EXT_BD;
         break;
 
+    case DDK_DMA_REQ_CSPI3_TX:
+        pChanDesc->dmaMask[0] = 0;
+        pChanDesc->dmaMask[1] = 1U << (DMA_EVENT_CSPI3_TX-32);
+        pChanDesc->perAddr = CSP_BASE_REG_PA_CSPI3 + CSPI_TXDATA_OFFSET;
+        pChanDesc->scriptAddr = mcu_2_app_ADDR;
+        pChanDesc->bExtended = SDMA_EXT_BD;
+        break;
+	// end  lqk OCT-13 2011       
     case DDK_DMA_REQ_EXTMEM2IPURAM:
     case DDK_DMA_REQ_EXTMEM2IRAM:
         pChanDesc->dmaMask[0] = 0;

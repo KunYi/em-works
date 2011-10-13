@@ -280,11 +280,17 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
 	//ADS8201 configuration
-	if( !m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
 		goto error_cleanup;
 	
+	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
+	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
+		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
+	RETAILMSG( 1, (TEXT("\r\n")));
+
 	//Redefine SPI bus configuration
 	stCspiConfig.drctl = 1;			//Use SPI_RDY
+	//stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
@@ -299,8 +305,11 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	BOOL bRet; 
 
 	PwmInfo.dwFreq = pADSConfig->dwSamplingRate;
-	PwmInfo.dwDuty = 1;				// PWM Duty cycle = 50% 
-	PwmInfo.dwDuration = 0;			// Remain output until issue a new write operation
+
+	// PWM Duty cycle = CONVST(convert start)pulse width>10nS.(CONVST active low level)
+	PwmInfo.dwDuty = 1;	
+	// Remain output until issue a new write operation
+	PwmInfo.dwDuration = 0;			
 	dwNumberOfBytesToWrite = sizeof(PWMINFO); 
 	dwNumberOfBytesWritten = 0; 
 	//Now start AD conversion
