@@ -159,7 +159,7 @@ BOOL eta108Class::ETA108Open()
 	if( !m_pSpi->CspiIOMux())
 		return FALSE;
 
-	m_hPWM = CreateFile(_T("PWM1:"),          // name of device
+	m_hPWM = CreateFile(_T("PWM2:"),          // name of device
 		GENERIC_READ|GENERIC_WRITE,         // desired access
 		FILE_SHARE_READ|FILE_SHARE_WRITE,   // sharing mode
 		NULL,                               // security attributes (ignored)
@@ -244,8 +244,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiConfig.pha = FALSE;
 	stCspiConfig.pol = FALSE;
 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
-	stCspiConfig.sspol = TRUE;		//SSPOL Active high
-	stCspiConfig.usepolling = FALSE;//polling don't use intterrupt
+	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
+	stCspiConfig.usepolling = FALSE;//polling don't use interrupt
 	
 	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 	stCspiConfig.usedma = FALSE;	//Don't DMA
@@ -280,17 +280,18 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
 	//ADS8201 configuration
-	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
-		goto error_cleanup;
-	
-	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
-	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
-		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
-	RETAILMSG( 1, (TEXT("\r\n")));
+// 	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+// 		goto error_cleanup;
+// 	
+// 	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
+// 	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
+// 		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
+// 	RETAILMSG( 1, (TEXT("\r\n")));
 
 	//Redefine SPI bus configuration
-	stCspiConfig.drctl = 1;			//Use SPI_RDY
-	//stCspiConfig.drctl = 0;			//Don't care SPI_RDY
+	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
+	//stCspiConfig.drctl = 1;			//Use SPI_RDY
+	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
@@ -307,6 +308,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	PwmInfo.dwFreq = pADSConfig->dwSamplingRate;
 
 	// PWM Duty cycle = CONVST(convert start)pulse width>10nS.(CONVST active low level)
+	//PwmInfo.dwDuty = 1;	
 	PwmInfo.dwDuty = 1;	
 	// Remain output until issue a new write operation
 	PwmInfo.dwDuration = 0;			
