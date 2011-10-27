@@ -8,6 +8,7 @@
    "PWMChannel"  = dword:1      ; use PWM1
    "DMABufSize"	 = dword:1400	; DMA buffer size. default = 5120. count in bytes.
    "MultDMABufSize" = dword:14	; Buffer Size of Continuous Sampling  default = 20
+   "Order"=dword:1 
    
 
 

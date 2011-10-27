@@ -11,9 +11,6 @@ TARGETTYPE=DYNLINK
 RELEASETYPE=PLATFORM
 DLLENTRY=ETA108_DllEntry
 
-#$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
-#$(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
-
 TARGETLIBS= \
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_bus.lib  \
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ddk_dma.lib  \
@@ -23,8 +20,8 @@ TARGETLIBS= \
     $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
    
 SOURCELIBS=\
-   $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cspi_$(_SOCDIR).lib
-   
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cspi_$(_SOCDIR).lib
+
 SOURCES= \
     ETA108_io.cpp \
     ETA108Class.cpp \
@@ -47,4 +44,3 @@ FILE_VIEW_INCLUDES_FOLDER= \
 	ETA108Class.H \
 	..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\INC\cspibus.h \
 	
-#..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_7\CSPIBUSV2\PDK\cspiClass.h \

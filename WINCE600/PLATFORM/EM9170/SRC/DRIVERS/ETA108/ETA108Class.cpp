@@ -38,7 +38,8 @@
 
 //-----------------------------------------------------------------------------
 // Defines
-
+#define  ETA108WRITE_BLOCK		TRUE
+#define  ETA108WRITE_UNBLOCK	FALSE
 //-----------------------------------------------------------------------------
 // Types
 
@@ -155,10 +156,6 @@ BOOL eta108Class::ETA108Release()
 
 BOOL eta108Class::ETA108Open()
 {
-	//SPI pin config
-	if( !m_pSpi->CspiIOMux())
-		return FALSE;
-
 	m_hPWM = CreateFile(_T("PWM2:"),          // name of device
 		GENERIC_READ|GENERIC_WRITE,         // desired access
 		FILE_SHARE_READ|FILE_SHARE_WRITE,   // sharing mode
@@ -209,8 +206,9 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	}
 	m_pSpi->CspiADCDone( );
 	//1.Parameter marshal
-	if( pADSConfig->dwADCompleteEventLength > 0 && pADSConfig->lpADCompleteEvent )
+	if( pADSConfig->lpADCompleteEvent && (pADSConfig->dwADCompleteEventLength == wcslen(pADSConfig->lpADCompleteEvent)) )
 	{
+		m_bWriteBlock = ETA108WRITE_UNBLOCK;
 		result = CeOpenCallerBuffer(
 			marshalEventStub,
 			pADSConfig->lpADCompleteEvent,
@@ -232,7 +230,14 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 			goto error_cleanup;
 		}
 	}
-	else 	goto error_cleanup;
+	else 	
+	{
+		m_bWriteBlock = ETA108WRITE_BLOCK;	
+		//Create event for AD conversion completed.
+		m_hADCEvent = CreateEvent(NULL,TRUE, FALSE, NULL );
+		if( m_hADCEvent == NULL )
+			goto error_cleanup;
+	}
 
 	//2.Config CSPI & config ADS8201
 	CSPI_BUSCONFIG_T stCspiConfig;
@@ -240,7 +245,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 
 	stCspiConfig.bitcount = 16;		//data rate = 16bit
 	stCspiConfig.chipselect = 0;	//use channel 0
-	stCspiConfig.freq = 16000000;	//XCH speed = 16M
+	//stCspiConfig.freq = 12000000;	//XCH speed = 16M
+	stCspiConfig.freq = 10000;	//XCH speed = 16M
 	stCspiConfig.pha = FALSE;
 	stCspiConfig.pol = FALSE;
 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
@@ -290,8 +296,6 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
-	//stCspiConfig.drctl = 1;			//Use SPI_RDY
-	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
@@ -307,7 +311,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 
 	PwmInfo.dwFreq = pADSConfig->dwSamplingRate;
 
-	// PWM Duty cycle = CONVST(convert start)pulse width>10nS.(CONVST active low level)
+	// PWM Duty cycle = CONVST(convert start)pulse width>40nS.(CONVST active low level)
 	//PwmInfo.dwDuty = 1;	
 	PwmInfo.dwDuty = 1;	
 	// Remain output until issue a new write operation
@@ -318,6 +322,11 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	bRet = WriteFile(m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
 	if( !bRet )
 		goto error_cleanup;
+	
+	if( m_bWriteBlock == ETA108WRITE_BLOCK )
+	{
+		WaitForSingleObject( m_hADCEvent, INFINITE );
+	}
 
 	return DWORD(sizeof(ADS_CONFIG));
 
@@ -385,7 +394,7 @@ DWORD WINAPI eta108Class::ADCEventHandle(LPVOID lpParameter)
 	while( !pETA108->m_bTerminate )
 	{
 		WaitForSingleObject(pETA108->m_hCSPIEvent, INFINITE );
-		if( !pETA108->m_bTerminate )
+		if( pETA108->m_bTerminate )
 			break;
 
 		SetEvent( pETA108->m_hADCEvent );
@@ -394,6 +403,7 @@ DWORD WINAPI eta108Class::ADCEventHandle(LPVOID lpParameter)
 		PwmInfo.dwDuration = 1;			
 		dwNumberOfBytesToWrite = sizeof(PWMINFO); 
 		dwNumberOfBytesWritten = 0; 
+		PwmInfo.dwFreq = 100;
 		WriteFile(pETA108->m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
 	}
 	pETA108->m_hThread = NULL;
