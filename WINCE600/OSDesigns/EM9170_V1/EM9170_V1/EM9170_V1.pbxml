@@ -202,8 +202,6 @@
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\wstartup\wstartup.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\update\update.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\sysinfo\sysinfo.pbpxml" />
-        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\ETA503Set\ETA503Set.pbpxml" />
-        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\IRQ1Set\IRQ1Set.pbpxml" />
       </PBPEntryCollection>
       <BoardSupportPackage Name="Bsp" PlatformFolder="EM9170" FriendlyName="EM9170: ARMV4I" />
       <Cpu Name="Cpu" CpuName="ARMV4I" />
@@ -247,13 +245,14 @@
         <BuildOption Name="Item" OptionName="IMGNOKITL" OptionValue="True" />
       </BuildOptionCollection>
       <StringDictionary Name="EnvironmentVariables">
-        <Entry Name="bsp_support_demand_paging">1</Entry>
-        <Entry Name="bsp_em9170_rtc_isl1208">1</Entry>
-        <Entry Name="enable_watch_dog">1</Entry>
         <Entry Name="imgnand">1</Entry>
+        <Entry Name="bsp_support_demand_paging">1</Entry>
         <Entry Name="bsp_nand_pdd">1</Entry>
-        <Entry Name="bsp_em9170">1</Entry>
+        <Entry Name="enable_watch_dog">1</Entry>
+        <Entry Name="bsp_em9170_rtc_isl1208">1</Entry>
         <Entry Name="bsp_nosim">1</Entry>
+        <Entry Name="bsp_eta108">1</Entry>
+        <Entry Name="bsp_em9170">1</Entry>
       </StringDictionary>
       <LocaleInfo Name="LocaleInformation" UseStrictLocalization="False" LocalizeTheBuild="True" DefaultLocale="2052">
         <LocaleCollection Name="Locales" EnforceUniqueItems="False">
@@ -271,8 +270,6 @@
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\wstartup\wstartup.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\update\update.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\sysinfo\sysinfo.pbpxml" />
-        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\ETA503Set\ETA503Set.pbpxml" />
-        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\IRQ1Set\IRQ1Set.pbpxml" />
       </PBPEntryCollection>
       <BoardSupportPackage Name="Bsp" PlatformFolder="EM9170" FriendlyName="EM9170: ARMV4I" />
       <Cpu Name="Cpu" CpuName="ARMV4I" />
