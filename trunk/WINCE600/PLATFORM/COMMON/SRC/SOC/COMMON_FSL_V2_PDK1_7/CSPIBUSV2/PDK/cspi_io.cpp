@@ -131,7 +131,7 @@ DWORD SPI_Init(LPCTSTR pContext)
     }
 
     pCspi = new cspiClass();
-    if (pCspi && !pCspi->CspiInitialize(dwDevIndex)) 
+    if (pCspi && !pCspi->CspiInitialize(dwDevIndex) ) 
     {
         delete pCspi;
         //DEBUGMSG(ZONE_ERROR, (TEXT("SPI_Init:  CspiInitialize failed!!!\r\n")));
