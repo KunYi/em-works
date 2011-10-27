@@ -94,7 +94,7 @@ private:
 	HANDLE m_hThread;		// ADC moniter thread
 	HANDLE m_hADCEvent;		// ADC completed event
 	HANDLE m_hCSPIEvent;	// SPI transfer completed event
-
+	BOOL   m_bWriteBlock;
 	DWORD  m_dwRxBufSeek;
 	DWORD  m_dwSamplingLength;
 	ADS8201_CFG m_stADS8201CFG;
