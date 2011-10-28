@@ -222,7 +222,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 		}
 
 		//Create event for AD conversion completed.
-		m_hADCEvent = CreateEvent(NULL,TRUE, FALSE, pADSConfig->lpADCompleteEvent );
+		m_hADCEvent = CreateEvent(NULL,FALSE, FALSE, pADSConfig->lpADCompleteEvent );
 		CeCloseCallerBuffer(marshalEventStub);
 
 		if( m_hADCEvent == NULL )
@@ -234,7 +234,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	{
 		m_bWriteBlock = ETA108WRITE_BLOCK;	
 		//Create event for AD conversion completed.
-		m_hADCEvent = CreateEvent(NULL,TRUE, FALSE, NULL );
+		m_hADCEvent = CreateEvent(NULL,FALSE, FALSE, NULL );
 		if( m_hADCEvent == NULL )
 			goto error_cleanup;
 	}
@@ -245,8 +245,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 
 	stCspiConfig.bitcount = 16;		//data rate = 16bit
 	stCspiConfig.chipselect = 0;	//use channel 0
-	//stCspiConfig.freq = 12000000;	//XCH speed = 16M
-	stCspiConfig.freq = 10000;	//XCH speed = 16M
+	stCspiConfig.freq = 12000000;	//XCH speed = 16M
+	//stCspiConfig.freq = 10000;	//XCH speed = 16M
 	stCspiConfig.pha = FALSE;
 	stCspiConfig.pol = FALSE;
 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
@@ -340,19 +340,17 @@ error_cleanup:
 DWORD eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
 {
 	DWORD idx,dwReadBytes;
-
-	if( m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf )
-		return DWORD(-1);
+	
+	if( !(m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf) )
+		 return DWORD(-1);
 
 	dwReadBytes = m_dwRxBufSeek;
 	idx = (m_dwRxBufSeek<<1);
-
 	while( dwCount-- &&  m_dwRxBufSeek<= m_dwSamplingLength )
 	{
 		pBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
 		++idx;
 	}
-
 	return (m_dwRxBufSeek-dwReadBytes);
 }
 
