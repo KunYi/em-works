@@ -194,8 +194,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	CALLER_STUB_T marshalEventStub;
 	HRESULT result;
 
-	if(m_hPWM == INVALID_HANDLE_VALUE )
-		goto error_cleanup;
+ 	if(m_hPWM == INVALID_HANDLE_VALUE )
+ 		goto error_cleanup;
 
 	m_dwRxBufSeek = 0;
 	m_dwSamplingLength = pADSConfig->dwSamplingLength;
@@ -261,8 +261,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiXchPkt.xchEventLength = 0;
 
 
-	UINT16 SPITxBuf[10];
-	UINT16 SPIRxBuf[10];
+	UINT32 SPITxBuf[10];
+	UINT32 SPIRxBuf[10];
 	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
 	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
 
@@ -285,18 +285,23 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	//Skip ADS8201's Reset SCR[09h]
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
 
+	/*stCspiXchPkt.xchCnt = 4;
+	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
+		SPITxBuf[i]  = (UINT16)i+1;
 	//ADS8201 configuration
-// 	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
-// 		goto error_cleanup;
-// 	
-// 	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
-// 	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
-// 		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
-// 	RETAILMSG( 1, (TEXT("\r\n")));
-
+	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+		goto error_cleanup;
+	
+ 	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
+ 	for( i=0; i<stCspiXchPkt.xchCnt; i++ )
+		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
+	RETAILMSG( 1, (TEXT("\r\n")));*/
+	
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
 	stCspiConfig.usedma = TRUE;		//Use DMA
+	stCspiConfig.pha = TRUE;
+	stCspiConfig.ssctl = FALSE;		
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
 
@@ -312,8 +317,9 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	PwmInfo.dwFreq = pADSConfig->dwSamplingRate;
 
 	// PWM Duty cycle = CONVST(convert start)pulse width>40nS.(CONVST active low level)
-	//PwmInfo.dwDuty = 1;	
-	PwmInfo.dwDuty = 1;	
+	// ETA108'S CPLD utilize 6M sample clock to generate AD start conversion pulse ,
+	// so the high level of the PWM should be greater than 166ns(1/6M).
+	PwmInfo.dwDuty = 2;	
 	// Remain output until issue a new write operation
 	PwmInfo.dwDuration = 0;			
 	dwNumberOfBytesToWrite = sizeof(PWMINFO); 
