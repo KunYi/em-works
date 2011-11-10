@@ -110,7 +110,7 @@ BOOL eta108Class::ETA108Initialize()
 			goto error_init;
 	}
 
- 	m_pSpi = new spiClass;
+	m_pSpi = new spiClass;
 	if( m_pSpi == NULL )
 		goto error_init;
 	
@@ -150,12 +150,57 @@ BOOL eta108Class::ETA108Release()
 
 	if( m_hCSPIEvent != NULL )
 		CloseHandle(m_hCSPIEvent);
-
 	return TRUE;
 }
 
 BOOL eta108Class::ETA108Open()
 {
+	CSPI_BUSCONFIG_T stCspiConfig;
+	CSPI_XCH_PKT_T stCspiXchPkt;
+
+	stCspiConfig.bitcount = 16;		//data rate = 16bit
+	stCspiConfig.chipselect = 0;	//use channel 0
+	stCspiConfig.freq = 12000000;	//XCH speed = 16M
+	stCspiConfig.pha = TRUE;
+	stCspiConfig.pol = FALSE;
+	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
+	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
+	stCspiConfig.usepolling = FALSE;//polling don't use interrupt
+
+	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
+	stCspiConfig.usedma = FALSE;	//Don't DMA
+
+	stCspiXchPkt.pBusCnfg = &stCspiConfig;
+	stCspiXchPkt.xchEvent = NULL;
+	stCspiXchPkt.xchEventLength = 0;
+
+
+	UINT16 SPITxBuf[5];
+	UINT16 SPIRxBuf[5];
+	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
+	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
+
+	SPITxBuf[0] = ADS8201_REG_READ|ADS8021_ADC_TRIGGER_SCR;
+	SPITxBuf[1] = ADS8201_REG_READ|ADS8021_CONV_DELAY_SCR;
+	SPITxBuf[2] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;	//BUSY
+	SPITxBuf[3] = ADS8201_REG_READ| ADS8021_ADC_SCR;	//BUSY
+	stCspiXchPkt.xchCnt = 4;
+	SPIRxBuf[0] = 0;
+	SPIRxBuf[1] = 0;
+	SPIRxBuf[2] = 0;
+	SPIRxBuf[3] = 0;
+	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+	{
+		RETAILMSG( 1, (TEXT("ETA108Open: CSPI exchange failed!!!\r\n")));
+		return FALSE;
+	}
+	
+	if( (SPIRxBuf[0]&0x1fff )  != 2  || (SPIRxBuf[1]&0x1fff) != 2 || (SPIRxBuf[3]&0x1fff) != 4 )
+	{
+		RETAILMSG( 1, (TEXT("ETA108Open: Read ADS8201's register failed!!! 0x%x, 0x%x, 0x%x\r\n"), SPIRxBuf[0], SPIRxBuf[1], SPIRxBuf[3]));
+		return FALSE;
+	}
+
 	m_hPWM = CreateFile(_T("PWM2:"),          // name of device
 		GENERIC_READ|GENERIC_WRITE,         // desired access
 		FILE_SHARE_READ|FILE_SHARE_WRITE,   // sharing mode
@@ -167,8 +212,11 @@ BOOL eta108Class::ETA108Open()
 	// if we failed to get handle to CSPI
 	if (m_hPWM == INVALID_HANDLE_VALUE)
 	{
+		RETAILMSG( 1, (TEXT("ETA108Open: Con't open pwm!!!\r\n")));
 		return FALSE;
 	}
+
+	RETAILMSG( 1, (TEXT("ETA108Open: ETA108 is Opened.\r\n")));
 	return TRUE;
 }
 
@@ -186,6 +234,7 @@ BOOL eta108Class::ETA108Close()
 		CloseHandle(m_hPWM);
 		m_hPWM = INVALID_HANDLE_VALUE;
 	}
+
 	return TRUE;
 }
 
@@ -193,6 +242,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 {
 	CALLER_STUB_T marshalEventStub;
 	HRESULT result;
+	DWORD i;
 
  	if(m_hPWM == INVALID_HANDLE_VALUE )
  		goto error_cleanup;
@@ -246,8 +296,8 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiConfig.bitcount = 16;		//data rate = 16bit
 	stCspiConfig.chipselect = 0;	//use channel 0
 	stCspiConfig.freq = 12000000;	//XCH speed = 16M
-	//stCspiConfig.freq = 10000;	//XCH speed = 16M
-	stCspiConfig.pha = FALSE;
+
+	stCspiConfig.pha = TRUE;
 	stCspiConfig.pol = FALSE;
 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
 	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
@@ -261,44 +311,39 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	stCspiXchPkt.xchEventLength = 0;
 
 
-	UINT32 SPITxBuf[10];
-	UINT32 SPIRxBuf[10];
+	UINT16 SPITxBuf[10];
+	UINT16 SPIRxBuf[10];
 	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
 	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
 
 	//ADS8201 Configuration parameter
-	if( pADSConfig->dwContrlWordLength == 0 || pADSConfig->lpContrlWord == NULL )
-	{
-		//ADS8201 default configuration
-		memset( &m_stADS8201CFG, 0, sizeof(m_stADS8201CFG));
-	}
+	//memset( &m_stADS8201CFG, 0, sizeof(m_stADS8201CFG));
+	//ADS8201 default configuration
 	stCspiXchPkt.xchCnt = 0;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA0_1_CCR | m_stADS8201CFG.cha0_1_ccr;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA2_3_CCR | m_stADS8201CFG.cha2_3_ccr;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA4_5_CCR | m_stADS8201CFG.cha4_5_ccr;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CHA6_7_CCR | m_stADS8201CFG.cha6_7_ccr;
-	//Skip ADS8201's Channel Select Register[04h]
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | m_stADS8201CFG.adc_scr;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_INT_SCR | m_stADS8201CFG.int_scr;
-	//Skip ADS8201's Status SCR[07h]
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_TRIGGER_SCR | m_stADS8201CFG.adc_trigger_scr;
-	//Skip ADS8201's Reset SCR[09h]
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_CONV_DELAY_SCR | m_stADS8201CFG.conv_delay_scr;
-
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;	//BUSY
+	if( pADSConfig->dwContrlWordLength > 0 && pADSConfig->dwContrlWordLength < 6 && pADSConfig->lpContrlWord != NULL )
+	{
+		for( i=0; i<pADSConfig->dwContrlWordLength ; i++)
+		{
+			SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE|*((UINT16 *)(UINT16)(pADSConfig->lpContrlWord)+i);
+		}
+	}
+	
 	/*stCspiXchPkt.xchCnt = 4;
 	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
-		SPITxBuf[i]  = (UINT16)i+1;
+		SPITxBuf[i]  = (UINT16)i+1;*/
 	//ADS8201 configuration
-	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
-		goto error_cleanup;
+	//if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+	//	goto error_cleanup;
 	
- 	RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
- 	for( i=0; i<stCspiXchPkt.xchCnt; i++ )
+ 	//RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
+ 	/*for( i=0; i<stCspiXchPkt.xchCnt; i++ )
 		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
 	RETAILMSG( 1, (TEXT("\r\n")));*/
 	
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
+	stCspiConfig.bitcount = 20;		//data rate = 16bit
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiConfig.pha = TRUE;
 	stCspiConfig.ssctl = FALSE;		
@@ -342,8 +387,8 @@ error_cleanup:
 
 }
 
-// dwCount count in UINT16
-DWORD eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
+// dwCount count in UINT32
+DWORD eta108Class::ETA108Read( UINT32* pBuffer, DWORD dwCount )
 {
 	DWORD idx,dwReadBytes;
 	
@@ -360,7 +405,7 @@ DWORD eta108Class::ETA108Read( UINT16* pBuffer, DWORD dwCount )
 	return (m_dwRxBufSeek-dwReadBytes);
 }
 
-// lAmount count in UINT16
+// lAmount count in UINT32
 DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
 {
 	DWORD dwSeek;
