@@ -376,8 +376,32 @@ BOOL cspiClass::CspiInitialize(DWORD Index)
 
     // By default, Loopback is disabled.
     CspiEnableLoopback(FALSE);
+	//Issue a silent read for 8 bit DMA
+	if( m_bUseDMA )
+	{
+		CSPI_XCH_PKT0_T XchPkt;	
+		CSPI_BUSCONFIG_T BusCnfg;
 
-    return TRUE;
+		UINT32 TxBuf[12];
+		UINT32 RxBuf[12];
+		BusCnfg.chipselect = 0;
+		BusCnfg.freq = 16000000;
+		BusCnfg.bitcount = 32;
+		BusCnfg.sspol = FALSE;
+		BusCnfg.ssctl = TRUE;
+		BusCnfg.pol = FALSE;
+		BusCnfg.pha = FALSE;
+		BusCnfg.drctl = 0;
+		BusCnfg.usedma = TRUE;
+		BusCnfg.usepolling =FALSE;
+		XchPkt.pBusCnfg = &BusCnfg;
+		XchPkt.pTxBuf = TxBuf;
+		XchPkt.pRxBuf = RxBuf;
+		XchPkt.xchCnt = 10;
+		XchPkt.xchEvent = NULL;
+		CspiDMADataExchange( &XchPkt);
+	}
+	return TRUE;
 
 Error:
     CspiRelease();
@@ -1355,6 +1379,10 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
     UINT8 byParamPOL;
     UINT8 byParamPHA;
     UINT8 byParamDRCTL;
+	UINT8 bufIncr;
+	void (*pfnRxBufWrt)(LPVOID, UINT32);
+
+	DDK_DMA_ACCESS dma_dataWidth;
 
     //DEBUGMSG(ZONE_THREAD, (TEXT("CspiDMADataExchange: &m_pCSPI=0x%x\r\n"),&m_pCSPI));
     //RETAILMSG(1, (TEXT("-->CspiDMADataExchange\r\n")));
@@ -1369,11 +1397,40 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
         return 0;
     }
 
-    if (pXchPkt->xchCnt<=8)
+    if (pXchPkt->xchCnt<=8 || pBusCnfg->freq<4000000 )
     {
         xchRxCnt = CspiNonDMADataExchange(pXchPkt);
         return xchRxCnt;
     }
+
+	if ((pBusCnfg->bitcount >= 1) && (pBusCnfg->bitcount <= 8))
+	{
+		// 8-bit access width
+		pfnRxBufWrt = CspiBufWrt8;
+		bufIncr = sizeof(UINT8);
+		dma_dataWidth = DDK_DMA_ACCESS_8BIT;
+	}
+	else if ((pBusCnfg->bitcount >= 9) && (pBusCnfg->bitcount <= 16))
+	{
+		// 16-bit access width
+		pfnRxBufWrt = CspiBufWrt16;
+		bufIncr = sizeof(UINT16);
+		dma_dataWidth = DDK_DMA_ACCESS_16BIT;
+
+	}
+	else if ((pBusCnfg->bitcount >= 17) && (pBusCnfg->bitcount <= 32))
+	{
+		// 32-bit access width
+		pfnRxBufWrt = CspiBufWrt32;
+		bufIncr = sizeof(UINT32);
+		dma_dataWidth = DDK_DMA_ACCESS_32BIT;
+	}
+	else
+	{
+		// unsupported access width
+		DEBUGMSG(ZONE_WARN, (TEXT("CspiMasterDataExchange:  unsupported bitcount!\r\n")));
+		return 0;
+	}
 
     xchTxCnt = 0;
     xchRxCnt = 0;
@@ -1392,6 +1449,10 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
     }
 	*/
 
+	// disable the CSPI
+	INSREG32(&m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_EN), 
+		CSP_BITFVAL(CSPI_CONREG_EN, CSPI_CONREG_EN_DISABLE));
+
     // Enable the clock gating
     BSPCSPIEnableClock(m_Index,TRUE);
 
@@ -1405,12 +1466,13 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
     //  default SMC = XCH bit controls master start transfer
     byParamChipSelect= pBusCnfg->chipselect &((1U<<CSPI_CONREG_CHIPSELECT_WID) -1);
     byParamSSPOL = pBusCnfg->sspol? CSPI_CONREG_SSPOL_ACTIVE_HIGH: CSPI_CONREG_SSPOL_ACTIVE_LOW;
-    byParamSSCTL = pBusCnfg->ssctl? CSPI_CONREG_SSCTL_PULSE: CSPI_CONREG_SSCTL_ASSERT;
+    //byParamSSCTL = pBusCnfg->ssctl? CSPI_CONREG_SSCTL_PULSE: CSPI_CONREG_SSCTL_ASSERT;
+	byParamSSCTL = CSPI_CONREG_SSCTL_PULSE;
     byParamPOL = pBusCnfg->pol? CSPI_CONREG_POL_ACTIVE_LOW: CSPI_CONREG_POL_ACTIVE_HIGH;
     byParamPHA = pBusCnfg->pha? CSPI_CONREG_PHA1: CSPI_CONREG_PHA0;
     byParamDRCTL = pBusCnfg->drctl &((1U<<CSPI_CONREG_DRCTL_WID) -1);
-    bReqPolling = (m_bAllowPolling && pBusCnfg->usepolling)?TRUE: FALSE;
-    
+    //bReqPolling = (m_bAllowPolling && pBusCnfg->usepolling)?TRUE: FALSE;
+    bReqPolling = FALSE;
     OUTREG32(&m_pCSPI->CONREG, 
         CSP_BITFVAL(CSPI_CONREG_EN, CSPI_CONREG_EN_DISABLE) |
         CSP_BITFVAL(CSPI_CONREG_MODE, CSPI_CONREG_MODE_MASTER) |
@@ -1465,40 +1527,39 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
         CSP_BITFVAL(CSPI_DMAREG_THDEN, CSPI_DMAREG_THDEN_ENABLE)|
         CSP_BITFVAL(CSPI_DMAREG_RHDEN, CSPI_DMAREG_RHDEN_ENABLE));
 
-
-	// CS&ZHL OCT-26-2011: move from InitDMAChannel function according to serialhw.c
-    // Initialize the chain and set the watermark level     
-	if (!DDKSdmaInitChain(m_dmaChanCspiRx, CSPI_DMA_WATERMARK_RX))
-	{
-		DEBUGMSG(ZONE_ERROR, (_T("ERROR:CspiDMADataExchange(Rx): DDKSdmaInitChain failed.\r\n")));
-		goto error_exit;
-	}
-    DDKSdmaClearChainStatus(m_dmaChanCspiRx);
-
 	// configure RX DMA
+	DDKSdmaClearChainStatus(m_dmaChanCspiRx);
     DDKSdmaClearBufDescStatus(m_dmaChanCspiRx,0);
     DDKSdmaSetBufDesc(m_dmaChanCspiRx, 0, 
         DDK_DMA_FLAGS_INTR | DDK_DMA_FLAGS_WRAP,					//DDK_DMA_FLAGS_WRAP,
         PhysDMABufferAddr.LowPart + CSPI_RECV_OFFSET,
-       0, DDK_DMA_ACCESS_32BIT, (UINT16)dmaTransferCount * 4); //Count should be in Bytes.
-
-	// CS&ZHL OCT-26-2011: move from InitDMAChannel function according to serialhw.c
-	// Initialize the chain and set the watermark level 
-    if (!DDKSdmaInitChain(m_dmaChanCspiTx, CSPI_DMA_WATERMARK_TX))
-    {
-        DEBUGMSG(ZONE_ERROR, (_T("ERROR:CspiDMADataExchange(Tx): DDKSdmaInitChain failed.\r\n")));
-		goto error_exit;
-    }
-    DDKSdmaClearChainStatus(m_dmaChanCspiTx);
-
-	// configure TX DMA
+       0, dma_dataWidth, (UINT16)dmaTransferCount * bufIncr); //Count should be in Bytes.
+	//RETAILMSG(1, (TEXT("CspiDMADataExchange::dmaTransferCount = %d\r\n"), dmaTransferCount * bufIncr) );
+    // configure TX DMA
+	DDKSdmaClearChainStatus(m_dmaChanCspiTx);
     DDKSdmaClearBufDescStatus(m_dmaChanCspiTx,0);
     DDKSdmaSetBufDesc(m_dmaChanCspiTx, 0, 
         DDK_DMA_FLAGS_INTR | DDK_DMA_FLAGS_WRAP,					// DDK_DMA_FLAGS_WRAP,
         PhysDMABufferAddr.LowPart + CSPI_TXMT_OFFSET,
-        0, DDK_DMA_ACCESS_32BIT, (UINT16)pXchPkt->xchCnt * 4); // set the count in bytes.
+        0, dma_dataWidth, (UINT16)pXchPkt->xchCnt * bufIncr); // set the count in bytes.
    	
-	MoveDMABuffer(pTxBuf, pXchPkt->xchCnt * 4, FALSE); // set the count in bytes.
+	MoveDMABuffer(pTxBuf, pXchPkt->xchCnt * bufIncr, FALSE); // set the count in bytes.
+
+	// CS&ZHL OCT-26-2011: move from InitDMAChannel function according to serialhw.c
+	// Initialize the chain and set the watermark level 
+	if (!DDKSdmaInitChain(m_dmaChanCspiTx, bufIncr<<2))
+	{
+		DEBUGMSG(ZONE_ERROR, (_T("ERROR:CspiDMADataExchange(Tx): DDKSdmaInitChain failed.\r\n")));
+		goto error_exit;
+	}
+
+	// CS&ZHL OCT-26-2011: move from InitDMAChannel function according to serialhw.c
+	// Initialize the chain and set the watermark level     
+	if (!DDKSdmaInitChain(m_dmaChanCspiRx, bufIncr<<2))
+	{
+		DEBUGMSG(ZONE_ERROR, (_T("ERROR:CspiDMADataExchange(Rx): DDKSdmaInitChain failed.\r\n")));
+		goto error_exit;
+	}
 
     // start Rx DMA channel
     DDKSdmaStartChan(m_dmaChanCspiRx);
@@ -1506,13 +1567,22 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
     // start Tx DMA channel
     DDKSdmaStartChan(m_dmaChanCspiTx);
 
+	if( !pBusCnfg->ssctl )
+	{
+		BSPCSPICS2IO( );
+	}
+
     // until we are done with requested transfers
     while(!bTxDone)
     {
         // load Tx FIFO until enough for XCH, or until we run out of data
         while (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TE));
         
-        // start exchange
+        if( !pBusCnfg->ssctl )
+		{
+			BSPCSPICSSet( FALSE );
+		}
+		// start exchange
         INSREG32(&m_pCSPI->CONREG, CSP_BITFMASK(CSPI_CONREG_XCH), 
             CSP_BITFVAL(CSPI_CONREG_XCH, CSPI_CONREG_XCH_EN));
 
@@ -1529,7 +1599,7 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
             if (!(uiTxStatus & DDK_DMA_FLAGS_BUSY) &&  
                 (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TE)))
             {
-                xchTxCnt = (uiTxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / 4;
+                xchTxCnt = (uiTxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / bufIncr;
                 bTxDone = TRUE;
 			}
         }
@@ -1552,8 +1622,12 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
             if (!(uiTxStatus & DDK_DMA_FLAGS_BUSY) &&  
                 (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_TE)))
             {
-                xchTxCnt = (uiTxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / 4;
-				RETAILMSG(1, (TEXT("CspiDMADataExchange::xchTxCnt = %d\r\n"), xchTxCnt) );
+				if( !pBusCnfg->ssctl )
+				{
+					BSPCSPICSSet( TRUE );
+				}
+				xchTxCnt = (uiTxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / bufIncr;
+				//RETAILMSG(1, (TEXT("CspiDMADataExchange::xchTxCnt = %d\r\n"), xchTxCnt) );
                 bTxDone = TRUE;
             }
 
@@ -1570,26 +1644,29 @@ UINT32 cspiClass::CspiDMADataExchange(PCSPI_XCH_PKT0_T pXchPkt)
 		RETAILMSG(1, (TEXT("CspiDMADataExchange::uiRxStatusx = 0x%x\r\n"), uiRxStatus) );
     }
     m_isDMADone = TRUE;
-    xchRxCnt = (uiRxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / 4;
-	RETAILMSG(1, (TEXT("CspiDMADataExchange::xchRxCnt = %d\r\n"), xchRxCnt) );
+    xchRxCnt = (uiRxStatus & CSP_BITFMASK(SDMA_MODE_COUNT)) / bufIncr;
+	//RETAILMSG(1, (TEXT("CspiDMADataExchange::xchRxCnt = %d\r\n"), xchRxCnt) );
 
     // there are data remain in RXFIFO below STATREG:RH
     if ( pRxBuf!= NULL)
     {
-        MoveDMABuffer(pRxBuf, xchRxCnt * 4,TRUE);
+        MoveDMABuffer(pRxBuf, xchRxCnt * bufIncr,TRUE);
 
         // increment Rx Buffer to next data point
-        pRxBuf = (LPVOID) ((UINT) pRxBuf + xchRxCnt * 4);
-
+        pRxBuf = (LPVOID) ((UINT) pRxBuf + xchRxCnt * bufIncr);
         // while there is data in Rx FIFO 
-        while (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
-        {
-            tmp = INREG32(&m_pCSPI->RXDATA);
-            CspiBufWrt32(pRxBuf, tmp);
+		while( xchRxCnt < xchTxCnt )
+		{
+			while (INREG32(&m_pCSPI->STATREG) & CSP_BITFMASK(CSPI_STATREG_RR))
+			{
+				  tmp = INREG32(&m_pCSPI->RXDATA);
+				 //CspiBufWrt32(pRxBuf, tmp);
+					pfnRxBufWrt( pRxBuf,  tmp );
 
-            // increment Rx Buffer to next data point
-            pRxBuf = (LPVOID) ((UINT) pRxBuf + 4);
-            ++xchRxCnt;
+				 // increment Rx Buffer to next data point
+					pRxBuf = (LPVOID) ((UINT) pRxBuf + bufIncr);
+				 ++xchRxCnt;
+			}
         }
     }
     else

@@ -1,12 +1,14 @@
 
 
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ADS1]
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ADS1]
+[HKEY_LOCAL_MACHINE\Drivers\ETA108]
    "Prefix"="ADS"									 
-   "Dll"="ETA108.dll"								 
+   ;"Dll"="ETA108.dll"								 
+   "Dll"="\\Nandflash\\ETA108.dll"								 
    "Index"		 = dword:1		;"ADS1:"
    "CSPIChannel" = dword:1      ; use CSPI1
    "PWMChannel"  = dword:1      ; use PWM1
-   "DMABufSize"	 = dword:1400	; DMA buffer size. default = 5120. count in bytes.
+   "DMABufSize"	 = dword:3B10	; DMA buffer size. default = 15120. count in bytes.
    "MultDMABufSize" = dword:14	; Buffer Size of Continuous Sampling  default = 20
    "Order"=dword:1 
    
