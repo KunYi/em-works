@@ -79,7 +79,7 @@ public:
 	BOOL ETA108Open( );
 	BOOL ETA108Close( );
 	DWORD ETA108Run( PADS_CONFIG pBuffer);
-	DWORD ETA108Read( UINT32* pBuffer, DWORD dwCount );
+	DWORD ETA108Read( LPVOID pBuffer, DWORD dwCount );
 	DWORD ReadSeek( long lAmount, WORD dwType );
 
 public:

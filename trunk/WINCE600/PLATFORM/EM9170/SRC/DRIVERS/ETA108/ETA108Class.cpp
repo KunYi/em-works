@@ -115,7 +115,8 @@ BOOL eta108Class::ETA108Initialize()
 		goto error_init;
 	
 	m_dwCSPIChannle = 3;
-	m_pSpi->m_dwDMABufferSize = m_dwDMABufSize;
+	//m_pSpi->m_dwDMABufferSize = m_dwDMABufSize;
+	m_pSpi->m_dwDMABufferSize = 0x2bc0;
 	m_pSpi->m_dwMultDmaBufSize = m_dwMultDmaBufSize;
  	if ( !(m_pSpi && m_pSpi->CspiInitialize(m_dwCSPIChannle))) 
  	{
@@ -343,10 +344,11 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
-	stCspiConfig.bitcount = 20;		//data rate = 16bit
+	stCspiConfig.bitcount = 16;		//data rate = 16bit
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiConfig.pha = TRUE;
 	stCspiConfig.ssctl = FALSE;		
+	//stCspiConfig.ssctl = TRUE;		
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
 
@@ -387,25 +389,27 @@ error_cleanup:
 
 }
 
-// dwCount count in UINT32
-DWORD eta108Class::ETA108Read( UINT32* pBuffer, DWORD dwCount )
+// dwCount count in UINT16
+DWORD eta108Class::ETA108Read( LPVOID pBuffer, DWORD dwCount )
 {
 	DWORD idx,dwReadBytes;
+	UINT16* pUserBuffer = (UINT16*)pBuffer;
+
 	
-	if( !(m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf) )
+	if( !(m_hADCEvent && pUserBuffer && m_pSpi->m_pSPIRxBuf) )
 		 return DWORD(-1);
 
 	dwReadBytes = m_dwRxBufSeek;
 	idx = (m_dwRxBufSeek<<1);
 	while( dwCount-- &&  m_dwRxBufSeek<= m_dwSamplingLength )
 	{
-		pBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
+		pUserBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
 		++idx;
 	}
 	return (m_dwRxBufSeek-dwReadBytes);
 }
 
-// lAmount count in UINT32
+// lAmount count in UINT16
 DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
 {
 	DWORD dwSeek;
