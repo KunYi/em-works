@@ -40,6 +40,8 @@
 // Defines
 #define  ETA108WRITE_BLOCK		TRUE
 #define  ETA108WRITE_UNBLOCK	FALSE
+
+#define  MIN_VAL(a, b)   (((a) > (b)) ? (b) : (a))
 //-----------------------------------------------------------------------------
 // Types
 
@@ -344,7 +346,7 @@ DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
 	
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
-	stCspiConfig.bitcount = 16;		//data rate = 16bit
+	stCspiConfig.bitcount = 32;		//data rate = 16bit
 	stCspiConfig.usedma = TRUE;		//Use DMA
 	stCspiConfig.pha = TRUE;
 	stCspiConfig.ssctl = FALSE;		
@@ -392,24 +394,21 @@ error_cleanup:
 // dwCount count in UINT16
 DWORD eta108Class::ETA108Read( LPVOID pBuffer, DWORD dwCount )
 {
-	DWORD idx,dwReadBytes;
-	UINT16* pUserBuffer = (UINT16*)pBuffer;
-
-	
-	if( !(m_hADCEvent && pUserBuffer && m_pSpi->m_pSPIRxBuf) )
+	DWORD dwReadBytes;
+		
+	if( !(m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf) )
 		 return DWORD(-1);
 
-	dwReadBytes = m_dwRxBufSeek;
-	idx = (m_dwRxBufSeek<<1);
-	while( dwCount-- &&  m_dwRxBufSeek<= m_dwSamplingLength )
-	{
-		pUserBuffer[m_dwRxBufSeek++] = m_pSpi->m_pSPIRxBuf[++idx];
-		++idx;
-	}
-	return (m_dwRxBufSeek-dwReadBytes);
+	if( m_dwRxBufSeek+dwCount > m_dwSamplingLength*4 )
+		dwReadBytes = m_dwSamplingLength*4 - m_dwRxBufSeek;
+	else
+		dwReadBytes = dwCount;
+
+	memcpy( pBuffer, m_pSpi->m_pSPIRxBuf+m_dwRxBufSeek, dwReadBytes );
+	return (dwReadBytes);
 }
 
-// lAmount count in UINT16
+// lAmount count in bytes
 DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
 {
 	DWORD dwSeek;
