@@ -241,7 +241,39 @@ BOOL eta108Class::ETA108Close()
 	return TRUE;
 }
 
-DWORD eta108Class::ETA108Run( PADS_CONFIG pADSConfig )
+BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLenOut, PDWORD pdwActualOut )
+{
+	BOOL bRet = TRUE;
+
+	*pdwActualOut = 0;
+	memset( m_stADS8201CFG, 0 , sizeof(m_stADS8201CFG ));
+
+	if( pADSConfig->dwSamplingRate > 100000 )
+	{
+		bRet = FALSE;
+		m_stADS8201CFG = 100000;
+	}
+	if( pADSConfig->dwSamplingRate<1 )
+	{
+		bRet = FALSE;
+		m_stADS8201CFG = 1;
+	}
+	if( pBufOut != NULL && dwLenOut == sizeof( ADS_CONFIG ))
+	{
+		*pdwActualOut = memcpy( pBufOut, (PBYTE)&m_stADS8201CFG, sizeof( ADS_CONFIG ));
+	}
+
+	return bRet;
+
+}
+
+
+BOOL eta108Class::ETA108Stop( )
+{
+
+}
+
+BOOL eta108Class::ETA108Start( )
 {
 	CALLER_STUB_T marshalEventStub;
 	HRESULT result;

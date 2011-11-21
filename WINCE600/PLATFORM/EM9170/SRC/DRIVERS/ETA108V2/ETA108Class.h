@@ -76,9 +76,12 @@ public:
 	~eta108Class();
 	BOOL ETA108Initialize( void );
 	BOOL ETA108Release( void );
+
 	BOOL ETA108Open( );
 	BOOL ETA108Close( );
-	DWORD ETA108Run( PADS_CONFIG pBuffer);
+	BOOL ETA108Start( );
+	BOOL ETA108Setup( PADS_CONFIG pADSConfig,  PBYTE pBufOut, DWORD dwLenOut, PDWORD pdwActualOut );
+	BOOL ETA108Stop( );
 	DWORD ETA108Read( LPVOID pBuffer, DWORD dwCount );
 	DWORD ReadSeek( long lAmount, WORD dwType );
 
