@@ -86,9 +86,6 @@ eta108Class::eta108Class()
 
 	m_hPWM = INVALID_HANDLE_VALUE;
 	
-	m_hThread = NULL;
-	m_hADCEvent = NULL;
-	m_hCSPIEvent = NULL;
 }
 
 eta108Class::~eta108Class()
@@ -98,28 +95,13 @@ eta108Class::~eta108Class()
 
 BOOL eta108Class::ETA108Initialize()
 {
-	// create event for CSPI transfer completed signaling
-	m_hCSPIEvent = CreateEvent( NULL, FALSE, FALSE, g_szCSPIEvent );
-	if( m_hCSPIEvent == NULL )
-		goto error_init;
-
-	if( !m_hThread )
-	{
-		m_bTerminate = FALSE;
-		// create ADC moniter thread
-		m_hThread = ::CreateThread(NULL, 0, ADCEventHandle, this, 0, NULL);
-		if( m_hThread == NULL )
-			goto error_init;
-	}
-
 	m_pSpi = new spiClass;
 	if( m_pSpi == NULL )
 		goto error_init;
 	
 	m_dwCSPIChannle = 3;
-	//m_pSpi->m_dwDMABufferSize = m_dwDMABufSize;
-	m_pSpi->m_dwDMABufferSize = 0x2bc0;
-	m_pSpi->m_dwMultDmaBufSize = m_dwMultDmaBufSize;
+	m_pSpi->m_dwTxDMABufferSize = 0x1b30;		//6960
+	m_pSpi->m_dwRxDMABufferSize = 0x61a8;		//25K
  	if ( !(m_pSpi && m_pSpi->CspiInitialize(m_dwCSPIChannle))) 
  	{
 		goto error_init;
@@ -141,18 +123,6 @@ BOOL eta108Class::ETA108Release()
  		m_pSpi = NULL;
  	}
 
-	if( m_hThread != NULL )
-	{
-		m_bTerminate = TRUE;
-		if( m_hCSPIEvent )
-		{
-			SetEvent(m_hCSPIEvent);
-		}
-		CloseHandle(m_hThread);
-	}
-
-	if( m_hCSPIEvent != NULL )
-		CloseHandle(m_hCSPIEvent);
 	return TRUE;
 }
 
@@ -226,12 +196,7 @@ BOOL eta108Class::ETA108Open()
 BOOL eta108Class::ETA108Close()
 {
 	m_pSpi->CspiADCDone( );
-	if( m_hADCEvent != NULL )
-	{
-		CloseHandle(m_hADCEvent);
-		m_hADCEvent = NULL;
-	}
-
+	
 	if( m_hPWM != INVALID_HANDLE_VALUE )
 	{
 		CloseHandle(m_hPWM);
@@ -244,23 +209,43 @@ BOOL eta108Class::ETA108Close()
 BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLenOut, PDWORD pdwActualOut )
 {
 	BOOL bRet = TRUE;
+	int i;
+	DWORD dwADChannleCount, dwTmp;
 
-	*pdwActualOut = 0;
-	memset( m_stADS8201CFG, 0 , sizeof(m_stADS8201CFG ));
+	dwTmp = 0;
+	memset( &m_stADSConfig, 0 , sizeof(m_stADSConfig ));
 
-	if( pADSConfig->dwSamplingRate > 100000 )
+	for( dwADChannleCount=0,i=0; i<8; i++ )
+	{
+		if( pADSConfig->dwSamplingChannel & (0x01<<i))
+			dwADChannleCount++;
+	}
+
+	m_stADSConfig.dwSamplingLength = pADSConfig->dwSamplingLength * dwADChannleCount;
+	m_stADSConfig.dwSamplingRate = pADSConfig->dwSamplingRate*dwADChannleCount;
+
+	if( m_stADSConfig.dwSamplingRate > 100000 )
 	{
 		bRet = FALSE;
-		m_stADS8201CFG = 100000;
+		m_stADSConfig.dwSamplingRate = 100000;
+		RETAILMSG( 1, (TEXT("ETA108Setup:The shampling rate out of range!\r\n")));
 	}
-	if( pADSConfig->dwSamplingRate<1 )
+	if( m_stADSConfig.dwSamplingRate<1 )
 	{
 		bRet = FALSE;
-		m_stADS8201CFG = 1;
+		m_stADSConfig.dwSamplingRate = 1;
+		RETAILMSG( 1, (TEXT("ETA108Setup:The shampling rate out of range!\r\n")));
 	}
+
 	if( pBufOut != NULL && dwLenOut == sizeof( ADS_CONFIG ))
 	{
-		*pdwActualOut = memcpy( pBufOut, (PBYTE)&m_stADS8201CFG, sizeof( ADS_CONFIG ));
+		dwTmp= sizeof( ADS_CONFIG );
+		memcpy( pBufOut, (PBYTE)&m_stADSConfig, dwTmp);
+	}
+
+	if( pdwActualOut )
+	{
+		*pdwActualOut = dwTmp;
 	}
 
 	return bRet;
@@ -270,59 +255,21 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 
 BOOL eta108Class::ETA108Stop( )
 {
+	BOOL bRet = FALSE;
 
+	m_pSpi->CspiADCDone( );
+
+	return bRet;
 }
 
 BOOL eta108Class::ETA108Start( )
 {
-	CALLER_STUB_T marshalEventStub;
-	HRESULT result;
+//	CALLER_STUB_T marshalEventStub;
+//	HRESULT result;
 	DWORD i;
 
  	if(m_hPWM == INVALID_HANDLE_VALUE )
  		goto error_cleanup;
-
-	m_dwRxBufSeek = 0;
-	m_dwSamplingLength = pADSConfig->dwSamplingLength;
-	if( m_hADCEvent != NULL )
-	{
-		CloseHandle(m_hADCEvent);
-		m_hADCEvent = NULL;
-	}
-	m_pSpi->CspiADCDone( );
-	//1.Parameter marshal
-	if( pADSConfig->lpADCompleteEvent && (pADSConfig->dwADCompleteEventLength == wcslen(pADSConfig->lpADCompleteEvent)) )
-	{
-		m_bWriteBlock = ETA108WRITE_UNBLOCK;
-		result = CeOpenCallerBuffer(
-			marshalEventStub,
-			pADSConfig->lpADCompleteEvent,
-			pADSConfig->dwADCompleteEventLength,
-			ARG_I_PTR,
-			FALSE);
-
-		if (!SUCCEEDED(result)) 
-		{
-			goto error_cleanup;
-		}
-
-		//Create event for AD conversion completed.
-		m_hADCEvent = CreateEvent(NULL,FALSE, FALSE, pADSConfig->lpADCompleteEvent );
-		CeCloseCallerBuffer(marshalEventStub);
-
-		if( m_hADCEvent == NULL )
-		{
-			goto error_cleanup;
-		}
-	}
-	else 	
-	{
-		m_bWriteBlock = ETA108WRITE_BLOCK;	
-		//Create event for AD conversion completed.
-		m_hADCEvent = CreateEvent(NULL,FALSE, FALSE, NULL );
-		if( m_hADCEvent == NULL )
-			goto error_cleanup;
-	}
 
 	//2.Config CSPI & config ADS8201
 	CSPI_BUSCONFIG_T stCspiConfig;
@@ -345,7 +292,6 @@ BOOL eta108Class::ETA108Start( )
 	stCspiXchPkt.xchEvent = NULL;
 	stCspiXchPkt.xchEventLength = 0;
 
-
 	UINT16 SPITxBuf[10];
 	UINT16 SPIRxBuf[10];
 	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
@@ -356,11 +302,11 @@ BOOL eta108Class::ETA108Start( )
 	//ADS8201 default configuration
 	stCspiXchPkt.xchCnt = 0;
 	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;	//BUSY
-	if( pADSConfig->dwContrlWordLength > 0 && pADSConfig->dwContrlWordLength < 6 && pADSConfig->lpContrlWord != NULL )
+	if( m_stADSConfig.dwContrlWordLength > 0 && m_stADSConfig.dwContrlWordLength < 6 && m_stADSConfig.lpContrlWord != NULL )
 	{
-		for( i=0; i<pADSConfig->dwContrlWordLength ; i++)
+		for( i=0; i<m_stADSConfig.dwContrlWordLength ; i++)
 		{
-			SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE|*((UINT16 *)(UINT16)(pADSConfig->lpContrlWord)+i);
+			SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE|*((UINT16 *)(UINT16)(m_stADSConfig.lpContrlWord)+i);
 		}
 	}
 	
@@ -386,7 +332,7 @@ BOOL eta108Class::ETA108Start( )
 	stCspiXchPkt.xchEvent = g_szCSPIEvent;
 	stCspiXchPkt.xchEventLength = wcslen( g_szCSPIEvent );
 
-	if( !m_pSpi->CspiADCRun( pADSConfig, &stCspiXchPkt ))
+	if( !m_pSpi->CspiADCRun( &m_stADSConfig, &stCspiXchPkt ))
 		goto error_cleanup;
 
 	//Config PWM
@@ -395,7 +341,7 @@ BOOL eta108Class::ETA108Start( )
 	DWORD dwNumberOfBytesWritten; 
 	BOOL bRet; 
 
-	PwmInfo.dwFreq = pADSConfig->dwSamplingRate;
+	PwmInfo.dwFreq = m_stADSConfig.dwSamplingRate;
 
 	// PWM Duty cycle = CONVST(convert start)pulse width>40nS.(CONVST active low level)
 	// ETA108'S CPLD utilize 6M sample clock to generate AD start conversion pulse ,
@@ -410,11 +356,6 @@ BOOL eta108Class::ETA108Start( )
 	if( !bRet )
 		goto error_cleanup;
 	
-	if( m_bWriteBlock == ETA108WRITE_BLOCK )
-	{
-		WaitForSingleObject( m_hADCEvent, INFINITE );
-	}
-
 	return DWORD(sizeof(ADS_CONFIG));
 
 error_cleanup:
@@ -426,70 +367,31 @@ error_cleanup:
 // dwCount count in UINT16
 DWORD eta108Class::ETA108Read( LPVOID pBuffer, DWORD dwCount )
 {
-	DWORD dwReadBytes;
-		
-	if( !(m_hADCEvent && pBuffer && m_pSpi->m_pSPIRxBuf) )
-		 return DWORD(-1);
-
-	if( m_dwRxBufSeek+dwCount > m_dwSamplingLength*4 )
-		dwReadBytes = m_dwSamplingLength*4 - m_dwRxBufSeek;
-	else
-		dwReadBytes = dwCount;
-
-	memcpy( pBuffer, m_pSpi->m_pSPIRxBuf+m_dwRxBufSeek, dwReadBytes );
-	return (dwReadBytes);
+	return (m_pSpi->ReadADCData( pBuffer, dwCount ));
 }
 
-// lAmount count in bytes
-DWORD eta108Class::ReadSeek( long lAmount, WORD dwType )
+BOOL eta108Class::WateDataReady(DWORD dwTimeOut)
 {
-	DWORD dwSeek;
-
-	switch( dwType )
-	{
-	case FILE_BEGIN:
-		dwSeek = lAmount;
-		break;
-	case FILE_CURRENT:
-		dwSeek = m_dwRxBufSeek + lAmount;
-		break;
-	case FILE_END:
-		dwSeek = m_dwSamplingLength - lAmount;
-		break;
-	default:return (DWORD)-1;
-	}
-
-	if( dwSeek >=0 && dwSeek <= m_dwSamplingLength )
-	{
-		m_dwRxBufSeek = dwSeek;
-		return m_dwRxBufSeek;
-	}
-	return (DWORD)-1;
-}	
-
-
-DWORD WINAPI eta108Class::ADCEventHandle(LPVOID lpParameter)
-{
-	eta108Class *pETA108 = (eta108Class *)lpParameter;
+	BOOL bRet=FALSE;
 	PWMINFO PwmInfo;
 	DWORD dwNumberOfBytesToWrite; 
 	DWORD dwNumberOfBytesWritten; 
 
-	while( !pETA108->m_bTerminate )
+	if( dwTimeOut==0 )
 	{
-		WaitForSingleObject(pETA108->m_hCSPIEvent, INFINITE );
-		if( pETA108->m_bTerminate )
-			break;
-
-		SetEvent( pETA108->m_hADCEvent );
-
-		// stop PWM output
-		PwmInfo.dwDuration = 1;			
-		dwNumberOfBytesToWrite = sizeof(PWMINFO); 
-		dwNumberOfBytesWritten = 0; 
-		PwmInfo.dwFreq = 100;
-		WriteFile(pETA108->m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
+		dwTimeOut = 250;
 	}
-	pETA108->m_hThread = NULL;
-	return 0;
+	if( WaitForSingleObject(m_pSpi->m_hTransferDoneEvent, dwTimeOut ) == WAIT_OBJECT_0 )
+	{
+		bRet = TRUE;
+	}
+		
+	// stop PWM output
+	PwmInfo.dwDuration = 1;			
+	dwNumberOfBytesToWrite = sizeof(PWMINFO); 
+	dwNumberOfBytesWritten = 0; 
+	PwmInfo.dwFreq = 100;
+	WriteFile(m_hPWM, (LPCVOID)&PwmInfo, dwNumberOfBytesToWrite, &dwNumberOfBytesWritten, NULL); 
+
+	return bRet;
 }

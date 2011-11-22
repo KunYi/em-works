@@ -67,7 +67,7 @@ typedef struct{
 	BYTE adc_trigger_scr;
 	BYTE rest_scr;
 	BYTE conv_delay_scr;
-}ADS8201_CFG;
+}ADS8201_REG;
 
 class eta108Class
 {
@@ -83,26 +83,23 @@ public:
 	BOOL ETA108Setup( PADS_CONFIG pADSConfig,  PBYTE pBufOut, DWORD dwLenOut, PDWORD pdwActualOut );
 	BOOL ETA108Stop( );
 	DWORD ETA108Read( LPVOID pBuffer, DWORD dwCount );
-	DWORD ReadSeek( long lAmount, WORD dwType );
+
+	BOOL WateDataReady( DWORD dwTimeOut );
 
 public:
 	DWORD  m_dwCSPIChannle;	
 	DWORD  m_dwPWMChannle;
+
 	DWORD  m_dwDMABufSize;
 	DWORD  m_dwMultDmaBufSize;	//Buffer Size of Continuous Sampling 
 	spiClass *m_pSpi;
 
 private:
 	HANDLE m_hPWM;			// PWM:
-	HANDLE m_hThread;		// ADC moniter thread
-	HANDLE m_hADCEvent;		// ADC completed event
-	HANDLE m_hCSPIEvent;	// SPI transfer completed event
-	BOOL   m_bWriteBlock;
-	DWORD  m_dwRxBufSeek;
-	DWORD  m_dwSamplingLength;
-	ADS8201_CFG m_stADS8201CFG;
-	BOOL   m_bTerminate;	// ADC moniter thread exit event
-	static DWORD WINAPI ADCEventHandle(LPVOID lpParameter);
+
+	//ADS8201_REG m_stADS8201REG;
+	ADS_CONFIG m_stADSConfig;
+
 };
 
 
