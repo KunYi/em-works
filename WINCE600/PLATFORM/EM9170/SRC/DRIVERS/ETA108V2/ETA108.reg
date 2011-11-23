@@ -4,7 +4,7 @@
 [HKEY_LOCAL_MACHINE\Drivers\ETA108]
    "Prefix"="ADS"									 
    ;"Dll"="ETA108.dll"								 
-   "Dll"="\\Nandflash\\ETA108.dll"								 
+   "Dll"="\\Nandflash\\ETA108V2.dll"								 
    "Index"		 = dword:1		;"ADS1:"
    "CSPIChannel" = dword:1      ; use CSPI1
    "PWMChannel"  = dword:1      ; use PWM1
