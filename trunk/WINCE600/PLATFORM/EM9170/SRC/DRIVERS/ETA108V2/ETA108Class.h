@@ -38,6 +38,10 @@ extern "C" {
 #define ADS8201_REG_WRITE			(0x8000)		
 #define ADS8201_ADC_READ			(0x0000)	
 #define ADS8201_CPLD_WRITE			(0xc000)
+#define ADS8201_IGNORE_BIT			(0x3ffff)
+
+#define  SAMPLING_MODE_SINGLE		1
+#define  SAMPLING_MODE_CONTINUOUS	2
 //------------------------------------------------------------------------------
 //Types
 typedef struct {
@@ -95,8 +99,6 @@ public:
 	spiClass *m_pSpi;
 
 private:
-	HANDLE m_hPWM;			// PWM:
-
 	//ADS8201_REG m_stADS8201REG;
 	ADS_CONFIG m_stADSConfig;
 
