@@ -100,8 +100,8 @@ BOOL eta108Class::ETA108Initialize()
 		goto error_init;
 	
 	m_dwCSPIChannle = 3;
-	m_pSpi->m_dwTxDMABufferSize = 0x1b30;		//6960
-	m_pSpi->m_dwRxDMABufferSize = 0x61a8;		//25K
+	m_pSpi->m_dwTxDMABufferSize = 0x1a40;		//5040
+	m_pSpi->m_dwRxDMABufferSize = 0x61a8+4;		//25K+4
  	if ( !(m_pSpi && m_pSpi->CspiInitialize(m_dwCSPIChannle))) 
  	{
 		goto error_init;
@@ -143,11 +143,11 @@ BOOL eta108Class::ETA108Open()
 // 	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
 // 	stCspiConfig.usedma = FALSE;	//Don't DMA
 // 
- 	stCspiXchPkt.pBusCnfg = &stCspiConfig;
+ 	
 // 	stCspiXchPkt.xchEvent = NULL;
 // 	stCspiXchPkt.xchEventLength = 0;
 
-
+	stCspiXchPkt.pBusCnfg = &stCspiConfig;
 	UINT16 SPITxBuf[5];
 	UINT16 SPIRxBuf[5];
 	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
@@ -220,11 +220,11 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 		m_stADSConfig.dwSamplingRate = pADSConfig->dwSamplingRate*dwADChannleCount;
 		//Total sampling length 250ms
 		m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingRate/4/dwADChannleCount*dwADChannleCount;
-		if( m_stADSConfig.dwSamplingLength< 4)
+		if( m_stADSConfig.dwSamplingLength%4 != 0 )
 		{
-			m_stADSConfig.dwSamplingLength = 4;
+			// for dma...
+			m_stADSConfig.dwSamplingLength = ((m_stADSConfig.dwSamplingLength>>2)<<2)+4;
 		}
-
 	}
 	else if( pADSConfig->dwSamplingLength>0 )
 	{
@@ -338,7 +338,7 @@ BOOL eta108Class::ETA108Start( )
 	
 	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
-
+	ResetEvent( m_pSpi->m_hTransferDoneEvent );
 	stCspiConfig.chipselect = 0;	//use channel 0
  	stCspiConfig.pol = FALSE;
  	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
@@ -383,7 +383,8 @@ BOOL eta108Class::WateDataReady(DWORD dwTimeOut)
 		{
 			dwTimeOut = 250;
 		}
-		dwTimeOut += 50;
+		if( dwTimeOut<4000 )
+			dwTimeOut = 4000;
 	}
 	RETAILMSG( 1, (TEXT("WateDataReady:TimeOut=%d\r\n"),dwTimeOut ));
 	if( WaitForSingleObject(m_pSpi->m_hTransferDoneEvent, dwTimeOut ) == WAIT_OBJECT_0 )
