@@ -83,9 +83,6 @@ inline HRESULT CeCloseCallerBuffer(CALLER_STUB_T& CallerStub)
 eta108Class::eta108Class()
 {
 	m_pSpi = NULL;
-
-	//m_hPWM = INVALID_HANDLE_VALUE;
-	
 }
 
 eta108Class::~eta108Class()
@@ -101,7 +98,7 @@ BOOL eta108Class::ETA108Initialize()
 	
 	m_dwCSPIChannle = 3;
 	m_pSpi->m_dwTxDMABufferSize = 0x1a40;		//5040
-	m_pSpi->m_dwRxDMABufferSize = 0x61a8+4;		//25K+4
+	m_pSpi->m_dwRxDMABufferSize = 0xC350;		//50K
  	if ( !(m_pSpi && m_pSpi->CspiInitialize(m_dwCSPIChannle))) 
  	{
 		goto error_init;
@@ -130,22 +127,6 @@ BOOL eta108Class::ETA108Open()
 {
 	CSPI_BUSCONFIG_T stCspiConfig;
 	CSPI_XCH_PKT_T stCspiXchPkt;
-
-// 	stCspiConfig.bitcount = 16;		//data rate = 16bit
-// 	stCspiConfig.chipselect = 0;	//use channel 0
-// 	stCspiConfig.freq = 12000000;	//XCH speed = 16M
-// 	stCspiConfig.pha = TRUE;
-// 	stCspiConfig.pol = FALSE;
-// 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
-// 	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
-// 	stCspiConfig.usepolling = FALSE;//polling don't use interrupt
-// 
-// 	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
-// 	stCspiConfig.usedma = FALSE;	//Don't DMA
-// 
- 	
-// 	stCspiXchPkt.xchEvent = NULL;
-// 	stCspiXchPkt.xchEventLength = 0;
 
 	stCspiXchPkt.pBusCnfg = &stCspiConfig;
 	UINT16 SPITxBuf[5];
@@ -196,9 +177,11 @@ BOOL eta108Class::ETA108Close()
 
 BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLenOut, PDWORD pdwActualOut )
 {
+	//	CALLER_STUB_T marshalEventStub;
+	//	HRESULT result;
 	BOOL bRet = TRUE;
 	int i;
-	DWORD dwADChannleCount, dwTmp;
+	DWORD dwADChannleCount, dwTmp, j;
 
 	dwTmp = 0;
 	
@@ -218,13 +201,22 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 		m_pSpi->m_nSamplingMode = SAMPLING_MODE_CONTINUOUS;
 		// Total sampling rate
 		m_stADSConfig.dwSamplingRate = pADSConfig->dwSamplingRate*dwADChannleCount;
-		//Total sampling length 250ms
-		m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingRate/4/dwADChannleCount*dwADChannleCount;
+		if( m_stADSConfig.dwSamplingRate > 50000 )
+		{
+			//Total sampling length (125ms)
+			m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingRate/8;
+		}
+		else
+		{
+			//Total sampling length (250ms)
+			m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingRate/4;
+		}
 		if( m_stADSConfig.dwSamplingLength%4 != 0 )
 		{
-			// for dma...
+			//DMA transmit require XchCount is a multiple of 4( count in UINT32)
 			m_stADSConfig.dwSamplingLength = ((m_stADSConfig.dwSamplingLength>>2)<<2)+4;
 		}
+		m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingLength/dwADChannleCount*dwADChannleCount;
 	}
 	else if( pADSConfig->dwSamplingLength>0 )
 	{
@@ -232,6 +224,11 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 		m_pSpi->m_nSamplingMode = SAMPLING_MODE_SINGLE;
 		//Total sampling length
 		m_stADSConfig.dwSamplingLength = pADSConfig->dwSamplingLength * dwADChannleCount;
+		if( m_stADSConfig.dwSamplingLength%4 != 0 )
+		{
+			//DMA transmit require XchCount is a multiple of 4( count in UINT32)
+			m_stADSConfig.dwSamplingLength = ((m_stADSConfig.dwSamplingLength>>2)<<2)+4;
+		}
 		// Total sampling rate
 		m_stADSConfig.dwSamplingRate = pADSConfig->dwSamplingRate*dwADChannleCount;
 	}
@@ -253,6 +250,22 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 		bRet = FALSE;
 		m_stADSConfig.dwSamplingRate = 1;
 		RETAILMSG( 1, (TEXT("ETA108Setup:The shampling rate out of range!\r\n")));
+	}
+
+	// ADS8201 register config data
+	memset( m_ADS8201REG, 0, sizeof(m_ADS8201REG ));
+	if( pADSConfig->lpContrlWord  && pADSConfig->dwContrlWordLength && pADSConfig->dwContrlWordLength<5 )
+	{
+		UINT16 *pUIN16 = (UINT16 *)pADSConfig->lpContrlWord;
+		for( j=0; j<pADSConfig->dwContrlWordLength; j++ )
+		{
+			pUIN16[j] &= 0x00003cff; 
+			if( pUIN16[j]>>10 == 4 )
+			{
+				pUIN16[j] |= 0x40;
+			}
+			m_ADS8201REG[j] = pUIN16[j];
+		}
 	}
 
 	if( pBufOut != NULL && dwLenOut == sizeof( ADS_CONFIG ))
@@ -281,30 +294,13 @@ BOOL eta108Class::ETA108Stop( )
 
 BOOL eta108Class::ETA108Start( )
 {
-//	CALLER_STUB_T marshalEventStub;
-//	HRESULT result;
-	DWORD i;
-
-	//2.Config CSPI & config ADS8201
 	CSPI_BUSCONFIG_T stCspiConfig;
 	CSPI_XCH_PKT_T stCspiXchPkt;
 
-// 	stCspiConfig.bitcount = 16;		//data rate = 16bit
-// 	stCspiConfig.chipselect = 0;	//use channel 0
-// 	stCspiConfig.freq = 12000000;	//XCH speed = 16M
-// 
-// 	stCspiConfig.pha = TRUE;
-// 	stCspiConfig.pol = FALSE;
-// 	stCspiConfig.ssctl = TRUE;		//one entry entry with each SPI burst
-// 	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
-// 	stCspiConfig.usepolling = FALSE;//polling don't use interrupt
-// 	
-// 	stCspiConfig.drctl = 0;			//Don't care SPI_RDY
-// 	stCspiConfig.usedma = FALSE;	//Don't DMA
-// 
+	//1.Reset ADS8201
+
+	//2.config ADS8201
  	stCspiXchPkt.pBusCnfg = &stCspiConfig;
-// 	stCspiXchPkt.xchEvent = NULL;
-// 	stCspiXchPkt.xchEventLength = 0;
 
 	UINT16 SPITxBuf[10];
 	UINT16 SPIRxBuf[10];
@@ -312,33 +308,24 @@ BOOL eta108Class::ETA108Start( )
 	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
 
 	//ADS8201 Configuration parameter
-	//memset( &m_stADS8201CFG, 0, sizeof(m_stADS8201CFG));
-	//ADS8201 default configuration
-	stCspiXchPkt.xchCnt = 0;
-	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;	//BUSY
-	if( m_stADSConfig.dwContrlWordLength > 0 && m_stADSConfig.dwContrlWordLength < 6 && m_stADSConfig.lpContrlWord != NULL )
+	stCspiXchPkt.xchCnt=0;
+	while( m_ADS8201REG[stCspiXchPkt.xchCnt] )
 	{
-		for( i=0; i<m_stADSConfig.dwContrlWordLength ; i++)
-		{
-			SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE|*((UINT16 *)(UINT16)(m_stADSConfig.lpContrlWord)+i);
-		}
+		SPITxBuf[stCspiXchPkt.xchCnt] = ADS8201_REG_WRITE | m_ADS8201REG[stCspiXchPkt.xchCnt];
+		stCspiXchPkt.xchCnt++;
 	}
+	if( stCspiXchPkt.xchCnt )
+	{
+		if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+			goto error_cleanup;
+	}
+		
+	//3.Start ADC
+	// Reset transfer done Semaphore
+	while( WaitForSingleObject( m_pSpi->m_hTransferDoneSemaphore, 0 ) == WAIT_OBJECT_0 );
 	
-	/*stCspiXchPkt.xchCnt = 4;
-	for( DWORD i=0; i<stCspiXchPkt.xchCnt; i++ )
-		SPITxBuf[i]  = (UINT16)i+1;*/
-	//ADS8201 configuration
-	//if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
-	//	goto error_cleanup;
-	
- 	//RETAILMSG( 1, (TEXT("ADS8201 Config words = %d\r\n"),stCspiXchPkt.xchCnt));
- 	/*for( i=0; i<stCspiXchPkt.xchCnt; i++ )
-		RETAILMSG( 1, (TEXT("0x%x "),SPIRxBuf[i]));
-	RETAILMSG( 1, (TEXT("\r\n")));*/
-	
-	//Redefine SPI bus configuration
 	//Burst will be triggered by the falling edge of the SPI_RDY signal (edge-triggered).
-	ResetEvent( m_pSpi->m_hTransferDoneEvent );
+	//Redefine SPI bus configuration
 	stCspiConfig.chipselect = 0;	//use channel 0
  	stCspiConfig.pol = FALSE;
  	stCspiConfig.sspol = FALSE;		//SPI_CS Active low
@@ -360,10 +347,9 @@ BOOL eta108Class::ETA108Start( )
 error_cleanup:
 	ETA108Stop();
 	return DWORD(-1);
-
 }
 
-// dwCount count in UINT16
+// dwCount count in bytes
 DWORD eta108Class::ETA108Read( LPVOID pBuffer, DWORD dwCount )
 {
 	return (m_pSpi->ReadADCData( pBuffer, dwCount ));
@@ -375,19 +361,12 @@ BOOL eta108Class::WateDataReady(DWORD dwTimeOut)
 
 	if( dwTimeOut<=0 )
 	{
-		if( m_pSpi->m_nSamplingMode == SAMPLING_MODE_SINGLE )
-		{
-			dwTimeOut = (DWORD)(1000.0/m_stADSConfig.dwSamplingRate*m_stADSConfig.dwSamplingLength);
-		}
-		else
-		{
-			dwTimeOut = 250;
-		}
+		dwTimeOut = (DWORD)(1000.0/m_stADSConfig.dwSamplingRate*m_stADSConfig.dwSamplingLength);
 		if( dwTimeOut<4000 )
 			dwTimeOut = 4000;
 	}
-	RETAILMSG( 1, (TEXT("WateDataReady:TimeOut=%d\r\n"),dwTimeOut ));
-	if( WaitForSingleObject(m_pSpi->m_hTransferDoneEvent, dwTimeOut ) == WAIT_OBJECT_0 )
+	RETAILMSG( 1, (TEXT("WateDataReady: WateDataReady:TimeOut=%d\r\n"),dwTimeOut ));
+	if( WaitForSingleObject(m_pSpi->m_hTransferDoneSemaphore, dwTimeOut ) == WAIT_OBJECT_0 )
 	{
 		bRet = TRUE;
 	}

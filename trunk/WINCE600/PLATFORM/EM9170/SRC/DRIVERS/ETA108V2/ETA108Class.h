@@ -101,6 +101,7 @@ public:
 private:
 	//ADS8201_REG m_stADS8201REG;
 	ADS_CONFIG m_stADSConfig;
+	UINT16	m_ADS8201REG[5];
 
 };
 

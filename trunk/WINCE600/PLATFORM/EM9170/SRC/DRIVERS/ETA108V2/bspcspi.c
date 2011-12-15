@@ -261,7 +261,7 @@ void BSPCSPICS2IO( UINT32 dwIndex )
 	}
 }
 
-void BAPCSPIRDY2IO( UINT32 dwIndex )
+void BSPCSPIRDY2IO( UINT32 dwIndex )
 {
 	switch( dwIndex )
 	{
