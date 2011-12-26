@@ -277,6 +277,20 @@ void BSPCSPIRDY2IO( UINT32 dwIndex )
 	}
 }
 
+
+void BSPETA108Reset( UINT32 dwTimes )
+{
+	// define GPIO9 as the reset-pin of the ETA108
+	DDKIomuxSetPinMux(DDK_IOMUX_PIN_CSI_D7, DDK_IOMUX_PIN_MUXMODE_ALT5, DDK_IOMUX_PIN_SION_REGULAR);
+	DDKIomuxSetPadConfig(DDK_IOMUX_PIN_CSI_D7, DDK_IOMUX_PAD_SLEW_SLOW, DDK_IOMUX_PAD_DRIVE_NORMAL, DDK_IOMUX_PAD_OPENDRAIN_DISABLE, DDK_IOMUX_PAD_PULL_UP_100K, DDK_IOMUX_PAD_HYSTERESIS_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	DDKGpioSetConfig( DDK_GPIO_PORT1, 6, DDK_GPIO_DIR_OUT, DDK_GPIO_INTR_NONE );
+	//low level
+	DDKGpioWriteDataPin(DDK_GPIO_PORT1, 6, 0);
+	Sleep( dwTimes ) ;
+	//high level
+	DDKGpioWriteDataPin(DDK_GPIO_PORT1, 6, 1);
+
+}
 //-----------------------------------------------------------------------------
 //
 // Function: ReleaseIOMux

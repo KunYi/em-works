@@ -53,7 +53,6 @@
 
 //-----------------------------------------------------------------------------
 // Local Functions
-
 inline HRESULT CeOpenCallerBuffer(
 								  CALLER_STUB_T& CallerStub,
 								  PVOID pSrcUnmarshalled,
@@ -128,30 +127,31 @@ BOOL eta108Class::ETA108Open()
 	CSPI_BUSCONFIG_T stCspiConfig;
 	CSPI_XCH_PKT_T stCspiXchPkt;
 
+	m_pSpi->ETA108Reset( 200 );		//unit is ms 
 	stCspiXchPkt.pBusCnfg = &stCspiConfig;
 	UINT16 SPITxBuf[5];
 	UINT16 SPIRxBuf[5];
 	stCspiXchPkt.pTxBuf = (LPVOID)SPITxBuf;
 	stCspiXchPkt.pRxBuf = (LPVOID)SPIRxBuf;
 
-	SPITxBuf[0] = ADS8201_REG_READ|ADS8021_ADC_TRIGGER_SCR;
+	SPITxBuf[0] = ADS8201_REG_WRITE|ADS8021_REST_SCR|0xaa;			// software reset
+	stCspiXchPkt.xchCnt = 1;
+	m_pSpi->CspiADCConfig( &stCspiXchPkt );
+	Sleep(2);
+	SPITxBuf[0] = ADS8201_REG_READ|ADS8021_ADC_TRIGGER_SCR;		
 	SPITxBuf[1] = ADS8201_REG_READ|ADS8021_CONV_DELAY_SCR;
-	SPITxBuf[2] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;	//BUSY
-	SPITxBuf[3] = ADS8201_REG_READ| ADS8021_ADC_SCR;	//BUSY
-	stCspiXchPkt.xchCnt = 4;
+	stCspiXchPkt.xchCnt = 2;
 	SPIRxBuf[0] = 0;
 	SPIRxBuf[1] = 0;
-	SPIRxBuf[2] = 0;
-	SPIRxBuf[3] = 0;
 	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
 	{
-		RETAILMSG( 1, (TEXT("ETA108Open: CSPI exchange failed!!!\r\n")));
+		DEBUGMSG( 1, (TEXT("ETA108Open: CSPI exchange failed!!!\r\n")));
 		goto open_error;
 	}
 	
-	if( (SPIRxBuf[0]&0x1fff )  != 2  || (SPIRxBuf[1]&0x1fff) != 2 || (SPIRxBuf[3]&0x1fff) != 4 )
+	if( (SPIRxBuf[0]&0x1fff )  != 2  || (SPIRxBuf[1]&0x1fff) != 2 )
 	{
-		RETAILMSG( 1, (TEXT("ETA108Open: Read ADS8201's register failed!!! 0x%x, 0x%x, 0x%x\r\n"), SPIRxBuf[0], SPIRxBuf[1], SPIRxBuf[3]));
+		RETAILMSG( 1, (TEXT("ETA108Open: Read ADS8201's register failed!!! 0x%x, 0x%x\r\n"), SPIRxBuf[1], SPIRxBuf[2]));
 		goto open_error;
 	}
 
@@ -211,12 +211,11 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 			//Total sampling length (250ms)
 			m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingRate/4;
 		}
-		if( m_stADSConfig.dwSamplingLength%4 != 0 )
-		{
-			//DMA transmit require XchCount is a multiple of 4( count in UINT32)
-			m_stADSConfig.dwSamplingLength = ((m_stADSConfig.dwSamplingLength>>2)<<2)+4;
-		}
-		m_stADSConfig.dwSamplingLength = m_stADSConfig.dwSamplingLength/dwADChannleCount*dwADChannleCount;
+		//RETAILMSG( 1, (TEXT("ETA108Setup: dwSamplingLength:0x%x, 0x4,dwADChannleCount:0x%x\r\n"),m_stADSConfig.dwSamplingLength, dwADChannleCount ));
+		//DMA transmit require XchCount(total sampling) is a multiple of 4( count in UINT32)
+		//As well as require it's a multiple of dwADChannleCount.
+		while( !(m_stADSConfig.dwSamplingLength%4==0 && m_stADSConfig.dwSamplingLength%dwADChannleCount==0 ))
+			m_stADSConfig.dwSamplingLength++;
 	}
 	else if( pADSConfig->dwSamplingLength>0 )
 	{
@@ -224,11 +223,12 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 		m_pSpi->m_nSamplingMode = SAMPLING_MODE_SINGLE;
 		//Total sampling length
 		m_stADSConfig.dwSamplingLength = pADSConfig->dwSamplingLength * dwADChannleCount;
-		if( m_stADSConfig.dwSamplingLength%4 != 0 )
-		{
-			//DMA transmit require XchCount is a multiple of 4( count in UINT32)
-			m_stADSConfig.dwSamplingLength = ((m_stADSConfig.dwSamplingLength>>2)<<2)+4;
-		}
+		
+		//DMA transmit require XchCount(total sampling) is a multiple of 4( count in UINT32). 
+		//As well as require it's a multiple of dwADChannleCount.
+		while( !(m_stADSConfig.dwSamplingLength%4==0 &&  m_stADSConfig.dwSamplingLength%dwADChannleCount==0 ))
+			m_stADSConfig.dwSamplingLength++;
+
 		// Total sampling rate
 		m_stADSConfig.dwSamplingRate = pADSConfig->dwSamplingRate*dwADChannleCount;
 	}
@@ -262,7 +262,7 @@ BOOL eta108Class::ETA108Setup( PADS_CONFIG pADSConfig, PBYTE pBufOut, DWORD dwLe
 			pUIN16[j] &= 0x00003cff; 
 			if( pUIN16[j]>>10 == 4 )
 			{
-				pUIN16[j] |= 0x40;
+				pUIN16[j] |= 0x0404;		//ADC SCR(Address 05h)-> |0x0400, BUSY/INT select->BUSY->|0x04
 			}
 			m_ADS8201REG[j] = pUIN16[j];
 		}
@@ -296,6 +296,7 @@ BOOL eta108Class::ETA108Start( )
 {
 	CSPI_BUSCONFIG_T stCspiConfig;
 	CSPI_XCH_PKT_T stCspiXchPkt;
+	int i;
 
 	//1.Reset ADS8201
 
@@ -309,16 +310,22 @@ BOOL eta108Class::ETA108Start( )
 
 	//ADS8201 Configuration parameter
 	stCspiXchPkt.xchCnt=0;
-	while( m_ADS8201REG[stCspiXchPkt.xchCnt] )
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_REST_SCR|0xaa;			// reset ads8201
+	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+		goto error_cleanup;
+	Sleep(2);
+	stCspiXchPkt.xchCnt=0;
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_TRIGGER_SCR;		// set adc trigger SCR for idle mode
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_SCR | 0x04;		
+	i = 0;
+	while( m_ADS8201REG[i] )
 	{
-		SPITxBuf[stCspiXchPkt.xchCnt] = ADS8201_REG_WRITE | m_ADS8201REG[stCspiXchPkt.xchCnt];
-		stCspiXchPkt.xchCnt++;
+		SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE | m_ADS8201REG[i++];
 	}
-	if( stCspiXchPkt.xchCnt )
-	{
-		if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
-			goto error_cleanup;
-	}
+	SPITxBuf[stCspiXchPkt.xchCnt++] = ADS8201_REG_WRITE| ADS8021_ADC_TRIGGER_SCR |0x02;
+	
+	if( stCspiXchPkt.xchCnt != m_pSpi->CspiADCConfig( &stCspiXchPkt ))
+		goto error_cleanup;
 		
 	//3.Start ADC
 	// Reset transfer done Semaphore
@@ -361,9 +368,7 @@ BOOL eta108Class::WateDataReady(DWORD dwTimeOut)
 
 	if( dwTimeOut<=0 )
 	{
-		dwTimeOut = (DWORD)(1000.0/m_stADSConfig.dwSamplingRate*m_stADSConfig.dwSamplingLength);
-		if( dwTimeOut<4000 )
-			dwTimeOut = 4000;
+		dwTimeOut = (DWORD)(1000.0/m_stADSConfig.dwSamplingRate*m_stADSConfig.dwSamplingLength)+4000;
 	}
 	RETAILMSG( 1, (TEXT("WateDataReady: WateDataReady:TimeOut=%d\r\n"),dwTimeOut ));
 	if( WaitForSingleObject(m_pSpi->m_hTransferDoneSemaphore, dwTimeOut ) == WAIT_OBJECT_0 )
