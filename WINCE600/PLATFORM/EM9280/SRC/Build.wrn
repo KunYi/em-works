@@ -1,0 +1,42 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000010:WARNS ] RNE_MDD is not a subdirectory of D:\WINCE600\PLATFORM\EM9280\SRC\COMMON\USBFN\.
+BUILD: [00:0000000048:WARNS ] Directory: D:\WINCE600\platform\EM9280\SRC\DRIVERS\MCU\MC9S08DZ60\INC\ does not exist.
+BUILD: [00:0000000050:WARNS ] Directory: D:\WINCE600\platform\EM9280\SRC\DRIVERS\MCU\MC9S08DZ60\INC\ does not exist.
+BUILD: [00:0000000055:WARNS ] Directory: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\inc\ does not exist.
+BUILD: [00:0000000060:WARNS ] Directory: D:\WINCE600\platform\common\src\SOC\mx28_fsl_v2_pdk1_9\media\include\ does not exist.
+BUILD: [00:0000000062:WARNS ] DDK_CLK is not a subdirectory of D:\WINCE600\PLATFORM\EM9280\SRC\BOOTLOADER\HWLIB\.
+BUILD: [00:0000000070:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\sources(100) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000071:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\sources(97) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000155:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPDIF\obj\ARMV4I\retail\hwctxt.obj does not exist (2).
+BUILD: [00:0000000169:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\sources(90) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000170:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\ROTARY\obj\ARMV4I\retail\bsprotary.obj does not exist (2).
+BUILD: [00:0000000184:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000185:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000186:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\: Missing source file: D:\WINCE600\platform\common\lib\ARMV4I\retail\uut_common_fsl_v2_pdk1_9.lib.
+BUILD: [00:0000000187:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\obj\ARMV4I\retail\bspuut.obj does not exist (2).
+BUILD: [00:0000000188:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\obj\ARMV4I\retail\otp.obj does not exist (2).
+BUILD: [00:0000000203:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdcardlib.lib.
+BUILD: [00:0000000204:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdbus.lib.
+BUILD: [00:0000000259:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SWITCH\obj\ARMV4I\retail\bspenetswi.obj does not exist (2).
+BUILD: [00:0000000273:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000274:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000275:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000276:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\SDIO.lib does not exist (2).
+BUILD: [00:0000000277:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enetswi.lib does not exist (2).
+BUILD: [00:0000000278:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPI\PDK\obj\ARMV4I\retail\bspspi.obj does not exist (2).
+BUILD: [00:0000000304:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\voltctrl.obj does not exist (2).
+BUILD: [00:0000000305:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\dvfc.obj does not exist (2).
+BUILD: [00:0000000306:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\irq.obj does not exist (2).
+BUILD: [00:0000000322:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\CANBUS\PDK\obj\ARMV4I\retail\bspcan.obj does not exist (2).
+BUILD: [00:0000000348:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\OAL\OALEXE\sources(48) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000349:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000350:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000351:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000352:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\SDIO.lib does not exist (2).
+BUILD: [00:0000000353:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enetswi.lib does not exist (2).
+BUILD: [00:0000000354:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spi.lib does not exist (2).
+BUILD: [00:0000000355:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spisdk.lib does not exist (2).
+BUILD: [00:0000000356:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\dvfc.lib does not exist (2).
+BUILD: [00:0000000357:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\can.lib does not exist (2).
+BUILD: [00:0000000358:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\cansdk.lib does not exist (2).
+BUILD: [00:0000000376:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\gperotate.lib.

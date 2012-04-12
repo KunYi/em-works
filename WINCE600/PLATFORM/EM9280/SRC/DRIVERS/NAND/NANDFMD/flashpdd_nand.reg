@@ -1,0 +1,51 @@
+; HIVE BOOT SECTION
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\EXFAT]
+    "FormatExfat"=dword:0
+    
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\NandFlash]
+    "Profile"="NandFlash"
+    "IClass"=multi_sz:"{A4E7EDDA-E575-4252-9D6B-4195D48BB865}",
+                     "{8DD679CE-8AB4-43c8-A14A-EA4963FAA715}"
+    "Order"=dword:0
+    "FriendlyName"="Freescale NAND FLASH Driver"
+    "Dll"="flashmdd.dll"
+    "FlashPddDll"="flashpdd_nand.dll"
+    "Prefix"="DSK"
+;
+; CS&ZHL APR-15-2011: http://msdn.microsoft.com/en-us/library/aa914710.aspx
+;
+    "Flags"=dword:1000
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\NandFlash]
+    "Name"="NANDFLASH"
+    "Folder"="NANDFlash"
+    "AutoMount"=dword:1
+    "AutoPart"=dword:1
+    "AutoFormat"=dword:1
+    "PartitionDriver"="flashpart.dll"
+	"MountAsBootable"=dword:1
+	"DefaultFileSystem"="FATFS"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\NandFlash\FATFS]
+    "MountAsBootable"=dword:1
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\AutoLoad\NandFlash]
+    "DriverPath"="Drivers\\BuiltIn\\NandFlash"
+    ; LoadFlags 0x01 == load synchronously
+    "LoadFlags"=dword:1
+	"BootPhase"=dword:0
+    "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\AutoLoad\ObjectStore]
+   "MountAsBootable"=-
+
+[HKEY_LOCAL_MACHINE\init\BootVars]
+    "SystemHive"="Documents and Settings\\system.hv"	; Set the location and name of the system hive file
+;
+; Start both storage manager and device manager in boot phase 1 for hive-based registry	
+;
+	"Flags"=dword:3
+    "RegistryFlags"=dword:1
+
+; END HIVE BOOT SECTION

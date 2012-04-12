@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatalogFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RequiredVersion="6.00" xsi:schemaLocation="urn:Microsoft.PlatformBuilder/Catalog PbcXml600.xsd" xmlns="urn:Microsoft.PlatformBuilder/Catalog">
+  <FileInformation Id="FileInformation:Emtronix:EM9280">
+    <Title>EM9280</Title>
+    <Description>EM9280 BSP Catalog Items</Description>
+    <Vendor>Emtronix</Vendor>
+    <OSVersion>6.00</OSVersion>
+    <FileVersion>1.9</FileVersion>
+  </FileInformation>
+  <Bsp Id="Bsp:Emtronix:EM9280:ARMV4I">
+    <Title>EM9280: ARMV4I</Title>
+    <Description>WinCE6.0 BSP for EM9280</Description>
+    <PlatformDirectory>EM9280</PlatformDirectory>
+    <CpuId>Cpu:ARMV4I</CpuId>
+    <BspItemId>Item:Emtronix:EthernetBootloader:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:AUDIO:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:DUART1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:I2CBUS2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:EmtronixWVF1G(WVGA):iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Notification LED:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Keypad:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:ROTARY:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:SSP2 SDHC:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:SSP2 SPIBUS:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Flash:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Pure Client Function:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed OTG Port Pure Host Function:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:SPDIF:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:CANBUS1:imx28-3ds_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:CANBUS2:imx28-3ds_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:ENET1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:ENET2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:ENETSWI:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:High Speed Host:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:DVFC:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:PHDC Support_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:MultiPartitionNAND:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+  </Bsp>
+  <Item Id="Item:Emtronix:EthernetBootloader:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Description</Description>
+    <Type>BspSpecific</Type>
+    <Location />
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\BOOTLOADER\EBOOT</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\BOOTLOADER\EBOOT</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:AUDIO:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:AUDIO:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:AUDIO:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_AUDIO_SGTL5000</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>wavedev2_sgtl5000.dll</Module>
+    <Location ConditionLocation="">Device Drivers\Audio</Location>
+    <SourceCode>
+      <Title>SGTL5000 AUDIO DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\WAVEDEV2\SGTL5000</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:DUART1:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:DUART1:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:DUART1:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_DUART1</Variable>
+    <Module>debug_serial.dll</Module>
+    <Location ConditionLocation="">Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>#FSL:IMX233-EVK:DUART1DETAIL:TITLE</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIALDEBUG</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:UART2:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART2:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART2</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location ConditionLocation="">Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>#FSL:IMX28-EVK-PDK1_9:UART2DETAIL:TITLE</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:UART5:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART5:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART5</Variable>
+    <Module>csp_serial.dll</Module>
+    <Location ConditionLocation="">Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>#FSL:IMX28-EVK-PDK1_9:UART5DETAIL:TITLE</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:I2CBUS1:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:I2CBUS1:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_I2CBUS1</Variable>
+    <Module>i2c.dll</Module>
+    <Location ConditionLocation="">Device Drivers\I2C Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\I2C</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\I2C</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:I2CBUS2:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:I2CBUS2:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:I2CBUS2:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_I2CBUS2</Variable>
+    <Module>i2c.dll</Module>
+    <Location ConditionLocation="">Device Drivers\I2C Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\I2C</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\I2C</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SSP2 SPIBUS:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:SSP2 SPIBUS:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:SSP2 SPIBUS:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SSP2_SPI</Variable>
+    <Module>spi.dll</Module>
+    <Location>Device Drivers\SPI Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SPI</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SPI</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:TOUCH:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:TOUCH:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>lradc_touch.dll</Module>
+    <Location>Device Drivers\Touch</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\TOUCH</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\TOUCH</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:EmtronixWVF1G(WVGA):iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:43WVF1G:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:43WVF1G:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_DISPLAY_43WVF1G-0</Variable>
+    <Module>ddraw_mx28.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\Display</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\DISPLAY</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\DISPLAY</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:Backlight PWM:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:Backlight PWM:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_BACKLIGHT</Variable>
+    <Module>backlight.dll</Module>
+    <Module>advbacklight.dll</Module>
+    <Location>Device Drivers\Backlight</Location>
+    <SourceCode>
+      <Title>BACKLIGHT PWM</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\BACKLIGHT\DRIVER</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>BACKLIGHT CTLPNL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\BACKLIGHT\CTLPNL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:Battery:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:Battery:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>battdrvr.dll</Module>
+    <Location>Device Drivers\Battery</Location>
+    <SourceCode>
+      <Title>BATTERY DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\BATTDRVR</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:LRADC:Title</Title>
+    <Description>LRADC Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_LRADC</Variable>
+    <Module>lradc.dll</Module>
+    <Location>Device Drivers\LRADC</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\LRADC\DLL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\LRADC\DLL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CANBUS1:imx28-3ds_EM9280">
+    <Title>#FSL:iMX28-3DS:CANBUS1:Title</Title>
+    <Description>#FSL:iMX28-3DS:CANBUS1:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CANBUS1</Variable>
+    <Module>can.dll</Module>
+    <Location>Device Drivers\CAN Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\IMX28-3DS\SRC\DRIVERS\CANBUS</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\IMX28-3DS\SRC\DRIVERS\CANBUS</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CANBUS2:imx28-3ds_EM9280">
+    <Title>#FSL:iMX28-3DS:CANBUS2:Title</Title>
+    <Description>#FSL:iMX28-3DS:CANBUS2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_CANBUS2</Variable>
+    <Module>can.dll</Module>
+    <Location>Device Drivers\CAN Bus</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\IMX28-3DS\SRC\DRIVERS\CANBUS</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\IMX28-3DS\SRC\DRIVERS\CANBUS</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Keypad:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:KEYPAD:Title</Title>
+    <Description>LRADC-based Keypad Driver</Description>
+    <Type>BspSpecific</Type>
+    <Module>keypad.dll</Module>
+    <Location>Device Drivers\KEYPAD</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\KEYPAD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\KEYPAD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ROTARY:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:ROTARY:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:ROTARY:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ROTARY</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Location>Device Drivers\ROTARY</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ROTARY</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ROTARY</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Notification LED:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:NLED Driver:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:NLED Driver:Description</Description>
+    <Type>BspSpecific</Type>
+    <Module>nleddrvr.dll</Module>
+    <Location>Device Drivers\NLED</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NLEDDRVR</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NLEDDRVR</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280">
+    <Title>SSP1 SDHC</Title>
+    <Description>SSP1 SD Host Controller</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SSP1_SDHC</Variable>
+    <Module>sdhc.dll</Module>
+    <Location>Device Drivers\SD Controller</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SDHC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SDHC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SSP2 SDHC:iMX28-EVK-PDK1_9_EM9280">
+    <Title>SSP2 SDHC</Title>
+    <Description>SSP2 SD Host Controller</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SSP2_SDHC</Variable>
+    <Module>sdhc.dll</Module>
+    <Location>Device Drivers\SD Controller</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SDHC</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SDHC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Flash:iMX28-EVK-PDK1_9_EM9280">
+    <Title>NANDFlash</Title>
+    <Description>NANDFlash</Description>
+    <Type>BspSpecific</Type>
+    <Module>flashpdd_nand.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Storage Drivers\Flash</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDFMD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDFMD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280">
+    <Title>High Speed OTG Port Full OTG Function</Title>
+    <Description>USB High Speed OTG Port Full OTG Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_CLIENT</Variable>
+    <Variable>BSP_USB_HSOTG_HOST</Variable>
+    <Variable>BSP_USBOTG</Variable>
+    <Module>fsl_usbotg.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB FUNCTION DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\USBD</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>USB HOST DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\USBH\HSOTG</Path>
+    </SourceCode>
+    <SourceCode>
+      <Title>USB OTG DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\USBOTG</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Pure Client Function:iMX28-EVK-PDK1_9_EM9280">
+    <Title>High Speed OTG Port Pure Client Function</Title>
+    <Description>USB High Speed OTG Port Pure Client Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_CLIENT</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>usbfn.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB FUNCTION DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\USBD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed OTG Port Pure Host Function:iMX28-EVK-PDK1_9_EM9280">
+    <Title>High Speed OTG Port Pure Host Function</Title>
+    <Description>USB High Speed OTG Port Pure Host Function Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSOTG_HOST</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>hcd_hsotg.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\USB Devices\USB High Speed OTG Device</Location>
+    <SourceCode>
+      <Title>USB HOST DRIVER</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\USBH\HSOTG</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:SPDIF:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:SPDIF:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:SPDIF:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SPDIF</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>spdifdev.dll</Module>
+    <Location>#FSL:iMX28-EVK-PDK1_9:SPDIF:Location</Location>
+    <SourceCode>
+      <Title>#FSL:IMX28-EVK-PDK1_9:SPDIFDETAIL:TITLE</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SPDIF</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:High Speed Host:iMX28-EVK-PDK1_9_EM9280">
+    <Title>High Speed Host</Title>
+    <Description>High Speed Host Function</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USB_HSH1</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>hcd_hsh1.dll</Module>
+    <Location>Device Drivers\USB Devices\USB Host Device</Location>
+  </Item>
+  <Item Id="Item:Emtronix:DVFC:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:DVFC:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:DVFC:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_DVFC</Variable>
+    <SupportedCpuId>Cpu:ARMV4I</SupportedCpuId>
+    <Module>dvfc.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location>Device Drivers\DVFC</Location>
+    <SourceCode>
+      <Title>#FSL:IMX28-EVK-PDK1_9:DVFCDETAIL:TITLE</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DVFC</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ENET1:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:ENET1:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:ENET1:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ENET1</Variable>
+    <Module>enet.dll</Module>
+    <Location ConditionLocation="">Device Drivers\ENET Driver</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ENET</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ENET</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ENET2:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:ENET2:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:ENET2:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ENET1</Variable>
+    <Variable>BSP_ENET2</Variable>
+    <Module>enet.dll</Module>
+    <Location ConditionLocation="">Device Drivers\ENET Driver</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ENET</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\ENET</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:ENETSWI:iMX28-EVK-PDK1_9_EM9280">
+    <Title>#FSL:iMX28-EVK-PDK1_9:ENETSWI:Title</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:ENETSWI:Description</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_ENETSWI</Variable>
+    <Module>enetswi.dll</Module>
+    <Location ConditionLocation="">Device Drivers\ENET Driver</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SWITCH</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SWITCH</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:PHDC Support_EM9280">
+    <Title>Personal HealthCare Class Support</Title>
+    <Description>Support for Personal HealthCare Class Peripheral Driver</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_USBFN_PHD_SUPPORT</Variable>
+    <Module>usbphdfn.dll</Module>
+    <Location>Device Drivers\USB Devices\USB Functional Class Driver</Location>
+  </Item>
+  <Item Id="Item:Emtronix:MultiPartitionNAND:iMX28-EVK-PDK1_9_EM9280">
+    <Title>MultiPartitionNAND</Title>
+    <Description>MultiPartitionNAND</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_NAND_PDD</Variable>
+    <Module>multipartition_flashpdd.dll</Module>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Storage Drivers\Flash</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDPDD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDPDD</Path>
+    </SourceCode>
+  </Item>
+</CatalogFile>

@@ -1,0 +1,29 @@
+!if 0
+;================================================================================
+;  Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;================================================================================
+!endif
+
+TARGETNAME=oalioctl
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+
+DLLENTRY=_DllMainCRTStartup
+DEFFILE=$(TARGETNAME).def
+
+INCLUDES=$(INCLUDES)
+
+CDEFINES=$(CDEFINES)
+
+SOURCES=\
+    oalioctl.cpp
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ..\..\INC\oemaddrtab_cfg.inc \
+

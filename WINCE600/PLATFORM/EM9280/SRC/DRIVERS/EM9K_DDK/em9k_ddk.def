@@ -1,0 +1,22 @@
+;------------------------------------------------------------------------------
+;
+;   Copyright (C) 2012, Emtronix, Inc. All Rights Reserved.
+;   THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;   AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+LIBRARY EM9K_DDK
+ 
+EXPORTS
+	DDKGpioSpiRead
+	DDKGpioSpiWrite
+
+	DDKGpioI2cWrite
+	DDKGpioI2cRead
+
+	DDKGpioxPinOutEn
+	DDKGpioxPinOutDis
+	DDKGpioxPinSet
+	DDKGpioxPinClear
+	DDKGpioxPinState

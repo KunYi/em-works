@@ -1,0 +1,55 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+    "DriverName"="touch.dll"
+    "MaxCalError"=dword:7
+IF BSP_PRECAL
+    "CalibrationData"="539,520 280,259 280,778 793,781 794,259"
+
+    ; Welcome.exe: Disable tutorial and calibration pages because we already
+    ; have the necessary calibration data.
+    ; Touch calibration (0x02), Stylus (0x04), Popup menu (0x08),
+    ; Timezone (0x10), Complete (0x20)
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Welcome]
+    "Disable"=dword:FFFFFFFF
+ENDIF ; BSP_PRECAL
+
+; For double-tap default setting
+[HKEY_CURRENT_USER\ControlPanel\Pen]
+    "DblTapDist"=dword:18
+    "DblTapTime"=dword:637
+
+;; For launching the TouchPanel calibration application on boot.
+;[HKEY_LOCAL_MACHINE\init]
+;    "Launch80"="touchc.exe"
+;    "Depend80"=hex:14,00,1e,00 ; Wait for standard initialization
+;                               ; modules to load first (GWES.dll and
+;                               ; Device.exe).
+
+;------------------------------------------------------------------------------
+; Default Calibration Data
+
+; For WQVGA LCD
+IF BSP_DISPLAY_LMS430HF02
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+    "CalibrationData"="2006,2123 3049,921 920,935 891,3320 3056,3289 "
+ENDIF ; BSP_DISPLAY_LMS430HF02
+
+; For QVGA LCD
+IF BSP_DISPLAY_LMS350GF10
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+    "CalibrationData"="2081,2117 947,951 3290,1003 3326,3364 957,3276 "
+ENDIF ; BSP_DISPLAY_LMS350GF10
+
+IF BSP_DISPLAY_43WVF1G-0
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+    "CalibrationData"="2128,2039 1059,956 3212,979 3224,3161 1057,3177 "
+ENDIF ; BSP_DISPLAY_43WVF1G-0
+;------------------------------------------------------------------------------
+

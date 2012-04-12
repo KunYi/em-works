@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_USB_HSOTG_CLIENT)" == ""
+SKIPBUILD=1
+!ENDIF
+
+
+TARGETNAME=usbfn
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+
+DEFFILE=usbfn.def
+DLLENTRY=_DllEntryCRTStartup
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_$(_SOCDIR).lib   \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_ufnmddbase_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_os_$(_SOCDIR).lib   \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib    \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\defbuslib.lib
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO -DERIC_MX233_USB  -DUSB_WAKEUP_NONE
+#-DUSB_WAKEUP_CNANDDN
+#-DUSB_WAKEUP_CN
+
+SOURCES=\
+    hwinit.c         \
+    i_usbclock.c \
+    i_usbutils.c

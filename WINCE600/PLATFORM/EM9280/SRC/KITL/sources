@@ -1,0 +1,46 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+TARGETNAME=kitl
+TARGETTYPE=DYNLINK
+DLLENTRY=KitlDllMain
+RELEASETYPE=PLATFORM
+
+SYNCHRONIZE_DRAIN=1
+
+DEFFILE=
+
+NOLIBC=1
+
+LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
+
+TARGETLIBS=\
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\kitlcore.lib                        \
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\nkstub.lib                          \
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\oemstub.lib                         \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_kitl.lib                            \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\kitl_log.lib                            \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_apbhdma_$(_SOCDIR).lib       \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_iomux_$(_SOCDIR).lib         \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_clk_$(_SOCDIR).lib           \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_cache_arm926.lib                    \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_memory_arm.lib                      \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\args.lib                           \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bspcmn.lib                         \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bspenet.lib                        \
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\vbridge.lib                         \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\fulllibc.lib                        \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\fsl_usbfn_rndiskitl_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_rne_mdd_$(_COMMONSOCDIR).lib        \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_rne_pdd_$(_COMMONSOCDIR).lib        \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_$(_SOCDIR).lib                \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_eboot_$(_SOCDIR).lib          \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_ethdrv_enet_$(_COMMONSOCDIR).lib    \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_serial_pdd_$(_COMMONSOCDIR).lib         
+
+    
+SOURCES=\
+    kitl.c

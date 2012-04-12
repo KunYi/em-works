@@ -1,0 +1,1122 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;------------------------------------------------------------------------------
+;
+; Copyright (C) 2007-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+;;******************************************************************************
+;; USBFN Part Begin
+;;******************************************************************************
+; @CESYSGEN IF CE_MODULES_USBFN
+IF BSP_USB_HSOTG_CLIENT
+;------------------------------------------------------------------------------
+; Fix usb mass storage Modules
+;
+; @CESYSGEN IF CE_MODULES_USBMSFN
+IF BSP_UUT !
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers\Mass_Storage_Class]
+   "idVendor"=- ;
+   "idVendor"=dword:0951
+   "Manufacturer"=- ;
+   "Manufacturer"="Freescale"
+   "idProduct"=- ;
+   "idProduct"=dword:160B
+   "Product"=- ;
+   "Product"="Mass Storage Device"
+   "SerialNumber"="0802270905553"
+   "DeviceName"=- ;
+;   "DeviceName"="ATA HARD DISK"
+;   "DeviceName"="SDMEMORY CARD"
+;   "DeviceName"="MMC CARD"
+;   "DeviceName"="USB HARD DISK"
+;   "DeviceName"="NAND FLASH"
+; Can Specify one of the mediums above, otherwise will use pre-coded priority to select one
+
+ELSE
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="UUT"
+   
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers\UUT]
+   "Dll"="UUT.dll"   
+   "InterfaceSubClass"=dword:06   
+   "InterfaceProtocol"=dword:50
+   "DeviceName"="DSK1:"
+   "FriendlyName"="Mass Storage"   
+   "idVendor"=dword:066F
+   "Manufacturer"="Freescale"
+   "idProduct"=dword:37FF
+   "Product"="UUT"
+   "bcdDevice"=dword:0   
+   "SerialNumber"="0802270905553"
+;   "DeviceName"="ATA HARD DISK"
+;   "DeviceName"="SDMEMORY CARD"
+;   "DeviceName"="MMC CARD"
+;   "DeviceName"="USB HARD DISK"
+   "DeviceName"="NAND FLASH"
+; Can Specify one of the mediums above, otherwise will use pre-coded priority to select one
+ENDIF ; BSP_UUT
+; @CESYSGEN ENDIF CE_MODULES_USBMSFN
+;------------------------------------------------------------------------------
+; Change RNDIS PID so that it can work correctly 
+;
+; @CESYSGEN IF CE_MODULES_RNDISFN
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers\RNDIS]
+   "idProduct"=-; erase previous default
+   "idProduct"=dword:0302
+; @CESYSGEN ENDIF CE_MODULES_RNDISFN
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; For usb PHD class
+;
+IF BSP_USBFN_PHD_SUPPORT
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="Personal_HealthCare_Class"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers\Personal_HealthCare_Class]
+    "dll"="usbphdfn.dll"
+    "bcdDevice"=dword:0
+    "FriendlyName"="Personal HealthCare"
+    "idProduct"=dword:0400
+    "idVendor"=dword:2504
+    "InterfaceProtocol"=dword:1
+    "InterfaceSubClass"=dword:0
+    "Manufacturer"="Freescale"
+    "Product"="General PHDC Peripheral"
+    "SerialNumber"="0802270905553"
+ENDIF ; BSP_USBFN_PHD_SUPPORT
+
+; @CESYSGEN IF CE_MODULES_USBMSFN
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="Mass_Storage_Class"
+; @CESYSGEN ENDIF CE_MODULES_USBMSFN
+
+; @CESYSGEN IF CE_MODULES_RNDISFN
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="RNDIS"
+; @CESYSGEN ENDIF CE_MODULES_RNDISFN
+
+; @CESYSGEN IF CE_MODULES_SERIALUSBFN
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="Serial_Class"
+; @CESYSGEN ENDIF CE_MODULES_SERIALUSBFN
+
+IF BSP_UUT
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"=- ; erase previous default
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers]
+   "DefaultClientDriver"="UUT"
+ENDIF ; BSP_UUT
+ENDIF ; BSP_USB_HSOTG_CLIENT
+; @CESYSGEN ENDIF CE_MODULES_USBFN
+;;******************************************************************************
+;; USBFN Part End
+;;******************************************************************************
+
+;------------------------------------------------------------------------------
+
+#define PLATFORM_DRIVERS_DIR $(_TARGETPLATROOT)\src\drivers
+;; @XIPREGION IF PLATFORM_REGISTRY_DEFAULT
+;
+;
+;; Platform type: 1=DK3, 2=ODO 3=Rose
+[HKEY_LOCAL_MACHINE\Platform]
+   "Name"="MX28 Platform"
+   "Type"=dword:4
+
+;------------------------------------------------------------------------------
+; Change RNDIS PID so that it can work correctly 
+;
+; @CESYSGEN IF CE_MODULES_RNDISFN
+[HKEY_LOCAL_MACHINE\Drivers\USB\FunctionDrivers\RNDIS]
+   "idProduct"=-; erase previous default
+   "idProduct"=dword:0302
+; @CESYSGEN ENDIF CE_MODULES_RNDISFN
+;------------------------------------------------------------------------------
+
+;;******************************************************************************
+;; Device Manager Begin
+;;******************************************************************************
+; @CESYSGEN IF CE_MODULES_DEVICE
+;
+;;------------------------------------------------------------------------------
+;; CSP DDK Driver
+;;
+
+; HIVE BOOT SECTION
+IF BSP_NOCSPDDK !
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CSPDDK]
+   "Dll"="cspddk.dll"
+   "Order"=dword:0
+; @CESYSGEN IF  FILESYS_FSREGHIVE
+   "Flags"=dword:1000
+; @CESYSGEN ENDIF FILESYS_FSREGHIVE
+ENDIF ; BSP_NOCSPDDK !
+; END HIVE BOOT SECTION
+;;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; PMU PDK Driver
+;
+IF BSP_NOPMU !
+; @XIPREGION IF PACKAGE_OEMDRIVERS
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PMI]
+   "Prefix"="PMI"
+   "Dll"="pmupdk.dll"
+   "Index"=dword:1
+   "Order"=dword:3
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"    ; PMCLASS_GENERIC_DEVICE
+; @XIPREGION ENDIF PACKAGE_OEMDRIVERS
+ENDIF BSP_NOPMU!
+
+;------------------------------------------------------------------------------
+; Battery Driver
+;
+; @CESYSGEN IF CE_MODULES_BATTDRVR
+IF BSP_NOBATTERY !
+IF BSP_LRADC
+; These registry entries load the battery driver.  The IClass value must match
+; the BATTERY_DRIVER_CLASS definition in battery.h -- this is how the system
+; knows which device is the battery driver.  Note that we are using 
+; DEVFLAGS_NAKEDENTRIES with this driver.  This tells the device manager
+; to instantiate the device with the prefix named in the registry but to look
+; for DLL entry points without the prefix.  For example, it will look for Init
+; instead of BAT_Init.  This allows the prefix to be changed in the registry (if
+; desired) without editing the driver code.
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Battery]
+   "Prefix"="BAT"
+   "Dll"="battdrvr.dll"
+   "Flags"=dword:8                      ; DEVFLAGS_NAKEDENTRIES
+   "Order"=dword:3
+   "MaxBatteryVoltage"=dword:1068       ; 4200mV
+   "BatteryVoltageHighLevel"=dword:E74  ; 3700mV
+   "BatteryVoltageLowLevel"=dword:C80   ; 3200mV
+   "PollInterval"=dword:1F4             ; battery polling interval, in milliseonds(0.5 seconds)
+   "IClass"="{DD176277-CD34-4980-91EE-67DBEF3D8913}"
+
+[HKEY_LOCAL_MACHINE\System\Events]
+    "SYSTEM/BatteryAPIsReady"="Battery Interface APIs"
+
+ENDIF ;BSP_LRADC
+ENDIF ;BSP_NOBATTERY !
+; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Rotary Driver
+;
+IF BSP_ROTARY    
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ROTARY]
+    "Dll"="rotary.dll"
+    "Prefix"="ROT"
+    "Order"=dword:1
+    "Index"=dword:1
+    "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"   ; PMCLASS_GENERIC_DEVICE
+ENDIF ;BSP_NOROTARY !
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; LRADC Driver
+;
+IF BSP_LRADC
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\LRADC]
+   "Prefix"="LDC"
+   "Dll"="lradc.dll"
+   "Index"=dword:1
+   "Order"=dword:2
+ENDIF ; BSP_LRADC
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Keypad Driver
+;
+; @CESYSGEN IF CE_MODULES_KEYBD
+IF BSP_NOKEYPAD !
+IF BSP_EM9280 !
+IF BSP_LRADC
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KEYPADS]
+   "Prefix"="KPD"
+   "Dll"="keypad.dll"
+   "Index"=dword:1
+   "Order"=dword:6
+
+; EventName : Named Event for Anykey pressed
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KeyPadS]
+;;
+;; registry for scan abilities
+   "RepeatLantency"=dword:3e8
+   "RepeatRate"=dword:a
+   "ScanPeriod"=dword:14
+   "Debounce"=dword:2
+;;
+;; registry for LRADC control
+   "ValidKeys"=dword:b
+   "LRADC_KeyPAD"=dword:0
+   "LRADC_Reference"=dword:6
+   "LRADC_SCHEDULER"=dword:0
+   "Hysteresis"=dword:80
+   "ReleaseVolatge"=dword:00000e4a
+;;
+;; the key index from 0 to ValidKeys defined
+;;
+;; the key0  map to sw10
+;; the key1  map to sw14
+;; the key2  map to sw8
+;; the key3  map to sw5
+;; the key4  map to sw12
+;; the key5  map to sw13
+;; the key6  map to sw6
+;; the key7  map to sw7
+;; the key8  map to sw4
+;; the key9  map to sw9
+;; the key10 map to sw11
+;;
+;; Type :
+;;        0 : 0->Press Key, 1->Launch Application
+;;    Bit 1 : 0->No Repeat, 1->Repeat
+;;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KeyPadS\Key2]
+   "KeyName"    ="HotKey0"
+   "AppName"    ="explorer.exe"
+   "Parameter"  =""
+   "Voltage"    =dword:00000550
+   "Flag"       =dword:00000001
+   "VirtualKey" =dword:0000ffff
+ENDIF ; BSP_LRADC
+ENDIF ; BSP_EM9280 !
+ENDIF ; BSP_NOKEYPAD !
+; @CESYSGEN ENDIF CE_MODULES_KEYBD
+;;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+; Notification LED Driver
+;
+; @CESYSGEN IF CE_MODULES_NLEDDRVR
+IF BSP_NONLED ! 
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\NLEDDRVR\nleddrvr.reg"
+ENDIF ; BSP_NONLED ! 
+; @CESYSGEN ENDIF CE_MODULES_NLEDDRVR
+;------------------------------------------------------------------------------
+
+
+;;------------------------------------------------------------------------------
+;; I2C Driver
+IF BSP_I2CBUS1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2C1]
+   "Prefix"="I2C"
+   "Dll"="i2c.dll"
+   "Index"=dword:1
+   "Order"=dword:3
+ENDIF ; BSP_I2CBUS1
+
+IF BSP_I2CBUS2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2C2]
+   "Prefix"="I2C"
+   "Dll"="i2c.dll"
+   "Index"=dword:2
+   "Order"=dword:3
+ENDIF ; BSP_I2CBUS2
+;;------------------------------------------------------------------------------
+
+
+;;------------------------------------------------------------------------------
+; Serial/UART Driver
+;
+; @CESYSGEN IF CE_MODULES_SERIAL 
+IF BSP_SERIAL_DUART1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM0]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:80074000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="debug_serial.dll"
+   "Index"=dword:0
+   "Order"=dword:3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM0\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="i.MX28 COM0 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF ; BSP_SERIAL_DUART1
+
+;
+; CS&ZHL MAR-12-2012: support all 5 serial ports on iMX28 for EM9280
+;
+IF BSP_EM9280_GPIO_SPI
+	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\SERIAL\csp_serial.reg"
+ELSE		; -> iMX28EVK
+IF BSP_SERIAL_UART2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:8006A000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:2
+   "Order"=dword:3
+   "useDMA"=dword:1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="i.MX28 COM2 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF ; BSP_SERIAL_UART2
+
+IF BSP_SERIAL_UART5
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:80070000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:5
+   "Order"=dword:3
+   "useDMA"=dword:1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="i.MX28 COM5 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF	;BSP_SERIAL_UART5
+ENDIF	;BSP_EM9280_GPIO_SPI
+; @CESYSGEN ENDIF CE_MODULES_SERIAL
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+;NAND FMD Driver
+;
+; @CESYSGEN IF CE_MODULES_FLASHMDD
+IF BSP_NONANDFMD !
+IF BSP_SSP2_SDHC !
+
+IF BSP_NAND_PDD
+	#include "$(_TARGETPLATROOT)\SRC\Drivers\NAND\NandPdd\flashpdd.reg"
+
+IF BSP_SUPPORT_DEMAND_PAGING
+	#include "$(_TARGETPLATROOT)\SRC\Drivers\NAND\NandDisk\nanddisk.reg"
+ENDIF
+
+ELSE
+	#include "$(_TARGETPLATROOT)\SRC\Drivers\NAND\NandFmd\flashpdd_nand.reg"
+ENDIF
+
+ENDIF	;BSP_SSP2_SDHC !
+ENDIF	;BSP_NONAND_FMD !
+; @CESYSGEN ENDIF CE_MODULES_FLASHMDD
+
+
+IF BSP_NOUPDATETOOL!
+IF BSP_UUT!
+[HKEY_LOCAL_MACHINE\init]
+    "Launch90"="UpdateSBTool.exe"
+    "Depend90"=hex:14,00,1e,00 ; Wait for standard initialization
+                               ; modules to load first (GWES.dll and
+                               ; Device.exe).
+ENDIF; BSP_UUT !
+ENDIF ;BSP_NOUPDATETOOL!                               
+
+; END HIVE BOOT SECTION
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; USB OTG Driver
+;
+; @CESYSGEN IF CE_MODULES_USBHOST && CE_MODULES_USBFN
+IF BSP_NOUSB !
+IF BSP_USBOTG
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\UsbOtg]
+    "Dll"="fsl_usbotg.dll"
+    "Prefix"="OTG"
+    "Order"=dword:10
+    "MemBase"=dword:80080000    
+    "MemLen"=dword:1000        
+    "Irq"=dword:5D
+    "IsrDll"="giisr.dll"
+    "IsrHandler"="ISRHandler"
+    "DynamicClientLoad"=dword:3
+;    "DynamicClientLoad"=dword:1
+;    "DisableRoleSwitch"=dword:1
+;    "InitialRoleMaster"=dword:1
+    "HCDPortNumberOnOTG"=dword:0
+    "BusIoctl"=dword:2a0048
+    "InterfaceType"=dword:0
+    "IClass"=multi_sz:"{6F40791D-300E-44E4-BC38-E0E63CA8375C}=%b"
+
+; @CESYSGEN IF CE_MODULES_USBD
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\UsbOtg\Hcd]
+	"Prefix"="HCD"
+	"Dll"="hcd_hsotg.dll"
+	"Order"=dword:15
+	"Class"=dword:0c
+	"SubClass"=dword:03
+	"ProgIF"=dword:20
+	"Irq"=dword:5D
+	"MemBase"=dword:80080000
+	"MemLen"=dword:1000
+	"UseExistingSettings"=dword:0
+	"OTGSupport"=dword:0
+	"OTGGroup"="01"
+	"HcdCapability"=dword:4     ;HCD_SUSPEND_ON_REQUEST 
+; @CESYSGEN ENDIF CE_MODULES_USBD
+
+; @CESYSGEN IF CE_MODULES_USBFN
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\UsbOtg\USBFN]
+    "Dll"="usbfn.dll"
+    "Prefix"="UFN"
+    "Index"=dword:1
+    "Order"=dword:20
+    "Priority256"=dword:64
+    "MemBase"=dword:80080000
+    "MemLen"=dword:00001000
+    "Irq"=dword:5D
+    "OTGSupport" = dword:0
+    "OTGGroup"="01"
+    "BusIoctl"=dword:2a0048
+    "IClass"=multi_sz:"{E2BDC372-598F-4619-BC50-54B3F7848D35}=%b","{6F40791D-300E-44E4-BC38-E0E63CA8375C}=%b"
+; @CESYSGEN ENDIF CE_MODULES_USBFN
+
+ENDIF ; BSP_USBOTG
+ENDIF ; BSP_NOUSB !   
+; @CESYSGEN ENDIF CE_MODULES_USBHOST && CE_MODULES_USBFN
+; END OF USBOTG DRIVER
+;------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------------------------------------
+;USB Client Driver
+;
+; @CESYSGEN IF CE_MODULES_USBFN
+IF BSP_NOUSB !
+IF BSP_USBOTG !
+IF BSP_USB_HSOTG_CLIENT
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\UFN]
+    "Prefix"="UFN"
+    "Dll"="usbfn.dll"
+    "Index"=dword:1
+    "Order"=dword:2
+    "MemBase"=dword:80080000
+    "MemLen"=dword:00001000
+    "Irq"=dword:5D
+    "Priority256"=dword:64
+IF BSP_USB_HSOTG_XVC
+    "OTGSupport" = dword:1
+ELSE
+    "OTGSupport" = dword:0
+ENDIF ; BSP_USB_HSOTG_XVC
+    "OTGGroup"="01"
+    "BusIoctl"=dword:2a0048
+    "IClass"= multi_sz:"{E2BDC372-598F-4619-BC50-54B3F7848D35}=%b","{6F40791D-300E-44E4-BC38-E0E63CA8375C}=%b"    
+ENDIF ; BSP_USB_HSOTG_CLIENT
+ENDIF ; BSP_USBOTG !
+ENDIF ; BSP_NOUSB !
+; @CESYSGEN ENDIF CE_MODULES_USBFN
+;
+; END OF USB Client Driver
+;-------------------------------------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; PURE HOST Registry
+; @CESYSGEN IF CE_MODULES_USBHOST
+IF BSP_NOUSB !
+IF BSP_USBOTG !
+IF BSP_USB_HSOTG_HOST
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\HCD_HSOTG]
+   "Prefix"="HCD"
+   "Dll"="hcd_hsotg.dll"
+   "Order"=dword:15
+   "Class"=dword:0c
+   "SubClass"=dword:03
+   "ProgIF"=dword:20
+   "MemBase"=dword:80080000
+   "MemLen"=dword:00001000
+   "irq"=dword:5D
+   "HcdCapability"=dword:4      ;HCD_SUSPEND_ON_REQUEST
+   "OTGSupport"=dword:0
+   "OTGGroup"="01"
+ENDIF ; BSP_USB_HSOTG_HOST
+ENDIF ; BSP_USBOTG !
+ENDIF ; BSP_NOUSB!
+; @CESYSGEN ENDIF CE_MODULES_USBHOST
+
+; @CESYSGEN IF CE_MODULES_USBHOST
+IF BSP_NOUSB !
+IF BSP_USB_HSH1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\HCD_HSH1]
+   "Prefix"="HCD"
+   "Dll"="hcd_hsh1.dll"
+   "Order"=dword:15
+   "Class"=dword:0c
+   "SubClass"=dword:03
+   "ProgIF"=dword:20
+   "MemBase"=dword:80090000
+   "MemLen"=dword:00001000
+   "irq"=dword:5C
+   "HcdCapability"=dword:4      ;HCD_SUSPEND_ON_REQUEST
+   "OTGSupport"=dword:0
+   "OTGGroup"="01"
+ENDIF ; BSP_USB_HSH1
+ENDIF ; BSP_NOUSB!
+; @CESYSGEN ENDIF CE_MODULES_USBHOST
+;
+; END OF PURE HOST Registry
+;------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------------------------------------
+IF BSP_KEYBD_NOP
+; USB - For USB Keyboard driver
+ 
+;#define BUILTIN_ROOT HKEY_LOCAL_MACHINE\Drivers\BuiltIn
+;#define DRIVERS_DIR $(_PUBLICROOT)\common\oak\drivers
+ ;
+;[HKEY_CURRENT_USER\Keyboard Layout\Preload\1]
+	;@="00000409"
+ ;
+;#include "$(DRIVERS_DIR)\keybd\keybd.reg"
+;#include "$(DRIVERS_DIR)\keybd\LayMgr.reg"
+;
+; CS&ZHL APR-6-2012: USB keyboard registry in EM9170 
+;
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\KEYBD]
+	"DriverName"="kbdmouse.dll"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Layouts\00000409] 
+    "Layout File"="kbdmouse.dll" 
+    "Layout Text"="US" 
+    "PS2_AT"="kbdmouse.dll" 
+ENDIF ; BSP_KEYBD_NOP
+
+; @CESYSGEN IF CE_MODULES_USBFN
+IF BSP_NOUSB !
+;;Active Sync over USB Settings
+;
+[HKEY_CURRENT_USER\ControlPanel\Comm]
+	"Cnct"="USB"
+	"AutoCnct"=dword:00000001
+
+[HKEY_CURRENT_USER]
+
+[HKEY_CURRENT_USER\Comm]
+
+[HKEY_CURRENT_USER\Comm\RasBook]
+
+[HKEY_CURRENT_USER\Comm\RasBook\USB]
+"DevCfg"=hex:\
+      30,00,00,00,78,00,00,00,00,01,00,00,00,c2,01,00,00,00,08,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00
+"Entry"=hex:\
+      08,02,40,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,70,19,00,00,7c,7d,10,0a,00,00,00,00,00,00,00,00,9c,ee,\
+      04,12,00,00,00,00,00,00,00,00,f0,f0,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,9c,ed,04,12,78,ee,04,12,70,19,0e,00,00,00,00,00,30,0f,41,03,00,00,00,00,\
+      08,11,41,03,7a,00,00,00,78,ee,04,12,9c,ed,04,12,00,00,00,00,78,ee,04,12,48,\
+      99,40,03,a4,01,00,00,4f,01,00,00,b5,01,00,00,7a,00,00,00,bc,ed,04,12,00,00,\
+      00,00,98,ee,04,12,48,99,40,03,a4,01,00,00,fc,ed,04,12,d8,ee,04,12,70,19,0e,\
+      00,00,00,00,00,30,0f,41,03,00,00,00,00,00,00,00,00,ab,00,00,00,08,11,41,03,\
+      88,00,00,00,d8,ee,04,12,fc,ed,04,12,8c,f0,04,12,d8,ee,04,12,48,99,40,03,a5,\
+      01,00,00,4f,01,00,00,b4,01,00,00,88,00,00,00,01,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,01,00,00,00,00,00,ff,00,8c,22,0e,00,01,00,00,00,70,19,0e,\
+      00,00,00,00,00,30,0f,41,03,80,22,0e,00,bc,ef,04,12,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,00,00,00,64,00,69,00,72,\
+      00,65,00,63,00,74,00,00,00,00,00,a8,58,01,00,5a,17,05,12,5a,17,05,12,05,00,\
+      00,00,90,d3,43,00,4f,00,4d,00,31,00,3a,00,00,00,00,00,89,01,00,00,5c,2f,08,\
+      00,5a,17,05,12,64,ee,04,12,00,00,00,00,fc,7d,f7,03,64,af,40,03,00,00,00,00,\
+      18,a0,40,03,00,00,00,00,80,22,0e,00,00,00,00,00,00,00,00,00,00,00,00,00,28,\
+      f4,04,12,00,00,00,00,1c,f0,04,12,fb,de,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,8c,22,0e,00,01,00,00,00,0e,36,e2,c3,00,ef,04,12,f8,ee,04,12,14,e8,f7,\
+      03,20,b0,f8,03,34,29,08,00,89,01,00,00,00,00,00,00,5a,17,05,12,00,00,00,00,\
+      00,00,00,00,ac,04,02,00,bc,ef,04,12,00,00,00,00,00,00,00,00,00,00,00,12,5a,\
+      17,05,12,00,00,00,00,0e,36,e2,c3,00,00,00,00,34,29,08,00,00,00,00,00,30,61,\
+      01,7c,01,00,00,00,01,00,00,00,05,00,00,00,00,00,00,00,89,01,00,00,30,61,01,\
+      7c,00,00,00,00,30,4b,01,7c,00,00,00,00,5a,17,05,12,00,00,00,00,30,4b,01,7c,\
+      01,00,00,00,ba,9c,bd,a3,20,00,00,00,00,00,00,00,2c,5a,02,00,00,00,00,00,00,\
+      00,00,00,6c,59,01,00,78,a8,02,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,80,22,0e,00,bc,14,40,03,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,00,00,00,00,00,00,00,89,01,00,00,30,61,01,7c,00,00,00,00,\
+      00,00,00,00,00,00,00,00,e4,58,01,00,05,00,00,00,80,c3,01,00,00,00,00,00,00,\
+      00,00,00,bc,14,40,03,20,9e,0e,0a,f0,ff,ff,ff,70,8b,0f,00,5a,17,05,12,81,00,\
+      00,00,80,4e,0f,0a,f0,ef,04,12,b4,b3,07,00,30,61,01,7c,89,01,00,00,00,00,00,\
+      00,5a,17,05,12,80,4e,0f,0a,0d,00,00,00,81,00,00,00,5a,17,05,12,5a,17,05,12,\
+      50,60,01,7c,54,c1,07,00,d2,01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,ab,\
+      00,00,00,4f,01,00,00,00,00,00,00,52,01,00,00,d2,01,00,00,00,00,00,00,00,00,\
+      00,00,00,00,00,00,ab,00,00,00,4f,01,00,00,00,00,00,00,00,00,00,00,ab,00,00,\
+      00,74,00,00,00,ba,9c,bd,a3,0d,00,00,00,5a,17,05,12,14,e8,f7,03,60,a0,f8,03,\
+      4f,01,00,00,0d,00,00,00,20,ff,01,00,b4,f0,04,12,b8,f0,04,12,0d,00,00,00,70,\
+      c0,07,00,0d,00,00,00,00,00,00,00,5a,17,05,12,00,00,00,00,00,00,00,00,ac,04,\
+      02,00,b8,f0,04,12,b0,f0,04,12,91,00,00,00,00,00,00,00,5a,17,05,12,00,00,00,\
+      00,0e,36,e2,c3,00,00,00,00,70,c0,07,00,00,00,00,00,50,60,01,7c,5a,17,05,12,\
+      4f,01,00,00,05,00,00,00,52,01,00,00,0d,00,00,00,50,60,01,7c,81,00,00,00,30,\
+      4b,01,7c,00,00,00,00,90,1d,05,00,00,00,00,12,00,94,f6,83,0f,00,00,00,00,00,\
+      00,00,0c,ce,cb,83,90,c5,ca,80,54,9a,bd,83,00,94,f6,83,0f,00,00,00,38,fe,00,\
+      f0,5c,f1,04,12,3c,b7,10,80,0f,00,00,00,90,1d,05,00,c4,b3,00,f0,38,f4,04,12,\
+      4e,00,00,00,00,00,00,00,00,00,00,00,80,54,01,7c,28,f3,04,12,80,8b,10,80,f1,\
+      ec,ff,ff,00,00,00,00,00,00,00,00
+
+ENDIF ; BSP_NOUSB !
+; @CESYSGEN ENDIF CE_MODULES_USBFN
+------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; @CESYSGEN IF WCESHELLFE_MODULES_CTLPNL
+; This registry setting controls the checkboxes displayed in the Sounds CPL
+; under "enable clicks & taps". Set bit0 if you have a keyboard, set bit1 if
+; you have a touch screen. Set bit2 if you have HW buttons (NOTE: for now
+; HW buttons are mutually exclusive with the keyboard)
+[HKEY_LOCAL_MACHINE\ControlPanel]
+    "InputConfig"=dword:3   ; 3 => keyboard and touch screen
+; @CESYSGEN ENDIF WCESHELLFE_MODULES_CTLPNL
+;------------------------------------------------------------------------------
+
+; @CESYSGEN IF CE_MODULES_DISPLAY
+IF BSP_NODISPLAY !
+	;#include "$(_TARGETPLATROOT)\SRC\DRIVERS\DISPLAY\ddraw_mx28.reg"
+	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\DOT_LCD\DOT_LCD.reg"
+ENDIF BSP_NODISPLAY !
+
+[HKEY_LOCAL_MACHINE\System\GDI\Rotation]
+    "Angle"=dword:0      ;; no rotation
+;   "Angle"=dword:5A     ;; 90 degrees rotated clockwise
+;   "Angle"=dword:B4     ;; 180 degrees rotated clockwise
+;   "Angle"=dword:10E    ;; 270 degrees rotated clockwise
+
+;
+; Let GWES save/restore video memory during suspend/resume
+;
+   
+;IF BSP_PXP
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PXP]
+   "Prefix"="PXP"
+   "Dll"="pxp.dll"
+   "Order"=dword:20
+   "Index"=dword:1
+;ENDIF ; BSP_PXP
+; @CESYSGEN ENDIF CE_MODULES_DISPLAY
+;;------------------------------------------------------------------------------
+;
+;;------------------------------------------------------------------------------
+;; @CESYSGEN IF WCESHELLFE_MODULES_CTLPNL
+;; @CESYSGEN ENDIF WCESHELLFE_MODULES_CTLPNL
+;;------------------------------------------------------------------------------
+;; GWES Display Driver (with Optional TVOut Support)
+;;
+;; @CESYSGEN IF CE_MODULES_DISPLAY
+;; @CESYSGEN IF DIRECTX_MODULES_DIRECTDRAW
+;; @CESYSGEN ENDIF DIRECTX_MODULES_DIRECTDRAW
+;; @CESYSGEN ENDIF CE_MODULES_DISPLAY
+;; -----------------------------------------------------------------------------
+;
+;------------------------------------------------------------------------------
+; Backlight Driver
+;
+; @CESYSGEN IF CE_MODULES_BATTDRVR
+IF BSP_BACKLIGHT
+; @CESYSGEN IF CE_MODULES_COMMCTRL
+[HKEY_CURRENT_USER\ControlPanel\Backlight]
+    "BattBacklightLevel"=dword:7F  ; Backlight level settings. 0x1E = Full On
+    "ACBacklightLevel"=dword:7F    ; Backlight level settings. 0x1E = Full On
+;;
+;;; Backlight control default settings for WinCE.
+    "UseExt"=dword:0             ; Disable timeout when on external power
+    "UseBattery"=dword:0         ; Disable timeout when on battery
+    "AdvancedCPL"="AdvBacklight" ; Enable Advanced Backlight control panel dialog
+    "BatteryTimeout"=dword:1E    ; 30 Seconds
+    "ACTimeout"=dword:3C         ; 1 Minutes
+;;
+; @CESYSGEN ENDIF CE_MODULES_COMMCTRL
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Backlight]
+    "Dll" = "backLight.Dll"
+    "Prefix" = "BKL"
+    "Index" = dword:1
+    "Order" = dword:6
+    "IClass" = "{A32942B7-920C-486b-B0E6-92A702A99B35}" ; GUID for generic power-managed devices.
+
+; Force backlight into D4 with SystemIdle state
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\State\SystemIdle]
+    "bkl1:"=dword:4           ; D4
+ENDIF ; BSP_BACKLIGHT
+; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
+;;------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+; Audio Driver
+;
+; @CESYSGEN IF CE_MODULES_WAVEAPI
+IF BSP_NOAUDIO !
+; Wavedev Audio Driver
+;
+IF BSP_AUDIO_SGTL5000
+IF BSP_I2CBUS1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Audio]
+    "Prefix"="WAV"
+    "Dll"="wavedev2_sgtl5000.dll"
+    "Index"=dword:1
+; NOTE:  Load order must direct the WAVEDEV to load
+;        before other peripherals using SDMA.  Doing
+;        so allows the WAVEDEV DMA data structures
+;        to be allocated in IRAM and supports audio
+;        SDMA-to-SSI transfers without EMI accesses
+    "Order"=dword:4
+    "Priority256"=dword:95
+    "IClass"=multi_sz:"{A32942B7-920C-486b-B0E6-92A702A99B35}",
+                      "{37168569-61C4-45fd-BD54-9442C7DBA46F}"
+; Flags==2 is DEVFLAGS_LOADLIBRARY
+; Uncomment this line to make the driver pageable
+;   "Flags"=dword:2
+
+
+; Override wave API load order to follow audio driver
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WAPIMAN]
+   "Order"=dword:5
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WAPIMAN_ACM]
+   "Order"=dword:5
+ENDIF ; BSP_I2CBUS1
+ENDIF ; BSP_AUDIO_SGTL5000
+
+; SPDIF Driver
+;
+IF BSP_SPDIF
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SPDIF]
+   "Prefix"="WAV"
+   "Dll"="spdifdev.dll"
+   "Index"=dword:2
+   "Order"=dword:3
+   ;"Priority256"=dword:99
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"   ; PMCLASS_GENERIC_DEVICE
+ENDIF ; BSP_SPDIF
+ENDIF ; BSP_NOAUDIO !
+; @CESYSGEN ENDIF CE_MODULES_WAVEAPI
+;;------------------------------------------------------------------------------
+
+
+;;------------------------------------------------------------------------------
+;; SSP SD Driver
+;;
+; @CESYSGEN IF CE_MODULES_SDBUS
+#include "$(_TARGETPLATROOT)\SRC\Drivers\SDHC\sdhc.reg"
+IF BSP_AR6102_SDIO
+#include "$(_FLATRELEASEDIR)\AR6102.reg"
+ENDIF BSP_AR6102_SDIO
+; @CESYSGEN ENDIF CE_MODULES_SDBUS
+
+IF BSP_SDBUS_FSL
+
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Class\MMC_Class]
+   "Dll"="SDMemory_fsl.dll"
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Class\SDMemory_Class\High_Capacity]
+   "Dll"="SDMemory_fsl.dll"
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Class\SDMemory_Class]
+   "Dll"="SDMemory_fsl.dll"         
+
+ENDIF BSP_SDBUS_FSL
+;;------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+; ENET  Ethernet Controller
+;
+; @CESYSGEN IF CE_MODULES_NDIS
+#if (defined BSP_ENET1 || defined BSP_ENET2)
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\ENET\mx28_enet.reg"
+ENDIF ;
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+;-------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------
+; ENET Switch Controller
+;
+; @CESYSGEN IF CE_MODULES_NDIS
+#if (! defined BSP_ENET1 && ! defined BSP_ENET2)
+IF BSP_ENETSWI
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\SWITCH\mx28_enetswi.reg"
+ENDIF BSP_ENETSWI
+#endif
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+;-------------------------------------------------------------------------------
+
+;;------------------------------------------------------------------------------
+;; SPI Bus Driver
+;;
+IF BSP_SSP2_SPI
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SPI2]
+   "Prefix"="SPI"
+   "Dll"="spi.dll"
+   "Index"=dword:2
+ENDIF ;BSP_SSP2_SPI
+;;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; CAN Bus Driver
+;
+IF BSP_CANBUS1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CAN1]
+   "Prefix"="CAN"
+   "Dll"="can.dll"
+   "Index"=dword:1
+   "Order"=dword:9
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}" 
+ENDIF ; BSP_CANBUS1
+
+IF BSP_CANBUS2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CAN2]
+   "Prefix"="CAN"
+   "Dll"="can.dll"
+   "Index"=dword:2
+   "Order"=dword:9
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}" 
+ENDIF ; BSP_CANBUS2
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Touchpanel Driver
+;
+; @CESYSGEN IF CE_MODULES_POINTER
+IF BSP_NOTOUCH !
+IF BSP_LRADC
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\TOUCH\mx28_touch.reg"
+ENDIF ; BSP_LRADC
+ENDIF ; BSP_NOTOUCH !
+; @CESYSGEN ENDIF CE_MODULES_POINTER
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Decrease the CPU loading of explorer.exe
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main]
+    "AnimationTicks"=dword:1F4 ; 500 msec
+;------------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------------
+; DVFC Driver
+;
+IF BSP_DVFC
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\DVFC]
+   "Prefix" = "DVF"
+   "Index" = dword:1
+   "Dll"="dvfc.dll"
+   "Order"=dword:4
+   "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"    ; PMCLASS_GENERIC_DEVICE
+ENDIF ;BSP_DVFC
+;------------------------------------------------------------------------------
+
+; @CESYSGEN ENDIF CE_MODULES_DEVICE
+;******************************************************************************
+; Device Manager End
+;******************************************************************************
+
+;
+; Default Activity Timers
+;
+
+;
+; These registry values set up activity timers inside the Power Manager.
+; GWES and/or other system components need to reset them periodically
+; to keep the associated inactivity event from being set.
+;
+; OEMs can define other timers instead of or in addition to the ones in this
+; file.  Generally this will be done in conjunction with modifications to
+; the Power Manager platform sources.
+;
+; Defining timers causes the PM to create a set of named events for resetting
+; the timer and for obtaining its activity status.  See the PM documentation
+; for more information.
+;
+; To remove these timer definitions from the configuration for a platform,
+; include the line:
+;   [-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\ActivityTimers]
+; in the device's platform.reg file.  Uncomment the line in the
+; platform.reg file.
+;
+;
+; HIVE BOOT SECTION
+[-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\ActivityTimers\UserActivity]
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\ActivityTimers\UserActivity]
+    "Timeout"=dword:3                        ; in  seconds
+
+; @CESYSGEN IF PM_PM_DEFAULT_PDD
+[-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\ActivityTimers\SystemActivity]
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\ActivityTimers\SystemActivity]
+    "Timeout"=dword:1                        ; in  seconds
+; @CESYSGEN ENDIF ; PM_PM_DEFAULT_PDD
+
+;
+; Default System Power State Transition Timeouts
+;
+
+; These registry values configure the interval of time the Power Manager allows
+; to pass during periods of inactivity before updating the system power state.
+; The sample implementation of the power manager uses them as follows:
+;   On AC power, the system will be in the "On" system power state as ;
+;       long as the UserActivity activity timer has not expired.
+;   Once the UserActivity timer expires, the PM will transition to the
+;       "UserIdle" system power state after ACUserIdle seconds of user
+;       inactivity.
+;   After ACSystemIdle seconds of continued user inactivity, the PM will
+;       transition to the "SystemIdle" system power state.
+;   The PM will keep the system in the SystemIdle power state for as long
+;       as the SystemActivity activity timer has not expired.  Once it expires,
+;       the PM will wait ACSuspend seconds before transitioning to the "Suspend"
+;       system power state.
+; Resetting the UserActivity activity timer at any time prior to entering
+; the Suspend system power state will cause the system to go back to the "On"
+; system power state.  The PM implements a similar algorithm on battery power
+; using the BattUserIdle, BattSystemIdle, and BattSuspend timeouts.
+;
+; OEMs can change this state machine by customizing the PM for their platform.
+;
+; To remove these timeout definitions from the configuration for a platform,
+; include the line:
+;   [-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\Timeouts]
+; in the device's platform.reg file.  Uncomment the line in the
+; platform.reg file.
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\Timeouts]
+; @CESYSGEN IF PM_PM_DEFAULT_PDD
+    "ACUserIdle"=dword:0        ; in seconds
+    "ACSystemIdle"=dword:0      ; in seconds
+    "ACSuspend"=dword:0     ; in seconds
+    "BattUserIdle"=dword:0     ; in seconds
+    "BattSystemIdle"=dword:0    ; in seconds
+    "BattSuspend"=dword:0       ; in seconds
+; @CESYSGEN ENDIF PM_PM_DEFAULT_PDD
+;;;     "BatteryPoll"=dword:1f4         ; battery polling interval, in milliseonds
+; END HIVE BOOT SECTION
+----------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Hive Registry Configuration
+;
+; @CESYSGEN IF FILESYS_FSREGHIVE
+; HIVE BOOT SECTION
+
+; BootVars Flags:
+; 1 = Start Storage Manager in boot phase 1 for hive-based registry.
+; 2 = Start Device Manager in boot phase 1 for hive-based registry.
+; 4 = Start Storage Manager in boot phase 1 for registry in external
+;     ROM (e.g., BINFS).
+; 8 = Start Device Manager in boot phase 1 for registry in external
+;     ROM (e.g., BINFS).
+;
+; We use 1 so that we launch only the Storage Manager in boot phase 1 using
+; the hive-based registry. This avoids any potential startup conflicts with
+; having both the Storage Manager and Device Manager running during boot
+; phase one.
+;
+[HKEY_LOCAL_MACHINE\init\BootVars]
+    "Flags"=dword:3
+    "NoDefaultUser"=dword:0
+    "RegistryFlags"=dword:1
+
+IF BSP_UUT !    
+IF PRJ_ENABLE_FSREGHIVE !
+#error PRJ_ENABLE_FSREGHIVE is not defined to 1 in HIVE based environment.  Set PRJ_ENABLE_FSREGHIVE=1 to your configuration
+ENDIF
+ENDIF
+
+; END HIVE BOOT SECTION
+; @CESYSGEN ENDIF FILESYS_FSREGHIVE
+
+;
+; CS&ZHL DEC-9-2011: EM9280 specified settings
+;
+IF BSP_EM9280
+[HKEY_LOCAL_MACHINE\Time Zones]
+	"Default"="China Standard Time"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\USBHDProfile]
+    "Name"="USB Hard Disk Drive"
+    "Folder"="USBDisk"
+
+[HKEY_LOCAL_MACHINE\COMM\TELNETD]
+	"IsEnabled"=dword:1
+	"UseAuthentication"=dword:0
+
+[HKEY_LOCAL_MACHINE\COMM\FTPD]
+	"IsEnabled"=dword:1
+	"AllowAnonymous"=dword:1
+	"AllowAnonymousUpload"=dword:1
+	"UseAuthentication"=dword:0
+	"DefaultDir"="\\"
+
+[HKEY_LOCAL_MACHINE\COMM\HTTPD\VROOTS\/]
+	@="\\Windows\\www\\wwwpub\\MySite"				
+	"a"=dword:0
+
+[HKEY_LOCAL_MACHINE\COMM\HTTPD\VROOTS\/USB]
+	@="\\USBDisk\\www\\"				
+	"a"=dword:0
+
+[HKEY_LOCAL_MACHINE\COMM\HTTPD\VROOTS\/Nand]
+	@="\\NandFlash\\www\\"				
+	"a"=dword:0
+
+;
+; CS&ZHL JUN-16-2009: add system search
+;
+[HKEY_LOCAL_MACHINE\Loader]
+    "SystemPath"=multi_sz:"\\NandFlash\\"
+
+;
+;CS&ZHL APR-30-2011: for sntp client
+;
+[HKEY_LOCAL_MACHINE\Services\Timesvc]
+	"AutoUpdate"=dword:0
+	"ClientOnly"=dword:1
+	"AutoDST"=dword:0					; auto Daylight Saving Time
+	"Trustlocalclock"=dword:0			; must be = 0
+	"Refresh"=dword:48190800			; 2 weeks
+	"RecoveryRefresh"=dword:1B7740		; 30 minutes
+	"Threshold"=dword:5265C00			; 1 day
+	"Server"="pool.ntp.org"
+
+ENDIF	;BSP_EM9280
+
+;;------------------------------------------------------------------------------
+
+
+;; @XIPREGION ENDIF PLATFORM_REGISTRY_DEFAULT
+;
+

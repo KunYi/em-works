@@ -1,0 +1,39 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+!endif
+
+!IF ("$(BSP_SERIAL_UART2)" == "" && "$(BSP_SERIAL_UART5)" == "")
+SKIPBUILD=1
+!ENDIF 
+
+TARGETNAME=csp_serial
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllEntryCRTStartup 
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib             
+    
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\serialapp_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\com_mdd2_$(_COMMONSOCDIR).lib
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\serialapp_$(_COMMONSOCDIR).def
+
+
+INCLUDES=\
+    ..\..\inc; \
+    $(INCLUDES)
+
+SOURCES=\
+    bspserial.c 
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    csp_serial.reg \
+

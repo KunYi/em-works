@@ -1,0 +1,46 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF ("$(BSP_NONANDFMD)" == "1") || ("$(BSP_NAND_PDD)" == "1")
+SKIPBUILD=1
+!ENDIF   
+
+TARGETNAME=flashpdd_nand
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DEFFILE=$(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\NAND\FMDWRAPPERPDD\flashpdd.def
+
+TARGETLIBS=\
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS = \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\fmdhooklib.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\hal_nand_$(_SOCDIR).lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\nandfmd_lib.lib   \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fmdwrapperpdd_$(_COMMONSOCDIR).lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\NandBootBurner.lib \
+
+SOURCES=nfc_sys.cpp\
+    
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\INC; \
+    $(INCLUDES)  
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    flashpdd_nand.reg \
+

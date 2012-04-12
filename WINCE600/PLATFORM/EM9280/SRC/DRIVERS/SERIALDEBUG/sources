@@ -1,0 +1,35 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+!endif
+
+!IF ("$(BSP_SERIAL_DUART1)" == "")
+SKIPBUILD=1
+!ENDIF 
+
+TARGETNAME=debug_serial
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllEntryCRTStartup 
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib             
+    
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\dserial_$(_COMMONSOCDIR).lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\com_mdd2.lib
+
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\dserial_$(_COMMONSOCDIR).def
+
+
+INCLUDES=\
+    ..\..\inc; \
+    $(INCLUDES)
+
+SOURCES=\
+    bspdserial.c 
