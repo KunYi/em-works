@@ -1,0 +1,3 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000025:ERRORE] D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\BOOT\FMD\NAND\.\nandboot.c(722) : error C2065: 'dwMBRStartSector' : undeclared identifier
+BUILD: [01:0000000026:ERRORE] D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\BOOT\FMD\NAND\.\nandboot.c(1388) : error C2146: syntax error : missing ';' before identifier 'KITLOutputDebugString'

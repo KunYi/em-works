@@ -1,0 +1,32 @@
+!if 0
+Copyright (C) 2010, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+!IF "$(BSP_SDBUS_FSL)" == ""
+SKIPBUILD=1
+!ENDIF
+
+DEFFILE=SDMemory.def
+
+TARGETNAME=SDMemory_fsl
+TARGETTYPE=DYNLINK
+
+SOURCES = SDMemMain.cpp   \
+          SDMemDiskIO.cpp \
+    	  SDMemCardIO.cpp \
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+              
+SOURCELIBS= \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdcardlib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdhclib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdbus.lib \
+              
+# DO NOT REMOVE --- END EXTERNALLY DEVELOPED SOURCE CODE ID --- DO NOT REMOVE
+

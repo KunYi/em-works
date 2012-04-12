@@ -1,0 +1,28 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=ddk_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+
+DEFFILE=ddk.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+SOURCELIBS=\
+    $(TARGETPATH)\ddk_apbhdma_$(_SOCDIR).lib \
+    $(TARGETPATH)\ddk_apbxdma_$(_SOCDIR).lib \
+    $(TARGETPATH)\ddk_clk_$(_SOCDIR).lib \
+    $(TARGETPATH)\ddk_iomux_$(_SOCDIR).lib 
+
+SOURCES=\
+    cspddk.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ddk.def \
+

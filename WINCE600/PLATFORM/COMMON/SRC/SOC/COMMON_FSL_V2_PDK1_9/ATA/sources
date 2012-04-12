@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2006-2008 Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=ata_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+WARNISERROR = 0
+
+SYNCHRONIZE_DRAIN=1
+PREPROCESSDEFFILE=1
+
+DEFFILE=ata.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+INCLUDES=\
+    ..\INC; \
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+SOURCES=\
+    csgreq.cpp   \
+    atamain.cpp  \
+    atapipm.cpp  \
+    diskmain.cpp \
+    atapiio.cpp  \
+    generic.cpp  \
+    helper.cpp   \
+    debug.cpp    \
+    zones.cpp    \
+    ata.cpp      \
+    cdio.cpp     \
+    cdaudio.cpp  \
+    dvdioctl.cpp \

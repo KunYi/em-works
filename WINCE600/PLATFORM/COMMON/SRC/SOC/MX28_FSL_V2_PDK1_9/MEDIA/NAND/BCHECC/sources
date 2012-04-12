@@ -1,0 +1,21 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=nand_ecc_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\INC; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+    $(INCLUDES) 
+
+
+SOURCES= \
+    ecc.c
+

@@ -1,0 +1,21 @@
+;------------------------------------------------------------------------------
+;
+;   Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;   THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;   AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+LIBRARY ADC_Driver
+
+EXPORTS
+    ADC_Init
+    ADC_Deinit
+    ADC_Open
+    ADC_Close
+    ADC_Read
+    ADC_Write
+    ADC_Seek
+    ADC_IOControl
+    ADC_PowerDown
+    ADC_PowerUp

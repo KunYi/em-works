@@ -1,0 +1,25 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=oal_timer_vartick_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+NOMIPS16CODE=1
+
+!IF "$(ENABLE_OAL_ILTIMING)" == "1"
+CDEFINES="$(CDEFINES) -DOAL_ILTIMING
+!ENDIF
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\inc;\
+    $(INCLUDES)
+    
+SOURCES= \
+    soc_timer.c \
+

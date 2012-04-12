@@ -1,0 +1,23 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=oal_ioctl_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+
+SOURCELIBS=\
+    $(TARGETPATH)\oal_ioctl.lib
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\inc;\
+    $(INCLUDES)
+
+SOURCES= \
+    hwentropy.c \
+

@@ -1,0 +1,32 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=pmicSdk_mc13783_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+DEFFILE=pmicSdk_mc13783.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETDEFNAME).def
+
+INCLUDES=\
+    ..\..\inc; \
+    ..\inc; \
+    $(_PLATFORMROOT)\common\src\inc;\
+    $(INCLUDES)
+
+SOURCES=\
+    pmic.cpp              \
+    pmic_adc.cpp          \
+    pmic_audio.cpp        \
+    pmic_battery.cpp      \
+    pmic_bklight.cpp      \
+    pmic_lla.cpp          \
+    pmic_pwrctrl.cpp      \
+    pmic_regulator.cpp    \
+    pmic_tcled.cpp        \
+    pmic_connectivity.cpp

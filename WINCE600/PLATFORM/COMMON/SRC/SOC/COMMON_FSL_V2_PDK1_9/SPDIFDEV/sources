@@ -1,0 +1,28 @@
+!if 0
+Copyright (C) 2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=spdif_common_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETDEFNAME=spdif_$(_COMMONSOCDIR)
+
+INCLUDES=\
+    $(INCLUDES)\
+    ..\inc; 
+
+SOURCES= \
+    devctxt.cpp \
+    hwctxt.cpp \
+    input.cpp \
+    txhwctxt.cpp \
+    rxhwctxt.cpp \
+    output.cpp \
+    strmctxt.cpp \
+    wavemain.cpp \
+    mixerdrv.cpp 
+    

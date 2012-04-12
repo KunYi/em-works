@@ -1,0 +1,42 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=c2d_ddraw_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+
+INCLUDES=\
+    ..\..\INC; \
+    $(INCLUDES)
+
+CDEFINES=$(CDEFINES) -DDDI -DUSE_C2D_ROUTINES
+
+!IF "$(DO_DISPPERF)"=="1"
+CDEFINES=$(CDEFINES) -DDO_DISPPERF
+!ENDIF
+
+SOURCES= \
+    ..\ddipu.cpp \
+    ..\ddipu_blt.cpp \
+    ..\ddipu_cursor.cpp \
+    ..\ddipu_line.cpp \
+    ..\ddipu_misc.cpp \
+    ..\ddipu_overlay.cpp \
+    ..\ddipu_power.cpp \
+    ..\ddipu_rotate.cpp \
+    ..\ddipu_surf.cpp \
+    ..\halcaps.cpp \
+    ..\haldd.cpp \
+    ..\halsurf.cpp \
+    ..\attribute.cpp \
+    ..\c2d_mutex.cpp \
+    

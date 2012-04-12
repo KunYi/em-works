@@ -1,0 +1,31 @@
+!if 0
+Copyright (C) 2006-2010 Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=fec_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+PREPROCESSDEFFILE=1
+
+DLLENTRY=DllEntry
+
+DEFFILE=common_fec.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+
+CDEFINES=$(CDEFINES) -DNDIS_MINIPORT_DRIVER
+INCLUDES=\
+      $(_PLATFORMROOT)\common\src\inc;\
+      $(INCLUDES)               ;\
+      $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\INC ;\
+         
+SOURCES= \
+    fec.c \
+    chip.c  \
+    interrupt.c
+
