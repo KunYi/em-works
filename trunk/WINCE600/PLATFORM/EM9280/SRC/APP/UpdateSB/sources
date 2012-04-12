@@ -1,0 +1,21 @@
+!if 0
+Copyright (C) 2009-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "$(_TARGETPLATROOT)\sources.cmn"
+
+TARGETNAME=UpdateSBTool
+TARGETTYPE=PROGRAM
+RELEASETYPE=PLATFORM
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_TARGETPLATROOT)\src\bootloader\common; \
+      
+SOURCES= \
+    UpdateSB.cpp

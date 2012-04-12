@@ -1,0 +1,30 @@
+;
+; The registry for GPIO_SPI based three HT45B0F uart chips
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM4]
+   "DeviceArrayIndex"=dword:4					; for MMD2, CE6.0 -> "COM4:"
+   "Prefix"="COM"
+   "Dll"="spi_serial.dll"
+   "LocalIndex"=dword:0							; local index -> SPI_CS0N
+   "IrqNum"=dword:c8							; 0xc8 => 200 = 128 + 32*2 + 8 (GPIO2_8)
+   "IrqGpioPin"=dword:48						; 0x48 => DDK_IOMUX_GPIO2_8 (enum value)
+   "Order"=dword:4
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM8]
+   "DeviceArrayIndex"=dword:8					; for MMD2, CE6.0 -> "COM8:"
+   "Prefix"="COM"
+   "Dll"="spi_serial.dll"
+   "LocalIndex"=dword:1							; local index -> SPI_CS1N
+   "IrqNum"=dword:c9							; 0xc9 => 201 = 128 + 32*2 + 9 (GPIO2_9)
+   "IrqGpioPin"=dword:49						; 0x49 => DDK_IOMUX_GPIO2_9 (enum value)
+   "Order"=dword:6
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM9]
+   "DeviceArrayIndex"=dword:9					; for MMD2, CE6.0 -> "COM9:"
+   "Prefix"="COM"
+   "Dll"="spi_serial.dll"
+   "LocalIndex"=dword:2							; local index -> SPI_CS2N
+   "IrqNum"=dword:ca							; 0xca => 202 = 128 + 32*2 + 10 (GPIO2_10)
+   "IrqGpioPin"=dword:4a						; 0x4a => DDK_IOMUX_GPIO2_10 (enum value)
+   "Order"=dword:6
+

@@ -1,0 +1,91 @@
+ pmusdk
+
+ Timestamp is 4f86751b (Thu Apr 12 14:24:27 2012)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000004H .CRT$XCA                CODE
+ 0001:00000004 00000004H .CRT$XCZ                CODE
+ 0001:00000008 00000004H .CRT$XIA                CODE
+ 0001:0000000c 00000004H .CRT$XIZ                CODE
+ 0001:00000010 00000004H .CRT$XPA                CODE
+ 0001:00000014 00000004H .CRT$XPZ                CODE
+ 0001:00000018 00000004H .CRT$XTA                CODE
+ 0001:0000001c 00000004H .CRT$XTZ                CODE
+ 0001:00000020 00000134H .rdata                  CODE
+ 0001:00000154 00000023H .rdata$debug            CODE
+ 0001:00000178 000006b8H .text                   CODE
+ 0001:00000830 00000014H .idata$2                CODE
+ 0001:00000844 00000014H .idata$3                CODE
+ 0001:00000858 00000024H .idata$4                CODE
+ 0001:0000087c 0000000cH .idata$6                CODE
+ 0001:00000890 00000145H .edata                  CODE
+ 0002:00000000 00000024H .idata$5                DATA
+ 0002:00000024 00000008H .data                   DATA
+ 0002:0000002c 00000010H .bss                    DATA
+ 0003:00000000 00000088H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       ___safe_se_handler_count   00000000     <absolute>
+ 0000:00000000       ___safe_se_handler_table   00000000     <absolute>
+ 0001:00000000       __xc_a                     10001000     corelib0:crt0init.obj
+ 0001:00000004       __xc_z                     10001004     corelib0:crt0init.obj
+ 0001:00000008       __xi_a                     10001008     corelib0:crt0init.obj
+ 0001:0000000c       __xi_z                     1000100c     corelib0:crt0init.obj
+ 0001:00000010       __xp_a                     10001010     corelib0:crt0init.obj
+ 0001:00000014       __xp_z                     10001014     corelib0:crt0init.obj
+ 0001:00000018       __xt_a                     10001018     corelib0:crt0init.obj
+ 0001:0000001c       __xt_z                     1000101c     corelib0:crt0init.obj
+ 0001:00000040       ??_C@_1JI@JJAPBCBJ@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 10001040     pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000000d8       ??_C@_1CI@OHCJFJPM@?$AAE?$AAR?$AAR?$AAO?$AAR?$AA?3?$AA?5?$AA?$CF?$AAs?$AA?5?$AAl?$AAi?$AAn?$AAe?$AA?5?$AA?$CF?$AAd?$AA?3?$AA?5?$AA?$AA@ 100010d8     pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000100       ??_C@_1EG@PFILEGOB@?$AAF?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAi?$AAn?$AA?5?$AAc?$AAr?$AAe?$AAa?$AAt?$AAe?$AAF?$AAi?$AAl?$AAe?$AA?$CI?$AA?$CJ?$AA?5?$AAf?$AAo?$AAr?$AA?5?$AAP?$AAM?$AAI?$AA1?$AA?3@ 10001100     pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000148       ??_C@_1M@LFHHPKIH@?$AAP?$AAM?$AAI?$AA1?$AA?3?$AA?$AA@ 10001148     pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000178       PmuInitBatteryMonitor      10001178 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000001c8       PmuGetBatteryVoltage       100011c8 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000224       PmuSetCharger              10001224 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000280       PmuStopCharger             10001280 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000002d4       PmuGetBatteryChargingStatus 100012d4 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000330       PmuSetVddd                 10001330 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000394       PmuGetVddd                 10001394 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000003f0       PmuGetVdddBrownont         100013f0 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:0000044c       PmuSetFets                 1000144c f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000004a8       PmuPowerGetSupplyMode      100014a8 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:00000504       DllEntry                   10001504 f   pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0001:000005c0       DeviceIoControl            100015c0 f   coredll:COREDLL.dll
+ 0001:000005d0       CloseHandle                100015d0 f   coredll:COREDLL.dll
+ 0001:000005e0       NKDbgPrintfW               100015e0 f   coredll:COREDLL.dll
+ 0001:000005f0       CreateFileW                100015f0 f   coredll:COREDLL.dll
+ 0001:00000600       DisableThreadLibraryCalls  10001600 f   coredll:COREDLL.dll
+ 0001:00000610       _DllEntryCRTStartup        10001610 f   corelib0:pegdentry.obj
+ 0001:00000720       _cexit                     10001720 f   corelib0:cexit.obj
+ 0001:0000073c       _initterm                  1000173c f   corelib0:crt0dat.obj
+ 0001:00000770       _cinit                     10001770 f   corelib0:crt0dat.obj
+ 0001:000007a4       __security_init_cookie     100017a4 f   corelib0:seccinit.obj
+ 0001:00000800       free                       10001800 f   corelib1:COREDLL.dll
+ 0001:00000810       __security_gen_cookie2     10001810 f   corelib1:COREDLL.dll
+ 0001:00000820       TerminateProcess           10001820 f   coredll:COREDLL.dll
+ 0001:00000830       __IMPORT_DESCRIPTOR_COREDLL 10001830     coredll:COREDLL.dll
+ 0001:00000844       __NULL_IMPORT_DESCRIPTOR   10001844     coredll:COREDLL.dll
+ 0002:00000000       __imp_DeviceIoControl      10002000     coredll:COREDLL.dll
+ 0002:00000004       __imp_CloseHandle          10002004     coredll:COREDLL.dll
+ 0002:00000008       __imp_NKDbgPrintfW         10002008     coredll:COREDLL.dll
+ 0002:0000000c       __imp_CreateFileW          1000200c     coredll:COREDLL.dll
+ 0002:00000010       __imp_DisableThreadLibraryCalls 10002010     coredll:COREDLL.dll
+ 0002:00000014       __imp_free                 10002014     corelib1:COREDLL.dll
+ 0002:00000018       __imp___security_gen_cookie2 10002018     corelib1:COREDLL.dll
+ 0002:0000001c       __imp_TerminateProcess     1000201c     coredll:COREDLL.dll
+ 0002:00000020       \177COREDLL_NULL_THUNK_DATA 10002020     coredll:COREDLL.dll
+ 0002:00000024       __security_cookie          10002024     corelib0:seccinit.obj
+ 0002:00000028       __security_cookie_complement 10002028     corelib0:seccinit.obj
+ 0002:0000002c       ?hPMI@@3PAXA               1000202c     pmusdk_mx28_fsl_v2_pdk1_9:pmusdk.obj
+ 0002:00000030       _exitflag                  10002030     corelib0:cexit.obj
+ 0002:00000034       __onexitend                10002034     <common>
+ 0002:00000038       __onexitbegin              10002038     <common>
+
+ entry point at        0001:00000610
+
+ Static symbols
+
+ 0001:00000658       doexit                     10001658 f   corelib0:cexit.obj

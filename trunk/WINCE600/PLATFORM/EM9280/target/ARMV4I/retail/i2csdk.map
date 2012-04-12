@@ -1,0 +1,88 @@
+ i2csdk
+
+ Timestamp is 4f86751c (Thu Apr 12 14:24:28 2012)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000004H .CRT$XCA                CODE
+ 0001:00000004 00000004H .CRT$XCZ                CODE
+ 0001:00000008 00000004H .CRT$XIA                CODE
+ 0001:0000000c 00000004H .CRT$XIZ                CODE
+ 0001:00000010 00000004H .CRT$XPA                CODE
+ 0001:00000014 00000004H .CRT$XPZ                CODE
+ 0001:00000018 00000004H .CRT$XTA                CODE
+ 0001:0000001c 00000004H .CRT$XTZ                CODE
+ 0001:00000020 0000001cH .rdata                  CODE
+ 0001:0000003c 00000023H .rdata$debug            CODE
+ 0001:00000060 00000678H .text                   CODE
+ 0001:000006d8 00000014H .idata$2                CODE
+ 0001:000006ec 00000014H .idata$3                CODE
+ 0001:00000700 00000020H .idata$4                CODE
+ 0001:00000720 0000000cH .idata$6                CODE
+ 0001:00000730 00000186H .edata                  CODE
+ 0002:00000000 00000020H .idata$5                DATA
+ 0002:00000020 00000008H .data                   DATA
+ 0002:00000028 0000000cH .bss                    DATA
+ 0003:00000000 000000a8H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       ___safe_se_handler_count   00000000     <absolute>
+ 0000:00000000       ___safe_se_handler_table   00000000     <absolute>
+ 0001:00000000       __xc_a                     10001000     corelib0:crt0init.obj
+ 0001:00000004       __xc_z                     10001004     corelib0:crt0init.obj
+ 0001:00000008       __xi_a                     10001008     corelib0:crt0init.obj
+ 0001:0000000c       __xi_z                     1000100c     corelib0:crt0init.obj
+ 0001:00000010       __xp_a                     10001010     corelib0:crt0init.obj
+ 0001:00000014       __xp_z                     10001014     corelib0:crt0init.obj
+ 0001:00000018       __xt_a                     10001018     corelib0:crt0init.obj
+ 0001:0000001c       __xt_z                     1000101c     corelib0:crt0init.obj
+ 0001:00000060       I2COpenHandle              10001060 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000000a4       I2CCloseHandle             100010a4 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000000d0       I2CSetSlaveMode            100010d0 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000118       I2CSetMasterMode           10001118 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000160       I2CIsMaster                10001160 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000001b0       I2CIsSlave                 100011b0 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000200       I2CGetClockRate            10001200 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000250       I2CSetClockRate            10001250 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000002a0       I2CSetSelfAddr             100012a0 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000002f0       I2CGetSelfAddr             100012f0 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000340       I2CTransfer                10001340 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000388       I2CReset                   10001388 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:000003d0       I2CEnableSlave             100013d0 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000418       I2CDisableSlave            10001418 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000460       DllEntry                   10001460 f   i2csdk_mx28_fsl_v2_pdk1_9:i2csdk.obj
+ 0001:00000478       CreateFileW                10001478 f   coredll:COREDLL.dll
+ 0001:00000488       CloseHandle                10001488 f   coredll:COREDLL.dll
+ 0001:00000498       DeviceIoControl            10001498 f   coredll:COREDLL.dll
+ 0001:000004a8       DisableThreadLibraryCalls  100014a8 f   coredll:COREDLL.dll
+ 0001:000004b8       _DllEntryCRTStartup        100014b8 f   corelib0:pegdentry.obj
+ 0001:000005c8       _cexit                     100015c8 f   corelib0:cexit.obj
+ 0001:000005e4       _initterm                  100015e4 f   corelib0:crt0dat.obj
+ 0001:00000618       _cinit                     10001618 f   corelib0:crt0dat.obj
+ 0001:0000064c       __security_init_cookie     1000164c f   corelib0:seccinit.obj
+ 0001:000006a8       free                       100016a8 f   corelib1:COREDLL.dll
+ 0001:000006b8       __security_gen_cookie2     100016b8 f   corelib1:COREDLL.dll
+ 0001:000006c8       TerminateProcess           100016c8 f   coredll:COREDLL.dll
+ 0001:000006d8       __IMPORT_DESCRIPTOR_COREDLL 100016d8     coredll:COREDLL.dll
+ 0001:000006ec       __NULL_IMPORT_DESCRIPTOR   100016ec     coredll:COREDLL.dll
+ 0002:00000000       __imp_CreateFileW          10002000     coredll:COREDLL.dll
+ 0002:00000004       __imp_CloseHandle          10002004     coredll:COREDLL.dll
+ 0002:00000008       __imp_DeviceIoControl      10002008     coredll:COREDLL.dll
+ 0002:0000000c       __imp_DisableThreadLibraryCalls 1000200c     coredll:COREDLL.dll
+ 0002:00000010       __imp_free                 10002010     corelib1:COREDLL.dll
+ 0002:00000014       __imp___security_gen_cookie2 10002014     corelib1:COREDLL.dll
+ 0002:00000018       __imp_TerminateProcess     10002018     coredll:COREDLL.dll
+ 0002:0000001c       \177COREDLL_NULL_THUNK_DATA 1000201c     coredll:COREDLL.dll
+ 0002:00000020       __security_cookie          10002020     corelib0:seccinit.obj
+ 0002:00000024       __security_cookie_complement 10002024     corelib0:seccinit.obj
+ 0002:00000028       _exitflag                  10002028     corelib0:cexit.obj
+ 0002:0000002c       __onexitend                1000202c     <common>
+ 0002:00000030       __onexitbegin              10002030     <common>
+
+ entry point at        0001:000004b8
+
+ Static symbols
+
+ 0001:00000500       doexit                     10001500 f   corelib0:cexit.obj

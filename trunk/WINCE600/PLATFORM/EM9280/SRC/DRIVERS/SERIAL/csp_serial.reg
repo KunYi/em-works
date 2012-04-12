@@ -1,0 +1,54 @@
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:80072000		; AUART4
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:2				; COM2
+   "Order"=dword:3
+   "useDMA"=dword:1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="COM2 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM3]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:8006A000		; AUART0
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:3				; COM3
+   "Order"=dword:3
+   "useDMA"=dword:1
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:8006C000		; AUART1
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:5				; COM5
+   "Order"=dword:5
+   "useDMA"=dword:1
+   
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM6]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:8006E000		; AUART2
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:6				; COM6
+   "Order"=dword:5
+   "useDMA"=dword:1
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM7]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:80070000		; AUART3
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:7				; COM7
+   "Order"=dword:5
+   "useDMA"=dword:1

@@ -1,0 +1,101 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000013:WARNS ] RNE_MDD is not a subdirectory of D:\WINCE600\PLATFORM\EM9280\SRC\COMMON\USBFN\.
+BUILD: [00:0000000053:WARNS ] Directory: D:\WINCE600\platform\EM9280\SRC\DRIVERS\MCU\MC9S08DZ60\INC\ does not exist.
+BUILD: [00:0000000055:WARNS ] Directory: D:\WINCE600\platform\EM9280\SRC\DRIVERS\MCU\MC9S08DZ60\INC\ does not exist.
+BUILD: [00:0000000060:WARNS ] Directory: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\inc\ does not exist.
+BUILD: [00:0000000069:WARNS ] Directory: D:\WINCE600\platform\common\src\SOC\mx28_fsl_v2_pdk1_9\media\include\ does not exist.
+BUILD: [00:0000000204:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPDIF\obj\ARMV4I\retail\hwctxt.obj does not exist (2).
+BUILD: [00:0000000218:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SERIALDEBUG\obj\ARMV4I\retail\bspdserial.obj does not exist (2).
+BUILD: [00:0000000233:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\sources(91) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000234:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\ROTARY\obj\ARMV4I\retail\bsprotary.obj does not exist (2).
+BUILD: [00:0000000248:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\wavedev2_sgtl5000.lib does not exist (2).
+BUILD: [00:0000000249:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000250:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\debug_serial.lib does not exist (2).
+BUILD: [00:0000000251:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000252:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDFMD\obj\ARMV4I\retail\nfc_sys.obj does not exist (2).
+BUILD: [00:0000000271:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\: Missing source file: D:\WINCE600\platform\common\lib\ARMV4I\retail\uut_common_fsl_v2_pdk1_9.lib.
+BUILD: [00:0000000272:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\obj\ARMV4I\retail\bspuut.obj does not exist (2).
+BUILD: [00:0000000273:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\obj\ARMV4I\retail\otp.obj does not exist (2).
+BUILD: [00:0000000301:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdcardlib.lib.
+BUILD: [00:0000000302:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SDHC\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\sdbus.lib.
+BUILD: [00:0000000370:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SWITCH\obj\ARMV4I\retail\bspenetswi.obj does not exist (2).
+BUILD: [00:0000000384:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\wavedev2_sgtl5000.lib does not exist (2).
+BUILD: [00:0000000385:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000386:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\debug_serial.lib does not exist (2).
+BUILD: [00:0000000387:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000388:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\flashpdd_nand.lib does not exist (2).
+BUILD: [00:0000000389:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000390:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\BATTDRVR.lib does not exist (2).
+BUILD: [00:0000000391:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\SDIO.lib does not exist (2).
+BUILD: [00:0000000392:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enet.lib does not exist (2).
+BUILD: [00:0000000393:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enetswi.lib does not exist (2).
+BUILD: [00:0000000394:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPI\PDK\obj\ARMV4I\retail\bspspi.obj does not exist (2).
+BUILD: [00:0000000420:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\voltctrl.obj does not exist (2).
+BUILD: [00:0000000421:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\dvfc.obj does not exist (2).
+BUILD: [00:0000000422:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DVFC\obj\ARMV4I\retail\irq.obj does not exist (2).
+BUILD: [00:0000000438:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\CANBUS\PDK\obj\ARMV4I\retail\bspcan.obj does not exist (2).
+BUILD: [00:0000000464:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPI_Serial\obj\ARMV4I\retail\ser_ht45b0f.obj does not exist (2).
+BUILD: [00:0000000465:WARNN ] File: D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\SPI_Serial\obj\ARMV4I\retail\spi_com.obj does not exist (2).
+BUILD: [00:0000000480:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\OAL\OALEXE\sources(63) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.
+BUILD: [00:0000000481:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\wavedev2_sgtl5000.lib does not exist (2).
+BUILD: [00:0000000482:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spdifdev.lib does not exist (2).
+BUILD: [00:0000000483:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\debug_serial.lib does not exist (2).
+BUILD: [00:0000000484:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\rotary.lib does not exist (2).
+BUILD: [00:0000000485:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\flashpdd_nand.lib does not exist (2).
+BUILD: [00:0000000486:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\uut.lib does not exist (2).
+BUILD: [00:0000000487:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\BATTDRVR.lib does not exist (2).
+BUILD: [00:0000000488:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\SDIO.lib does not exist (2).
+BUILD: [00:0000000489:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enet.lib does not exist (2).
+BUILD: [00:0000000490:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\enetswi.lib does not exist (2).
+BUILD: [00:0000000491:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spi.lib does not exist (2).
+BUILD: [00:0000000492:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spisdk.lib does not exist (2).
+BUILD: [00:0000000493:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\dvfc.lib does not exist (2).
+BUILD: [00:0000000494:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\can.lib does not exist (2).
+BUILD: [00:0000000495:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\cansdk.lib does not exist (2).
+BUILD: [00:0000000496:WARNN ] File: D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\spi_serial.lib does not exist (2).
+BUILD: [00:0000000552:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\gperotate.lib.
+BUILD: [01:0000000585:WARNN ] display_controller_factory.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\ddraw_mx28.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000586:WARNN ] lms430.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\ddraw_mx28.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000587:WARNN ] 43wvf1g.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\ddraw_mx28.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000588:WARNN ] bsplcdif.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\ddraw_mx28.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000589:WARNN ] ddgpe.lib(guid.obj) : warning LNK4099: PDB 'ddguid.pdb' was not found with 'D:\WINCE600\OSDesigns\EM9283_V1\EM9283_V1\Wince600\EM9280_ARMV4I\cesysgen\oak\lib\ARMV4I\retail\ddgpe.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\ddguid.pdb'; linking object as if no debug info
+BUILD: [00:0000000634:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\NAND\NandDisk\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
+BUILD: [01:0000000666:WARNN ] system.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\nanddisk.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000715:WARNN ] bspkeypad.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\keypad.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [00:0000000721:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\UUT\: Missing source file: D:\WINCE600\platform\common\lib\ARMV4I\retail\uut_common_fsl_v2_pdk1_9.def.
+BUILD: [01:0000000808:WARNN ] bspsdhc.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\sdhc.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [00:0000000814:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\ENET\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\ndis.lib.
+BUILD: [00:0000000815:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\ENET\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\Ws2.lib.
+BUILD: [00:0000000816:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\ENET\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.
+BUILD: [01:0000000988:WARNN ] dispdrvr.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\dot_lcd.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000989:WARNN ] DOT_LCD.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\dot_lcd.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000001025:WARNN ] xldr.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\xldr.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000001111:WARNN ] nandboot.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\eboot.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000001112:WARNN ] menu.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\eboot.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000001113:WARNN ] eboot.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\eboot.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000001114:WARNN ] nandfmd_lib.lib(nandbsp.obj) : warning LNK4099: PDB 'nandfmd_lib.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\nandfmd_lib.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\nandfmd_lib.pdb'; linking object as if no debug info
+BUILD: [01:0000001115:WARNN ] i_ddk_apbhdma_mx28_fsl_v2_pdk1_9.lib(i_ddk_apbhdma.obj) : warning LNK4099: PDB 'i_ddk_apbhdma_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\i_ddk_apbhdma_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\i_ddk_apbhdma_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001116:WARNN ] i_ddk_iomux_mx28_fsl_v2_pdk1_9.lib(i_soc_ddk_gpio.obj) : warning LNK4099: PDB 'i_ddk_iomux_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\i_ddk_iomux_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\i_ddk_iomux_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001117:WARNN ] i_ddk_iomux_mx28_fsl_v2_pdk1_9.lib(i_soc_ddk_iomux.obj) : warning LNK4099: PDB 'i_ddk_iomux_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\i_ddk_iomux_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\i_ddk_iomux_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001118:WARNN ] i_ddk_clk_mx28_fsl_v2_pdk1_9.lib(i_ddk_clk.obj) : warning LNK4099: PDB 'i_ddk_clk_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\i_ddk_clk_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\i_ddk_clk_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001119:WARNN ] bl_lcdif_mx28_fsl_v2_pdk1_9.lib(i_LCDIF.obj) : warning LNK4099: PDB 'bl_lcdif_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bl_lcdif_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bl_lcdif_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001120:WARNN ] bspcmn.lib(bspargs.obj) : warning LNK4099: PDB 'bspcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bspcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bspcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001121:WARNN ] bspcmn.lib(debugserial.obj) : warning LNK4099: PDB 'bspcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bspcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bspcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001122:WARNN ] bspcmn.lib(bsputils.obj) : warning LNK4099: PDB 'bspcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bspcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bspcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001123:WARNN ] bootcmn.lib(main.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001124:WARNN ] bootcmn.lib(flash.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001125:WARNN ] bootcmn.lib(utils.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001126:WARNN ] bootcmn.lib(nand.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001127:WARNN ] bootcmn.lib(nor.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001128:WARNN ] bootcmn.lib(ether.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001129:WARNN ] bootcmn.lib(esdhc.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001130:WARNN ] bootcmn.lib(display.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001131:WARNN ] bootcmn.lib(sdmmc.obj) : warning LNK4099: PDB 'bootcmn.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bootcmn.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bootcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000001132:WARNN ] fulllibc.lib(atox.obj) : warning LNK4099: PDB 'ccrtconv.pdb' was not found with 'D:\WINCE600\OSDesigns\EM9283_V1\EM9283_V1\Wince600\EM9280_ARMV4I\cesysgen\oak\lib\ARMV4I\retail\fulllibc.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\ccrtconv.pdb'; linking object as if no debug info
+BUILD: [01:0000001133:WARNN ] fulllibc.lib(toupper.obj) : warning LNK4099: PDB 'ccrtconv.pdb' was not found with 'D:\WINCE600\OSDesigns\EM9283_V1\EM9283_V1\Wince600\EM9280_ARMV4I\cesysgen\oak\lib\ARMV4I\retail\fulllibc.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\ccrtconv.pdb'; linking object as if no debug info
+BUILD: [01:0000001134:WARNN ] fulllibc.lib(xtoa.obj) : warning LNK4099: PDB 'ccrtconv.pdb' was not found with 'D:\WINCE600\OSDesigns\EM9283_V1\EM9283_V1\Wince600\EM9280_ARMV4I\cesysgen\oak\lib\ARMV4I\retail\fulllibc.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\ccrtconv.pdb'; linking object as if no debug info
+BUILD: [01:0000001135:WARNN ] fulllibc.lib(diverr.obj) : warning LNK4099: PDB 'ccrthelp.pdb' was not found with 'D:\WINCE600\OSDesigns\EM9283_V1\EM9283_V1\Wince600\EM9280_ARMV4I\cesysgen\oak\lib\ARMV4I\retail\fulllibc.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\ccrthelp.pdb'; linking object as if no debug info
+BUILD: [01:0000001136:WARNN ] fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.lib(stub.obj) : warning LNK4099: PDB 'fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001137:WARNN ] fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.lib(hwinit.obj) : warning LNK4099: PDB 'fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\fsl_usbfn_rndiskitl_mx28_fsl_v2_pdk1_9.pdb'; linking object as if no debug info
+BUILD: [01:0000001138:WARNN ] bsp_bootshell.lib(bspbootshell.obj) : warning LNK4099: PDB 'bsp_bootshell.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bsp_bootshell.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bsp_bootshell.pdb'; linking object as if no debug info
+BUILD: [01:0000001139:WARNN ] bspenet.lib(bspenet.obj) : warning LNK4099: PDB 'bspenet.pdb' was not found with 'D:\WINCE600\platform\EM9280\lib\ARMV4I\retail\bspenet.lib' or at 'D:\WINCE600\platform\EM9280\target\ARMV4I\retail\bspenet.pdb'; linking object as if no debug info

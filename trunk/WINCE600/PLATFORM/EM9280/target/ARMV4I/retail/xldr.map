@@ -1,0 +1,42 @@
+ xldr
+
+ Timestamp is 4f86a0d6 (Thu Apr 12 17:31:02 2012)
+
+ Preferred load address is 00010000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000010H .astart                 CODE
+ 0001:00000010 000000b4H .rdata                  CODE
+ 0001:000000c4 00000021H .rdata$debug            CODE
+ 0001:000000e8 00001c58H .text                   CODE
+ 0001:00001d40 00000000H .edata                  CODE
+ 0002:00000000 00000010H .bss                    DATA
+ 0003:00000000 00000080H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       ___safe_se_handler_table   00000000     <absolute>
+ 0000:00000000       ___safe_se_handler_count   00000000     <absolute>
+ 0001:00000000       StartUp                    00011000 f   start.obj
+ 0001:000000c0       pTOC                       000110c0     xldr.obj
+ 0001:000000e8       ConfigureEmiPins           000110e8 f   xldr.obj
+ 0001:0000017c       DDR2EmiController_EDE1116_200MHz 0001117c f   xldr.obj
+ 0001:00000bb8       InitDebugSerial            00011bb8 f   xldr.obj
+ 0001:00000ccc       XLDRWriteDebugByte         00011ccc f   xldr.obj
+ 0001:00000d30       EnableBatteryMeasure       00011d30 f   xldr.obj
+ 0001:00000e5c       PrintBatteryVoltage        00011e5c f   xldr.obj
+ 0001:00000f68       CPUClock2PLL               00011f68 f   xldr.obj
+ 0001:00001050       InitSdram                  00012050 f   xldr.obj
+ 0001:00001208       IsBatteryGood              00012208 f   xldr.obj
+ 0001:00001344       IsUSBPlugin                00012344 f   xldr.obj
+ 0001:000013f8       Is5VPresent                000123f8 f   xldr.obj
+ 0001:00001458       BootFromBattery            00012458 f   xldr.obj
+ 0001:000015a0       BootFrom4P2                000125a0 f   xldr.obj
+ 0001:00001760       ChargeBattery2Boot         00012760 f   xldr.obj
+ 0001:00001a00       InitPower                  00012a00 f   xldr.obj
+ 0001:00001ce8       start                      00012ce8 f   xldr.obj
+
+ entry point at        0001:00000000
+
+ Static symbols
+

@@ -1,0 +1,3 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000478:ERRORE] nand_common_fsl_v2_pdk1_9.lib(fmd.obj) : error LNK2019: unresolved external symbol "unsigned long __cdecl BSP_NANDImageFileSystemOffset(void)" (?BSP_NANDImageFileSystemOffset@@YAKXZ) referenced in function FMD_GetBlockStatus
+BUILD: [01:0000000479:ERRORE] D:\WINCE600\platform\EM9280\target\ARMV4I\retail\flashpdd_nand.dll : fatal error LNK1120: 1 unresolved externals

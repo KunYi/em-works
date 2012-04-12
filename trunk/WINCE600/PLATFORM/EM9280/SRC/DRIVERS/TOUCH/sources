@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+!endif
+
+!IF "$(BSP_NOTOUCH)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_LRADC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=lradc_touch
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DEFFILE=$(_COMMONOAKROOT)\inc\touch.def
+
+PREPROCESSDEFFILE=1
+
+TARGETLIBS= \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\lradcsdk_$(_SOCDIR).lib \
+    
+
+SOURCELIBS= \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\tch_cal.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\tchmdd.lib  \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\lradc_touch_$(_COMMONSOCDIR).lib \
+
+SOURCES=touchbsp.cpp
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx28_touch.reg \
+

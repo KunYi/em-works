@@ -1,0 +1,71 @@
+# Copyright (c) Microsoft Corporation.  All rights reserved.
+# Use of this source code is subject to the terms of the Microsoft end-user
+# license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+# If you did not accept the terms of the EULA, you are not authorized to use
+# this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+# install media.
+# ------------------------------------------------------------------------------
+# IDE display files
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# SDK files
+# ------------------------------------------------------------------------------
+# Use this to automaticaly add new files to generated SDKs
+# For libraries, use $(TARGETNAME).lib in SDK_LIB_FILES list to add the
+# genrated lib to the SDK
+# Enable copy to the SDK directory
+# Hearder files
+# Lib files
+# 
+#  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\com_mdd2.lib \
+# DLLENTRY=DllEntry
+# 
+
+RELEASETYPE=PLATFORM
+TARGETNAME=spi_serial
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllEntryCRTStartup
+
+DEFFILE=spi_serial.def
+
+CDEFINES=$(CDEFINES) -DUSE_NEW_SERIAL_MODEL
+
+!IF "$(BSP_EM9280)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+    
+SOURCELIBS=\
+    $(_PUBLICROOT)\common\oak\lib\$(_CPUINDPATH)\com_mdd2.lib
+
+
+INCLUDES=\
+    ..\..\inc; \
+    $(INCLUDES)
+
+
+SOURCES= \
+  ser_ht45b0f.c \
+  spi_com.c \
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+  spi_serial.def \
+  spi_serial.reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    spi_com.h \
+    ser_ht45b0f.h \
+    ..\..\INC\em9280_oal_spi.h \
+    ..\..\INC\ioctl_cfg.h \
+    serpriv.h \
+
+
+!IF "$(BSP_EM9280_GPIO_SPI)" == "" 
+SKIPBUILD=1
+!ENDIF

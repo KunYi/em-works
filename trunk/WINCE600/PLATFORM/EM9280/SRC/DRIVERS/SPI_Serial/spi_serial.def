@@ -1,0 +1,52 @@
+;**********************************************************************
+;                                                                      
+; Filename: em9x60_serial.def
+;                                                                      
+; Description: 
+;
+; THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+; ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+; THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+; PARTICULAR PURPOSE.
+;
+; Use of this source code is subject to the terms of the Cirrus end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to 
+; use this source code. For a copy of the EULA, please see the 
+; EULA.RTF on your install media.
+;
+; Copyright(c) Emtronix 2005, All Rights Reserved                       
+;                                                                      
+;**********************************************************************
+
+;**********************************************************************
+;This is Adeneo Serial Driver DEF
+;**********************************************************************
+;LIBRARY    COM
+;
+;EXPORTS 
+;	COM_Init
+;	COM_Deinit
+;	COM_Open
+;	COM_Close
+;	COM_Read
+;	COM_Write
+;	COM_Seek
+;	COM_PowerDown
+;	COM_PowerUp
+;	COM_IOControl
+;	DllEntry
+;**********************************************************************
+
+LIBRARY 	SERIAL
+
+EXPORTS COM_Init
+		COM_Deinit
+		COM_Open
+		COM_Close
+		COM_Read
+		COM_Write
+		COM_Seek
+		COM_PowerDown
+		COM_PowerUp
+		COM_IOControl

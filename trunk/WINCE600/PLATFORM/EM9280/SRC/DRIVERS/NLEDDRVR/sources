@@ -1,0 +1,51 @@
+!if 0
+//------------------------------------------------------------------------------
+//
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+//
+//
+//  Use of this source code is subject to the terms of the Microsoft end-user
+//  license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+//  If you did not accept the terms of the EULA, you are not authorized to use
+//  this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+//  install media.
+//------------------------------------------------------------------------------
+//  Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+//------------------------------------------------------------------------------
+//
+//  File:  Sources
+//
+//  Sources file for Notification LED Driver
+
+!endif
+
+!IF "$(BSP_NONLED)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=nleddrvr
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+WINCEOEM=1
+DLLENTRY=_DllMainCRTStartup
+
+
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nled_$(_COMMONSOCDIR).lib \
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\nled_$(_COMMONSOCDIR).def
+
+INCLUDES=\
+    $(INCLUDES); \
+    $(_TARGETPLATROOT)\src\inc
+
+SOURCES=\
+    snled.cpp

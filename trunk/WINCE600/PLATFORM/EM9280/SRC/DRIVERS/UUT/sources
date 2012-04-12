@@ -1,0 +1,37 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_UUT)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=uut
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllMainCRTStartup
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_TARGETPLATROOT)\src\inc; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+  $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\UUT; \
+    
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ufnclientlib.lib     \
+    $(_PUBLICROOT)\common\oak\lib\$(_CPUINDPATH)\storeapi.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\uut_$(_COMMONSOCDIR).lib
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\uut_$(_COMMONSOCDIR).def
+
+SOURCES=\
+    bspuut.cpp \
+    otp.cpp

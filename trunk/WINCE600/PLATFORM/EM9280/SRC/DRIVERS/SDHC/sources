@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2009-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+!endif
+
+!IF ("$(BSP_SSP1_SDHC)" == "" && "$(BSP_SSP2_SDHC)" == "")
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=sdhc
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+
+DEFFILE=sdhc.def
+DLLENTRY=DllEntry
+
+INCLUDES= \
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_SOCDIR)\SDHC; \
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+
+    
+SOURCELIBS= \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdcardlib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdhclib.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdbus.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\sdhc_$(_SOCDIR).lib     
+
+SOURCES = bspsdhc.cpp
+

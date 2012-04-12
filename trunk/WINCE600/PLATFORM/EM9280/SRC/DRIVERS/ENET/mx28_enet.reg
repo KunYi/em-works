@@ -1,0 +1,112 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2009-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+IF BSP_ENET1
+[HKEY_LOCAL_MACHINE\Comm\1ENET]
+   "DisplayName"="ENET Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="enet.dll"
+    "Index"=dword:0
+
+[HKEY_LOCAL_MACHINE\Comm\1ENET\Linkage]
+   "Route"=multi_sz:"ENET1"
+
+[HKEY_LOCAL_MACHINE\Comm\ENET1]
+   "DisplayName"="ENET Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="enet.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\ENET1\Parms]
+   "BusNumber"=dword:0
+   "BusType"=dword:0
+   ; DuplexMode: 0:AutoDetect; 1:HalfDuplex; 2:FullDuplex.
+   "DuplexMode"=dword:0
+   ; The Ethernet Physical Address. For example,
+   ; Ethernet Address 00:24:20:10:bf:03 is MACAddress1=0024,
+   ; MACAddress2=2010,and MACAddress3=bf03.
+   "MACAddress1"=dword:1213
+   "MACAddress2"=dword:1728
+   "MACAddress3"=dword:3120
+
+[HKEY_LOCAL_MACHINE\Comm\ENET1\Parms\TcpIp]
+   ; This should be MULTI_SZ
+   "DefaultGateway"=""
+   ; This should be SZ... If null it means use LAN, else WAN and Interface.
+   "LLInterface"=""
+   ; Use zero for broadcast address? (or 255.255.255.255)
+   "UseZeroBroadcast"=dword:0
+   ; Thus should be MULTI_SZ, the IP address list
+   "IpAddress"="0.0.0.0"
+   ; This should be MULTI_SZ, the subnet masks for the above IP addresses
+   "Subnetmask"="0.0.0.0"
+   "EnableDHCP"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\TcpIp\Parms]
+
+   ;Set to True to keep the device from entering idle mode if there's network adapter 
+    ;;"NoIdleIfAdapter"=dword:1
+    ;Set to True to keep the device from entering idle mode while communicating/loop back 
+    "NoIdleIfConnected"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\Tcpip\Linkage]
+   ; This should be MULTI_SZ
+   ; This is the list of llip drivers to load
+   "Bind"=multi_sz:"ENET1"
+ENDIF ;  BSP_ENET1
+
+IF BSP_ENET2
+[HKEY_LOCAL_MACHINE\Comm\2ENET]
+   "DisplayName"="ENET Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="enet.dll"
+   "Index"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\2ENET\Linkage]
+   "Route"=multi_sz:"ENET2"
+
+[HKEY_LOCAL_MACHINE\Comm\ENET2]
+   "DisplayName"="ENET Ethernet Driver"
+   "Group"="NDIS"
+   "ImagePath"="enet.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\ENET2\Parms]
+   "BusNumber"=dword:0
+   "BusType"=dword:0
+   ; DuplexMode: 0:AutoDetect; 1:HalfDuplex; 2:FullDuplex.
+   "DuplexMode"=dword:0
+   ; The Ethernet Physical Address. For example,
+   ; Ethernet Address 00:24:20:10:bf:03 is MACAddress1=0024,
+   ; MACAddress2=2010,and MACAddress3=bf03.
+   "MACAddress1"=dword:1213
+   "MACAddress2"=dword:1728
+   "MACAddress3"=dword:4567
+
+[HKEY_LOCAL_MACHINE\Comm\ENET2\Parms\TcpIp]
+   ; This should be MULTI_SZ
+   "DefaultGateway"=""
+   ; This should be SZ... If null it means use LAN, else WAN and Interface.
+   "LLInterface"=""
+   ; Use zero for broadcast address? (or 255.255.255.255)
+   "UseZeroBroadcast"=dword:0
+   ; Thus should be MULTI_SZ, the IP address list
+   "IpAddress"="0.0.0.0"
+   ; This should be MULTI_SZ, the subnet masks for the above IP addresses
+   "Subnetmask"="0.0.0.0"
+   "EnableDHCP"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\TcpIp\Parms]
+   ;Set to True to keep the device from entering idle mode if there's network adapter 
+    ;;"NoIdleIfAdapter"=dword:1
+    ;Set to True to keep the device from entering idle mode while communicating/loop back 
+    "NoIdleIfConnected"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\Tcpip\Linkage]
+   ; This should be MULTI_SZ
+   ; This is the list of llip drivers to load
+   "Bind"=multi_sz:"ENET2"
+
+ENDIF ;  BSP_ENET2

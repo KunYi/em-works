@@ -1,0 +1,230 @@
+ cspddk
+
+ Timestamp is 4f86751a (Thu Apr 12 14:24:26 2012)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000004H .CRT$XCA                CODE
+ 0001:00000004 00000004H .CRT$XCZ                CODE
+ 0001:00000008 00000004H .CRT$XIA                CODE
+ 0001:0000000c 00000004H .CRT$XIZ                CODE
+ 0001:00000010 00000004H .CRT$XPA                CODE
+ 0001:00000014 00000004H .CRT$XPZ                CODE
+ 0001:00000018 00000004H .CRT$XTA                CODE
+ 0001:0000001c 00000004H .CRT$XTZ                CODE
+ 0001:00000020 00000ff6H .rdata                  CODE
+ 0001:00001018 00000023H .rdata$debug            CODE
+ 0001:0000103c 00003a9cH .text                   CODE
+ 0001:00004ad8 00000014H .idata$2                CODE
+ 0001:00004aec 00000014H .idata$3                CODE
+ 0001:00004b00 0000005cH .idata$4                CODE
+ 0001:00004b5c 0000000cH .idata$6                CODE
+ 0001:00004b70 000005aeH .edata                  CODE
+ 0002:00000000 0000005cH .idata$5                DATA
+ 0002:0000005c 00000008H .data                   DATA
+ 0002:00000080 00000040H .bss                    DATA
+ 0003:00000000 00000288H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       ___safe_se_handler_table   00000000     <absolute>
+ 0000:00000000       ___safe_se_handler_count   00000000     <absolute>
+ 0001:00000000       __xc_a                     10001000     corelib0:crt0init.obj
+ 0001:00000004       __xc_z                     10001004     corelib0:crt0init.obj
+ 0001:00000008       __xi_a                     10001008     corelib0:crt0init.obj
+ 0001:0000000c       __xi_z                     1000100c     corelib0:crt0init.obj
+ 0001:00000010       __xp_a                     10001010     corelib0:crt0init.obj
+ 0001:00000014       __xp_z                     10001014     corelib0:crt0init.obj
+ 0001:00000018       __xt_a                     10001018     corelib0:crt0init.obj
+ 0001:0000001c       __xt_z                     1000101c     corelib0:crt0init.obj
+ 0001:00000040       ??_C@_1LE@MOFMKKKD@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 10001040     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000000f4       ??_C@_1CI@OHCJFJPM@?$AAE?$AAR?$AAR?$AAO?$AAR?$AA?3?$AA?5?$AA?$CF?$AAs?$AA?5?$AAl?$AAi?$AAn?$AAe?$AA?5?$AA?$CF?$AAd?$AA?3?$AA?5?$AA?$AA@ 100010f4     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000120       ??_C@_1FG@FFKBFMHG@?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAV?$AAa?$AAl?$AAi?$AAd?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?$CF?$AAd?$AA?5?$AAi?$AAs?$AA?5?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5@ 10001120     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000178       ??_C@_1DK@FOEAIIIE@?$AAC?$AAh?$AAa?$AAn?$AAn?$AAe?$AAl?$AA?5?$AAv?$AAa?$AAl?$AAi?$AAd?$AAa?$AAt?$AAi?$AAo?$AAn?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AN?$AA?6?$AA?$AA@ 10001178     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000001b8       ??_C@_1EK@GOOMGDOE@?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc?$AAe?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe@ 100011b8     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000204       ??_C@_1DE@OLOKJACC@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAh?$AAS?$AAt?$AAa?$AAr?$AAt?$AAD?$AAm?$AAa?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AN?$AA?6?$AA?$AA@ 10001204     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000238       ??_C@_1HE@FCLEGJJP@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAs@ 10001238     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000002b0       ??_C@_1GK@OPDFEEDK@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAF?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAE@ 100012b0     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000320       ??_C@_1GA@FKCFANAK@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAF?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAr@ 10001320     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00000380       ??_C@_1GG@MMACIPPC@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAU@ 10001380     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000003e8       ??_C@_1LE@LLNIPPKB@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 100013e8     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000004a0       ??_C@_1FG@EMKJNLGH@?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAV?$AAa?$AAl?$AAi?$AAd?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?$CF?$AAd?$AA?5?$AAi?$AAs?$AA?5?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5@ 100014a0     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000004f8       ??_C@_1DE@BPANJDNM@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAx?$AAS?$AAt?$AAa?$AAr?$AAt?$AAD?$AAm?$AAa?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AN?$AA?6?$AA?$AA@ 100014f8     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:0000052c       ??_C@_1CM@FONMNFCK@?$AAC?$AAr?$AAe?$AAa?$AAt?$AAe?$AAM?$AAu?$AAt?$AAe?$AAx?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AN?$AA?6?$AA?$AA@ 1000152c     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00000558       ??_C@_1BG@GPGAHAMG@?$AAM?$AAU?$AAT?$AAE?$AAX?$AA_?$AAS?$AAD?$AAM?$AAA?$AA?$AA@ 10001558     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00000570       ??_C@_1EK@ILIAPOIB@?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc?$AAe?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe@ 10001570     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000005c0       ??_C@_1EE@FJJLAJCF@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAx?$AAS?$AAt?$AAo?$AAp?$AAD?$AAm?$AAa?$AA?5?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAC?$AAh?$AAa?$AAn?$AAn?$AAe?$AAl?$AA?$CB?$AA?$AN@ 100015c0     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00000608       ??_C@_1GK@BKCGDGNP@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAF?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAE@ 10001608     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00000678       ??_C@_1GA@PKEIBCDN@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAF?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAr@ 10001678     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000006d8       ??_C@_1GG@CHPJMKAK@?$AAD?$AAD?$AAK?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AAC?$AAh?$AAa?$AAn?$AA?4?$AA?4?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAt?$AAo?$AA?5?$AAU@ 100016d8     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00000740       ??_C@_1KM@HFLDBBJL@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 10001740     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:000007f0       ??_C@_1HI@CPEECLDJ@?$AAC?$AAl?$AAo?$AAc?$AAk?$AAU?$AAp?$AAd?$AAa?$AAt?$AAe?$AAR?$AAo?$AAo?$AAt?$AA?3?$AA?5?$AA?5?$AAN?$AAo?$AAd?$AAe?$AA?5?$AAr?$AAe?$AAf?$AAe?$AAr?$AAe?$AAn?$AAc?$AAe@ 100017f0     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000868       ??_C@_1GI@LFPNOONN@?$AA?5?$AAD?$AAD?$AAK?$AAC?$AAl?$AAo?$AAc?$AAk?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AAB?$AAa?$AAu?$AAd?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR?$AA?0?$AA?5?$AAc?$AAl?$AAo?$AAc?$AAk@ 10001868     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:000008d0       ??_C@_1EK@EKBAIMEK@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA3?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 100018d0     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000920       ??_C@_1EK@KBCHDHEJ@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA3?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 10001920     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000970       ??_C@_1EK@LLMKIJOA@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA2?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 10001970     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:000009c0       ??_C@_1EK@FAPNDCOD@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA2?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 100019c0     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000a10       ??_C@_1EK@JJOCDKFM@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA1?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 10001a10     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000a60       ??_C@_1EK@IDAPIEPF@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA0?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 10001a60     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000ab0       ??_C@_1EK@GIDIDPPG@?$AA?5?$AAD?$AAD?$AAK?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAS?$AAI?$AAG?$AAN?$AAA?$AAL?$AA_?$AAS?$AAS?$AAP?$AA0?$AA_?$AAC?$AAL?$AAK?$AA?5?$AAE?$AAR?$AAR?$AAO?$AAR@ 10001ab0     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000b00       ??_C@_1EK@OIOENCCF@?$AAD?$AAD?$AAK?$AAC?$AAl?$AAo?$AAc?$AAk?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AAB?$AAa?$AAu?$AAd?$AA?3?$AA?5?$AAD?$AAi?$AAv?$AAi?$AAd?$AAe?$AA?5?$AAb?$AAy?$AA?5?$AAz?$AAe@ 10001b00     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000b50       ??_C@_1EG@FCNOKBMG@?$AAC?$AAl?$AAo?$AAc?$AAk?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc?$AAe?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB@ 10001b50     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00000b98       ??_C@_1LO@IIGIKAJO@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 10001b98     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00000c58       ??_C@_1EO@FDEPDNPK@?$AAI?$AAo?$AAm?$AAu?$AAx?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?3?$AA?5?$AA?5?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AA?5?$AAm?$AAa?$AAp?$AAp?$AAi?$AAn?$AAg?$AA?5?$AAf?$AAa?$AAi@ 10001c58     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00000ca8       ??_C@_1CG@EDBHHEHJ@?$AAC?$AAl?$AAo?$AAc?$AAk?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001ca8     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000cd0       ??_C@_1CG@HJKJMKDE@?$AAI?$AAo?$AAm?$AAu?$AAx?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001cd0     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000cf8       ??_C@_1CK@KGKPHEHL@?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001cf8     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000d28       ??_C@_1JK@CCLNNOLD@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAP?$AAL?$AAA?$AAT?$AAF?$AAO?$AAR?$AAM?$AA?2?$AAC?$AAO?$AAM?$AAM?$AAO?$AAN?$AA?2?$AAS?$AAR?$AAC?$AA?2@ 10001d28     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000dc4       ??_C@_1CK@EHOOBGCH@?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001dc4     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000df0       ??_C@_1CI@GOBIFDC@?$AAA?$AAp?$AAb?$AAx?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001df0     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000e18       ??_C@_1CI@CDFHJMJB@?$AAA?$AAp?$AAb?$AAh?$AAD?$AAm?$AAa?$AAI?$AAn?$AAi?$AAt?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AA@ 10001e18     ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00000ed0       ??_C@_1CE@KCPPCGKP@?$AAE?$AAV?$AAE?$AAN?$AAT?$AA_?$AAD?$AAV?$AAF?$AAC?$AA_?$AAW?$AAO?$AAR?$AAK?$AAE?$AAR?$AA?$AA@ 10001ed0     ddk_clk:ddk_clk.obj
+ 0001:00000ef4       ??_C@_1CM@PPPGIKAO@?$AAC?$AAr?$AAe?$AAa?$AAt?$AAe?$AAE?$AAv?$AAe?$AAn?$AAt?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?$CB?$AA?$AN?$AA?6?$AA?$AA@ 10001ef4     ddk_clk:ddk_clk.obj
+ 0001:00000f20       ??_C@_1BO@ICEODACO@?$AAE?$AAV?$AAE?$AAN?$AAT?$AA_?$AAS?$AAE?$AAT?$AAP?$AAO?$AAI?$AAN?$AAT?$AA?$AA@ 10001f20     ddk_clk:ddk_clk.obj
+ 0001:00000f40       ??_C@_1IG@DLDJCKCL@?$AAD?$AA?3?$AA?2?$AAW?$AAI?$AAN?$AAC?$AAE?$AA6?$AA0?$AA0?$AA?2?$AAp?$AAl?$AAa?$AAt?$AAf?$AAo?$AAr?$AAm?$AA?2?$AAE?$AAM?$AA9?$AA2?$AA8?$AA0?$AA?2?$AAs?$AAr?$AAc?$AA?2@ 10001f40     ddk_clk:ddk_clk.obj
+ 0001:00000fc8       ??_C@_1EO@BABGMAOC@?$AAB?$AAS?$AAP?$AAC?$AAl?$AAo?$AAc?$AAk?$AAA?$AAl?$AAl?$AAo?$AAc?$AA?3?$AA?5?$AA?5?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc?$AAe?$AA?5?$AAf?$AAa?$AAi@ 10001fc8     ddk_clk:ddk_clk.obj
+ 0001:0000103c       DDKApbhDmaGetPhore         1000203c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00001060       DDKApbhDmaSetBurstSize     10002060 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00001094       ApbhDmaInit                10002094 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000010e8       ApbhDmaDeInit              100020e8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00001104       ApbhDmaDealloc             10002104 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:0000118c       DDKApbhDmaClearErrorIrq    1000218c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000011f8       DDKApbhDmaChanCLKGATE      100021f8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:0000126c       DDKApbhDmaClearCommandCmpltIrq 1000226c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000012d8       DDKApbhDmaEnableCommandCmpltIrq 100022d8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00001350       DDKApbhDmaResetChan        10002350 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000013cc       DDKApbhDmaFreezeChan       100023cc f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:00001444       ApbhDmaAlloc               10002444 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000014c4       DDKApbhStartDma            100024c4 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000015a8       DDKApbhStopDma             100025a8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000015f8       DDKApbhDmaInitChan         100025f8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:0000171c       DDKApbxGetNextCMDAR        1000271c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001738       ApbxDmaInit                10002738 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:0000178c       ApbxDmaDeInit              1000278c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000017a8       ApbxDmaDealloc             100027a8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001848       DDKApbxDmaClearInterrupts  10002848 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000018c0       ApbxZeroSemaphore          100028c0 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001944       DDKApbxStartDma            10002944 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001a0c       DDKApbxDmaGetActiveIrq     10002a0c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001a98       DDKApbxDmaClearCommandCmpltIrq 10002a98 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001b04       DDKApbxDmaClearErrorIrq    10002b04 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001b6c       DDKApbxDmaEnableCommandCmpltIrq 10002b6c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001be8       DDKApbxDmaGetErrorStatus   10002be8 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001cf0       DDKApbxDmaResetChan        10002cf0 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001d94       DDKApbxDmaFreezeChan       10002d94 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001e30       ApbxDmaAlloc               10002e30 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001efc       DDKApbxStopDma             10002efc f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00001f4c       DDKApbxDmaInitChan         10002f4c f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:00002058       ClockDealloc               10003058 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002098       ClockSetGating             10003098 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002374       ClockUpdateRoot            10003374 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:0000242c       ClockRootGating            1000342c f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:0000250c       DDKClockSetGatingMode      1000350c f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002648       DDKClockGetGatingMode      10003648 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002814       DDKClockGetFreq            10003814 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002824       DDKClockConfigBaud         10003824 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002f48       DDKClockSetpointRequest    10003f48 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002f58       DDKClockSetpointRelease    10003f58 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002f68       DDKClockGetSharedConfig    10003f68 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002f78       DDKClockLock               10003f78 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002f90       DDKClockUnlock             10003f90 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002fa8       DDKClockReadENetConfig     10003fa8 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002fbc       DDKClockWriteENetConfig    10003fbc f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00002fd0       ClockAlloc                 10003fd0 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0001:00003060       DDKGpioConfig              10004060 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:000035d8       DDKGpioEnableDataPin       100045d8 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:00003700       DDKGpioWriteDataPin        10004700 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:00003828       DDKGpioReadDataPin         10004828 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:000038d8       DDKGpioReadIntrPin         100048d8 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:0000395c       DDKGpioClearIntrPin        1000495c f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_gpio.obj
+ 0001:000039f8       DDKIomuxSetPinMux          100049f8 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00003bbc       DDKIomuxGetPinMux          10004bbc f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00003cfc       DDKIomuxSetPadConfig       10004cfc f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00003f0c       DDKIomuxGetPadConfig       10004f0c f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00004020       IomuxDealloc               10005020 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:00004058       IomuxAlloc                 10005058 f   ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0001:000040e0       DllEntry                   100050e0 f   ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:000041d4       Init                       100051d4 f   ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:0000424c       Deinit                     1000524c f   ddk_mx28_fsl_v2_pdk1_9:cspddk.obj
+ 0001:00004260       BSPClockDealloc            10005260 f   ddk_clk:ddk_clk.obj
+ 0001:000042cc       BSPClockAlloc              100052cc f   ddk_clk:ddk_clk.obj
+ 0001:000043d0       BSPClockGetFreq            100053d0 f   ddk_clk:ddk_clk.obj
+ 0001:000043f0       BSPClockUpdateFreq         100053f0 f   ddk_clk:ddk_clk.obj
+ 0001:00004508       BSPClockSetpointRequest    10005508 f   ddk_clk:ddk_clk.obj
+ 0001:000045c4       BSPClockSetpointRelease    100055c4 f   ddk_clk:ddk_clk.obj
+ 0001:00004618       BSPClockSetGatingModePrepare 10005618 f   ddk_clk:ddk_clk.obj
+ 0001:00004654       BSPClockSetGatingModeComplete 10005654 f   ddk_clk:ddk_clk.obj
+ 0001:00004694       MmMapIoSpace               10005694 f   ddk_map:ddk_map.obj
+ 0001:0000475c       MmUnmapIoSpace             1000575c f   ddk_map:ddk_map.obj
+ 0001:00004788       NKDbgPrintfW               10005788 f   coredll:COREDLL.dll
+ 0001:00004798       WaitForSingleObject        10005798 f   coredll:COREDLL.dll
+ 0001:000047a8       ReleaseMutex               100057a8 f   coredll:COREDLL.dll
+ 0001:000047b8       CloseHandle                100057b8 f   coredll:COREDLL.dll
+ 0001:000047c8       CreateMutexW               100057c8 f   coredll:COREDLL.dll
+ 0001:000047d8       DeleteCriticalSection      100057d8 f   coredll:COREDLL.dll
+ 0001:000047e8       LeaveCriticalSection       100057e8 f   coredll:COREDLL.dll
+ 0001:000047f8       EnterCriticalSection       100057f8 f   coredll:COREDLL.dll
+ 0001:00004808       InitializeCriticalSection  10005808 f   coredll:COREDLL.dll
+ 0001:00004818       DisableThreadLibraryCalls  10005818 f   coredll:COREDLL.dll
+ 0001:00004828       EventModify                10005828 f   coredll:COREDLL.dll
+ 0001:00004838       CreateEventW               10005838 f   coredll:COREDLL.dll
+ 0001:00004848       InterlockedIncrement       10005848 f   coredll:COREDLL.dll
+ 0001:00004858       InterlockedDecrement       10005858 f   coredll:COREDLL.dll
+ 0001:00004868       VirtualFree                10005868 f   coredll:COREDLL.dll
+ 0001:00004878       VirtualCopy                10005878 f   coredll:COREDLL.dll
+ 0001:00004888       VirtualAlloc               10005888 f   coredll:COREDLL.dll
+ 0001:00004898       SetLastError               10005898 f   coredll:COREDLL.dll
+ 0001:000048a8       _DllEntryCRTStartup        100058a8 f   corelib0:pegdentry.obj
+ 0001:000049b8       _cexit                     100059b8 f   corelib0:cexit.obj
+ 0001:000049d4       _initterm                  100059d4 f   corelib0:crt0dat.obj
+ 0001:00004a08       _cinit                     10005a08 f   corelib0:crt0dat.obj
+ 0001:00004a3c       __security_init_cookie     10005a3c f   corelib0:seccinit.obj
+ 0001:00004a98       __rt_udiv                  10005a98 f   corelib1:COREDLL.dll
+ 0001:00004aa8       free                       10005aa8 f   corelib1:COREDLL.dll
+ 0001:00004ab8       __security_gen_cookie2     10005ab8 f   corelib1:COREDLL.dll
+ 0001:00004ac8       TerminateProcess           10005ac8 f   coredll:COREDLL.dll
+ 0001:00004ad8       __IMPORT_DESCRIPTOR_COREDLL 10005ad8     coredll:COREDLL.dll
+ 0001:00004aec       __NULL_IMPORT_DESCRIPTOR   10005aec     coredll:COREDLL.dll
+ 0002:00000000       __imp_NKDbgPrintfW         10007000     coredll:COREDLL.dll
+ 0002:00000004       __imp_WaitForSingleObject  10007004     coredll:COREDLL.dll
+ 0002:00000008       __imp_ReleaseMutex         10007008     coredll:COREDLL.dll
+ 0002:0000000c       __imp_CloseHandle          1000700c     coredll:COREDLL.dll
+ 0002:00000010       __imp_CreateMutexW         10007010     coredll:COREDLL.dll
+ 0002:00000014       __imp_DeleteCriticalSection 10007014     coredll:COREDLL.dll
+ 0002:00000018       __imp_LeaveCriticalSection 10007018     coredll:COREDLL.dll
+ 0002:0000001c       __imp_EnterCriticalSection 1000701c     coredll:COREDLL.dll
+ 0002:00000020       __imp_InitializeCriticalSection 10007020     coredll:COREDLL.dll
+ 0002:00000024       __imp_DisableThreadLibraryCalls 10007024     coredll:COREDLL.dll
+ 0002:00000028       __imp_EventModify          10007028     coredll:COREDLL.dll
+ 0002:0000002c       __imp_CreateEventW         1000702c     coredll:COREDLL.dll
+ 0002:00000030       __imp_InterlockedIncrement 10007030     coredll:COREDLL.dll
+ 0002:00000034       __imp_InterlockedDecrement 10007034     coredll:COREDLL.dll
+ 0002:00000038       __imp_VirtualFree          10007038     coredll:COREDLL.dll
+ 0002:0000003c       __imp_VirtualCopy          1000703c     coredll:COREDLL.dll
+ 0002:00000040       __imp_VirtualAlloc         10007040     coredll:COREDLL.dll
+ 0002:00000044       __imp_SetLastError         10007044     coredll:COREDLL.dll
+ 0002:00000048       __imp___rt_udiv            10007048     corelib1:COREDLL.dll
+ 0002:0000004c       __imp_free                 1000704c     corelib1:COREDLL.dll
+ 0002:00000050       __imp___security_gen_cookie2 10007050     corelib1:COREDLL.dll
+ 0002:00000054       __imp_TerminateProcess     10007054     coredll:COREDLL.dll
+ 0002:00000058       \177COREDLL_NULL_THUNK_DATA 10007058     coredll:COREDLL.dll
+ 0002:0000005c       __security_cookie          1000705c     corelib0:seccinit.obj
+ 0002:00000060       __security_cookie_complement 10007060     corelib0:seccinit.obj
+ 0002:00000080       pv_HWregAPBH               10007080     ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0002:00000088       pv_HWregAPBX               10007088     ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0002:0000008c       pv_HWregCLKCTRL            1000708c     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_clk.obj
+ 0002:00000090       pv_HWregPINCTRL            10007090     ddk_mx28_fsl_v2_pdk1_9:soc_ddk_iomux.obj
+ 0002:0000009c       _exitflag                  1000709c     corelib0:cexit.obj
+ 0002:000000a0       g_csDdkClk                 100070a0     <common>
+ 0002:000000b4       g_pDdkClkConfig            100070b4     <common>
+ 0002:000000b8       __onexitend                100070b8     <common>
+ 0002:000000bc       __onexitbegin              100070bc     <common>
+
+ entry point at        0001:000048a8
+
+ Static symbols
+
+ 0001:00001138       ApbhDmaValidChan           10002138 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbhdma.obj
+ 0001:000017f4       ApbxDmaValidChan           100027f4 f   ddk_mx28_fsl_v2_pdk1_9:ddk_apbxdma.obj
+ 0001:000048f0       doexit                     100058f0 f   corelib0:cexit.obj

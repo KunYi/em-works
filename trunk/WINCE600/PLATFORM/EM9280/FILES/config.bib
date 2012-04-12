@@ -1,0 +1,251 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;------------------------------------------------------------------------------
+; 
+; Copyright (C) 2007-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+; 
+;------------------------------------------------------------------------------
+;
+; Memory Map
+; ----------
+;
+; 8000.0000 -+
+;            | Bootloader Stack (64KB)
+; 8001.0000 -+
+;            | Bootloader RAM (256KB)
+; 8005.0000 -+
+;            | Bootloader Code (256KB)
+; 8009.0000 -+
+;            | GAP (reserved for future)
+; 800F.7000 -+
+;            | ARGS (4KB)
+; 800F.8000 -+
+;            | USB KITL transfers (32 KB)
+; 8010.0000  |
+;            | Display Frame buffer ( 1 MB)
+; 8020.0000  |
+;            |
+;            | OS (NK) Code (32MB)
+;            |
+; 8220.0000 -+   **auto-size**
+;            |
+;            | OS (NK) RAM  (30MB)
+;            |
+; 8400.0000 -+
+;
+;******************************************************************************
+
+
+;**************************** MEMORY SECTION ***************************
+MEMORY
+
+; ----------------- Reserved Region Mapping (2 MB) ---------------------
+;   Start Addr      End Addr        Mem Type    Region Name     Size
+;    80000000       80010000        SDRAM       STACK           64KB
+;    80010000       80050000        SDRAM       RAM             256KB
+;    80050000       80090000        SDRAM       EBOOT           256KB
+;    80090000       800F7000        SDRAM       RSVD            412KB
+;    800F7000       800F8000        SDRAM       ARGS            4KB
+;    800F8000       80100000        SDRAM       USB             32KB  
+;    80100000       80200000        SDRAM       DISPLAY         1MB
+; ----------------------------------------------------------------------
+;                   Name        Address     Size        Type
+                    RSVD        80000000    000F7000    RESERVED     ;0x8000_0000 -> 0x8010_0000  (1MB EBOOT RAM & ARGS)
+                    ARGS        800F7000    00001000    RESERVED
+                    USB         800F8000    00008000    RESERVED
+                    DISPLAY     80100000    00100000    RESERVED
+
+IF IMGFLASH !
+    #define NK_START    80200000
+    IF IMGUUT
+        #define NK_SIZE     00300000    ;3MB
+    ENDIF
+    
+    IF IMGUUT !
+        #define NK_SIZE     02800000    ;40MB
+    ENDIF    
+    #define RAM_START   82000000
+    #define RAM_SIZE    06000000    ;96MB    
+ENDIF
+
+IF IMGFLASH
+    IF IMGEBOOT
+        #define NK_START    90040000
+        #define NK_SIZE     03FC0000
+        #define RAM_START   80200000
+        #define RAM_SIZE    07500000
+    ENDIF
+
+    IF IMGEBOOT !
+        #define NK_START    90000000
+        #define NK_SIZE     020C0000
+        #define RAM_START   88100000
+        #define RAM_SIZE    07500000
+    ENDIF
+ENDIF
+
+IF BSP_SUPPORT_DEMAND_PAGING !
+; ----------------------------------------------------------------------
+;                   Name        Address			Size			Type
+                    NK          $(NK_START)	$(NK_SIZE)		RAMIMAGE
+                    RAM         $(RAM_START)	$(RAM_SIZE)	RAM
+                    OCRAM       88000000		00008000		RESERVED
+ENDIF
+
+;
+; CS&ZHL MAR-27-2012: create bib for BinFS
+;
+IF BSP_SUPPORT_DEMAND_PAGING 
+; ----------------------------------------------------------------------
+;                   Name        Address       Size        Type
+					XIPKERNEL	80200000	 003C0000	 RAMIMAGE
+					CHAIN      	805C0000	 00040000	 RESERVED
+					NK			80600000     02000000    NANDIMAGE
+					RAM			82600000     05A00000    RAM
+                    OCRAM       88000000     00008000    RESERVED
+ENDIF
+
+; This fix-up variable is a bitfield that can be used to initialize 
+; the Kernel debug zones per kernel.h. Uncomment the line and 
+; change the hexadecimal bits to enable the desired zones. The 
+; default value (0x00000100) enables the ZONE_DEBUG. 
+; 
+;kernel.dll:initialKernelLogZones 00000000 00000100 FIXUPVAR 
+;kernel.dll:initialKernelLogZones 00000000 7FFFFFFF FIXUPVAR 
+
+;
+; This fix-up variable is a bitfield that can be used to initialize
+; the OAL debug zones per oal_log.h.  Uncomment the line and
+; change the hexidecimal bits to enable the desired zones.  The
+; default value (0x0000000B) enables the OAL_LOG_ERROR,
+; OAL_LOG_WARN, and OAL_LOG_INFO zones, and will be used by
+; OEMInit if the line remains commented out.
+;
+;  nk.exe:initialOALLogZones        00000000 0x0000000B       FIXUPVAR
+;
+
+; This fix-up variable determines the amount of memory the BSP reserves
+; for Watson dump capture (see also the OEMInit() function in the OAL).
+; The current default behavior is to default to zero unless the image has
+; SYSGEN_WATSON_DMPGEN defined, then the default size is 300KB (0x4B000).
+;
+; If WATSONBUFFERSIZE is defined, use its value.  Otherwise use 300KB.
+;
+; @CESYSGEN IF CE_MODULES_OSAXST0
+; @CESYSGEN ENDIF CE_MODULES_OSAXST0
+
+;**************************** CONFIG SECTION ***************************
+CONFIG
+
+; ---------------------- All Image Types Settings ----------------------
+;   KERNELFIXUPS = ON (sections to which the kernel can write are 
+;                      relocated to the start of RAM)
+;   SRE = ON (Romimage.exe produces an .sre file)
+; ----------------------------------------------------------------------
+    KERNELFIXUPS=ON
+
+; --------------------------- RAM image --------------------------------
+;   AUTOSIZE = ON (allows NK and RAM space to resize automatically)
+;   ROMSIZE  = 0x04000000 (64 MB)
+;   ROMSTART = 0x80200000 (SDRAM base + 2 MB offset for reserved region)
+;   ROMWIDTH = 32 (32-bit wide memory, entire image in one file)
+;
+; Note:  Since we run the bootloader with MMU on, we do not need to
+;        adjust virtual addresses back to physical.  If we need
+;        to adjust to physical, the calculation would look something
+;        like this:
+;
+;   ROMOFFSET = (SDRAM_PHYSICAL_START - ROMSTART) % 0x100000000
+;             = (0x80000000 - 0x80000000) % 0x100000000 = 0x00000000
+; ----------------------------------------------------------------------
+IF IMGFLASH !
+	;
+	; CS&ZHL MAR-27-2012: create bib for BinFS
+	;
+	IF BSP_SUPPORT_DEMAND_PAGING;
+		RAM_AUTOSIZE=ON
+		ROM_AUTOSIZE=ON
+		DLLADDR_AUTOSIZE=ON
+		XIPSCHAIN=805C0000
+	ENDIF
+
+    AUTOSIZE=ON
+    ROMSTART=$(NK_START)
+    ROMSIZE=$(NK_SIZE)
+    ROMWIDTH=32
+    IF IMGNAND
+        ; ROMOFFSET = (FLASH_PHYSICAL_ADDRESS - ROMSTART) % 0x100000000
+        ;           = (0x84200000 - 0x80200000) % 0x10000000 = 4200000
+        ;ROMOFFSET=4200000
+        ;
+        ; CS&ZHL DEC-8-2011: fix arithmatic error
+        ;
+        ;ROMOFFSET= (0x84200000 - 0x80200000) % 0x10000000 = 0x4000000
+        ROMOFFSET=4000000
+    ENDIF
+    IF IMGSDMMC
+        ; ROMOFFSET = (FLASH PHYSICAL ADDRESS - ULDR_PHSYICAL_START) % 0x100000000
+        ;           = ( 0x87F00000 - 0x80200000 ) % 0x10000000 = 7D00000
+        ROMOFFSET=7d00000
+    ENDIF
+ENDIF
+
+; ------------------- FLASH image with/without EBOOT -------------------
+;   ROMSIZE  = 0x04000000 (64 MB)
+;   ROMSTART = 0x90000000 (NOR virtual address base)
+;   ROMWIDTH = 32 (32-bit wide memory, entire image in one file)
+; ----------------------------------------------------------------------
+IF IMGFLASH
+    IF IMGEBOOT
+        ROMSIZE=03FC0000
+        ROMSTART=90040000
+    ENDIF
+    IF IMGEBOOT !
+        ROMSIZE=04000000
+        ROMSTART=90000000
+    ENDIF
+    ROMWIDTH=32
+ENDIF
+
+;;@CESYSGEN IF !NK_NKNOCOMP
+;;COMPRESSION=ON
+;;@CESYSGEN ENDIF !NK_NKNOCOMP
+;;@CESYSGEN IF NK_NKNOCOMP
+;;@CESYSGEN ENDIF NK_NKNOCOMP
+COMPRESSION=OFF
+;DLLADDR_AUTOSIZE=ON
+
+; --------------------- Profiling kernel support -----------------------
+;   PROFILE = ON  (includes profiler structure and symbols in image)
+;   PROFILE = OFF (does not include profiler structure and symbols)
+; ----------------------------------------------------------------------
+IF IMGPROFILER
+   PROFILE=ON
+ELSE
+   PROFILE=OFF
+ENDIF
+
+FSRAMPERCENT=0x40404040
+
+;
+; ROMFLAGS is a bitmask of options for the kernel
+;   ROMFLAGS    0x0001  Disallow Paging
+;   ROMFLAGS    0x0002  Not all KMode
+;   ROMFLAGS    0x0010  Trust Module only
+;
+IF IMGTRUSTROMONLY
+       ROMFLAGS=10
+ELSE
+       ROMFLAGS=00
+ENDIF
+; EOF config.bib

@@ -1,0 +1,29 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+!endif
+
+!IF "$(BSP_ROTARY)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=rotary
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+
+DLLENTRY=_DllEntryCRTStartup
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\rotary_$(_SOCDIR).def
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+    
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\rotary_$(_SOCDIR).lib \
+
+SOURCES=\
+        bsprotary.cpp \

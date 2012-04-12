@@ -1,0 +1,751 @@
+ hcd_hsotg
+
+ Timestamp is 4f869dc1 (Thu Apr 12 17:17:53 2012)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000004H .CRT$XCA                CODE
+ 0001:00000004 00000004H .CRT$XCZ                CODE
+ 0001:00000008 00000004H .CRT$XIA                CODE
+ 0001:0000000c 00000004H .CRT$XIZ                CODE
+ 0001:00000010 00000004H .CRT$XPA                CODE
+ 0001:00000014 00000004H .CRT$XPZ                CODE
+ 0001:00000018 00000004H .CRT$XTA                CODE
+ 0001:0000001c 00000004H .CRT$XTZ                CODE
+ 0001:00000020 000013a6H .rdata                  CODE
+ 0001:000013c8 00000026H .rdata$debug            CODE
+ 0001:000013f0 000119fcH .text                   CODE
+ 0001:00012dec 00000184H .xdata                  CODE
+ 0001:00012f70 0000003cH .idata$2                CODE
+ 0001:00012fac 00000014H .idata$3                CODE
+ 0001:00012fc0 00000140H .idata$4                CODE
+ 0001:00013100 00000094H .idata$6                CODE
+ 0001:000131a0 00000100H .edata                  CODE
+ 0002:00000000 00000140H .idata$5                DATA
+ 0002:00000140 00000114H .data                   DATA
+ 0002:00000260 00000090H .bss                    DATA
+ 0003:00000000 00000dd8H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000000       ___safe_se_handler_count   00000000     <absolute>
+ 0000:00000000       ___safe_se_handler_table   00000000     <absolute>
+ 0001:00000000       __xc_a                     10001000     corelib0:crt0init.obj
+ 0001:00000004       __xc_z                     10001004     corelib0:crt0init.obj
+ 0001:00000008       __xi_a                     10001008     corelib0:crt0init.obj
+ 0001:0000000c       __xi_z                     1000100c     corelib0:crt0init.obj
+ 0001:00000010       __xp_a                     10001010     corelib0:crt0init.obj
+ 0001:00000014       __xp_z                     10001014     corelib0:crt0init.obj
+ 0001:00000018       __xt_a                     10001018     corelib0:crt0init.obj
+ 0001:0000001c       __xt_z                     1000101c     corelib0:crt0init.obj
+ 0001:000000d0       ??_C@_1GC@PLPEIKOF@?$AAU?$AAS?$AAB?$AA?5?$AAH?$AAo?$AAs?$AAt?$AA?5?$AAl?$AAo?$AAa?$AAd?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAu?$AAr?$AAe?$AA?5?$AAb?$AAe?$AAc?$AAa?$AAu?$AAs?$AAe?$AA?5?$AAU?$AAs@ 100010d0     i_hwinit.obj
+ 0001:000001c8       ??_C@_1IA@ECOMNKDK@?$AAI?$AAn?$AAi?$AAt?$AAi?$AAa?$AAl?$AAi?$AAz?$AAe?$AAT?$AAr?$AAa?$AAn?$AAs?$AAc?$AAe?$AAi?$AAv?$AAe?$AAr?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp@ 100011c8     i_usbclock.obj
+ 0001:00000248       ??_C@_1FC@NEMMIEIK@?$AAF?$AAa?$AAi?$AAl?$AAu?$AAr?$AAe?$AA?5?$AAt?$AAo?$AA?5?$AAC?$AAr?$AAe?$AAa?$AAt?$AAe?$AA?5?$AAF?$AAi?$AAl?$AAe?$AA?5?$AAM?$AAa?$AAp?$AAp?$AAi?$AAn?$AAg?$AA?5?$AAf@ 10001248     i_usbclock.obj
+ 0001:0000029c       ??_C@_1CC@BJPGGDNC@?$AAU?$AAS?$AAB?$AA_?$AAC?$AAL?$AAO?$AAC?$AAK?$AA_?$AAG?$AAA?$AAT?$AAI?$AAN?$AAG?$AA?$AA@ 1000129c     i_usbclock.obj
+ 0001:000002c0       ??_C@_1CE@DCPIDLMJ@?$AAH?$AA1?$AAH?$AAC?$AAl?$AAo?$AAc?$AAk?$AAO?$AAp?$AAe?$AAn?$AAS?$AAt?$AAa?$AAt?$AAe?$AA?$AA@ 100012c0     i_usbclock.obj
+ 0001:000002e4       ??_C@_1CE@FOPGHOEF@?$AAO?$AAT?$AAG?$AAC?$AAl?$AAo?$AAc?$AAk?$AAO?$AAp?$AAe?$AAn?$AAS?$AAt?$AAa?$AAt?$AAe?$AA?$AA@ 100012e4     i_usbclock.obj
+ 0001:00000398       ??_C@_1HI@DCBDCBBF@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAP?$AAh?$AAy?$AAS?$AAt?$AAa?$AAr?$AAt?$AAU?$AAp?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc?$AAe?$AA?5?$AAf@ 10001398     i_usbutils.obj
+ 0001:00000410       ??_C@_1IK@PCKHGMEM@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAP?$AAh?$AAy?$AAE?$AAn?$AAt?$AAe?$AAr?$AAL?$AAo?$AAw?$AAP?$AAo?$AAw?$AAe?$AAr?$AAM?$AAo?$AAd?$AAe?$AA?5?$AAM?$AAm?$AAM?$AAa?$AAp@ 10001410     i_usbutils.obj
+ 0001:000004a0       ??_C@_1IK@DOANGMNC@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAP?$AAh?$AAy?$AAE?$AAn?$AAt?$AAe?$AAr?$AAL?$AAo?$AAw?$AAP?$AAo?$AAw?$AAe?$AAr?$AAM?$AAo?$AAd?$AAe?$AA?5?$AAM?$AAm?$AAM?$AAa?$AAp@ 100014a0     i_usbutils.obj
+ 0001:00000530       ??_C@_1HO@MFBKDDCJ@?$AAB?$AAS?$AAP?$AAH?$AAo?$AAs?$AAt?$AAD?$AAi?$AAs?$AAc?$AAo?$AAn?$AAD?$AAe?$AAt?$AAe?$AAc?$AAt?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc@ 10001530     i_usbutils.obj
+ 0001:000005b0       ??_C@_1HO@JLADDLH@?$AAB?$AAS?$AAP?$AAH?$AAo?$AAs?$AAt?$AAD?$AAi?$AAs?$AAc?$AAo?$AAn?$AAD?$AAe?$AAt?$AAe?$AAc?$AAt?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa?$AAc@ 100015b0     i_usbutils.obj
+ 0001:00000630       ??_C@_1IA@GCNDDNEO@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAh?$AAP?$AAu?$AAt?$AAP?$AAh?$AAy?$AAS?$AAu?$AAs?$AAp?$AAe?$AAn?$AAd?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa@ 10001630     i_usbutils.obj
+ 0001:000006b0       ??_C@_1IA@KOHJDNNA@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAh?$AAP?$AAu?$AAt?$AAP?$AAh?$AAy?$AAS?$AAu?$AAs?$AAp?$AAe?$AAn?$AAd?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp?$AAa@ 100016b0     i_usbutils.obj
+ 0001:00000730       ??_C@_1IC@EJJHEHII@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAh?$AAC?$AAh?$AAe?$AAc?$AAk?$AAP?$AAh?$AAy?$AAR?$AAe?$AAs?$AAu?$AAm?$AAe?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp@ 10001730     i_usbutils.obj
+ 0001:000007b8       ??_C@_1IC@IFDNEHBG@?$AAB?$AAS?$AAP?$AAU?$AAs?$AAb?$AAh?$AAC?$AAh?$AAe?$AAc?$AAk?$AAP?$AAh?$AAy?$AAR?$AAe?$AAs?$AAu?$AAm?$AAe?$AA?3?$AA?3?$AAM?$AAm?$AAM?$AAa?$AAp?$AAI?$AAo?$AAS?$AAp@ 100017b8     i_usbutils.obj
+ 0001:0000083c       ??_C@_1BI@BHLBGEOK@?$AAP?$AAr?$AAi?$AAo?$AAr?$AAi?$AAt?$AAy?$AA2?$AA5?$AA6?$AA?$AA@ 1000183c     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00000854       ??_C@_1DG@INPFIHHA@?$AAH?$AAc?$AAd?$AAM?$AAd?$AAd?$AA_?$AAS?$AAe?$AAt?$AAS?$AAu?$AAb?$AAH?$AAu?$AAb?$AAT?$AAe?$AAs?$AAt?$AAM?$AAo?$AAd?$AAe?$AA?$AN?$AA?6?$AA?$AA@ 10001854     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:0000088c       ??_C@_17KACEIPNC@?$AAK?$AAe?$AAy?$AA?$AA@ 1000188c     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00000898       ??_7CHcd@@6B@              10001898     usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:0000090c       ??_C@_1CA@GOGEMIHH@?$AAW?$AAa?$AAi?$AAt?$AAF?$AAo?$AAr?$AAA?$AAP?$AAI?$AAR?$AAe?$AAa?$AAd?$AAy?$AA?$AA@ 1000190c     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:0000092c       ??_C@_1BM@LLINKHBA@?$AAk?$AA?4?$AAc?$AAo?$AAr?$AAe?$AAd?$AAl?$AAl?$AA?4?$AAd?$AAl?$AAl?$AA?$AA@ 1000192c     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000948       ??_C@_1BO@KLPJMMP@?$AAC?$AAe?$AAC?$AAa?$AAl?$AAl?$AAU?$AAs?$AAe?$AAr?$AAP?$AAr?$AAo?$AAc?$AA?$AA@ 10001948     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000968       ??_7CDeviceGlobal@@6B@     10001968     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000978       ??_C@_1BE@NANPENDH@?$AAH?$AAc?$AAd?$AAA?$AAt?$AAt?$AAa?$AAc?$AAh?$AA?$AA@ 10001978     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:0000098c       ??_C@_1CE@MBINLHH@?$AAH?$AAc?$AAd?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAA?$AAt?$AAt?$AAa?$AAc?$AAh?$AAe?$AAd?$AA?$AA@ 1000198c     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000009b0       ??_C@_1CE@KAKNBFJP@?$AAH?$AAc?$AAd?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAD?$AAe?$AAt?$AAa?$AAc?$AAh?$AAe?$AAd?$AA?$AA@ 100019b0     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000009d4       ??_C@_1CO@MCCAIHAO@?$AAH?$AAc?$AAd?$AAS?$AAe?$AAl?$AAe?$AAc?$AAt?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AAu?$AAr?$AAa?$AAt?$AAi?$AAo?$AAn?$AA?$AA@ 100019d4     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a04       ??_C@_1BC@MPAIGMIO@?$AAU?$AAS?$AAB?$AAD?$AA?4?$AAD?$AAL?$AAL?$AA?$AA@ 10001a04     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a18       ??_C@_1BE@MDMBICMJ@?$AAH?$AAc?$AAd?$AAD?$AAe?$AAt?$AAa?$AAc?$AAh?$AA?$AA@ 10001a18     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a2c       ??_7CDevice@@6B@           10001a2c     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a64       ??_C@_1BK@GALBKKNF@?$AAN?$AAe?$AAt?$AAM?$AAs?$AAg?$AAB?$AAo?$AAx?$AAE?$AAx?$AAt?$AA?$AA@ 10001a64     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a80       ??_C@_1BE@BOHEBICI@?$AAn?$AAe?$AAt?$AAu?$AAi?$AA?4?$AAd?$AAl?$AAl?$AA?$AA@ 10001a80     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000a98       ??_C@_1GE@CBKPHLEP@?$AA?7?$AAU?$AAS?$AAB?$AAH?$AAo?$AAs?$AAt?$AA?5?$AA?3?$AA?5?$AAD?$AAe?$AAt?$AAa?$AAc?$AAh?$AA?5?$AAH?$AAu?$AAb?$AA?5?$AA?$FL?$AAa?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs?$AA?$CI?$AA?$CF@ 10001a98     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000b00       ??_C@_1GC@COFJGCOD@?$AA?7?$AAU?$AAS?$AAB?$AAH?$AAo?$AAs?$AAt?$AA?5?$AA?3?$AA?5?$AAH?$AAu?$AAb?$AA?5?$AA?$FL?$AAa?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs?$AA?$CI?$AA?$CF?$AAd?$AA?$CJ?$AA?5?$AA?1?$AA?5?$AAl?$AAa@ 10001b00     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000b64       ??_C@_1O@BAAIDILM@?$AAR?$AAE?$AAS?$AAU?$AAM?$AAE?$AA?$AA@ 10001b64     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000b74       ??_C@_1BA@ODNFALIH@?$AAS?$AAU?$AAS?$AAP?$AAE?$AAN?$AAD?$AA?$AA@ 10001b74     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000b88       ??_C@_1GO@MODMIGEA@?$AAC?$AAE?$AAx?$AAt?$AAe?$AAr?$AAn?$AAa?$AAl?$AAH?$AAu?$AAb?$AA?3?$AA?3?$AAS?$AAe?$AAt?$AAO?$AAr?$AAC?$AAl?$AAe?$AAa?$AAr?$AAF?$AAe?$AAa?$AAt?$AAu?$AAr?$AAe?$AA?5@ 10001b88     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000bf8       ??_C@_1HA@HJIFJBA@?$AA?7?$AAU?$AAS?$AAB?$AAH?$AAo?$AAs?$AAt?$AA?5?$AA?3?$AA?5?$AAD?$AAe?$AAt?$AAa?$AAc?$AAh?$AA?5?$AAF?$AAu?$AAn?$AAc?$AAt?$AAi?$AAo?$AAn?$AA?5?$AA?$FL?$AAa?$AAd?$AAd?$AAr@ 10001bf8     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000c68       ??_C@_1BE@KCBNNJPA@?$AAU?$AAS?$AAB?$AAD?$AAe?$AAt?$AAa?$AAc?$AAh?$AA?$AA@ 10001c68     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000c80       ??_7CHub@@6B@              10001c80     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000ce0       ??_7CRootHub@@6B@          10001ce0     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000d40       ??_7CExternalHub@@6B@      10001d40     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000da0       ??_7CFunction@@6B@         10001da0     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000dd8       ??_C@_1GI@IAHECEM@?$AA?7?$AAU?$AAs?$AAb?$AAH?$AAo?$AAs?$AAt?$AA?5?$AA?3?$AA?5?$AAN?$AAe?$AAw?$AA?5?$AAF?$AAu?$AAn?$AAc?$AAt?$AAi?$AAo?$AAn?$AA?5?$AA?$FL?$AAa?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@ 10001dd8     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000e40       ??_C@_1FO@JFMBDOOA@?$AA?7?$AAU?$AAs?$AAb?$AAH?$AAo?$AAs?$AAt?$AA?5?$AA?3?$AA?5?$AAN?$AAe?$AAw?$AA?5?$AAH?$AAu?$AAb?$AA?5?$AA?$FL?$AAa?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs?$AA?$CI?$AA?$CF?$AAd?$AA?$CJ?$AA?5@ 10001e40     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000ea0       ??_C@_1HE@EAEFIBJD@?$AAE?$AAx?$AAc?$AAe?$AAe?$AAd?$AA?5?$AAp?$AAo?$AAw?$AAe?$AAr?$AA?5?$AAl?$AAi?$AAm?$AAi?$AAt?$AAa?$AAt?$AAi?$AAo?$AAn?$AA?0?$AA?5?$AAU?$AAS?$AAB?$AA?5?$AAd?$AAe?$AAv@ 10001ea0     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000f18       ??_C@_1GK@IHAKGPKC@?$AAT?$AAo?$AAo?$AA?5?$AAm?$AAa?$AAn?$AAy?$AA?5?$AAh?$AAu?$AAb?$AA?5?$AAt?$AAi?$AAe?$AAr?$AAs?$AA?0?$AA?5?$AAU?$AAS?$AAB?$AA?5?$AAd?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?5?$AAc@ 10001f18     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00000f88       ??_7CEhcd@@6B@             10001f88     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00001004       ??_7CQTransfer@@6B@        10002004     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001010       ??_7CPipeAbs@@6B@          10002010     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001034       ??_7CPipe@@6B@             10002034     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001070       ??_7CQueuedPipe@@6B@       10002070     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000010b0       ??_7CBulkPipe@@6B@         100020b0     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000010f0       ??_C@_19PBJLGAMD@?$AAB?$AAu?$AAl?$AAk?$AA?$AA@ 100020f0     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001100       ??_7CControlPipe@@6B@      10002100     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001140       ??_C@_1BA@JGFNDEFA@?$AAC?$AAo?$AAn?$AAt?$AAr?$AAo?$AAl?$AA?$AA@ 10002140     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001150       ??_7CInterruptPipe@@6B@    10002150     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00001190       ??_C@_1BE@PBKDACKD@?$AAI?$AAn?$AAt?$AAe?$AAr?$AAr?$AAu?$AAp?$AAt?$AA?$AA@ 10002190     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000011a4       ??_7CIsochronousPipe@@6B@  100021a4     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000011dc       ??_C@_1BI@FKFHNGHF@?$AAI?$AAs?$AAo?$AAc?$AAh?$AAr?$AAo?$AAn?$AAo?$AAu?$AAs?$AA?$AA@ 100021dc     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000011fc       ??_7CDummyPipe@@6B@        100021fc     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:00001234       ??_C@_1M@EOJMLNDL@?$AAD?$AAu?$AAm?$AAm?$AAy?$AA?$AA@ 10002234     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:00001240       ??_C@_1BM@CBMLCADC@?$AAI?$AAn?$AAt?$AAT?$AAh?$AAr?$AAe?$AAs?$AAh?$AAC?$AAt?$AAr?$AAl?$AA?$AA@ 10002240     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:00001260       ??_7CHW@@6B@               10002260     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:000012dc       ??_C@_1BA@MLDLNLBG@?$AAU?$AAS?$AAB?$AAH?$AAo?$AAs?$AAt?$AA?$AA@ 100022dc     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:000012ec       ??_C@_1BA@JAHEEJIA@?$AAU?$AAS?$AAB?$AAX?$AAC?$AAV?$AAR?$AA?$AA@ 100022ec     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:000012fc       ??_7CTransfer@@6B@         100022fc     usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00001308       ??_7CIsochTransfer@@6B@    10002308     usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00001324       ??_7CITransfer@@6B@        10002324     usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00001340       ??_7CSITransfer@@6B@       10002340     usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000135c       ??_C@_1CC@NPEFILDH@?$AAP?$AAh?$AAy?$AAs?$AAi?$AAc?$AAa?$AAl?$AAP?$AAa?$AAg?$AAe?$AAS?$AAi?$AAz?$AAe?$AA?$AA@ 1000235c     usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00001380       ??_C@_1BM@KKKMKIHE@?$AAH?$AAc?$AAd?$AAC?$AAa?$AAp?$AAa?$AAb?$AAi?$AAl?$AAi?$AAt?$AAy?$AA?$AA@ 10002380     usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0000139c       ??_C@_1BC@GDFGLIEL@?$AAO?$AAT?$AAG?$AAG?$AAr?$AAo?$AAu?$AAp?$AA?$AA@ 1000239c     usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:000013b0       ??_C@_1BG@HHFAGDDC@?$AAO?$AAT?$AAG?$AAS?$AAu?$AAp?$AAp?$AAo?$AAr?$AAt?$AA?$AA@ 100023b0     usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:000013f0       FslUfnIsUSBKitlEnable      100023f0 f   i_hwinit.obj
+ 0001:0000145c       SetPHYPowerMgmt            1000245c f   i_hwinit.obj
+ 0001:00001460       gfnGetOTGGroup             10002460 f   i_hwinit.obj
+ 0001:0000146c       gfnIsOTGSupport            1000246c f   i_hwinit.obj
+ 0001:0000147c       BSPUsbhCheckConfigPower    1000247c f   i_hwinit.obj
+ 0001:00001490       BSPUsbCheckWakeUp          10002490 f   i_hwinit.obj
+ 0001:00001498       BSPUsbHostLowPowerModeEnable 10002498 f   i_hwinit.obj
+ 0001:000014a0       BSPNeedCloseVBus           100024a0 f   i_hwinit.obj
+ 0001:000014a8       IsLowPowerSameAsSuspend    100024a8 f   i_hwinit.obj
+ 0001:000014b0       BSPGetUSBControllerType    100024b0 f   i_hwinit.obj
+ 0001:000015bc       BSPUsbSetWakeUp            100025bc f   i_hwinit.obj
+ 0001:0000162c       BSPUSBHostVbusControl      1000262c f   i_hwinit.obj
+ 0001:00001668       InitializeTransceiver      10002668 f   i_hwinit.obj
+ 0001:000019cc       USBClockGatingLock         100029cc f   i_usbclock.obj
+ 0001:00001a08       BSPUSBClockCreateFileMapping 10002a08 f   i_usbclock.obj
+ 0001:00001ad0       BSPUSBClockSwitch          10002ad0 f   i_usbclock.obj
+ 0001:00001b30       USBClockInit               10002b30 f   i_usbclock.obj
+ 0001:00001bb4       PowerDownSchemeExist       10002bb4 f   i_usbutils.obj
+ 0001:00001bbc       BSPUsbConfigurePhyWakeup   10002bbc f   i_usbutils.obj
+ 0001:00001ea8       BSPUsbPhyEnterLowPowerMode 10002ea8 f   i_usbutils.obj
+ 0001:00001f88       BSPUsbSetBusConfig         10002f88 f   i_usbutils.obj
+ 0001:00001f94       BSPUSBInterruptControl     10002f94 f   i_usbutils.obj
+ 0001:00001fdc       BSPUsbPhyStartUp           10002fdc f   i_usbutils.obj
+ 0001:00002110       BSPUsbPhyExit              10003110 f   i_usbutils.obj
+ 0001:00002114       BSPUSBSwitchModulePower    10003114 f   i_usbutils.obj
+ 0001:00002118       BSPHostDisconDetect        10003118 f   i_usbutils.obj
+ 0001:0000221c       BSPUsbhPutPhySuspend       1000321c f   i_usbutils.obj
+ 0001:00002394       BSPUsbhCheckPhyResume      10003394 f   i_usbutils.obj
+ 0001:000024bc       IsResetNeed                100034bc f   i_usbutils.obj
+ 0001:000024c4       DllMain                    100034c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002520       HcdGetFrameNumber          10003520 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:0000253c       HcdGetFrameLength          1000353c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002558       HcdSetFrameLength          10003558 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002574       HcdStopAdjustingFrame      10003574 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002590       HcdOpenPipe                10003590 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000025a0       HcdClosePipe               100035a0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000025b0       HcdResetPipe               100035b0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000025c0       HcdIsPipeHalted            100035c0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000025d0       HcdIssueTransfer           100035d0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002680       HcdAbortTransfer           10003680 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000026a8       HcdDisableDevice           100036a8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000026c4       HcdSuspendResume           100036c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000026e0       HcdMdd_CreateHcdObject_Customized 100036e0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:0000274c       HcdMdd_DestroyHcdObject    1000374c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002774       HcdMdd_DestroyMemoryObject 10003774 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:0000279c       HcdMdd_PowerUp             1000379c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000027c0       HcdMdd_PowerDown           100037c0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000027e4       HcdMdd_SetCapability       100037e4 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002800       HcdMdd_SetSubHubTestMode   10003800 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002864       HCD_Init                   10003864 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029a8       HCD_PowerUp                100039a8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029b8       HCD_PowerDown              100039b8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029c8       HCD_Deinit                 100039c8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029d8       HCD_Open                   100039d8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029e8       HCD_Close                  100039e8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:000029f8       HCD_Read                   100039f8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002a08       HCD_Write                  10003a08 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002a18       HCD_Seek                   10003a18 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002a28       HCD_IOControl              10003a28 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002a58       HcdMdd_CreateMemoryObject  10003a58 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0001:00002ad8       ??0CHcd@@QAA@XZ            10003ad8 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002b10       ?WaitForPortStatusChange@CHcd@@UAAHPAX@Z 10003b10 f i usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002b18       ?SuspendHC@CHcd@@UAAHXZ    10003b18 f i usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002b20       ?ResumeNotification@CHcd@@MAAHXZ 10003b20 f i usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002b70       ??1CHcd@@UAA@XZ            10003b70 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002bf0       ?SetRootHub@CHcd@@QAAPAVCRootHub@@PAV2@@Z 10003bf0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002c20       ?OpenPipe@CHcd@@QAAHIPBU_USB_ENDPOINT_DESCRIPTOR@@PAI@Z 10003c20 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002cb0       ?ClosePipe@CHcd@@QAAHII@Z  10003cb0 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002d10       ?IssueTransfer@CHcd@@QAAHIIP6AKPAX@Z0KPBXKKPBKK0K2PAK4PAH44@Z 10003d10 f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002e0c       ?AbortTransfer@CHcd@@QAAHIIP6AKPAX@Z0PBX@Z 10003e0c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002e8c       ?IsPipeHalted@CHcd@@QAAHIIPAH@Z 10003e8c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002efc       ?ResetPipe@CHcd@@QAAHII@Z  10003efc f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002f5c       ?DisableDevice@CHcd@@UAAHIH@Z 10003f5c f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00002fbc       ?SuspendResume@CHcd@@UAAHIH@Z 10003fbc f   usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:0000301c       ??_GCHcd@@UAAPAXI@Z        1000401c f i usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:0000301c       ??_ECHcd@@UAAPAXI@Z        1000401c f i usbh_usb2com_common_fsl_v2_pdk1_9:hcd.obj
+ 0001:00003044       ?CreateNewNode@CPhysMem@@AAAPAUtMEMLIST@@KKK@Z 10004044 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:000030c4       ?FindFreeBlock@CPhysMem@@AAAPAUtMEMLIST@@KH@Z 100040c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:00003138       ?AddNodeToFreeList@CPhysMem@@AAAHPAUtMEMLIST@@H@Z 10004138 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:000032d0       ?FreeList@CPhysMem@@AAAHPAPAUtMEMLIST@@@Z 100042d0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:00003320       ?AllocateSpecialMemory@CPhysMem@@QAAHKQAPAE@Z 10004320 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:00003340       ?FreeSpecialMemory@CPhysMem@@QAAXQAE@Z 10004340 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:0000334c       ?AllocateMemory@CPhysMem@@QAAHKQAPAEKPAH@Z 1000434c f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:000034b8       ?FreeMemory@CPhysMem@@QAAXQAEKK@Z 100044b8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:000035a0       ?ReInit@CPhysMem@@QAAXXZ   100045a0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:00003744       ??1CPhysMem@@QAA@XZ        10004744 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:000037b0       ??0CPhysMem@@QAA@KKPAE0@Z  100047b0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cphysmem.obj
+ 0001:00003920       ?WaitForAPIReadyWrapper@@YAKKK@Z 10004920 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003994       ?CeCallUserProcWrapper@@YAHPBG0PAXK1KPAK@Z 10004994 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003a38       ??0CDeviceGlobal@@QAA@XZ   10004a38 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003a9c       ?Initialize@CDeviceGlobal@@QAAHPAX@Z 10004a9c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003b88       ?DeInitialize@CDeviceGlobal@@UAAXXZ 10004b88 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003c00       ?ReserveAddress@CDeviceGlobal@@QAAHAAE@Z 10004c00 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003c88       ?FreeAddress@CDeviceGlobal@@QAAXE@Z 10004c88 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003ccc       ?TransferDoneCallbackSetEvent@CDevice@@KAKPAX@Z 10004ccc f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003ce4       ??0CDevice@@QAA@EABU_USB_DEVICE_INFO@@HHEQAVCDeviceGlobal@@QAVCHub@@E@Z 10004ce4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003d68       ?ResumeNotification@CDevice@@UAAHXZ 10004d68 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003d70       ?GetUSB2TT@CDevice@@UAAPAVCHub@@PAE0@Z 10004d70 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003de0       ?DeleteUsbConfigurationStructure@CDevice@@QBAXAAU_NON_CONST_USB_CONFIGURATION@@@Z 10004de0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003e90       ?AllocatePipeArray@CDevice@@IAAHXZ 10004e90 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003f5c       ?SubHubTestModeEnable@CHub@@UAAHGG@Z 10004f5c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003f64       ?DisableDevice@CDevice@@UAA?AW4HCD_REQUEST_STATUS@@IH@Z 10004f64 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00003f9c       ?SuspendResume@CDevice@@UAA?AW4HCD_REQUEST_STATUS@@IH@Z 10004f9c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004004       ?MessageBoxSpecial@CHub@@QAAHPAUHWND__@@PBGI@Z 10005004 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000040d4       ?GetDescriptor@CHub@@IAAHQAVCPipeAbs@@EEEGPAX@Z 100050d4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004264       ?DetachDownstreamDeviceThread@CHub@@IAAKXZ 10005264 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000042c8       ?AllocateDeviceArray@CHub@@IAAHXZ 100052c8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000043a0       ?HandleDetach@CHub@@UAAXXZ 100053a0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004530       ?OpenPipe@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IQBU_USB_ENDPOINT_DESCRIPTOR@@QAI@Z 10005530 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000045c4       ?ClosePipe@CHub@@UAA?AW4HCD_REQUEST_STATUS@@II@Z 100055c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004650       ?IssueTransfer@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IIQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 10005650 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004768       ?AbortTransfer@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IIQ6AKPAX@ZQAXQBX@Z 10005768 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004814       ?IsPipeHalted@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IIQAH@Z 10005814 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000048a8       ?ResetPipe@CHub@@UAA?AW4HCD_REQUEST_STATUS@@II@Z 100058a8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004934       ?DisableDevice@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IH@Z 10005934 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004984       ?SuspendResume@CHub@@UAA?AW4HCD_REQUEST_STATUS@@IH@Z 10005984 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004a24       ?SuspendResumeOffStreamDevice@CHub@@UAAHIH@Z 10005a24 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004b80       ?PowerAllHubPorts@CRootHub@@EAAHXZ 10005b80 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004b88       ?WaitForPortStatusChange@CRootHub@@EAAHAAEAAU_USB_HUB_AND_PORT_STATUS@@PAK@Z 10005b88 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004e3c       ?GetStatus@CRootHub@@EAAHEAAU_USB_HUB_AND_PORT_STATUS@@PAK@Z 10005e3c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004e5c       ?ResetAndEnablePort@CRootHub@@EAAHE@Z 10005e5c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004e7c       ?DisablePort@CRootHub@@EAAXE@Z 10005e7c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004e9c       ?SetOrClearFeature@CRootHub@@EAAHGEG@Z 10005e9c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004ec0       ?SetOrClearRemoteWakup@CRootHub@@EAAHH@Z 10005ec0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004ec8       ?SubHubTestModeEnable@CRootHub@@UAAHGG@Z 10005ec8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00004fc0       ?SubHubTestModeEnable@CExternalHub@@UAAHGG@Z 10005fc0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:0000517c       ?PowerAllHubPorts@CExternalHub@@EAAHXZ 1000617c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005260       ?GetStatusChangeBitmap@CExternalHub@@AAAHAAK@Z 10006260 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000053d4       ?WaitForPortStatusChange@CExternalHub@@EAAHAAEAAU_USB_HUB_AND_PORT_STATUS@@PAK@Z 100063d4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005504       ?GetStatus@CExternalHub@@EAAHEAAU_USB_HUB_AND_PORT_STATUS@@PAK@Z 10006504 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:0000565c       ?ResetAndEnablePort@CExternalHub@@EAAHE@Z 1000665c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005798       ?DisablePort@CExternalHub@@EAAXE@Z 10006798 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000057d0       ?SetOrClearFeature@CExternalHub@@EAAHGEG@Z 100067d0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005924       ?SetOrClearRemoteWakup@CExternalHub@@EAAHH@Z 10006924 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005a78       ?EnterOperationalState@CFunction@@UAAHQAVCPipeAbs@@@Z 10006a78 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005b84       ?OpenPipe@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@IQBU_USB_ENDPOINT_DESCRIPTOR@@QAI@Z 10006b84 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005e7c       ?ClosePipe@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@II@Z 10006e7c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00005f1c       ?IssueTransfer@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@IIQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 10006f1c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006040       ?AbortTransfer@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@IIQ6AKPAX@ZQAXQBX@Z 10007040 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000060c4       ?IsPipeHalted@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@IIQAH@Z 100070c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006154       ?HandleDetach@CFunction@@EAAXXZ 10007154 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000062f8       ?SetOrClearFeature@CFunction@@AAAHEGEG@Z 100072f8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006428       ??1CDeviceGlobal@@UAA@XZ   10007428 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006460       ??1CDevice@@UAA@XZ         10007460 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000064f8       ?CreateUsbConfigurationStructure@CDevice@@QBAHAAU_NON_CONST_USB_CONFIGURATION@@QAEI@Z 100074f8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006874       ??0CHub@@QAA@EABU_USB_DEVICE_INFO@@HHEABU_USB_HUB_DESCRIPTOR@@QAVCHcd@@QAV0@E@Z 10007874 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000069a4       ?ResumeNotification@CHub@@UAAHXZ 100079a4 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000069c8       ??1CHub@@UAA@XZ            100079c8 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006a58       ?DetachDownstreamDeviceThreadStub@CHub@@KAKPAX@Z 10007a58 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006a68       ?DetachDevice@CHub@@IAAXE@Z 10007a68 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006be0       ??0CRootHub@@QAA@ABU_USB_DEVICE_INFO@@HHABU_USB_HUB_DESCRIPTOR@@QAVCHcd@@@Z 10007be0 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006c40       ?GetDeviceTypeInt@CRootHub@@EBA?BKXZ 10007c40 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006c48       ??0CExternalHub@@QAA@EABU_USB_DEVICE_INFO@@HHEABU_USB_HUB_DESCRIPTOR@@QAVCHcd@@QAVCHub@@E@Z 10007c48 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006ca4       ?GetDeviceTypeInt@CExternalHub@@EBA?BKXZ 10007ca4 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006cac       ??0CFunction@@QAA@EABU_USB_DEVICE_INFO@@HHEQAVCHcd@@QAVCHub@@E@Z 10007cac f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006d14       ?GetDeviceTypeInt@CFunction@@EBA?BKXZ 10007d14 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006d1c       ?ResetPipe@CFunction@@UAA?AW4HCD_REQUEST_STATUS@@II@Z 10007d1c f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006dd4       ??_ECDeviceGlobal@@UAAPAXI@Z 10007dd4 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006dd4       ??_GCDeviceGlobal@@UAAPAXI@Z 10007dd4 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006dfc       ??_GCDevice@@UAAPAXI@Z     10007dfc f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006dfc       ??_ECDevice@@UAAPAXI@Z     10007dfc f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006e24       ??_ECHub@@UAAPAXI@Z        10007e24 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006e24       ??_GCHub@@UAAPAXI@Z        10007e24 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00006e54       ?AttachDevice@CHub@@IAAXEHH@Z 10007e54 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007b90       ?DisableOffStreamDevice@CHub@@UAAHIH@Z 10008b90 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007c74       ??_ECRootHub@@UAAPAXI@Z    10008c74 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007c74       ??_GCRootHub@@UAAPAXI@Z    10008c74 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007ca8       ??_ECExternalHub@@UAAPAXI@Z 10008ca8 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007ca8       ??_GCExternalHub@@UAAPAXI@Z 10008ca8 f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007cdc       ??_ECFunction@@UAAPAXI@Z   10008cdc f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007cdc       ??_GCFunction@@UAAPAXI@Z   10008cdc f i usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00007d10       ?HubStatusChangeThread@CHub@@AAAKXZ 10008d10 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000082c4       ?HubStatusChangeThreadStub@CHub@@KAKPAX@Z 100092c4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:000082d4       ?EnterOperationalState@CRootHub@@UAAHQAVCPipeAbs@@@Z 100092d4 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00008398       ?EnterOperationalState@CExternalHub@@UAAHQAVCPipeAbs@@@Z 10009398 f   usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0001:00008550       ?EnterCritSec_Ex@CritSec_Ex@@QAA?AW4e_CritSec_Status@@K@Z 10009550 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:00008674       ?LeaveCritSec_Ex@CritSec_Ex@@QAAXXZ 10009674 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000086b4       ?Initialize@CritSec_Ex@@QAAXXZ 100096b4 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000086e8       ?PrepareDeleteCritSec_Ex@CritSec_Ex@@QAAXXZ 100096e8 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:00008738       ??1CritSec_Ex@@QAA@XZ      10009738 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000087a4       ??0Countdown@@QAA@K@Z      100097a4 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000087f0       ?IncrCountdown@Countdown@@QAAHXZ 100097f0 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:00008840       ?DecrCountdown@Countdown@@QAAXXZ 10009840 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:00008874       ?WaitForCountdown@Countdown@@QAAXH@Z 10009874 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000088ac       ??1Countdown@@QAA@XZ       100098ac f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:000088d4       ??0CritSec_Ex@@QAA@XZ      100098d4 f   usbh_usb2com_common_fsl_v2_pdk1_9:sync.obj
+ 0001:00008928       ??0CEhcd@@QAA@PAXPAVCPhysMem@@PBGRAEKK@Z 10009928 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:0000898c       ?SignalCheckForDoneTransfers@CHW@@UAAXXZ 1000998c f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089a0       ?GetForceReAttach@CHW@@UAAKXZ 100099a0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089a8       ?SetForceReAttach@CHW@@UAAXK@Z 100099a8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089b0       ?GetBaseMem@CHW@@UAAPAEXZ  100099b0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089c0       ?GetCapability@CHW@@UAAKXZ 100099c0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089c8       ?SignalHubStatusChange@CHW@@UAAXXZ 100099c8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089e8       ?AddedTt@CEhcd@@UAAHEE@Z   100099e8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:000089fc       ?DeleteTt@CEhcd@@UAAHEE@Z  100099fc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008a10       ??1CEhcd@@UAA@XZ           10009a10 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008a80       ?DeviceDeInitialize@CEhcd@@UAAXXZ 10009a80 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008aec       ?DeviceInitialize@CEhcd@@UAAHXZ 10009aec f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008c74       ?CreateHCDObject@@YAPAVCHcd@@PAXPAVCPhysMem@@KPBGRAEK@Z 10009c74 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008cd4       ??_GCEhcd@@UAAPAXI@Z       10009cd4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008cd4       ??_ECEhcd@@UAAPAXI@Z       10009cd4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cehcd.obj
+ 0001:00008cfc       ??0CQTransfer@@QAA@QAVCPipe@@QAVCPhysMem@@PAUSTRANSFER@@@Z 10009cfc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d28       ??_ECQTransfer@@UAAPAXI@Z  10009d28 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d28       ??_GCQTransfer@@UAAPAXI@Z  10009d28 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d50       ?ChangeMaxPacketSize@CPipeAbs@@UAAXG@Z 10009d50 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d54       ??_GCPipeAbs@@UAAPAXI@Z    10009d54 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d54       ??_ECPipeAbs@@UAAPAXI@Z    10009d54 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008d7c       ??0CPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 10009d7c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008e14       ??1CPipe@@UAA@XZ           10009e14 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008e40       ?GetCPhysMem@CPipe@@UAAPAVCPhysMem@@XZ 10009e40 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008e4c       ?IsPipeHalted@CPipe@@UAA?AW4HCD_REQUEST_STATUS@@QAH@Z 10009e4c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008e80       ?ClearHaltedFlag@CPipe@@UAAXXZ 10009e80 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008ea8       ??0CQueuedPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 10009ea8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008f04       ??1CQueuedPipe@@UAA@XZ     10009f04 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008f54       ?ClearHaltedFlag@CQueuedPipe@@UAAXXZ 10009f54 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00008f94       ?IssueTransfer@CQueuedPipe@@UAA?AW4HCD_REQUEST_STATUS@@EQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 10009f94 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000091bc       ??0CBulkPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 1000a1bc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009208       ?GetPipeType@CBulkPipe@@UBAPBGXZ 1000a208 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009214       ?RemoveQHeadFromQueue@CBulkPipe@@MAAHXZ 1000a214 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000923c       ?InsertQHeadToQueue@CBulkPipe@@MAAHXZ 1000a23c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009268       ?AreTransferParametersValid@CBulkPipe@@EBAHPBUSTRANSFER@@@Z 1000a268 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000092d4       ??0CControlPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 1000a2d4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009320       ?GetPipeType@CControlPipe@@UBAPBGXZ 1000a320 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000932c       ?RemoveQHeadFromQueue@CControlPipe@@MAAHXZ 1000a32c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009354       ?InsertQHeadToQueue@CControlPipe@@MAAHXZ 1000a354 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009380       ?AreTransferParametersValid@CControlPipe@@EBAHPBUSTRANSFER@@@Z 1000a380 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009424       ??0CInterruptPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 1000a424 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000095d4       ?GetPipeType@CInterruptPipe@@UBAPBGXZ 1000a5d4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000095e4       ?RemoveQHeadFromQueue@CInterruptPipe@@MAAHXZ 1000a5e4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000095ec       ?InsertQHeadToQueue@CInterruptPipe@@MAAHXZ 1000a5ec f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000095f4       ?AreTransferParametersValid@CInterruptPipe@@EBAHPBUSTRANSFER@@@Z 1000a5f4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009660       ??0CIsochronousPipe@@QAA@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCEhcd@@@Z 1000a660 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000992c       ?GetPipeType@CIsochronousPipe@@UBAPBGXZ 1000a92c f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000993c       ?StopTransfers@CIsochronousPipe@@UAAXXZ 1000a93c f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009940       ?AllocateCITD@CIsochronousPipe@@QAAPAVCITD@@PAVCITransfer@@@Z 1000a940 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:000099c0       ?AllocateCSITD@CIsochronousPipe@@QAAPAVCSITD@@PAVCSITransfer@@PAV2@@Z 1000a9c0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009a48       ?OpenPipe@CIsochronousPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000aa48 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009ac0       ?ClosePipe@CIsochronousPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000aac0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009b48       ?AbortTransfer@CIsochronousPipe@@UAA?AW4HCD_REQUEST_STATUS@@Q6AKPAX@ZQAXPBX@Z 1000ab48 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009c68       ?IssueTransfer@CIsochronousPipe@@UAA?AW4HCD_REQUEST_STATUS@@EQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 1000ac68 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:00009f90       ?ScheduleTransfer@CIsochronousPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000af90 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a00c       ?CheckForDoneTransfers@CIsochronousPipe@@UAAHXZ 1000b00c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a110       ?AreTransferParametersValid@CIsochronousPipe@@EBAHPBUSTRANSFER@@@Z 1000b110 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a250       ?CreateBulkPipe@@YAPAVCPipeAbs@@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCHcd@@@Z 1000b250 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a2b8       ?CreateControlPipe@@YAPAVCPipeAbs@@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCHcd@@@Z 1000b2b8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a320       ?CreateInterruptPipe@@YAPAVCPipeAbs@@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCHcd@@@Z 1000b320 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a388       ?CreateIsochronousPipe@@YAPAVCPipeAbs@@QBU_USB_ENDPOINT_DESCRIPTOR@@HHEEEQAVCHcd@@@Z 1000b388 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a3f0       ??_ECPipe@@UAAPAXI@Z       1000b3f0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a3f0       ??_GCPipe@@UAAPAXI@Z       1000b3f0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a430       ??_ECQueuedPipe@@UAAPAXI@Z 1000b430 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a430       ??_GCQueuedPipe@@UAAPAXI@Z 1000b430 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a460       ?AbortTransfer@CQueuedPipe@@UAA?AW4HCD_REQUEST_STATUS@@Q6AKPAX@ZQAXPBX@Z 1000b460 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a64c       ?AbortQueue@CQueuedPipe@@IAAXXZ 1000b64c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a770       ?StopTransfers@CQueuedPipe@@UAAXXZ 1000b770 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a788       ?ScheduleTransfer@CQueuedPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000b788 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a84c       ?CheckForDoneTransfers@CQueuedPipe@@UAAHXZ 1000b84c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000a95c       ?OpenPipe@CBulkPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000b95c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000aa24       ?ClosePipe@CBulkPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000ba24 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000aaa0       ?OpenPipe@CControlPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000baa0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000ab80       ?ClosePipe@CControlPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000bb80 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000abfc       ?IssueTransfer@CControlPipe@@UAA?AW4HCD_REQUEST_STATUS@@EQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 1000bbfc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000ad20       ?ChangeMaxPacketSize@CControlPipe@@UAAXG@Z 1000bd20 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000adb4       ?OpenPipe@CInterruptPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000bdb4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000aed8       ?ClosePipe@CInterruptPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000bed8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000af58       ?FreeCITD@CIsochronousPipe@@QAAXPAVCITD@@@Z 1000bf58 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000afa8       ?FreeCSITD@CIsochronousPipe@@QAAXPAVCSITD@@@Z 1000bfa8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000aff8       ??1CInterruptPipe@@UAA@XZ  1000bff8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b044       ??1CIsochronousPipe@@UAA@XZ 1000c044 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b164       ??_GCBulkPipe@@UAAPAXI@Z   1000c164 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b164       ??_ECBulkPipe@@UAAPAXI@Z   1000c164 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b1a0       ??_GCControlPipe@@UAAPAXI@Z 1000c1a0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b1a0       ??_ECControlPipe@@UAAPAXI@Z 1000c1a0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b1dc       ??_GCInterruptPipe@@UAAPAXI@Z 1000c1dc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b1dc       ??_ECInterruptPipe@@UAAPAXI@Z 1000c1dc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b204       ??_ECIsochronousPipe@@UAAPAXI@Z 1000c204 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b204       ??_GCIsochronousPipe@@UAAPAXI@Z 1000c204 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0001:0000b22c       ??0TransactionTrasnlate@@QAA@EEPAV0@@Z 1000c22c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b26c       ??1TransactionTrasnlate@@QAA@XZ 1000c26c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b2a4       ?FindBestTimeSlot@TransactionTrasnlate@@AAAHGGPAU_ENDPOINTBUGETLIST@@PAK@Z 1000c2a4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b2f8       ?InsertEp@TransactionTrasnlate@@AAAHKPAU_EndpointBuget@@@Z 1000c2f8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b3dc       ?RemoveEp@TransactionTrasnlate@@AAAHKPAU_EndpointBuget@@@Z 1000c3dc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b48c       ??0USB2lib@@QAA@XZ         1000c48c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b4ec       ?DeleteTt@USB2lib@@QAAHEE@Z 1000c4ec f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b57c       ?GetTT@USB2lib@@QAAPAVTransactionTrasnlate@@EE@Z 1000c57c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b5d0       ?Compute_nonsplit_overhead@USB2lib@@AAAHPAU_EndpointBuget@@@Z 1000c5d0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b640       ?ConvertBtoHFrame@USB2lib@@AAAXEEPAE0@Z 1000c640 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b684       ?AddedEp@TransactionTrasnlate@@QAAHPAU_EndpointBuget@@@Z 1000c684 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b8a4       ?DeletedEp@TransactionTrasnlate@@QAAHPAU_EndpointBuget@@@Z 1000c8a4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b91c       ??1USB2lib@@QAA@XZ         1000c91c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b96c       ?AddedTt@USB2lib@@QAAHEE@Z 1000c96c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000b9e8       ?AllocUsb2BusTime@USB2lib@@QAAHEEPAU_EndpointBuget@@@Z 1000c9e8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000bcb8       ?FreeUsb2BusTime@USB2lib@@QAAXEEPAU_EndpointBuget@@@Z 1000ccb8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000bd70       ?GetSMASK@USB2lib@@QAAEPAU_EndpointBuget@@@Z 1000cd70 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000bdf0       ?GetCMASK@USB2lib@@QAAEPAU_EndpointBuget@@@Z 1000cdf0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0001:0000bee4       ?SetLinkValid@CNextLinkPointer@@QAAHH@Z 1000cee4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000bf24       ?SetNextPointer@CNextLinkPointer@@QAAHKW4NEXTLINKTYPE@@H@Z 1000cf24 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000bf94       ??0CRegistryEdit@@QAA@PAUHKEY__@@PBG@Z 1000cf94 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000bfe4       ?GetRegValue@CRegistryEdit@@QAAHPBGPAEK@Z 1000cfe4 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c034       ??0CDummyPipe@@QAA@QAVCPhysMem@@@Z 1000d034 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c098       ?IssueTransfer@CDummyPipe@@UAA?AW4HCD_REQUEST_STATUS@@EQ6AKPAX@ZQAXKQBXKKQBKK2K3QAK5QAH55@Z 1000d098 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0a0       ?OpenPipe@CDummyPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000d0a0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0a8       ?ClosePipe@CDummyPipe@@UAA?AW4HCD_REQUEST_STATUS@@XZ 1000d0a8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0b0       ?IsPipeHalted@CDummyPipe@@UAA?AW4HCD_REQUEST_STATUS@@QAH@Z 1000d0b0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0b8       ?ClearHaltedFlag@CDummyPipe@@UAAXXZ 1000d0b8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0bc       ?StopTransfers@CDummyPipe@@UAAXXZ 1000d0bc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0c0       ?AbortTransfer@CDummyPipe@@UAA?AW4HCD_REQUEST_STATUS@@Q6AKPAX@ZQAXPBX@Z 1000d0c0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0c8       ?GetCPhysMem@CDummyPipe@@UAAPAVCPhysMem@@XZ 1000d0c8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0d0       ?ScheduleTransfer@CDummyPipe@@EAA?AW4HCD_REQUEST_STATUS@@XZ 1000d0d0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0d8       ?GetPipeType@CDummyPipe@@MBAPBGXZ 1000d0d8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0e8       ?AreTransferParametersValid@CDummyPipe@@MBAHPBUSTRANSFER@@@Z 1000d0e8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0f0       ?CheckForDoneTransfers@CDummyPipe@@MAAHXZ 1000d0f0 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0f8       ??_GCDummyPipe@@UAAPAXI@Z  1000d0f8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c0f8       ??_ECDummyPipe@@UAAPAXI@Z  1000d0f8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c12c       ??0CPeriodicMgr@@QAA@QAVCPhysMem@@K@Z 1000d12c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c1b8       ?QueueITD@CPeriodicMgr@@QAAHPAVCITD@@K@Z 1000d1b8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c254       ?DeQueueTD@CPeriodicMgr@@QAAHKK@Z 1000d254 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c358       ??0CAsyncMgr@@QAA@QAVCPhysMem@@@Z 1000d358 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c3a4       ?DeInit@CAsyncMgr@@QAAXXZ  1000d3a4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c3e8       ?SignalCheckForDoneTransfers@CBusyPipeList@@QAAXXZ 1000d3e8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c400       ?CheckForDoneTransfersThread@CBusyPipeList@@AAAKXZ 1000d400 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c478       ?AddToBusyPipeList@CBusyPipeList@@QAAHQAVCPipe@@H@Z 1000d478 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c4fc       ?RemoveFromBusyPipeList@CBusyPipeList@@QAAXQAVCPipe@@@Z 1000d4fc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c564       ?EnableAsyncSchedule@CHW@@QAAHXZ 1000d564 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c63c       ?PowerOnAllPorts@CHW@@QAAHXZ 1000d63c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c6e8       ?EnterOperationalState@CHW@@QAAXXZ 1000d6e8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c7dc       ?RunStopUSBController@CHW@@QAAXH@Z 1000d7dc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000c8e8       ?StartHostController@CHW@@QAAXXZ 1000d8e8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000ca00       ?StopHostController@CHW@@QAAXXZ 1000da00 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cabc       ?AsyncBell@CHW@@QAAHXZ     1000dabc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cb38       ?PeriodQueueITD@CHW@@QAAHPAVCITD@@K@Z 1000db38 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cb84       ?PeriodDeQueueTD@CHW@@QAAHKK@Z 1000db84 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cbe8       ?CeResumeThread@CHW@@AAAKXZ 1000dbe8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cc98       ?UpdateFrameCounter@CHW@@AAAXXZ 1000dc98 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000ccfc       ?GetFrameNumber@CHW@@UAAHPAK@Z 1000dcfc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cd44       ?GetFrameLength@CHW@@UAAHPAG@Z 1000dd44 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cd58       ?SetFrameLength@CHW@@UAAHPAXG@Z 1000dd58 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cd60       ?StopAdjustingFrame@CHW@@UAAHXZ 1000dd60 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cd68       ?DidPortStatusChange@CHW@@UAAHE@Z 1000dd68 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000cee4       ?GetPortStatus@CHW@@UAAHEAAU_USB_HUB_AND_PORT_STATUS@@PAK@Z 1000dee4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d0d8       ?RootHubFeature@CHW@@UAAHEEG@Z 1000e0d8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d250       ?ResetAndEnablePort@CHW@@UAAHE@Z 1000e250 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d480       ?DisablePort@CHW@@UAAXE@Z  1000e480 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d520       ?WaitForPortStatusChange@CHW@@UAAHPAX@Z 1000e520 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d588       ?SetCapability@CHW@@UAAKK@Z 1000e588 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d59c       ?IsOTGHostDevice@CHW@@UAAHXZ 1000e59c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d5d0       ?WakeUpSysIntr@CHW@@UAAXXZ 1000e5d0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d5e4       ?Init@CPeriodicMgr@@QAAHXZ 1000e5e4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d7cc       ?DeInit@CPeriodicMgr@@QAAXXZ 1000e7cc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d844       ?QueueSITD@CPeriodicMgr@@QAAHPAVCSITD@@K@Z 1000e844 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000d8e0       ?QueueQHead@CPeriodicMgr@@QAAPAVCQH@@PAV2@EEH@Z 1000e8e0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000da9c       ?DequeueQHead@CPeriodicMgr@@QAAHPAVCQH@@@Z 1000ea9c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000dbb4       ?Init@CAsyncMgr@@QAAHXZ    1000ebb4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000dc48       ?QueueQH@CAsyncMgr@@QAAPAVCQH@@PAV2@@Z 1000ec48 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000dd00       ?DequeueQHead@CAsyncMgr@@QAAHPAVCQH@@@Z 1000ed00 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000de04       ?DeInit@CBusyPipeList@@QAAXXZ 1000ee04 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000de7c       ?CheckForDoneTransfersThreadStub@CBusyPipeList@@CAKPAX@Z 1000ee7c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000de8c       ?ConfigureHS@CHW@@QAAHXZ   1000ee8c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e140       ?DeInitialize@CHW@@UAAXXZ  1000f140 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e260       ?AsyncDequeueQH@CHW@@QAAHPAVCQH@@@Z 1000f260 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e288       ?PeriodQueueSITD@CHW@@QAAHPAVCSITD@@K@Z 1000f288 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e2d4       ?CeResumeThreadStub@CHW@@CAKPAX@Z 1000f2d4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e2e4       ?EnterLowPowerMode@CHW@@QAAXXZ 1000f2e4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e4c0       ?PowerMgmtCallback@CHW@@UAAXH@Z 1000f4c0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e7dc       ??1CPeriodicMgr@@QAA@XZ    1000f7dc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e814       ?Init@CBusyPipeList@@QAAHXZ 1000f814 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e8a0       ??0CHW@@QAA@SAEKKQAVCPhysMem@@PAXPBG@Z 1000f8a0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000e9fc       ??1CHW@@UAA@XZ             1000f9fc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000eac0       ?UsbInterruptThread@CHW@@AAAKXZ 1000fac0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000f560       ??_ECHW@@UAAPAXI@Z         10010560 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000f560       ??_GCHW@@UAAPAXI@Z         10010560 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000f588       ?UsbInterruptThreadStub@CHW@@CAKPAX@Z 10010588 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000f5a4       ?Initialize@CHW@@UAAHXZ    100105a4 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0001:0000f708       ??0CTransfer@@QAA@QAVCPipe@@QAVCPhysMem@@PAUSTRANSFER@@@Z 10010708 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000f778       ??1CTransfer@@UAA@XZ       10010778 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000f7cc       ?Init@CTransfer@@UAAHXZ    100107cc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000f940       ??0CIsochTransfer@@QAA@QAVCIsochronousPipe@@QAVCEhcd@@PAUSTRANSFER@@@Z 10010940 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000f998       ?ArmTD@CITransfer@@QAAHXZ  10010998 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000fb8c       ?AddTransfer@CITransfer@@UAAHXZ 10010b8c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000fc50       ?ScheduleTD@CITransfer@@UAAHKK@Z 10010c50 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000fd1c       ?IsTransferDone@CITransfer@@UAAHKK@Z 10010d1c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0000ff40       ?AbortTransfer@CITransfer@@UAAHXZ 10010f40 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000100ac       ?DoneTransfer@CITransfer@@UAAHKK@Z 100110ac f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000101bc       ?DoneTransfer@CSITransfer@@UAAHKK@Z 100111bc f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000102cc       ??_ECIsochTransfer@@UAAPAXI@Z 100112cc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000102cc       ??_GCIsochTransfer@@UAAPAXI@Z 100112cc f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010300       ??_ECTransfer@@UAAPAXI@Z   10011300 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010300       ??_GCTransfer@@UAAPAXI@Z   10011300 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010328       ?AddTransfer@CQTransfer@@UAAHXZ 10011328 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010764       ?AbortTransfer@CQTransfer@@QAAHXZ 10011764 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000107ac       ?IsTransferDone@CQTransfer@@QAAHXZ 100117ac f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:0001080c       ??0CITransfer@@QAA@QAVCIsochronousPipe@@QAVCEhcd@@PAUSTRANSFER@@@Z 1001180c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010838       ??1CITransfer@@UAA@XZ      10011838 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000108d8       ??0CSITransfer@@QAA@QAVCIsochronousPipe@@QAVCEhcd@@PAUSTRANSFER@@@Z 100118d8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010904       ?ArmTD@CSITransfer@@QAAHXZ 10011904 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010a14       ?AddTransfer@CSITransfer@@UAAHXZ 10011a14 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010ac0       ?ScheduleTD@CSITransfer@@UAAHKK@Z 10011ac0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010b8c       ?IsTransferDone@CSITransfer@@UAAHKK@Z 10011b8c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010dc0       ?AbortTransfer@CSITransfer@@UAAHXZ 10011dc0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010f0c       ??1CQTransfer@@UAA@XZ      10011f0c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00010f6c       ?DoneTransfer@CQTransfer@@QAAHXZ 10011f6c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00011100       ??_GCITransfer@@UAAPAXI@Z  10012100 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00011100       ??_ECITransfer@@UAAPAXI@Z  10012100 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:00011128       ??1CSITransfer@@UAA@XZ     10012128 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000111c8       ??_ECSITransfer@@UAAPAXI@Z 100121c8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000111c8       ??_GCSITransfer@@UAAPAXI@Z 100121c8 f i usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0001:000111f0       ??2CNextLinkPointer@@SAPAXIQAVCPhysMem@@@Z 100121f0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:0001128c       ??3CNextLinkPointer@@SAXPAX@Z 1001228c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011290       ??0CITD@@QAA@PAVCITransfer@@@Z 10012290 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:0001131c       ?ReInit@CITD@@QAAXPAVCITransfer@@@Z 1001231c f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011398       ?SetIOC@CITD@@QAAXH@Z      10012398 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011424       ?IssueTransfer@CITD@@QAAKKPAK0HH@Z 10012424 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:000116a8       ??0CSITD@@QAA@PAVCSITransfer@@PAV0@@Z 100126a8 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011770       ?ReInit@CSITD@@QAAXPAVCSITransfer@@PAV1@@Z 10012770 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011828       ??0CQTD@@QAA@PAVCQTransfer@@PAVCQH@@@Z 10012828 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:000118c0       ?IssueTransfer@CQTD@@QAAKKHKPAUPhysBufferArray@@H@Z 100128c0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011a68       ??0CQH@@QAA@PAVCPipe@@@Z   10012a68 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011c60       ?IssueTransfer@CSITD@@QAAKKKKHH@Z 10012c60 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011e88       ?QueueNextTD@CQTD@@QAAPAV1@PAV1@@Z 10012e88 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011eb0       ?QueueTD@CQH@@QAAHPAVCQTD@@@Z 10012eb0 f   usbh_ehcdmdd_common_fsl_v2_pdk1_9:ctd.obj
+ 0001:00011f04       HcdPdd_DllMain             10012f04 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00011f0c       ConfigureEHCICard          10012f0c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012394       HcdPdd_Init                10013394 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0001241c       HcdPdd_CheckConfigPower    1001341c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0001242c       HcdPdd_PowerUp             1001342c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012440       HcdPdd_PowerDown           10013440 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012454       HcdPdd_Deinit              10013454 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012518       HcdPdd_Open                10013518 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0001251c       HcdPdd_Close               1001351c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012524       HcdPdd_Read                10013524 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0001252c       HcdPdd_Write               1001352c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012534       HcdPdd_Seek                10013534 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:0001253c       HcdPdd_IOControl           1001353c f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012584       HcdPdd_InitiatePowerUp     10013584 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012588       KernelIoControl            10013588 f   coredll:COREDLL.dll
+ 0001:00012598       Sleep                      10013598 f   coredll:COREDLL.dll
+ 0001:000125a8       NKDbgPrintfW               100135a8 f   coredll:COREDLL.dll
+ 0001:000125b8       StringCchCopyW             100135b8 f   coredll:COREDLL.dll
+ 0001:000125c8       EventModify                100135c8 f   coredll:COREDLL.dll
+ 0001:000125d8       WaitForSingleObject        100135d8 f   coredll:COREDLL.dll
+ 0001:000125e8       InterlockedCompareExchange 100135e8 f   coredll:COREDLL.dll
+ 0001:000125f8       MapViewOfFile              100135f8 f   coredll:COREDLL.dll
+ 0001:00012608       GetLastError               10013608 f   coredll:COREDLL.dll
+ 0001:00012618       CreateFileMappingW         10013618 f   coredll:COREDLL.dll
+ 0001:00012628       CloseHandle                10013628 f   coredll:COREDLL.dll
+ 0001:00012638       CreateEventW               10013638 f   coredll:COREDLL.dll
+ 0001:00012648       DeleteCriticalSection      10013648 f   coredll:COREDLL.dll
+ 0001:00012658       InitializeCriticalSection  10013658 f   coredll:COREDLL.dll
+ 0001:00012668       DisableThreadLibraryCalls  10013668 f   coredll:COREDLL.dll
+ 0001:00012678       RegCloseKey                10013678 f   coredll:COREDLL.dll
+ 0001:00012688       RegQueryValueExW           10013688 f   coredll:COREDLL.dll
+ 0001:00012698       OpenDeviceKey              10013698 f   coredll:COREDLL.dll
+ 0001:000126a8       LeaveCriticalSection       100136a8 f   coredll:COREDLL.dll
+ 0001:000126b8       EnterCriticalSection       100136b8 f   coredll:COREDLL.dll
+ 0001:000126c8       RegOpenKeyExW              100136c8 f   coredll:COREDLL.dll
+ 0001:000126d8       LocalAlloc                 100136d8 f   coredll:COREDLL.dll
+ 0001:000126e8       LocalFree                  100136e8 f   coredll:COREDLL.dll
+ 0001:000126f8       FreePhysMem                100136f8 f   coredll:COREDLL.dll
+ 0001:00012708       AllocPhysMem               10013708 f   coredll:COREDLL.dll
+ 0001:00012718       SetLastError               10013718 f   coredll:COREDLL.dll
+ 0001:00012728       FreeLibrary                10013728 f   coredll:COREDLL.dll
+ 0001:00012738       GetProcAddressW            10013738 f   coredll:COREDLL.dll
+ 0001:00012748       LoadLibraryW               10013748 f   coredll:COREDLL.dll
+ 0001:00012758       LoadDriver                 10013758 f   coredll:COREDLL.dll
+ 0001:00012768       StringCchCatW              10013768 f   coredll:COREDLL.dll
+ 0001:00012778       CeGetThreadPriority        10013778 f   coredll:COREDLL.dll
+ 0001:00012788       CeSetThreadPriority        10013788 f   coredll:COREDLL.dll
+ 0001:00012798       CreateThread               10013798 f   coredll:COREDLL.dll
+ 0001:000127a8       __GetUserKData             100137a8 f   coredll:COREDLL.dll
+ 0001:000127b8       GetTickCount               100137b8 f   coredll:COREDLL.dll
+ 0001:000127c8       RaiseException             100137c8 f   coredll:COREDLL.dll
+ 0001:000127d8       WaitForMultipleObjects     100137d8 f   coredll:COREDLL.dll
+ 0001:000127e8       SetInterruptEvent          100137e8 f   coredll:COREDLL.dll
+ 0001:000127f8       TerminateThread            100137f8 f   coredll:COREDLL.dll
+ 0001:00012808       InterruptDisable           10013808 f   coredll:COREDLL.dll
+ 0001:00012818       InterruptInitialize        10013818 f   coredll:COREDLL.dll
+ 0001:00012828       InterruptDone              10013828 f   coredll:COREDLL.dll
+ 0001:00012838       ExitThread                 10013838 f   coredll:COREDLL.dll
+ 0001:00012848       FreeIntChainHandler        10013848 f   coredll:COREDLL.dll
+ 0001:00012858       StringCchCopyNW            10013858 f   coredll:COREDLL.dll
+ 0001:00012868       DDKReg_GetIsrInfo          10013868 f   coredll:COREDLL.dll
+ 0001:00012878       DDKReg_GetWindowInfo       10013878 f   coredll:COREDLL.dll
+ 0001:00012888       StallExecution             10013888 f   ceddk:CEDDK.dll
+ 0001:00012898       MmUnmapIoSpace             10013898 f   ceddk:CEDDK.dll
+ 0001:000128a8       MmMapIoSpace               100138a8 f   ceddk:CEDDK.dll
+ 0001:000128b8       BusTransBusAddrToVirtual   100138b8 f   ceddk:CEDDK.dll
+ 0001:000128c8       HalFreeCommonBuffer        100138c8 f   ceddk:CEDDK.dll
+ 0001:000128d8       HalAllocateCommonBuffer    100138d8 f   ceddk:CEDDK.dll
+ 0001:000128e8       CloseBusAccessHandle       100138e8 f   ceddk:CEDDK.dll
+ 0001:000128f8       CreateBusAccessHandle      100138f8 f   ceddk:CEDDK.dll
+ 0001:00012908       DDKGpioWriteDataPin        10013908 f   cspddk:CSPDDK.dll
+ 0001:00012918       DDKGpioEnableDataPin       10013918 f   cspddk:CSPDDK.dll
+ 0001:00012928       DDKIomuxSetPinMux          10013928 f   cspddk:CSPDDK.dll
+ 0001:00012938       DDKClockSetGatingMode      10013938 f   cspddk:CSPDDK.dll
+ 0001:00012948       DDKClockGetGatingMode      10013948 f   cspddk:CSPDDK.dll
+ 0001:00012a5c       _DllMainCRTStartup         10013a5c f   corelib0:pegdmain.obj
+ 0001:00012a8c       __GSHandlerCheckCommon     10013a8c f   corelib0:gshandler.obj
+ 0001:00012ac8       __GSHandlerCheck           10013ac8 f   corelib0:gshandler.obj
+ 0001:00012aec       __security_init_cookie     10013aec f   corelib0:seccinit.obj
+ 0001:00012b48       __security_check_cookie    10013b48 f   corelib0:armsecgs.obj
+ 0001:00012b5c       __gsfailure                10013b5c f   corelib0:armsecgs.obj
+ 0001:00012c68       _cexit                     10013c68 f   corelib0:cexit.obj
+ 0001:00012c84       _initterm                  10013c84 f   corelib0:crt0dat.obj
+ 0001:00012cb8       _cinit                     10013cb8 f   corelib0:crt0dat.obj
+ 0001:00012cec       ??3@YAXPAX@Z               10013cec f   corelib1:COREDLL.dll
+ 0001:00012cfc       ??2@YAPAXI@Z               10013cfc f   corelib1:COREDLL.dll
+ 0001:00012d0c       _purecall                  10013d0c f   corelib1:COREDLL.dll
+ 0001:00012d1c       memset                     10013d1c f   corelib1:COREDLL.dll
+ 0001:00012d2c       memcpy                     10013d2c f   corelib1:COREDLL.dll
+ 0001:00012d3c       wcslen                     10013d3c f   corelib1:COREDLL.dll
+ 0001:00012d4c       memcmp                     10013d4c f   corelib1:COREDLL.dll
+ 0001:00012d5c       __C_specific_handler       10013d5c f   corelib1:COREDLL.dll
+ 0001:00012d6c       __rt_sdiv                  10013d6c f   corelib1:COREDLL.dll
+ 0001:00012d7c       __rt_udiv                  10013d7c f   corelib1:COREDLL.dll
+ 0001:00012d8c       free                       10013d8c f   corelib1:COREDLL.dll
+ 0001:00012d9c       malloc                     10013d9c f   corelib1:COREDLL.dll
+ 0001:00012dac       _XcptFilter                10013dac f   corelib1:COREDLL.dll
+ 0001:00012dbc       __security_gen_cookie2     10013dbc f   corelib1:COREDLL.dll
+ 0001:00012dcc       __report_gsfailure         10013dcc f   corelib1:COREDLL.dll
+ 0001:00012ddc       TerminateProcess           10013ddc f   coredll:COREDLL.dll
+ 0001:00012f70       __IMPORT_DESCRIPTOR_COREDLL 10013f70     coredll:COREDLL.dll
+ 0001:00012f84       __IMPORT_DESCRIPTOR_CEDDK  10013f84     ceddk:CEDDK.dll
+ 0001:00012f98       __IMPORT_DESCRIPTOR_CSPDDK 10013f98     cspddk:CSPDDK.dll
+ 0001:00012fac       __NULL_IMPORT_DESCRIPTOR   10013fac     coredll:COREDLL.dll
+ 0002:00000000       __imp_CloseBusAccessHandle 10015000     ceddk:CEDDK.dll
+ 0002:00000004       __imp_HalAllocateCommonBuffer 10015004     ceddk:CEDDK.dll
+ 0002:00000008       __imp_HalFreeCommonBuffer  10015008     ceddk:CEDDK.dll
+ 0002:0000000c       __imp_BusTransBusAddrToVirtual 1001500c     ceddk:CEDDK.dll
+ 0002:00000010       __imp_MmMapIoSpace         10015010     ceddk:CEDDK.dll
+ 0002:00000014       __imp_MmUnmapIoSpace       10015014     ceddk:CEDDK.dll
+ 0002:00000018       __imp_StallExecution       10015018     ceddk:CEDDK.dll
+ 0002:0000001c       __imp_CreateBusAccessHandle 1001501c     ceddk:CEDDK.dll
+ 0002:00000020       \177CEDDK_NULL_THUNK_DATA  10015020     ceddk:CEDDK.dll
+ 0002:00000024       __imp_CreateFileMappingW   10015024     coredll:COREDLL.dll
+ 0002:00000028       __imp_CloseHandle          10015028     coredll:COREDLL.dll
+ 0002:0000002c       __imp_CreateEventW         1001502c     coredll:COREDLL.dll
+ 0002:00000030       __imp_DeleteCriticalSection 10015030     coredll:COREDLL.dll
+ 0002:00000034       __imp_InitializeCriticalSection 10015034     coredll:COREDLL.dll
+ 0002:00000038       __imp_DisableThreadLibraryCalls 10015038     coredll:COREDLL.dll
+ 0002:0000003c       __imp_RegCloseKey          1001503c     coredll:COREDLL.dll
+ 0002:00000040       __imp_RegQueryValueExW     10015040     coredll:COREDLL.dll
+ 0002:00000044       __imp_OpenDeviceKey        10015044     coredll:COREDLL.dll
+ 0002:00000048       __imp_LeaveCriticalSection 10015048     coredll:COREDLL.dll
+ 0002:0000004c       __imp_EnterCriticalSection 1001504c     coredll:COREDLL.dll
+ 0002:00000050       __imp_RegOpenKeyExW        10015050     coredll:COREDLL.dll
+ 0002:00000054       __imp_LocalAlloc           10015054     coredll:COREDLL.dll
+ 0002:00000058       __imp_LocalFree            10015058     coredll:COREDLL.dll
+ 0002:0000005c       __imp_FreePhysMem          1001505c     coredll:COREDLL.dll
+ 0002:00000060       __imp_AllocPhysMem         10015060     coredll:COREDLL.dll
+ 0002:00000064       __imp_SetLastError         10015064     coredll:COREDLL.dll
+ 0002:00000068       __imp_FreeLibrary          10015068     coredll:COREDLL.dll
+ 0002:0000006c       __imp_GetProcAddressW      1001506c     coredll:COREDLL.dll
+ 0002:00000070       __imp_GetLastError         10015070     coredll:COREDLL.dll
+ 0002:00000074       __imp_LoadDriver           10015074     coredll:COREDLL.dll
+ 0002:00000078       __imp_StringCchCatW        10015078     coredll:COREDLL.dll
+ 0002:0000007c       __imp_CeGetThreadPriority  1001507c     coredll:COREDLL.dll
+ 0002:00000080       __imp_CeSetThreadPriority  10015080     coredll:COREDLL.dll
+ 0002:00000084       __imp_CreateThread         10015084     coredll:COREDLL.dll
+ 0002:00000088       __imp___GetUserKData       10015088     coredll:COREDLL.dll
+ 0002:0000008c       __imp_GetTickCount         1001508c     coredll:COREDLL.dll
+ 0002:00000090       __imp_RaiseException       10015090     coredll:COREDLL.dll
+ 0002:00000094       __imp_WaitForMultipleObjects 10015094     coredll:COREDLL.dll
+ 0002:00000098       __imp_SetInterruptEvent    10015098     coredll:COREDLL.dll
+ 0002:0000009c       __imp_TerminateThread      1001509c     coredll:COREDLL.dll
+ 0002:000000a0       __imp_InterruptDisable     100150a0     coredll:COREDLL.dll
+ 0002:000000a4       __imp_InterruptInitialize  100150a4     coredll:COREDLL.dll
+ 0002:000000a8       __imp_InterruptDone        100150a8     coredll:COREDLL.dll
+ 0002:000000ac       __imp_ExitThread           100150ac     coredll:COREDLL.dll
+ 0002:000000b0       __imp_FreeIntChainHandler  100150b0     coredll:COREDLL.dll
+ 0002:000000b4       __imp_StringCchCopyNW      100150b4     coredll:COREDLL.dll
+ 0002:000000b8       __imp_DDKReg_GetIsrInfo    100150b8     coredll:COREDLL.dll
+ 0002:000000bc       __imp_DDKReg_GetWindowInfo 100150bc     coredll:COREDLL.dll
+ 0002:000000c0       __imp_MapViewOfFile        100150c0     coredll:COREDLL.dll
+ 0002:000000c4       __imp_InterlockedCompareExchange 100150c4     coredll:COREDLL.dll
+ 0002:000000c8       __imp_WaitForSingleObject  100150c8     coredll:COREDLL.dll
+ 0002:000000cc       __imp_EventModify          100150cc     coredll:COREDLL.dll
+ 0002:000000d0       __imp_StringCchCopyW       100150d0     coredll:COREDLL.dll
+ 0002:000000d4       __imp_NKDbgPrintfW         100150d4     coredll:COREDLL.dll
+ 0002:000000d8       __imp_Sleep                100150d8     coredll:COREDLL.dll
+ 0002:000000dc       __imp_LoadLibraryW         100150dc     coredll:COREDLL.dll
+ 0002:000000e0       __imp_KernelIoControl      100150e0     coredll:COREDLL.dll
+ 0002:000000e4       __imp___report_gsfailure   100150e4     corelib1:COREDLL.dll
+ 0002:000000e8       __imp___security_gen_cookie2 100150e8     corelib1:COREDLL.dll
+ 0002:000000ec       __imp__XcptFilter          100150ec     corelib1:COREDLL.dll
+ 0002:000000f0       __imp_malloc               100150f0     corelib1:COREDLL.dll
+ 0002:000000f4       __imp_??3@YAXPAX@Z         100150f4     corelib1:COREDLL.dll
+ 0002:000000f8       __imp_??2@YAPAXI@Z         100150f8     corelib1:COREDLL.dll
+ 0002:000000fc       __imp__purecall            100150fc     corelib1:COREDLL.dll
+ 0002:00000100       __imp_memset               10015100     corelib1:COREDLL.dll
+ 0002:00000104       __imp_memcpy               10015104     corelib1:COREDLL.dll
+ 0002:00000108       __imp_wcslen               10015108     corelib1:COREDLL.dll
+ 0002:0000010c       __imp_memcmp               1001510c     corelib1:COREDLL.dll
+ 0002:00000110       __imp___C_specific_handler 10015110     corelib1:COREDLL.dll
+ 0002:00000114       __imp___rt_sdiv            10015114     corelib1:COREDLL.dll
+ 0002:00000118       __imp___rt_udiv            10015118     corelib1:COREDLL.dll
+ 0002:0000011c       __imp_free                 1001511c     corelib1:COREDLL.dll
+ 0002:00000120       __imp_TerminateProcess     10015120     coredll:COREDLL.dll
+ 0002:00000124       \177COREDLL_NULL_THUNK_DATA 10015124     coredll:COREDLL.dll
+ 0002:00000128       __imp_DDKClockSetGatingMode 10015128     cspddk:CSPDDK.dll
+ 0002:0000012c       __imp_DDKIomuxSetPinMux    1001512c     cspddk:CSPDDK.dll
+ 0002:00000130       __imp_DDKGpioEnableDataPin 10015130     cspddk:CSPDDK.dll
+ 0002:00000134       __imp_DDKGpioWriteDataPin  10015134     cspddk:CSPDDK.dll
+ 0002:00000138       __imp_DDKClockGetGatingMode 10015138     cspddk:CSPDDK.dll
+ 0002:0000013c       \177CSPDDK_NULL_THUNK_DATA 1001513c     cspddk:CSPDDK.dll
+ 0002:00000140       ?gc_HcdFuncs@@3U_HCD_FUNCS@@A 10015140     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0002:00000178       ?cszPipeType@?1??GetPipeType@CInterruptPipe@@UBAPBGXZ@4PBGB 10015178     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0002:0000017c       ?cszPipeType@?1??GetPipeType@CIsochronousPipe@@UBAPBGXZ@4PBGB 1001517c     usbh_ehcdmdd_common_fsl_v2_pdk1_9:cpipe.obj
+ 0002:00000180       ?CMASKS@USB2lib@@0PAEA     10015180     usbh_ehcdmdd_common_fsl_v2_pdk1_9:usb2lib.obj
+ 0002:00000188       ?periodTable@CPeriodicMgr@@0PAU_PERIOD_TABLE@@A 10015188     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0002:00000248       ?cszPipeType@?1??GetPipeType@CDummyPipe@@MBAPBGXZ@4PBGB 10015248     usbh_ehcdmdd_common_fsl_v2_pdk1_9:chw.obj
+ 0002:0000024c       __security_cookie          1001524c     corelib0:seccinit.obj
+ 0002:00000250       __security_cookie_complement 10015250     corelib0:seccinit.obj
+ 0002:00000260       m_hUSBClockGatingHandle    10015260     i_usbclock.obj
+ 0002:00000264       pUSBClkGating              10015264     i_usbclock.obj
+ 0002:00000270       g_IstThreadPriority        10015270     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0002:00000274       ?g_CSection@@3UCRITICAL_SECTION@@A 10015274     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0002:00000288       g_dwContext                10015288     usbh_usb2com_common_fsl_v2_pdk1_9:hcddrv.obj
+ 0002:0000028c       ?ghDetach@@3PAXA           1001528c     usbh_usb2com_common_fsl_v2_pdk1_9:cdevice.obj
+ 0002:00000294       ?m_dwGlobalTransferID@CTransfer@@1KA 10015294     usbh_ehcdmdd_common_fsl_v2_pdk1_9:trans.obj
+ 0002:00000298       _exitflag                  10015298     corelib0:cexit.obj
+ 0002:0000029a       gSel                       1001529a     <common>
+ 0002:000002a0       gszOTGGroup                100152a0     <common>
+ 0002:000002dc       gRegs                      100152dc     <common>
+ 0002:000002e0       gdwOTGSupport              100152e0     <common>
+ 0002:000002e4       __onexitend                100152e4     <common>
+ 0002:000002e8       __onexitbegin              100152e8     <common>
+ 0002:000002ec       _pRawDllMain               100152ec     <common>
+
+ entry point at        0001:00012a5c
+
+ Static symbols
+
+ 0001:000014b8       ConfigEHCI                 100024b8 f   i_hwinit.obj
+ 0001:000017dc       USBClockSet                100027dc f   i_usbclock.obj
+ 0001:00011f70       InitializeEHCI             10012f70 f   usbh_ehcdpdd_common_fsl_v2_pdk1_9:system.obj
+ 0001:00012960       _DllMainCRTStartupHelper   10013960 f   corelib0:pegdmain.obj
+ 0001:00012ba0       doexit                     10013ba0 f   corelib0:cexit.obj

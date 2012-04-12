@@ -1,0 +1,18 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+LIBRARY SDHC
+
+EXPORTS
+    SHC_Init
+    SHC_Deinit
+    SHC_Open
+    SHC_Close
+    SHC_IOControl
+    SHC_PowerUp
+    SHC_PowerDown
+    

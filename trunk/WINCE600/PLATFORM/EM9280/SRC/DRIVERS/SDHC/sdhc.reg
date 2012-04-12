@@ -1,0 +1,60 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2009-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+IF BSP_SSP1_SDHC
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SDHC1]
+    "Order"=dword:19
+    "Dll"="sdhc.dll"
+    "Prefix"="SHC"
+    "Index"=dword:1
+ENDIF ;BSP_SSP1_SDHC
+
+IF BSP_SSP2_SDHC
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SDHC2]
+    "Order"=dword:19
+    "Dll"="sdhc.dll"
+    "Prefix"="SHC"
+    "Index"=dword:2
+ENDIF ;BSP_SSP2_SDHC
+
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\MMC]
+    "Name"="MMC Card"
+    "Folder"="MMCMemory"
+    
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\MMC\FATFS]
+   "FormatTfat"=dword:1
+   "AutoMount"=dword:1
+   "AutoPart"=dword:1
+   "AutoFormat"=dword:1
+   "DisableAutoFormat"=dword:0
+    
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\MMC\EXFAT]
+   "FormatTfat"=dword:1
+   "AutoMount"=dword:1
+   "AutoPart"=dword:1
+   "AutoFormat"=dword:1
+   "DisableAutoFormat"=dword:0
+               
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory]
+    "Name"="SD Memory Card"
+    "Folder"="SDMemory"
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory\FATFS]
+   "FormatTfat"=dword:1
+   "AutoMount"=dword:1
+   "AutoPart"=dword:1
+   "AutoFormat"=dword:1
+   "DisableAutoFormat"=dword:0
+     
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory\EXFAT]
+   "FormatTfat"=dword:1
+   "AutoMount"=dword:1
+   "AutoPart"=dword:1
+   "AutoFormat"=dword:1
+   "DisableAutoFormat"=dword:0
+   

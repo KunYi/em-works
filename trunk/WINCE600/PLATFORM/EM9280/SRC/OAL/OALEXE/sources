@@ -1,0 +1,75 @@
+!if 0
+Copyright (C) 2006-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+
+TARGETNAME=oal
+TARGETTYPE=PROGRAM
+SYNCHRONIZE_DRAIN=1
+RELEASETYPE=PLATFORM
+NOMIPS16CODE=1
+
+EXEENTRY=StartUp
+
+LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
+
+SOURCES=
+NOLIBC=1
+
+
+TARGETLIBS=\
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\oemmain.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUDEPPATH)\nkstub.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\nkldr.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\oal.lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_io.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_timer_vartick_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_intr_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_cache_arm926.lib\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_abort_arm920t.lib\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_ioctl_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_power_$(_SOCDIR).lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\args.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bspcmn.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_rtc_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_memory_arm.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_profiler_gpt_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_other.lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_log.lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_misc_arm.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\fulllibc.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_oemioctrl_$(_COMMONSOCDIR).lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_apbhdma_$(_SOCDIR).lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_iomux_$(_SOCDIR).lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_clk_$(_SOCDIR).lib      \
+
+
+!IF "$(ENABLE_OAL_ILTIMING)" == "1"
+TARGETLIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_ilt.lib \
+    $(TARGETLIBS)
+!ENDIF
+
+
+!IF "$(BSP_NAND_PDD)" == "1"
+TARGETLIBS=       \
+	$(TARGETLIBS) \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\hal_nand_$(_SOCDIR).lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\nandfmd_lib.lib       \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_$(_COMMONSOCDIR).lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\NandBootBurner.lib    
+!ENDIF
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ..\..\..\FILES\PostMakeImg.bat \
+    ..\..\..\FILES\MakeBinfsBib.js \
+    ..\..\..\FILES\PreRomImage.bat \
+
+
+#
+##    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+#
