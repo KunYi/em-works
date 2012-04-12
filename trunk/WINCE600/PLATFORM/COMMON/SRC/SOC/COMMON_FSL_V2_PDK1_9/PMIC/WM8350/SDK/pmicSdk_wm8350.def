@@ -1,0 +1,299 @@
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;------------------------------------------------------------------------------
+; Copyright (C) 2006-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;------------------------------------------------------------------------------
+;
+; Copyright (c) 2007 Wolfson Microelectronics plc.  All rights reserved.
+;
+; This software as well as any related documentation may only be used or
+; copied in accordance with the terms of the Wolfson Microelectronic plc
+; agreement(s) (e.g. licence or non-disclosure agreement (NDA)).
+;
+; The information in this file is furnished for informational use only,
+; is subject to change without notice, and should not be construed as a
+; commitment by Wolfson Microelectronics plc.  Wolfson Microelectronics plc
+; assumes no responsibility or liability for any errors or inaccuracies that
+; may appear in the software or any related documention.
+;
+; Except as permitted by the agreement(s), no part of the software or any
+; related documention may be reproduced, stored in a retrieval system, or
+; transmitted in any form or by any means without the express written
+; consent of Wolfson Microelectronics plc.
+;
+;  $Id: pmic_wm8350.def 693 2007-07-04 01:36:24Z ib $
+;
+;  Warning
+;    This software is specifically written for Wolfson devices. It may not be
+;    used with other devices.
+;
+;------------------------------------------------------------------------------
+
+LIBRARY PMICSDK_WM8350
+
+EXPORTS
+
+    PmicRegisterRead
+    PmicRegisterWrite
+    PmicGetSiliconRev
+    PmicBlockControlIF
+    PmicUnblockControlIF
+    PmicDumpAllRegs
+    PmicInterruptRegister
+    PmicInterruptDeregister
+    PmicInterruptHandlingComplete
+    PmicInterruptDisable
+    PmicInterruptEnable
+
+    PmicBacklightMasterEnable
+    PmicBacklightMasterDisable
+    PmicBacklightEnable
+    PmicBacklightDisable
+    PmicBacklightRampUp
+    PmicBacklightRampDown
+    PmicBacklightSetMode
+    PmicBacklightSetCurrentLevel
+    PmicBacklightGetCurrentLevel
+    ;PmicBacklightSetDutyCycle
+    ;PmicBacklightGetDutyCycle
+    ;PmicBacklightSetCycleTime
+    ;PmicBacklightGetCycleTime
+    ;PmicBacklightEnableEdgeSlow
+    ;PmicBacklightDisableEdgeSlow
+
+    PmicAudioOpen
+    PmicAudioClose
+    PmicAudioSetProtocol
+    PmicAudioGetProtocol
+    PmicAudioEnable
+    PmicAudioDisable
+    PmicAudioMute
+    PmicAudioUnmute
+    PmicAudioReset
+    PmicAudioResetAll
+    PmicAudioSetCallback
+    PmicAudioClearCallback
+    PmicAudioGetCallback
+    PmicAudioSetPowerState
+    PmicAudioAntipopEnable
+    PmicAudioAntipopDisable
+    PmicAudioDigitalFilterReset
+    PmicAudioGetPttButtonLevel
+    PmicAudioVcodecSetClock
+    PmicAudioVcodecGetClock
+    PmicAudioVcodecSetRxtxTimeslot
+    PmicAudioVcodecGetRxtxTimeslot
+    PmicAudioVcodecSetSecondaryTxslot
+    PmicAudioVcodecGetSecondaryTxslot
+    PmicAudioVcodecSetConfig
+    PmicAudioVcodecClearConfig
+    PmicAudioVcodecGetConfig
+    PmicAudioVcodecEnableBypass
+    PmicAudioVcodecDisableBypass
+    PmicAudioStdacSetClock
+    PmicAudioStdacGetClock
+    PmicAudioStdacSetRxTimeslot
+    PmicAudioStdacGetRxTimeslot
+    PmicAudioStdacSetConfig
+    PmicAudioStdacClearConfig
+    PmicAudioStdacGetConfig
+    PmicAudioInputSetConfig
+    PmicAudioInputClearConfig
+    PmicAudioInputGetConfig
+    PmicAudioVcodecSetMic
+    PmicAudioVcodecGetMic
+    PmicAudioVcodecSetMicOnOff
+    PmicAudioVcodecGetMicOnOff
+    PmicAudioVcodecSetRecordGain
+    PmicAudioVcodecGetRecordGain
+    PmicAudioVcodecEnableMicbias
+    PmicAudioVcodecDisableMicbias
+    PmicAudioVcodecEnableMixer
+    PmicAudioVcodecDisableMixer
+    PmicAudioStdacEnableMixer
+    PmicAudioStdacDisableMixer
+    PmicAudioOutputSetPort
+    PmicAudioOutputClearPort
+    PmicAudioOutputGetPort
+    PmicAudioOutputSetStereoInGain
+    PmicAudioOutputGetStereoInGain
+    PmicAudioOutputSetPgaGain
+    PmicAudioOutputGetPgaGain
+    PmicAudioOutputEnableMixer
+    PmicAudioOutputDisableMixer
+    PmicAudioOutputSetBalance
+    PmicAudioOutputGetBalance
+    PmicAudioOutputEnableMonoAdder
+    PmicAudioOutputDisableMonoAdder
+    PmicAudioOutputSetMonoAdderGain
+    PmicAudioOutputGetMonoAdderGain
+    PmicAudioOutputSetConfig
+    PmicAudioOutputClearConfig
+    PmicAudioOutputGetConfig
+    PmicAudioOutputEnablePhantomGround
+    PmicAudioOutputDisablePhantomGround
+    PmicAudioTimedDelay
+    PmicAudioDriverInit
+    PmicAudioDriverDeinit
+    PmicAudioDumpRegisters
+    PmicAudioPowerDown
+    PmicAudioPowerUp
+
+    PmicADCSetComparatorThresholds
+    PmicADCGetSingleChannelOneSample
+    PmicADCGetSingleChannelEightSamples
+    PmicADCGetMultipleChannelsSamples
+    PmicADCGetHandsetCurrent
+    PmicADCTouchRead
+    PmicADCTouchStandby
+
+    PmicTCLEDEnable
+    PmicTCLEDDisable
+    PmicTCLEDGetMode
+    PmicTCLEDIndicatorSetCurrentLevel
+    PmicTCLEDIndicatorGetCurrentLevel
+    PmicTCLEDIndicatorSetBlinkPattern
+    PmicTCLEDIndicatorGetBlinkPattern
+    PmicTCLEDFunLightSetCurrentLevel
+    PmicTCLEDFunLightGetCurrentLevel
+    PmicTCLEDFunLightSetCycleTime
+    PmicTCLEDFunLightGetCycleTime
+    PmicTCLEDFunLightSetDutyCycle
+    PmicTCLEDFunLightGetDutyCycle
+    PmicTCLEDFunLightBlendedRamps
+    PmicTCLEDFunLightSawRamps
+    PmicTCLEDFunLightBlendedBowtie
+    PmicTCLEDFunLightChasingLightsPattern
+    PmicTCLEDFunLightStrobe
+    PmicTCLEDFunLightRampUp
+    PmicTCLEDFunLightRampDown
+    PmicTCLEDFunLightRampOff
+    PmicTCLEDFunLightTriodeOn
+    PmicTCLEDFunLightTriodeOff
+    PmicTCLEDEnableEdgeSlow
+    PmicTCLEDDisableEdgeSlow
+    PmicTCLEDEnableHalfCurrent
+    PmicTCLEDDisableHalfCurrent
+
+    PmicBatterySetChargeVoltage
+    PmicBatteryGetChargeVoltage
+    PmicBatterySetChargeCurrent
+    PmicBatteryGetChargeCurrent
+    PmicBatterySetTrickleCurrent
+    PmicBatteryGetTrickleCurrent
+    PmicBatteryFETControl
+    PmicBatteryReverseDisable
+    PmicBatteryReverseEnable
+    PmicBatterySetOvervoltageThreshold
+    PmicBatteryGetOvervoltageThreshold
+    PmicBatteryUnregulatedChargeDisable
+    PmicBatteryUnregulatedChargeEnable
+    PmicBatteryChargeLedDisable
+    PmicBatteryChargeLedEnable
+    PmicBatteryEnablePulldown
+    PmicBatteryDisablePulldown
+    PmicBatteryGetChargerMode
+    PmicBatteryEnableCoincellCharger
+    PmicBatteryDisableCoincellCharger
+    PmicBatterySetCoincellVoltage
+    PmicBatteryGetCoincellVoltage
+    PmicBatteryEnableEolComparator
+    PmicBatteryDisableEolComparator
+
+    PmicSwitchModeRegulatorOn
+    PmicSwitchModeRegulatorOff
+    PmicSwitchModeRegulatorSetVoltageLevel
+    PmicSwitchModeRegulatorGetVoltageLevel
+    PmicSwitchModeRegulatorSetDVSSpeed
+    PmicSwitchModeRegulatorSetMode
+    PmicSwitchModeRegulatorGetMode
+    PmicSwitchModeRegulatorEnablePanicMode
+    PmicSwitchModeRegulatorDisablePanicMode
+    PmicSwitchModeRegulatorEnableSoftStart
+    PmicSwitchModeRegulatorDisableSoftStart
+    PmicVoltageRegulatorOn
+    PmicVoltageRegulatorOff
+    PmicVoltageRegulatorSetVoltageLevel
+    PmicVoltageRegulatorGetVoltageLevel
+    PmicVoltageRegulatorSetPowerMode
+    PmicVoltageRegulatorGetPowerMode
+
+    PmicPwrctrlSetPowerCutTimer
+    PmicPwrctrlGetPowerCutTimer
+    PmicPwrctrlEnablePowerCut
+    PmicPwrctrlDisablePowerCut
+    PmicPwrctrlSetPowerCutCounter
+    PmicPwrctrlGetPowerCutCounter
+    PmicPwrctrlSetPowerCutMaxCounter
+    PmicPwrctrlGetPowerCutMaxCounter
+    PmicPwrctrlEnableCounter
+    PmicPwrctrlDisableCounter
+    PmicPwrctrlSetMemHoldTimer
+    PmicPwrctrlGetMemHoldTimer
+    PmicPwrctrlSetMemHoldTimerAllOn
+    PmicPwrctrlClearMemHoldTimerAllOn
+    PmicPwrctrlEnableClk32kMCU
+    PmicPwrctrlDisableClk32kMCU
+    PmicPwrctrlEnableUserOffModeWhenDelay
+    PmicPwrctrlDisableUserOffModeWhenDelay
+    PmicPwrctrlSetVBKUPRegulator
+    PmicPwrctrlSetVBKUPRegulatorVoltage
+    PmicPwrctrlEnableWarmStart
+    PmicPwrctrlDisableWarmStart
+    PmicPwrctrlEnableRegenAssig
+    PmicPwrctrlDisableRegenAssig
+    PmicPwrctrlGetRegenAssig
+
+    PmicConvityOpen
+    PmicConvityClose
+    PmicConvitySetMode
+    PmicConvityGetMode
+    PmicConvityReset
+    PmicConvitySetCallback
+    PmicConvityClearCallback
+    PmicConvityGetCallback
+    PmicConvityGetEventStatus
+    PmicConvityUsbSetSpeed
+    PmicConvityUsbGetSpeed
+    PmicConvityUsbSetPowerSource
+    PmicConvityUsbGetPowerSource
+    PmicConvityUsbSetXcvr
+    PmicConvityUsbGetXcvr
+    PmicConvityUsbOtgSetDlpDuration
+    PmicConvityUsbOtgGetDlpDuration
+    PmicConvityUsbOtgBeginHnp
+    PmicConvityUsbOtgEndHnp
+    PmicConvityUsbOtgSetConfig
+    PmicConvityUsbOtgClearConfig
+    PmicConvityUsbOtgGetConfig
+    PmicConvityRs232SetConfig
+    PmicConvityRs232GetConfig
+    PmicConvityCea936SetDetectionConfig
+    PmicConvityCea936GetDetectionConfig
+    PmicConvityCea936ExitSignal
+
+    PmicGpioSetLevels
+    PmicGpioSetDir
+    PmicGpioSetPolarity
+    PmicGpioSetPinType
+    PmicGpioSetPullUp
+    PmicGpioSetPullDown
+    PmicGpioSetDebounce
+    PmicGpioSetFunction
+    PmicGpioClearInt
+    PmicGpioGetLevels
+    PmicGpioGetInputs
+    PmicGpioGetOutputs
+    PmicGpioGetPolarity
+    PmicGpioGetPinType
+    PmicGpioGetPullUp
+    PmicGpioGetPullDown
+    PmicGpioGetDebounce
+    PmicGpioGetFunction

@@ -1,0 +1,44 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM]
+    "defaultDestDir"="\\My Documents"
+    "thumbnailPrefix"="thumbnail_"
+    "requestThumbnail"=dword:0
+    "startImgViewer"=dword:0                    
+    "defaultImgViewer"="\\windows\\iexplore.exe"
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM\image-formats\JPG]
+    "encoding"="JPEG"
+    "pixels"="0*0-65535*65535"
+    "maxsize"="2758320"
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM\image-formats\GIF]
+    "encoding"="GIF"
+    "pixels"="0*0-65535*65535"
+    "maxsize"="2758320"
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM\image-formats\PNG]
+    "encoding"="PNG"
+    "pixels"="0*0-65535*65535"
+    "maxsize"="2758320"
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM\image-formats\BMP]
+    "encoding"="BMP"
+    "pixels"="0*0-65535*65535"
+    "maxsize"="2758320"
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPSM\attachments]
+    "32kadpcm"="audio/32kadpcm"
+    "audiobasic"="audio/basic"
+    "text"="text/plain"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\BIPSM]
+    "State"="Idle"
+
+[HKEY_CLASSES_ROOT\CLSID\{6DB81DD8-3787-4AA5-8B2E-D1778B4CEE8F}]
+    @="images_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{6DB81DD8-3787-4AA5-8B2E-D1778B4CEE8F}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+
+[HKEY_LOCAL_MACHINE\software\microsoft\shell\extensions\controls folder\bluetooth\shellex\propertysheethandlers\{6DB81DD8-3787-4AA5-8B2E-D1778B4CEE8F}]
+    @=""

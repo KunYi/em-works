@@ -1,0 +1,28 @@
+!if 0
+Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=display_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+
+INCLUDES=\
+    ..\INC; \
+    ..\ddraw; \
+    $(INCLUDES)
+
+SOURCES=\
+    display.cpp \
+    display_overlay.cpp \
+    display_overlay_top.cpp \
+    display_overlay_middle.cpp \
+    display_xec.cpp \
+    dirtyrect.cpp

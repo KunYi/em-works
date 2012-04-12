@@ -1,0 +1,46 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;------------------------------------------------------------------------------
+
+LIBRARY LRADCSDK
+
+EXPORTS
+    LRADCOpenHandle
+    LRADCCloseHandle
+    LRADCEnableInterrupt
+    LRADCClearInterrupt
+    LRADCConfigureChannel
+    LRADCSetDelayTrigger
+    LRADCSetDelayTriggerKick
+    LRADCGetAccumValue
+    LRADCGetInterruptFlag
+    LRADCGetToggleFlag
+    LRADCScheduleChannel
+    LRADCClearAccum
+    LRADCClearChannel
+    LRADCGetChannelPresent
+    LRADCSetAnalogPowerUp
+    LRADCCLearDelayChannel
+    LRADCEnableBatteryMeasurement
+    LRADCEnableDieMeasurement
+    LRADCEnableVDD5VMeasurement
+    LRADCDumpRegisters
+    LRADCReadTouchX
+    LRADCReadTouchY
+    
+    LRADCGetTouchDetectPresent
+    LRADCGetTouchDetect
+    LRADCEnableTouchDetect
+    LRADCEnableTouchDetectInterrupt
+    LRADCGetTouchDetectInterruptFlag
+    LRADCClearTouchDetect
+    LRADCEnableTouchDetectXDrive
+    LRADCEnableTouchDetectYDrive
+    
+    LRADCEnableButtonDetect
+    LRADCEnableButtonDetectInterrupt
+    LRADCClearButtonDetect
+
+

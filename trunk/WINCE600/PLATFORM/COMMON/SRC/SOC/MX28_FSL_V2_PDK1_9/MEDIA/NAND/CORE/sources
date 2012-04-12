@@ -1,0 +1,24 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=hal_nand_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+    $(INCLUDES) 
+
+SOURCES= cspnand.c
+
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_dma_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_ecc_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_gpmi_$(_SOCDIR).lib

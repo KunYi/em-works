@@ -1,0 +1,15 @@
+;------------------------------------------------------------------------------
+;
+;  Copyright (C) 2008 Freescale Semiconductor, Inc. All Rights Reserved.
+;  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+LIBRARY DVFC
+
+EXPORTS
+    DVF_Init
+    DVF_Deinit
+    DVF_Open
+    DVF_Close
+    DVF_IOControl

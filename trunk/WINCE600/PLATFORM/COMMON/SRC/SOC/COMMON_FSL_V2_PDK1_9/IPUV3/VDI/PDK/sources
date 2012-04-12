@@ -1,0 +1,26 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=ipuv3_vdi_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+TARGETDEFNAME=$(TARGETNAME)
+DEFFILE=vdi.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+INCLUDES=\
+    ..\..\INC; \
+    $(INCLUDES)
+
+
+SOURCES=\
+    vdi_io.cpp   \
+    vdi_config.cpp \
+    vdi_regs.cpp \

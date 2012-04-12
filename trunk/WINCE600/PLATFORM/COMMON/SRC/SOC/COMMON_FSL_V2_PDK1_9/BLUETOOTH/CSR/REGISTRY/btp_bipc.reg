@@ -1,0 +1,8 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BIPCM]
+    "allowFormatChanged"=dword:0    
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\bluetooth\services\0000111A-0000-1000-8000-00805F9B34FB]
+    @="Basic Imaging"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\BIPCM]
+    "State"="Idle"

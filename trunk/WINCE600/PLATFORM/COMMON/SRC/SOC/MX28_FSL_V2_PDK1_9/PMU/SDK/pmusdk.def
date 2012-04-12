@@ -1,0 +1,19 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+;------------------------------------------------------------------------------
+
+LIBRARY PMUSDK
+
+EXPORTS
+PmuInitBatteryMonitor
+PmuGetBatteryVoltage
+PmuSetCharger
+PmuStopCharger
+PmuGetBatteryChargingStatus
+PmuSetVddd
+PmuGetVddd
+PmuGetVdddBrownont
+PmuSetFets
+PmuPowerGetSupplyMode

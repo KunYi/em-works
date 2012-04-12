@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2010, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+!IF "$(BSP_SDBUS_FSL)" == ""
+SKIPBUILD=1
+!ENDIF
+
+DEFFILE=SDBus.def
+
+TARGETNAME=sdbus2
+TARGETTYPE=DYNLINK
+PREPROCESSDEFFILE=1
+DLLENTRY=_DllEntryCRTStartup
+
+SOURCES = sdbusreq.cpp \
+	sddevice.cpp \
+	sdbus.cpp \
+	sdslot.cpp \
+	sdclient.cpp \
+	sddevinf.cpp \
+	sdiofeat.cpp \
+	sdworki.cpp \
+	sddebug.cpp \
+
+TARGETLIBS=                                           \
+  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\defbuslib.lib  \
+  $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib    \
+  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib     

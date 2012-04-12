@@ -1,0 +1,23 @@
+!if 0
+Copyright (C) 2006-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=gptsdk_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+INCLUDES=\
+    ..\..\inc;  \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\inc
+
+SOURCES=\
+    gptsdk.c
