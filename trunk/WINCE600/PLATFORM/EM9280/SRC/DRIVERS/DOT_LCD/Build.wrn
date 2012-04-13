@@ -1,3 +1,3 @@
 BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [00:0000000046:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\gperotate.lib.
-BUILD: [01:0000000079:WARNN ] DOT_LCD.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\dot_lcd.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [00:0000000009:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\gperotate.lib.
+BUILD: [01:0000000051:WARNN ] DOT_LCD.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\dot_lcd.pdb' is missing debugging information for referencing module; linking object as if no debug info
