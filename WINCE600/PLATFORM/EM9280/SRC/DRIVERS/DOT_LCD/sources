@@ -52,6 +52,9 @@ TARGETLIBS= \
         $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
         $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
         $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\gperotate.lib
+        
+#SOURCELIBS= \
+#		$(_PLATCOMMONLIB)\$(_CPUINDPATH)\lcdif_$(_SOCDIR).lib     
 
 CDEFINES=$(CDEFINES) -DDDI
 
