@@ -297,7 +297,7 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
 		//
 		// CS&ZHL JUN-2-2011: only use RXD / TXD as debug port in EM9170
 		//
-		RETAILMSG(1, (TEXT("CS&ZHL::config UART1 pins\r\n")));
+		//RETAILMSG(1, (TEXT("CS&ZHL::config UART1 pins\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_UART1_RXD, DDK_IOMUX_PIN_MUXMODE_ALT0,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_UART1_TXD, DDK_IOMUX_PIN_MUXMODE_ALT0,DDK_IOMUX_PIN_SION_REGULAR);
 #else		// ->iMX257PDK
@@ -320,7 +320,7 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
         
     case CSP_BASE_REG_PA_UART2:
 		// CS&ZHL JUN-2-2011: EM9170 has the same config with iMX257PDK's
-		RETAILMSG(1, (TEXT("CS&ZHL::config UART2 pins\r\n")));
+		//RETAILMSG(1, (TEXT("CS&ZHL::config UART2 pins\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_UART2_RXD, DDK_IOMUX_PIN_MUXMODE_ALT0,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_UART2_TXD, DDK_IOMUX_PIN_MUXMODE_ALT0,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_UART2_RTS, DDK_IOMUX_PIN_MUXMODE_ALT0,DDK_IOMUX_PIN_SION_REGULAR);
@@ -339,7 +339,7 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
 
     case CSP_BASE_REG_PA_UART3:
 #ifdef		EM9170
-		RETAILMSG(1, (TEXT("CS&ZHL::config UART3 pins\r\n")));
+		//RETAILMSG(1, (TEXT("CS&ZHL::config UART3 pins\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_CSPI1_MOSI, DDK_IOMUX_PIN_MUXMODE_ALT2,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_CSPI1_MISO, DDK_IOMUX_PIN_MUXMODE_ALT2,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSelectInput(DDK_IOMUX_SELEIN_UART3_IPP_UART_RXD_MUX, 0x0);
@@ -366,7 +366,7 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
 
     case CSP_BASE_REG_PA_UART4:
 #ifdef		EM9170
-		RETAILMSG(1, (TEXT("CS&ZHL::config UART4 pins\r\n")));
+		//RETAILMSG(1, (TEXT("CS&ZHL::config UART4 pins\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_KPP_COL0, DDK_IOMUX_PIN_MUXMODE_ALT1,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_KPP_COL1, DDK_IOMUX_PIN_MUXMODE_ALT1,DDK_IOMUX_PIN_SION_REGULAR);
         DDKIomuxSelectInput(DDK_IOMUX_SELEIN_UART4_IPP_UART_RXD_MUX, 0x1);
@@ -401,7 +401,7 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
 
     case CSP_BASE_REG_PA_UART5:
 #ifdef	EM9170
-		RETAILMSG(1, (TEXT("CS&ZHL::config UART5 pins\r\n")));
+		//RETAILMSG(1, (TEXT("CS&ZHL::config UART5 pins\r\n")));
 		// CS&ZHL JUN-1-2011: no RTS/CTS in EM9170
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_LBA, DDK_IOMUX_PIN_MUXMODE_ALT3,DDK_IOMUX_PIN_SION_REGULAR);		//UART5_RXD
         DDKIomuxSetPinMux(DDK_IOMUX_PIN_ECB, DDK_IOMUX_PIN_MUXMODE_ALT3,DDK_IOMUX_PIN_SION_REGULAR);	//UART5_TXD
@@ -434,6 +434,155 @@ BOOL BSPUartConfigureGPIO( ULONG HWAddr )
     }
 
     return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+//
+// Function: BSPUartConfigureRTS
+//
+// This function is used to configure the GPIO as RTSn (EM9170 only).
+//
+// Parameters:
+//      HWAddr
+//          [in] Physical IO address.
+//
+// Returns:
+//      TRUE if successfully performed the required action.
+//
+//-----------------------------------------------------------------------------
+BOOL BSPUartConfigureRTS(ULONG HWAddr)
+{
+#ifdef	EM9170
+    switch (HWAddr)
+    {
+    case CSP_BASE_REG_PA_UART1:			// -> EM9170_DBGU
+    case CSP_BASE_REG_PA_UART2:			// -> EM9170_COM2
+    case CSP_BASE_REG_PA_UART5:			// -> EM9170_COM3
+		//RETAILMSG(1, (TEXT("no GPIO as RTS pin\r\n")));
+		break;
+
+    case CSP_BASE_REG_PA_UART4:		// -> EM9170_COM4
+		// first, set GPIO1_30 (EM9170_GPIO8) as output
+        DDKGpioSetConfig(DDK_GPIO_PORT1, 30, DDK_GPIO_DIR_OUT, DDK_GPIO_INTR_NONE);
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 30, 1);
+		// and then switch GPIO1_30 onto chip pin
+        DDKIomuxSetPinMux(DDK_IOMUX_PIN_CSI_D5, DDK_IOMUX_PIN_MUXMODE_ALT5, DDK_IOMUX_PIN_SION_REGULAR);
+        DDKIomuxSetPadConfig(DDK_IOMUX_PAD_CSI_D5, 
+							DDK_IOMUX_PAD_SLEW_FAST, DDK_IOMUX_PAD_DRIVE_HIGH, 
+							DDK_IOMUX_PAD_OPENDRAIN_DISABLE, DDK_IOMUX_PAD_PULL_UP_100K, 
+							DDK_IOMUX_PAD_HYSTERESIS_DISABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        break;
+
+    case CSP_BASE_REG_PA_UART3:		// -> EM9170_COM5
+		// first, set GPIO1_6 (EM9170_GPIO9) as output
+        DDKGpioSetConfig(DDK_GPIO_PORT1, 6, DDK_GPIO_DIR_OUT, DDK_GPIO_INTR_NONE);
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 6, 1);
+		// and then switch GPIO1_6 onto chip pin
+        DDKIomuxSetPinMux(DDK_IOMUX_PIN_CSI_D7, DDK_IOMUX_PIN_MUXMODE_ALT5, DDK_IOMUX_PIN_SION_REGULAR);
+        DDKIomuxSetPadConfig(DDK_IOMUX_PAD_CSI_D7, 
+							DDK_IOMUX_PAD_SLEW_FAST, DDK_IOMUX_PAD_DRIVE_HIGH, 
+							DDK_IOMUX_PAD_OPENDRAIN_DISABLE, DDK_IOMUX_PAD_PULL_UP_100K, 
+							DDK_IOMUX_PAD_HYSTERESIS_DISABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        break;
+
+    default:
+		RETAILMSG(1, (TEXT("BSPUartConfigureRTS: parameter error\r\n")));
+        return FALSE;
+        
+    }
+#endif	//EM9170
+
+	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+//
+// Function: BSPUartSetGPIORTS
+//
+// This function is used to set GPIO based RTSn (EM9170 only).
+//
+// Parameters:
+//      HWAddr
+//          [in] Physical IO address.
+//
+// Returns:
+//      TRUE if successfully performed the required action.
+//
+//-----------------------------------------------------------------------------
+BOOL BSPUartSetGPIORTS(ULONG HWAddr)
+{
+#ifdef	EM9170
+    switch (HWAddr)
+    {
+    case CSP_BASE_REG_PA_UART1:			// -> EM9170_DBGU
+    case CSP_BASE_REG_PA_UART2:			// -> EM9170_COM2
+    case CSP_BASE_REG_PA_UART5:			// -> EM9170_COM3
+		//RETAILMSG(1, (TEXT("no GPIO as RTS pin\r\n")));
+		break;
+
+    case CSP_BASE_REG_PA_UART4:		// -> EM9170_COM4
+		// Set GPIO1_30 (EM9170_GPIO8) => RTSn = 0 -> active low
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 30, 0);
+        break;
+
+    case CSP_BASE_REG_PA_UART3:		// -> EM9170_COM5
+		// Set GPIO1_6 (EM9170_GPIO9) => RTSn = 0 -> active low
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 6, 0);
+        break;
+
+    default:
+		RETAILMSG(1, (TEXT("BSPUartSetGPIORTS: parameter error\r\n")));
+        return FALSE;
+        
+    }
+#endif	//EM9170
+
+	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+//
+// Function: BSPUartClearGPIORTS
+//
+// This function is used to clear GPIO based RTSn (EM9170 only).
+//
+// Parameters:
+//      HWAddr
+//          [in] Physical IO address.
+//
+// Returns:
+//      TRUE if successfully performed the required action.
+//
+//-----------------------------------------------------------------------------
+BOOL BSPUartClearGPIORTS(ULONG HWAddr)
+{
+#ifdef	EM9170
+    switch (HWAddr)
+    {
+    case CSP_BASE_REG_PA_UART1:			// -> EM9170_DBGU
+    case CSP_BASE_REG_PA_UART2:			// -> EM9170_COM2
+    case CSP_BASE_REG_PA_UART5:			// -> EM9170_COM3
+		//RETAILMSG(1, (TEXT("no GPIO as RTS pin\r\n")));
+		break;
+
+    case CSP_BASE_REG_PA_UART4:		// -> EM9170_COM4
+		// Set GPIO1_30 (EM9170_GPIO8) => RTSn = 1 -> active low
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 30, 1);
+        break;
+
+    case CSP_BASE_REG_PA_UART3:		// -> EM9170_COM5
+		// Set GPIO1_6 (EM9170_GPIO9) => RTSn = 1 -> active low
+        DDKGpioWriteDataPin(DDK_GPIO_PORT1, 6, 1);
+        break;
+
+    default:
+		RETAILMSG(1, (TEXT("BSPUartClearGPIORTS: parameter error\r\n")));
+        return FALSE;
+        
+    }
+#endif	//EM9170
+
+	return TRUE;
 }
 
 //-----------------------------------------------------------------------------
