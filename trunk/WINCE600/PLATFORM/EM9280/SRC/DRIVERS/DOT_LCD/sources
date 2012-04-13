@@ -53,19 +53,35 @@ TARGETLIBS= \
         $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
         $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\gperotate.lib
         
-#SOURCELIBS= \
-#		$(_PLATCOMMONLIB)\$(_CPUINDPATH)\lcdif_$(_SOCDIR).lib     
+SOURCELIBS= \
+		$(_PLATCOMMONLIB)\$(_CPUINDPATH)\lcdif_$(_SOCDIR).lib     
 
 CDEFINES=$(CDEFINES) -DDDI
 
 SOURCES= \
-	DOT_LCD.cpp \
-	dispdrvr.c
+    DOT_LCD.cpp \
+    dispdrvr.c \
+    display_controller_factory.cpp \
+    UC1698.cpp \
+    bsplcdif.cpp \
+
+
+
+
 
 WARNLEVEL=3
 FILE_VIEW_RESOURCE_FOLDER= \
     DOT_LCD.def \
     DOT_lcd.reg \
 
+FILE_VIEW_INCLUDES_FOLDER= \
+    DOT_LCD.h \
+    precomp.h \
+    display_controller.h \
+    display_controller_factory.h \
+    UC1698.h \
+
 #xref VIGUID {1a4fca39-2c0a-42f7-91d6-dda607f3b957}
 #xref VSGUID {3b4b199b-739e-4cdb-ae6d-93b61ed97634}
+
+
