@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{A9579C99-2FCB-404B-BD28-4858F56A8BA4}") = "EM9283_V1", "EM9283_V1\EM9283_V1.pbxml", "{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Platform Builder (_TGTCPU) = Debug|Platform Builder (_TGTCPU)
+		EM9280 ARMV4I Debug|Platform Builder (_TGTCPU) = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		EM9280 ARMV4I Release|Platform Builder (_TGTCPU) = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		Release|Platform Builder (_TGTCPU) = Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Debug|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Debug|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Release|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Release|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{61973415-E77B-4F75-9FCE-23779EA42F70}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
