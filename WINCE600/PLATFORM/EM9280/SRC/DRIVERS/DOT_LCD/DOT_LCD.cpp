@@ -71,7 +71,7 @@ Dot_lcd::Dot_lcd()
 {
 	DEBUGMSG( GPE_ZONE_INIT,(TEXT("Dot_lcd::Dot_lcd\r\n")));
 
-	DispDrvrInitialize();	// call entry point to 2bpp GDI driver
+	BSPSetDisplayController();
 	
 	// When this DispDrvrInitialize returns, DispDrvrPhysicalFrameBuffer contains
 	// the physical address of the screen if it is in 2bpp DIB format. - Alternatively it
@@ -112,6 +112,9 @@ Dot_lcd::Dot_lcd()
 		m_pPrimarySurface = new GPESurf( m_nScreenWidth, m_nScreenHeight, m_pVirtualFrameBuffer,
 			 DispDrvr_cdwStride / 4, gpe2Bpp );
 	}
+
+	//LCDIFDisplayFrameBuffer((const void*) (m_nLAWPhysical+pTempSurf->OffsetInVideoMemory()));
+	BSPBacklightEnable(TRUE);
 }
 
 SCODE Dot_lcd::SetMode( int modeId, HPALETTE *pPalette )
