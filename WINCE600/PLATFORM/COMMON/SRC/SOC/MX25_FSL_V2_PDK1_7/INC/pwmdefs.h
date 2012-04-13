@@ -75,6 +75,7 @@ typedef struct {
    UINT32  sample;				// pwm sample value
    UINT32  period;					// pwm period
    UINT32  duration;				// duration of the sample (msec)
+   UINT32  pwmctrl;
 } PwmSample_t, *pPwmSample_t;
 
 
@@ -85,6 +86,10 @@ typedef struct {
    DWORD	dwFreq;				// PWM freq in Hz, = 0: stop PWM output
    DWORD	dwDuty;				// PWM duty in %, = 0: stop PWM output
    DWORD	dwDuration;			// duration of PWM output (msec), = 0: -> infinit
+   DWORD	dwPwmctrl;			// PWM Control register 
+								// dwPwmctrl[1:0]:PWM Output Configuration. This bit field determines the mode of PWM output on the output pin.
+								//	   00 Output pin is set at rollover and cleared at comparison
+								//	   01 Output pin is cleared at rollover and set at comparison
 } PWMINFO, *PPWMINFO;
 
 

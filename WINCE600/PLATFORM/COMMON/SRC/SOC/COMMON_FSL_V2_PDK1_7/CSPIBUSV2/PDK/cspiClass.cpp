@@ -382,8 +382,8 @@ BOOL cspiClass::CspiInitialize(DWORD Index)
 		CSPI_XCH_PKT0_T XchPkt;	
 		CSPI_BUSCONFIG_T BusCnfg;
 
-		UINT32 TxBuf[12];
-		UINT32 RxBuf[12];
+		UINT32 TxBuf[64];
+		UINT32 RxBuf[64];
 		BusCnfg.chipselect = 0;
 		BusCnfg.freq = 16000000;
 		BusCnfg.bitcount = 32;
@@ -397,7 +397,7 @@ BOOL cspiClass::CspiInitialize(DWORD Index)
 		XchPkt.pBusCnfg = &BusCnfg;
 		XchPkt.pTxBuf = TxBuf;
 		XchPkt.pRxBuf = RxBuf;
-		XchPkt.xchCnt = 10;
+		XchPkt.xchCnt = 64;
 		XchPkt.xchEvent = NULL;
 		CspiDMADataExchange( &XchPkt);
 	}

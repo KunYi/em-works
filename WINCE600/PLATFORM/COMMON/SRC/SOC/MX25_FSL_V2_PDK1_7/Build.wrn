@@ -1,4 +1,4 @@
 BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [00:0000000012:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\INC\ does not exist.
-BUILD: [00:0000000014:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\INC\ does not exist.
+BUILD: [00:0000000012:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\SRC\SOC\INC\ does not exist.
+BUILD: [00:0000000014:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\SRC\SOC\INC\ does not exist.
 BUILD: [00:0000000038:WARNS ] Directory: D:\WINCE600\platform\src\inc\ does not exist.
