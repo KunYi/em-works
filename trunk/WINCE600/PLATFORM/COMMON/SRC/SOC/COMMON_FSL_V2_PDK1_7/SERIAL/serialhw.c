@@ -52,6 +52,12 @@ extern UCHAR BSPUartCalRFDIV(ULONG* pRefFreq);
 extern BOOL BSPUartEnableClock(ULONG HWAddr, BOOL bEnable);
 extern BOOL BSPSerAcquireDMAReqGpr(ULONG HWAddr);
 extern BOOL BSPSerRestoreDMAReqGpr(ULONG HWAddr);
+//
+// CS&ZHL MAR-13-2012: supporting GPIO based RTSn
+//
+extern BOOL	BSPUartConfigureRTS(ULONG HWAddr);
+extern BOOL BSPUartSetGPIORTS(ULONG HWAddr);
+extern BOOL BSPUartClearGPIORTS(ULONG HWAddr);
 
 //------------------------------------------------------------------------------
 // External Variables
@@ -1391,7 +1397,7 @@ INTERRUPT_TYPE SL_GetIntrType(PVOID pContext)
                DEBUGMSG(ZONE_FLOW, (TEXT("GetIntr: pSerHead->awaitingTxDMACompBmp: %d\r\n"), pSerHead->awaitingTxDMACompBmp));
                for (i = 0; i < SERIAL_MAX_DESC_COUNT_TX; i++)
                {
-                   if ((1 << i) & pSerHead->awaitingTxDMACompBmp)
+                   /*if ((1 << i) & pSerHead->awaitingTxDMACompBmp)
                    {
                        DDKSdmaGetBufDescStatus(pSerHead->SerialDmaChanTx, i, &txStatus);
                        DEBUGMSG(ZONE_FLOW, (TEXT("GetIntr: Status: 0x%x\r\n"), txStatus));
@@ -1401,7 +1407,19 @@ INTERRUPT_TYPE SL_GetIntrType(PVOID pContext)
                            pSerHead->awaitingTxDMACompBmp &= ~(1 << i);
                            DEBUGMSG(ZONE_FLOW, (TEXT("GetIntr: TX SDMA completion\r\n")));
                        }
-                   }
+                   }*/
+				   if ((1 << i) & pSerHead->awaitingTxDMACompBmp )
+				   {
+					   DDKSdmaGetBufDescStatus(pSerHead->SerialDmaChanTx, i, &txStatus);
+					   DEBUGMSG(ZONE_FLOW, (TEXT("GetIntr: Status: 0x%x\r\n"), txStatus));
+					   if (((txStatus & DDK_DMA_FLAGS_BUSY) == 0 )
+						   && (INREG32(&pHWHead->pUartReg->USR2) & CSP_BITFVAL(UART_USR2_TXDC,UART_USR2_TXDC_SET) ))
+					   {
+						   interrupts |= INTR_TX;
+						   pSerHead->awaitingTxDMACompBmp &= ~(1 << i);
+						   DEBUGMSG(ZONE_FLOW, (TEXT("GetIntr: TX SDMA completion\r\n")));
+					   }
+				   }
                }
             }
         }
@@ -2207,13 +2225,53 @@ VOID SL_SetDTR(PVOID pContext)
 VOID SL_ClearRTS(PVOID pContext)
 {
     PUART_INFO pHWHead = (PUART_INFO)pContext;
+    PSER_INFO pSerHead = (PSER_INFO) pContext;
 
     DEBUGMSG(ZONE_FUNCTION, (TEXT("SL_ClearRTS+\r\n")));
 
     EnterCriticalSection(&(pHWHead->RegCritSec));
     try {
+		//
+		// CS&ZHL MAR-13-2012: if RTS_CONTROL_TOGGLE, wait all data transfer completed before clearing RTSn
+		//
+        if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+		{
+			DWORD	dwDelayMilliSeconds;
+			DWORD	dwStartCount, dwCurrCount;
+			DWORD	dwElipsedMilliSeconds = 0;
+
+			dwDelayMilliSeconds = 9600 / pHWHead->dcb.BaudRate;
+			if(dwDelayMilliSeconds == 0)
+			{
+				dwDelayMilliSeconds = 1;
+			}
+			
+			dwStartCount = GetTickCount();
+			while(dwElipsedMilliSeconds < dwDelayMilliSeconds)
+			{
+				// check transmit complete bit
+				if (INREG32(&pHWHead->pUartReg->USR2) & CSP_BITFVAL(UART_USR2_TXDC, UART_USR2_TXDC_SET))
+				{
+					break;
+				}
+
+				// check timeout
+				dwCurrCount = GetTickCount();
+				if(dwCurrCount >= dwStartCount)
+				{
+					dwElipsedMilliSeconds = dwCurrCount - dwStartCount;
+				}
+				else
+				{
+					dwElipsedMilliSeconds = ~dwStartCount + dwCurrCount + 1;
+				}
+			}
+
+			// clear GPIO based RTSn if required
+			BSPUartClearGPIORTS(pSerHead->dwIOBase);
+		}
+
         //Clear RTS(CTS) to logic "0":high;
-                
         OUTREG32(&pHWHead->pUartReg->UCR2, 
                  INREG32(&pHWHead->pUartReg->UCR2)&~CSP_BITFMASK(UART_UCR2_CTS));
 
@@ -2274,6 +2332,12 @@ VOID SL_SetRTS(PVOID pContext)
         
         //Set RTS(CTS) to logic "1":low;
         INSREG32BF(&pHWHead->pUartReg->UCR2, UART_UCR2_CTS, UART_UCR2_CTS_LOW);
+
+		// CS&ZHL MAR-13-2012: set GPIO based RTSn if required
+        if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+		{
+			BSPUartSetGPIORTS(pSerHead->dwIOBase);
+		}
 
         pHWHead->MDDFlowOff  = FALSE;
 
@@ -2631,6 +2695,7 @@ VOID SL_PurgeComm(PVOID pContext, DWORD fdwAction)
 BOOL SL_SetDCB(PVOID pContext, LPDCB lpDCB)
 {
     PUART_INFO pHWHead = (PUART_INFO)pContext;
+    PSER_INFO pSerHead = (PSER_INFO)pContext;			// CS&ZHL MAR-13-2012: supporting RTS_CONTROL_TOGGLE
     BOOL bRet = TRUE;
 
     DEBUGMSG(ZONE_FUNCTION, (TEXT("SL_SetDC+ \r\n")));
@@ -2696,6 +2761,14 @@ BOOL SL_SetDCB(PVOID pContext, LPDCB lpDCB)
     {
         // store this DCB
         pHWHead->dcb = *lpDCB;
+
+		//
+		// CS&ZHL MAR-13-2012: set GPIO8 -> RTS4n, GPIO9 -> RTS5n if required
+		//
+        if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+		{
+			BSPUartConfigureRTS(pSerHead->dwIOBase);
+		}
     }
 
     DEBUGMSG(ZONE_FUNCTION,(TEXT("SL_SetDCB- Ret = %d\r\n"), bRet));

@@ -126,6 +126,10 @@ DWORD PwmInfo2PwmSample(PPWMINFO pInfo, pPwmSample_t pSample)
 	pSample->period  = dwPeriod - 2;		//CS&ZHL AUG-17-2011: fPWMO = fPCLK / (PERIOD +2)
 	pSample->sample = dwSample;
 	pSample->duration = pInfo->dwDuration;
+	//LQK Sep-9-2011
+	//pInfo->dwPwmctrl[1:0]->pSample->pwmctrl[19:18]-> REG32 PWM_CR[19:18]
+	pSample->pwmctrl = pInfo->dwPwmctrl<<PWM_CR_POUTC_LSH;
+	RETAILMSG(1, (TEXT("PwmInfo2PwmSample::pwmctrl = %0x\r\n"), pSample->pwmctrl));
 	//RETAILMSG(1, (TEXT("PwmInfo2PwmSample::PreScaler = %d, Period = %d, Sample = %d\r\n"), dwPreScaler, dwPeriod, dwSample));
 
 	return dwPreScaler;
@@ -177,6 +181,7 @@ void PwmStop(PVOID pDeviceContext)
     PPWM_DEVICE_CONTEXT pPwm = (PPWM_DEVICE_CONTEXT) pDeviceContext;
     DEBUGMSG(ZONE_FUNCTION, (TEXT("++PwmStop\r\n")));
     // Disable the pwm
+	OUTREG32( &pPwm->pPwmRegs->PWM_CR, INREG32(&pPwm->pPwmRegs->PWM_CR)|0xc0000 );
     INSREG32(&pPwm->pPwmRegs->PWM_CR, CSP_BITFMASK(PWM_CR_EN),CSP_BITFVAL(PWM_CR_EN, PWM_CR_EN_DISABLE));
     DEBUGMSG(ZONE_FUNCTION, (TEXT("--PwmStop\r\n")));
 }
@@ -227,7 +232,12 @@ BOOL PwmPlaySample(PVOID pDeviceContext, LPCVOID SampleBuffer, int SampleSize )
 
 	OUTREG32(&pPwm->pPwmRegs->PWM_SAR, PwmSampleBuffer->sample);
     OUTREG32(&pPwm->pPwmRegs->PWM_PR, PwmSampleBuffer->period);
-    
+
+	//RETAILMSG(1, (TEXT("pPwmRegs->PWM_CR = 0x%x\r\n"), INREG32(&pPwm->pPwmRegs->PWM_CR)));
+	//lqk Sep-9-2011: Pwm output configuation
+	//INSREG32(&pPwm->pPwmRegs->PWM_CR, CSP_BITFMASK(PWM_CR_POUTC), CSP_BITFVAL(PWM_CR_POUTC, PWMOUTCONFIG_VAL));
+	//OUTREG32( &pPwm->pPwmRegs->PWM_CR, INREG32(&pPwm->pPwmRegs->PWM_CR)|0xc0000 );
+	//RETAILMSG(1, (TEXT("pPwmRegs->PWM_CR = 0x%x\r\n"), INREG32(&pPwm->pPwmRegs->PWM_CR)));
     PwmStart(pDeviceContext);
     
 	/*

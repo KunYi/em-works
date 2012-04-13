@@ -28,6 +28,7 @@ SOURCES= pwmpdd.c \
          pwmmdd.c
 
 FILE_VIEW_RESOURCE_FOLDER= \
+    pwm.def \
 
 
 FILE_VIEW_INCLUDES_FOLDER= \
