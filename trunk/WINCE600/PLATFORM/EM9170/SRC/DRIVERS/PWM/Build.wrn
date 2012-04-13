@@ -1,4 +1,4 @@
 BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [00:0000000048:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
-BUILD: [00:0000000049:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\ceosutil.lib.
-BUILD: [00:0000000050:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.
+BUILD: [00:0000000031:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
+BUILD: [00:0000000032:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\ceosutil.lib.
+BUILD: [00:0000000033:WARNN ] D:\WINCE600\PLATFORM\EM9170\src\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.

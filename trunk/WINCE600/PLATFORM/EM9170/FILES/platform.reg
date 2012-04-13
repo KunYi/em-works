@@ -190,7 +190,8 @@ ENDIF	;BSP_EM9170
 ;
 ; @CESYSGEN IF CE_MODULES_DISPLAY 
 IF BSP_NODISPLAY !
-#include "$(_TARGETPLATROOT)\SRC\DRIVERS\LCDC\mx25_lcdc.reg"
+;#include "$(_TARGETPLATROOT)\SRC\DRIVERS\LCDC\mx25_lcdc.reg"
+#include "$(_TARGETPLATROOT)\SRC\DRIVERS\DOT_LCD\DOT_LCD.REG"
 ENDIF ; BSP_NODISPLAY !
 ; @CESYSGEN ENDIF CE_MODULES_DISPLAY
 ;------------------------------------------------------------------------------
