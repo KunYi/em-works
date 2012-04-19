@@ -48,9 +48,9 @@ const GUID DisplayControllerFactory::Controller43WVF1G = {
 //------------------------------------------------------------------------------
 DisplayController* DisplayControllerFactory::GetDisplayController(const GUID* const guid)
 {
-    if (*guid == Controller43WVF1G)
-    {
+    //if (*guid == Controller43WVF1G)
+    //{
         return DisplayControllerUC1698::GetInstance();
-    }
-    return NULL;
+    //}
+   // return NULL;
 } //DisplayControllerFactory
