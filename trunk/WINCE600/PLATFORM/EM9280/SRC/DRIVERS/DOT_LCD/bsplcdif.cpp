@@ -44,8 +44,8 @@
 DisplayController * pLCDDisplay = NULL;
 DWORD dwPixelDepth = 0;
 DWORD dwDisplayMode = 0;
-PVOID pPhysBase = NULL;
-PVOID pVirtBase = NULL;
+ULONG g_PhysBase = 0;
+PVOID g_pVirtBase = NULL;
 
 static EGPEFormat eFormat[] =
 {
@@ -518,10 +518,9 @@ void BSPDisplayPowerHandler(BOOL bOn)
 //      None.
 //
 //------------------------------------------------------------------------------
-void BSPSetDisplayBuffer(PVOID PhysBase, PVOID VirtBase)
+void BSPSetDisplayBuffer(ULONG PhysBase, PVOID pVirtBase)
 {
-    pPhysBase = PhysBase;
-    pVirtBase = VirtBase; 
+    pLCDDisplay->SetDisplayBuffer( PhysBase, pVirtBase );
 }
 
 //------------------------------------------------------------------------------
@@ -616,13 +615,17 @@ void BSPBacklightEnable(BOOL Enable)
     pLCDDisplay->BacklightEnable(Enable);
 }
 
-BOOL BSPInitLCD( unsigned char* pV, ULONG pP )
+BOOL BSPInitLCD(  )
 {
-	pLCDDisplay->InitLCD( pV, pP );
+	pLCDDisplay->InitLCD( );
 	return TRUE;
 }
 
+void BSPFrameBufferUpdate( PVOID pSurface )
+{
+	pLCDDisplay->Update( pSurface );
+}
 DWORD BSPGetIRQ( )
 {
-	return 0;
+	return IRQ_LCDIF;
 }

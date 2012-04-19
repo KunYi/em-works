@@ -23,7 +23,9 @@ public:
     virtual DWORD GetHeight() = 0;
     virtual void  BacklightEnable(BOOL Enable) = 0;
     virtual void  InitDisplay() = 0;
-	virtual void  InitLCD(unsigned char* pV, ULONG pP ) =0;
+	virtual void  InitLCD( ) =0;
+	virtual void  Update( PVOID pSurface )=0;
+	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )=0;
 }; //class
 
 #endif /* __DISPLAY_CONTROLLER_H__ */
