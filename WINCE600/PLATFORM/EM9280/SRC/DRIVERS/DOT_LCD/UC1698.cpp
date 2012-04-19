@@ -22,21 +22,21 @@
 
 #define MSG_DUMP_REG			0
 
-#define DOTCLK_H_ACTIVE         480
-#define DOTCLK_H_PULSE_WIDTH	41
-#define DOTCLK_HF_PORCH         8
-#define DOTCLK_HB_PORCH         4
-#define DOTCLK_H_WAIT_CNT		(DOTCLK_H_PULSE_WIDTH + DOTCLK_HB_PORCH + 2)
-#define DOTCLK_H_PERIOD			(DOTCLK_HB_PORCH + DOTCLK_HF_PORCH + DOTCLK_H_ACTIVE + DOTCLK_H_PULSE_WIDTH)
+#define DOTCLK_H_ACTIVE         160
+//#define DOTCLK_H_PULSE_WIDTH	41
+//#define DOTCLK_HF_PORCH         8
+//#define DOTCLK_HB_PORCH         4
+//#define DOTCLK_H_WAIT_CNT		(DOTCLK_H_PULSE_WIDTH + DOTCLK_HB_PORCH + 2)
+//#define DOTCLK_H_PERIOD			(DOTCLK_HB_PORCH + DOTCLK_HF_PORCH + DOTCLK_H_ACTIVE + DOTCLK_H_PULSE_WIDTH)
 
-#define DOTCLK_V_ACTIVE         272
-#define DOTCLK_V_PULSE_WIDTH    10
-#define DOTCLK_VF_PORCH         4
-#define DOTCLK_VB_PORCH         2
-#define DOTCLK_V_WAIT_CNT		(DOTCLK_V_PULSE_WIDTH + DOTCLK_VB_PORCH)
-#define DOTCLK_V_PERIOD			(DOTCLK_VF_PORCH + DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_V_PULSE_WIDTH)
+#define DOTCLK_V_ACTIVE         160
+//#define DOTCLK_V_PULSE_WIDTH    10
+//#define DOTCLK_VF_PORCH         4
+//#define DOTCLK_VB_PORCH         2
+//#define DOTCLK_V_WAIT_CNT		(DOTCLK_V_PULSE_WIDTH + DOTCLK_VB_PORCH)
+//#define DOTCLK_V_PERIOD			(DOTCLK_VF_PORCH + DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_V_PULSE_WIDTH)
 
-#define PIX_CLK					1000
+#define PIX_CLK					10000
 
 const	PRODUCTCODE	 =	0x80;
 const	CTRBYTECOUNT =	39;
@@ -295,10 +295,10 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
 	LcdifInit.eWordLength = WORDLENGTH_16BITS;           
     LcdifInit.eBusWidth = LCDIF_BUS_WIDTH_16BIT;
 
-    LcdifInit.Timing.BYTE.u8DataSetup = 1;
-    LcdifInit.Timing.BYTE.u8DataHold  = 1;
-    LcdifInit.Timing.BYTE.u8CmdSetup  = 1;
-    LcdifInit.Timing.BYTE.u8CmdHold   = 1; 
+    LcdifInit.Timing.BYTE.u8DataSetup = 3;
+    LcdifInit.Timing.BYTE.u8DataHold  = 12;
+    LcdifInit.Timing.BYTE.u8CmdSetup  = 10;
+    LcdifInit.Timing.BYTE.u8CmdHold   = 10; 
 
     DDKIomuxSetupLCDIFPins(FALSE);    
     LCDIFInit(&LcdifInit, bReset,FALSE);
@@ -495,7 +495,7 @@ void DisplayControllerUC1698::BacklightEnable(BOOL Enable)
 //------------------------------------------------------------------------------
 void DisplayControllerUC1698::InitDisplay()
 {
-    RETAILMSG(1, (L"Initializing LCDIF\r\n"));
+    //RETAILMSG(1, (L"Initializing LCDIF\r\n"));
 
     //m_Bpp = BSPLoadPixelDepthFromRegistry();
 
@@ -503,7 +503,7 @@ void DisplayControllerUC1698::InitDisplay()
 }
 
 
-void DisplayControllerUC1698::InitLCD( unsigned char* pV, ULONG pP )
+void DisplayControllerUC1698::InitLCD(  )
 {
 	RETAILMSG(1, (L"Initializing UC1698 controller\r\n"));
 	int i;
@@ -517,22 +517,66 @@ void DisplayControllerUC1698::InitLCD( unsigned char* pV, ULONG pP )
 		CtrByte[i] |= CTRBYTE[i];
 	}
 
-	memcpy( pV,  (const BYTE*)CtrByte, sizeof(CtrByte));
-	RETAILMSG(1, (L"1\r\n"));
+	memcpy( m_pVirtBase,  (const BYTE*)CtrByte, sizeof(CtrByte));
+
 	// First , send software reset command
-	LCDIFSetTransferCount(CTRBYTECOUNT, 1);
-	RETAILMSG(1, (L"2\r\n"));
-	LCDIFDisplayFrameBufferEx( (const void *)pP, CMD_MODE );
-	RETAILMSG(1, (L"3\r\n"));
+	//while( 1 )
+	//{
+		LCDIFSetTransferCount(1, 1);
+
+		LCDIFDisplayFrameBufferEx( (const void *)m_PhysBase, CMD_MODE );
+	//	Sleep( 1 );
+	//	LCDIFFlush();
+	//}
+
 	Sleep( 150 );
 
 	// Then beginning of initialization 
 	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(pP+1), CMD_MODE );
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+1), CMD_MODE );
 
 	//waits for LCDIF transmit current frame
 	LCDIFFlush();
-	RETAILMSG(1, (L"4\r\n"));
-	LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
-	RETAILMSG(1, (L"5\r\n"));
+
+	// UC1698 controller is 3 bytes corresponding 6 pixel
+	LCDIFSetTransferCount(162/6*3, DOTCLK_V_ACTIVE);
+
+}
+
+void DisplayControllerUC1698::SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )
+{
+	m_PhysBase = PhysBase;
+	m_pVirtBase = VirtBase;
+}
+
+void DisplayControllerUC1698::Update( PVOID pSurface )
+{
+	int FrameBufferX, FrameBufferY, SurfaceX, SurfaceY;
+	UINT8	**pSurfaceBuffer;
+	UINT32	**pFrameBuffer;
+	int i, var;
+
+	pSurfaceBuffer = (UINT8 **)pSurface;
+	pFrameBuffer = (UINT32 **)m_pVirtBase;
+
+	FrameBufferX = 0;
+	FrameBufferY = 0;
+
+	for( SurfaceY=0; SurfaceY<DOTCLK_V_ACTIVE;SurfaceY++ )
+	{
+		for( SurfaceX=0; SurfaceX<((DOTCLK_H_ACTIVE+2)>>3); SurfaceX++ )
+		{
+			var = pSurfaceBuffer[SurfaceY][SurfaceX];
+			for( i=0; i<8; i++, i++ )
+			{
+				if( (0x80>>i)&var )
+					pFrameBuffer[FrameBufferY][FrameBufferX] = 0xf0;
+				if( (0x80>>(i+1))&var)
+					pFrameBuffer[FrameBufferY][FrameBufferX] |= 0x0f;
+				FrameBufferX++;
+			}
+		}
+		FrameBufferY++;
+	}
+	
 }

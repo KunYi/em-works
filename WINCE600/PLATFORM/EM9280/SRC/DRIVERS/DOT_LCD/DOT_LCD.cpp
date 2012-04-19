@@ -29,6 +29,7 @@ Notes:
 --*/
 
 #include "precomp.h"
+#include "csp.h"
 
 #define PALETTE_SIZE              	4
 RGBQUAD _rgb2bpp[PALETTE_SIZE] =
@@ -47,10 +48,12 @@ INSTANTIATE_GPE_ZONES(0x3,"MGDI Driver","unused1","unused2")	 /* Start with Erro
 //------------------------------------------------------------------------------
 extern void BSPBacklightEnable(BOOL Enable);
 extern void BSPSetDisplayController();
-extern BOOL BSPInitLCD( unsigned char* pV, ULONG pP );
+extern void BSPSetDisplayBuffer(ULONG PhysBase, PVOID pVirtBase);
+extern BOOL BSPInitLCD( );
 extern DWORD BSPGetIRQ( );
 extern void BSPGetModeInfo(GPEMode* pMode, int modeNumber);
 extern DWORD BSPGetVideoMemorySize();
+extern void BSPFrameBufferUpdate( PVOID pSurface );
 
 
 BOOL APIENTRY GPEEnableDriver(          // This gets around problems exporting from .lib
@@ -87,15 +90,15 @@ GPE *GetGPE()
 
 Dot_lcd::Dot_lcd()
 {
-	DEBUGMSG( GPE_ZONE_INIT,(TEXT("Dot_lcd::Dot_lcd\r\n")));
-
+	
+	RETAILMSG(1, (L"-->LCDIF Dot_lcd\r\n"));
 	BSPSetDisplayController();
 
 	BSPGetModeInfo( &m_ModeInfo,  m_nModeNumber );
 
 	m_pMode = &m_ModeInfo;
 
-	m_pPrimarySurface = new GPESurf( m_ModeInfo.width, m_ModeInfo.height, gpe2Bpp );
+	m_pPrimarySurface = new GPESurf( m_ModeInfo.width, m_ModeInfo.height, m_ModeInfo.format );
 	if (!m_pPrimarySurface)
 	{
 		RETAILMSG(1, (TEXT("Wrap2bpp::Wrap2bpp: Error allocating GPESurf.\r\n")));
@@ -105,14 +108,16 @@ Dot_lcd::Dot_lcd()
 
 	AllocPhysicalMemory();
 
-	
-	BSPInitLCD( m_VirtualMemAddr, m_nLAWPhysical );
+	BSPSetDisplayBuffer( m_nLAWPhysical, m_VirtualMemAddr);
+
+	BSPInitLCD(  );
 
 	memset( m_VirtualMemAddr, 0, m_dwFrameBufferSize );
-	//InitIrq( );
-	//LCDIFDisplayFrameBufferEx( (const void *)pP, DATA_MODE );
+	InitIrq( );
+	LCDIFDisplayFrameBufferEx( (const void *)m_nLAWPhysical, DATA_MODE );
 	
 	BSPBacklightEnable(TRUE);
+	RETAILMSG(1, (L"<--LCDIF Dot_lcd\r\n"));
 }
 
 
@@ -221,14 +226,6 @@ BOOL Dot_lcd::InitIrq( )
 		goto _done;
 	}
 
-	// Create an event for properly exiting the thread
-	m_hExitSyncThread = CreateEvent(NULL, TRUE, FALSE, NULL);
-	if(!m_hExitSyncThread)
-	{
-		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: failed to create event for exiting SyncThread, error[%d]\r\n"), GetLastError()));
-		goto _done;
-	}
-
 	// Get LCDC IRQ
 	DWORD irq = BSPGetIRQ();
 	// Request an associated systintr
@@ -253,6 +250,8 @@ BOOL Dot_lcd::InitIrq( )
 		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: fail to initiate the interrupt thread, error[%d]!\r\n"), GetLastError()));
 		goto _done;
 	}
+
+	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
 	result = TRUE;
 
 _done:
@@ -541,6 +540,18 @@ SCODE Dot_lcd::SetPalette
 
 DWORD Dot_lcd::IntrProc( )
 {
+	while( !m_bStopIntrProc )
+	{
+		WaitForSingleObject( m_hSyncEvent, INFINITE );
+		if( m_bStopIntrProc )
+			break;
+
+		LCDIFDisplayFrameBufferEx( (const void *)m_nLAWPhysical, DATA_MODE );
+		//BSPFrameBufferUpdate( m_pPrimarySurface->Buffer() );
+
+		LCDIFClearIrq( LCDIF_IRQ_FRAME_DONE );
+		InterruptDone( m_dwlcdcSysintr );
+	}
 	return 0;
 }
 

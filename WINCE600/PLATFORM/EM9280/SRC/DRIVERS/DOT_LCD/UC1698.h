@@ -30,7 +30,9 @@ public:
     virtual DWORD GetHeight();
     virtual void BacklightEnable(BOOL Enable);
     virtual void InitDisplay();
-	virtual void InitLCD(unsigned char* pV, ULONG pP );
+	virtual void InitLCD( );
+	virtual void  Update( PVOID pSurface );
+	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase );
 
 private:
     DisplayControllerUC1698();
@@ -43,6 +45,8 @@ private:
 private:
     static DisplayControllerUC1698 * SingletonController;    
     DWORD m_Bpp;
+	ULONG m_PhysBase;
+	PVOID m_pVirtBase; 
 
 }; //class
 
