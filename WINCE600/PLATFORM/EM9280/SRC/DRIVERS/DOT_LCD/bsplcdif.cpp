@@ -397,6 +397,18 @@ void BSPGetModeInfoEx(GPEModeEx* pModeEx, int modeNumber)
 
 }
 
+void BSPGetModeInfo(GPEMode* pMode, int modeNumber)
+{
+	//pMode->height = BSPGetHeight(modeNumber);
+	//pMode->width = BSPGetWidth(modeNumber);
+	pMode->modeId = 0;
+	pMode->height = 160;
+	pMode->width = 160;
+	pMode->Bpp = 2;
+	pMode->frequency = 60;		// not too important
+	pMode->format = gpe2Bpp;
+}
+
 //------------------------------------------------------------------------------
 //
 // Function: IsTvMode
@@ -604,3 +616,13 @@ void BSPBacklightEnable(BOOL Enable)
     pLCDDisplay->BacklightEnable(Enable);
 }
 
+BOOL BSPInitLCD( unsigned char* pV, ULONG pP )
+{
+	pLCDDisplay->InitLCD( pV, pP );
+	return TRUE;
+}
+
+DWORD BSPGetIRQ( )
+{
+	return 0;
+}

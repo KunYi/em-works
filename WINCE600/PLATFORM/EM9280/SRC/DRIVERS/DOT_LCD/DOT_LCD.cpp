@@ -42,6 +42,17 @@ RGBQUAD _rgb2bpp[PALETTE_SIZE] =
 
 INSTANTIATE_GPE_ZONES(0x3,"MGDI Driver","unused1","unused2")	 /* Start with Errors, warnings, and temporary messages */
 
+//------------------------------------------------------------------------------
+// External Functions
+//------------------------------------------------------------------------------
+extern void BSPBacklightEnable(BOOL Enable);
+extern void BSPSetDisplayController();
+extern BOOL BSPInitLCD( unsigned char* pV, ULONG pP );
+extern DWORD BSPGetIRQ( );
+extern void BSPGetModeInfo(GPEMode* pMode, int modeNumber);
+extern DWORD BSPGetVideoMemorySize();
+
+
 BOOL APIENTRY GPEEnableDriver(          // This gets around problems exporting from .lib
 	ULONG          iEngineVersion,
 	ULONG          cj,
@@ -56,6 +67,13 @@ BOOL APIENTRY DrvEnableDriver(
 	return GPEEnableDriver( iEngineVersion, cj, pded, pEngCallbacks );
 }
 
+DWORD DotLcdcIntr( Dot_lcd* pClass )
+{
+	pClass->IntrProc();
+
+	// We shouldn't come to here
+	return 0;
+}
 
 static GPE *pGPE = (GPE *)NULL;
 // Main entry point for a GPE-compliant driver
@@ -72,49 +90,174 @@ Dot_lcd::Dot_lcd()
 	DEBUGMSG( GPE_ZONE_INIT,(TEXT("Dot_lcd::Dot_lcd\r\n")));
 
 	BSPSetDisplayController();
-	
-	// When this DispDrvrInitialize returns, DispDrvrPhysicalFrameBuffer contains
-	// the physical address of the screen if it is in 2bpp DIB format. - Alternatively it
-	// is NULL - in which case this is a "dirty-rect" driver
 
-	m_ModeInfo.modeId = 0;
-	m_ModeInfo.width = m_nScreenWidth = DispDrvr_cxScreen;
-	m_ModeInfo.height = m_nScreenHeight = DispDrvr_cyScreen;
-	m_ModeInfo.Bpp = 2;
-	m_ModeInfo.frequency = 60;		// not too important
-	m_ModeInfo.format = gpe2Bpp;
+	BSPGetModeInfo( &m_ModeInfo,  m_nModeNumber );
 
 	m_pMode = &m_ModeInfo;
+
+	m_pPrimarySurface = new GPESurf( m_ModeInfo.width, m_ModeInfo.height, gpe2Bpp );
+	if (!m_pPrimarySurface)
+	{
+		RETAILMSG(1, (TEXT("Wrap2bpp::Wrap2bpp: Error allocating GPESurf.\r\n")));
+		return;
+
+	}
+
+	AllocPhysicalMemory();
+
 	
-	if( DispDrvrPhysicalFrameBuffer == NULL )
-	{
-		// it is a "dirty-rect" driver - we create a system memory bitmap to represent
-		// the screen and refresh rectangles of this to the screen as they are altered
-		m_pPrimarySurface = new GPESurf( m_nScreenWidth, m_nScreenHeight, gpe2Bpp );
-		if (!m_pPrimarySurface)
-		{
-		    RETAILMSG(1, (TEXT("Dot_lcd::Dot_lcd: Error allocating GPESurf.\r\n")));
-		    return;
+	BSPInitLCD( m_VirtualMemAddr, m_nLAWPhysical );
 
-		}
-
-		DispDrvrSetDibBuffer( m_pPrimarySurface->Buffer() );
-	}
-	else
-	{
-		// The hardware is arranged as a DIB
-		// Map it into virtual addr space
-		unsigned long fbSize = DispDrvr_cxScreen * DispDrvr_cdwStride / 4;
-		m_pVirtualFrameBuffer = VirtualAlloc( 0, fbSize, MEM_RESERVE, PAGE_NOACCESS );
-		VirtualCopy( m_pVirtualFrameBuffer, DispDrvrPhysicalFrameBuffer, fbSize,
-			PAGE_READWRITE | PAGE_NOCACHE );
-			
-		m_pPrimarySurface = new GPESurf( m_nScreenWidth, m_nScreenHeight, m_pVirtualFrameBuffer,
-			 DispDrvr_cdwStride / 4, gpe2Bpp );
-	}
-
-	//LCDIFDisplayFrameBuffer((const void*) (m_nLAWPhysical+pTempSurf->OffsetInVideoMemory()));
+	memset( m_VirtualMemAddr, 0, m_dwFrameBufferSize );
+	//InitIrq( );
+	//LCDIFDisplayFrameBufferEx( (const void *)pP, DATA_MODE );
+	
 	BSPBacklightEnable(TRUE);
+}
+
+
+//------------------------------------------------------------------------------
+//
+// Function: AllocPhysicalMemory
+//
+// Allocate contiguous memory for the display driver.
+// NOTE: Should be called only once at startup.
+//
+// Updates class members:
+//      FrameBufferSize
+//      PhysicalMemAddr
+//      VirtualMemAddr
+//      FrameBufferHeap
+//
+// Parameters:
+//      none
+//
+// Returns:
+//      TRUE for success, FALSE if fail.
+//
+//------------------------------------------------------------------------------
+BOOL Dot_lcd::AllocPhysicalMemory( )
+{
+	BOOL rc = FALSE;
+
+
+	//DWORD FrameBufferSize = BSPGetVideoMemorySize();
+	m_dwFrameBufferSize = 0x100000;
+	m_pVideoMemory = (PUCHAR)AllocPhysMem(m_dwFrameBufferSize,       // Frame buffer size
+		PAGE_EXECUTE_READWRITE,   // All needed rigth
+		0x400000,                 // The default system alignment is used
+		0,                        // Reserved
+		(ULONG *) &m_nLAWPhysical);
+	DWORD PhysicalMemOffset = m_nLAWPhysical >> 8;
+	void* PhysicalMemAddr = (void *)m_nLAWPhysical;
+	// Check if virtual mapping failed
+	if (!m_pVideoMemory)
+	{
+		ERRORMSG(1,	(TEXT("MmMapIoSpace failed!\r\n")));
+		ASSERT(0);
+		goto _AllocPhysMemdone;
+	}
+	// The hardware is arranged as a DIB
+	// Map it into virtual addr space
+	//Allocate Frame Buffer Space in shared memory
+	HANDLE m_hLAWMapping = CreateFileMapping(
+		INVALID_HANDLE_VALUE,
+		NULL,
+		PAGE_READWRITE,
+		0,
+		m_dwFrameBufferSize,
+		NULL);
+
+	if (m_hLAWMapping != NULL) 
+	{
+		m_VirtualMemAddr = (unsigned char *)MapViewOfFile(
+			m_hLAWMapping,
+			FILE_MAP_WRITE,
+			0,
+			0,
+			0);
+	} 
+	else 
+	{
+		ERRORMSG(1, (TEXT("AllocPhysicalMemory: failed at MapViewOfFile(), error[%d]\r\n"), m_dwFrameBufferSize, GetLastError()));
+		ASSERT(0);
+		goto _AllocPhysMemdone;
+	}
+	
+	BOOL result = VirtualCopy( m_VirtualMemAddr, (LPVOID)PhysicalMemOffset, m_dwFrameBufferSize,
+		PAGE_READWRITE | PAGE_NOCACHE |PAGE_PHYSICAL );
+	if(!result)
+	{
+		RETAILMSG(1, (TEXT("AllocPhysicalMemory: failed at VirtualCopy(), error[%d]\r\n"), m_dwFrameBufferSize, GetLastError()));
+		ASSERT(0);
+		goto _AllocPhysMemdone;        
+	}
+
+	rc = TRUE;
+
+_AllocPhysMemdone:
+	if(rc)
+	{
+		DEBUGMSG(1, (TEXT("DISPLAY: memory allocation OK\r\n")));
+		DEBUGMSG(1, (TEXT("    Virtual address : 0x%08x\r\n"), (DWORD) VirtualMemAddr));
+		DEBUGMSG(1, (TEXT("    Physical address: 0x%08x\r\n"), (DWORD) PhysicalMemAddr));
+		DEBUGMSG(1, (TEXT("    Size            : 0x%08x\r\n"), (DWORD) FrameBufferSize));
+	}
+	return rc;
+
+
+
+}
+
+BOOL Dot_lcd::InitIrq( )
+{
+	BOOL result = FALSE;
+
+	// Initialze LCDC interrupt
+	m_hSyncEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+	if(NULL == m_hSyncEvent)
+	{
+		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: failed to create the intr event, error[%d]!\r\n"), GetLastError()));
+		goto _done;
+	}
+
+	// Create an event for properly exiting the thread
+	m_hExitSyncThread = CreateEvent(NULL, TRUE, FALSE, NULL);
+	if(!m_hExitSyncThread)
+	{
+		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: failed to create event for exiting SyncThread, error[%d]\r\n"), GetLastError()));
+		goto _done;
+	}
+
+	// Get LCDC IRQ
+	DWORD irq = BSPGetIRQ();
+	// Request an associated systintr
+	if (!KernelIoControl(IOCTL_HAL_REQUEST_SYSINTR, &irq, sizeof(DWORD),
+		&m_dwlcdcSysintr, sizeof(DWORD), NULL)){
+			DEBUGMSG(GPE_ZONE_ERROR, (_T("Failed to obtain sysintr value!\r\n")));
+			return 0;
+	}
+
+	// Initialize interrupt
+	if(!InterruptInitialize(m_dwlcdcSysintr, m_hSyncEvent, NULL, NULL))
+	{
+		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: fail to initialize the interrupt, error[%d]!\r\n"), GetLastError()));
+		goto _done;
+	}
+
+	// Create the IST (thread)
+	m_bStopIntrProc = FALSE;
+	m_hSyncThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)DotLcdcIntr, this, 0, NULL);
+	if(NULL == m_hSyncThread)
+	{
+		DEBUGMSG(GPE_ZONE_ERROR, (TEXT("MXDDLcdc InitHardware: fail to initiate the interrupt thread, error[%d]!\r\n"), GetLastError()));
+		goto _done;
+	}
+	result = TRUE;
+
+_done:
+	return result;
+
 }
 
 SCODE Dot_lcd::SetMode( int modeId, HPALETTE *pPalette )
@@ -181,13 +324,13 @@ SCODE Dot_lcd::MovePointer(
 	int y )
 {
 	DEBUGMSG(GPE_ZONE_HW,(TEXT("Moving cursor to %d,%d\r\n"), x, y ));
-	if( x == -1 )
+	/*if( x == -1 )
 	{
-		DispDrvrMoveCursor( DispDrvr_cxScreen, DispDrvr_cyScreen );		// disable cursor
+		DispDrvrMoveCursor( m_ModeInfo.width, m_ModeInfo.height );		// disable cursor
 	}
 	{
 		DispDrvrMoveCursor( x, y );		// disable cursor
-	}
+	}*/
 	return S_OK;
 }
 
@@ -207,8 +350,8 @@ void Dot_lcd::GetPhysicalVideoMemory
 	unsigned long *pVideoMemorySize
 )
 {
-	*pPhysicalMemoryBase = (unsigned long)DispDrvrPhysicalFrameBuffer;
-	*pVideoMemorySize = DispDrvr_cdwStride * DispDrvr_cyScreen / 4;
+	*pPhysicalMemoryBase = (unsigned long)(void *)0;//(unsigned long)m_nLAWPhysical;
+	*pVideoMemorySize =20*160/4;// DispDrvr_cdwStride * DispDrvr_cyScreen / 4;
 }
 
 
@@ -307,7 +450,7 @@ SCODE Dot_lcd::WrappedEmulatedLine( GPELineParms *pParms )
 			return E_INVALIDARG;
 	}
 
-	DispDrvrDirtyRectDump( (LPRECT)&bounds );
+	//DispDrvrDirtyRectDump( (LPRECT)&bounds );
 
 	return sc;
 }
@@ -321,7 +464,7 @@ SCODE Dot_lcd::Line(
 
 	if( phase == gpeSingle || phase == gpePrepare )
 	{
-		if( ( pLineParms->pDst != m_pPrimarySurface ) || ( DispDrvrPhysicalFrameBuffer != NULL ) )
+		if( pLineParms->pDst != m_pPrimarySurface  )
 			pLineParms->pLine = &GPE::EmulatedLine;
 		else
 			pLineParms->pLine = (SCODE (GPE::*)(struct GPELineParms *))&Dot_lcd::WrappedEmulatedLine;
@@ -356,7 +499,7 @@ SCODE Dot_lcd::WrappedEmulatedBlt( GPEBltParms *pParms )
 		SWAP( int, bounds.top, bounds.bottom )
 	}
 
-	DispDrvrDirtyRectDump( (LPRECT)&bounds );
+	//DispDrvrDirtyRectDump( (LPRECT)&bounds );
 
 	return sc;
 }
@@ -367,7 +510,7 @@ SCODE Dot_lcd::BltPrepare(
 {
 	DEBUGMSG(GPE_ZONE_LINE,(TEXT("Dot_lcd::BltPrepare\r\n")));
 
-	if( ( pBltParms->pDst != m_pPrimarySurface ) || ( DispDrvrPhysicalFrameBuffer != NULL ) )
+	if(  pBltParms->pDst != m_pPrimarySurface )
 		pBltParms->pBlt = &GPE::EmulatedBlt;
 	else
 		pBltParms->pBlt = (SCODE (GPE::*)(struct GPEBltParms *))&Dot_lcd::WrappedEmulatedBlt;
@@ -396,6 +539,11 @@ SCODE Dot_lcd::SetPalette
 	return S_OK;
 }
 
+DWORD Dot_lcd::IntrProc( )
+{
+	return 0;
+}
+
 void RegisterDDHALAPI()
 {
 	;	// No DDHAL support in 2bpp wrapper
@@ -408,3 +556,5 @@ ULONG *APIENTRY DrvGetMasks(
 {
 	return BitMasks;
 }
+
+

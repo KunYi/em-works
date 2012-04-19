@@ -60,7 +60,6 @@ CDEFINES=$(CDEFINES) -DDDI
 
 SOURCES= \
     DOT_LCD.cpp \
-    dispdrvr.c \
     display_controller_factory.cpp \
     UC1698.cpp \
     bsplcdif.cpp \

@@ -36,7 +36,17 @@
 #define DOTCLK_V_WAIT_CNT		(DOTCLK_V_PULSE_WIDTH + DOTCLK_VB_PORCH)
 #define DOTCLK_V_PERIOD			(DOTCLK_VF_PORCH + DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_V_PULSE_WIDTH)
 
-#define PIX_CLK					9200
+#define PIX_CLK					1000
+
+const	PRODUCTCODE	 =	0x80;
+const	CTRBYTECOUNT =	39;
+
+const unsigned char CTRBYTE[CTRBYTECOUNT]={
+	0xe2, 0xe9, 0x2b, 0x24, 0x81, 0xc6, 0xa4, 0xa6, 0xc4, 0xa3,
+	0xd1, 0xd5, 0x84, 0xc8, 0x10, 0xda, 0xf4, 0x25, 0xf6, 0x5a, 
+	0xf5, 0x00, 0xf7, 0x9f, 0xf8, 0x89, 0xad, 0x40, 0xf0, 0xc4,
+	0x90, 0x00, 0x84, 0xf1, 0x9f, 0xf2, 0x00, 0xf3, 0x9f,
+};
 
 extern DWORD BSPLoadPixelDepthFromRegistry();
 
@@ -129,8 +139,6 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
     if(bPoweroff)
     {
-
-
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_GPIO);
@@ -147,8 +155,6 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
     else
     {
 
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4,DDK_IOMUX_MODE_00);
@@ -156,8 +162,6 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
 
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D8,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D9,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
@@ -165,32 +169,17 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
 
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_00);
-
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D20,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D21,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D22,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D23,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
 
         // setup the pin for LCDIF block
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,  DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0,   DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,  DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET,  DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_CS,   DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RS,   DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_WR_RWN,   DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RD_E,   DDK_IOMUX_MODE_00);
 
-        // Set pin drive to 8mA,enable pull up,3.3V
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D0, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D1, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D2, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
@@ -215,14 +204,7 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D8, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D9, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
+
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D10, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
@@ -247,19 +229,8 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D16, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D17, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D17, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D18, 
+
+		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D18, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
@@ -267,36 +238,20 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D20, 
+   
+        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_CS, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D21, 
+        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_RS, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D22, 
+        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_WR_RWN, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D23, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);        
-
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_DOTCLK_0, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_ENABLE_0, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_VSYNC_0, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_HSYNC_0, 
+        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_RD_E, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);                                                 
@@ -325,8 +280,8 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
 {
 
     LCDIF_INIT LcdifInit;
-    LCDIFVSYNC LCDIfVsync;
-    LCDIFDOTCLK sLcdifDotclk;
+//    LCDIFVSYNC LCDIfVsync;
+//   LCDIFDOTCLK sLcdifDotclk;
 
     // Start the PIX clock and set frequency
     LCDIFSetupLCDIFClock(PIX_CLK);
@@ -337,8 +292,8 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
     LcdifInit.eDataSwizzle = NO_SWAP;
     LcdifInit.eCscSwizzle = NO_SWAP;
 
-	LcdifInit.eWordLength = WORDLENGTH_8BITS;           
-    LcdifInit.eBusWidth = LCDIF_BUS_WIDTH_8BIT;
+	LcdifInit.eWordLength = WORDLENGTH_16BITS;           
+    LcdifInit.eBusWidth = LCDIF_BUS_WIDTH_16BIT;
 
     LcdifInit.Timing.BYTE.u8DataSetup = 1;
     LcdifInit.Timing.BYTE.u8DataHold  = 1;
@@ -349,15 +304,13 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
     LCDIFInit(&LcdifInit, bReset,FALSE);
     
     LCDIFSetBusMasterMode(TRUE);
-    LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
+    //LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
         
     LCDIFSetDataShift(DATA_SHIFT_RIGHT, 0);
-    if(32 == m_Bpp )
-        LCDIFSetBytePacking(7);
-    else
-        LCDIFSetBytePacking(0x0F);    
+	//only use 2 low bytes
+	LCDIFSetBytePacking(0x3);    
 
-    LCDIfVsync.bOEB = FALSE;
+    /*LCDIfVsync.bOEB = FALSE;
     LCDIfVsync.ePolarity = POLARITY_LOW;
     LCDIfVsync.eVSyncPeriodUnit = VSYNC_UNIT_HORZONTAL_LINE;
     LCDIfVsync.eVSyncPulseWidthUnit = VSYNC_UNIT_HORZONTAL_LINE;
@@ -378,13 +331,13 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
     sLcdifDotclk.u32HsyncWaitCount  = DOTCLK_H_WAIT_CNT;
     sLcdifDotclk.u32DotclkWaitCount = DOTCLK_H_ACTIVE;
     
-    LCDIFSetupDotclk(&sLcdifDotclk);
-    
-    LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
-    
-    LCDIFSetSyncSignals(TRUE);
-    LCDIFSetDotclkMode(TRUE);
+    LCDIFSetupDotclk(&sLcdifDotclk);*/
+    LCDIFSetDviMode(FALSE);
+	LCDIFSetDotclkMode(FALSE);
+	LCDIFSetVsyncMode(FALSE);
 
+    //LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
+    
 }
 
 //-----------------------------------------------------------------------------
@@ -542,10 +495,44 @@ void DisplayControllerUC1698::BacklightEnable(BOOL Enable)
 //------------------------------------------------------------------------------
 void DisplayControllerUC1698::InitDisplay()
 {
-    RETAILMSG(1, (L"Initializing LMS430 controller\r\n"));
+    RETAILMSG(1, (L"Initializing LCDIF\r\n"));
 
-    m_Bpp = BSPLoadPixelDepthFromRegistry();
+    //m_Bpp = BSPLoadPixelDepthFromRegistry();
 
-    BSPInitLCDIF(FALSE);
+    BSPInitLCDIF(TRUE);
 }
 
+
+void DisplayControllerUC1698::InitLCD( unsigned char* pV, ULONG pP )
+{
+	RETAILMSG(1, (L"Initializing UC1698 controller\r\n"));
+	int i;
+
+	UINT32 CtrByte[ CTRBYTECOUNT ];
+
+	for( i=0; i<CTRBYTECOUNT; i++ )
+	{
+		CtrByte[i] = CTRBYTE[i];
+		CtrByte[i] <<= 10;
+		CtrByte[i] |= CTRBYTE[i];
+	}
+
+	memcpy( pV,  (const BYTE*)CtrByte, sizeof(CtrByte));
+	RETAILMSG(1, (L"1\r\n"));
+	// First , send software reset command
+	LCDIFSetTransferCount(CTRBYTECOUNT, 1);
+	RETAILMSG(1, (L"2\r\n"));
+	LCDIFDisplayFrameBufferEx( (const void *)pP, CMD_MODE );
+	RETAILMSG(1, (L"3\r\n"));
+	Sleep( 150 );
+
+	// Then beginning of initialization 
+	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(pP+1), CMD_MODE );
+
+	//waits for LCDIF transmit current frame
+	LCDIFFlush();
+	RETAILMSG(1, (L"4\r\n"));
+	LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
+	RETAILMSG(1, (L"5\r\n"));
+}

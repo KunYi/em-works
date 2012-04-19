@@ -30,6 +30,7 @@ public:
     virtual DWORD GetHeight();
     virtual void BacklightEnable(BOOL Enable);
     virtual void InitDisplay();
+	virtual void InitLCD(unsigned char* pV, ULONG pP );
 
 private:
     DisplayControllerUC1698();

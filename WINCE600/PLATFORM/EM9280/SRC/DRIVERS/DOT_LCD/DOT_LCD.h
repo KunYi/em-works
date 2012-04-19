@@ -105,6 +105,30 @@ public:
 					(
 						GPEBltParms *pBltParms
 					);
+
+private:
+	HANDLE			m_hSyncEvent;
+	HANDLE			m_hExitSyncThread;
+	HANDLE			m_bStopIntrProc;
+	DWORD			m_dwlcdcSysintr;
+	HANDLE			m_hSyncThread;
+
+	void			*m_pVideoMemory;
+	void			*m_pLCDMappingMemory;
+	ULONG			m_nLMMPhysical;
+	ULONG			m_nLAWPhysical;
+	DWORD			m_dwFrameBufferSize;
+
+	unsigned char * m_VirtualMemAddr;
+
+	int				m_nModeNumber;
+
+	BOOL			InitIrq( );
+	BOOL			AllocPhysicalMemory( );
+
+public:
+	DWORD IntrProc( );
+
 };
 
 
