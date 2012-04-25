@@ -6,9 +6,9 @@
 //
 //-----------------------------------------------------------------------------
 //
-//  File:  LMS430.cpp
+//  File:  UC1698.cpp
 //
-//  Implementation of class DisplayControllerLMS430 which for LMS430HF02 4.3
+//  Implementation of class DisplayControllerUC1698 which for UC1698 160*160
 //  WQVGA panel.
 //
 //-----------------------------------------------------------------------------
@@ -22,31 +22,24 @@
 
 #define MSG_DUMP_REG			0
 
-#define DOTCLK_H_ACTIVE         160
-//#define DOTCLK_H_PULSE_WIDTH	41
-//#define DOTCLK_HF_PORCH         8
-//#define DOTCLK_HB_PORCH         4
-//#define DOTCLK_H_WAIT_CNT		(DOTCLK_H_PULSE_WIDTH + DOTCLK_HB_PORCH + 2)
-//#define DOTCLK_H_PERIOD			(DOTCLK_HB_PORCH + DOTCLK_HF_PORCH + DOTCLK_H_ACTIVE + DOTCLK_H_PULSE_WIDTH)
-
+#define DOTCLK_H_ACTIVE         162
 #define DOTCLK_V_ACTIVE         160
-//#define DOTCLK_V_PULSE_WIDTH    10
-//#define DOTCLK_VF_PORCH         4
-//#define DOTCLK_VB_PORCH         2
-//#define DOTCLK_V_WAIT_CNT		(DOTCLK_V_PULSE_WIDTH + DOTCLK_VB_PORCH)
-//#define DOTCLK_V_PERIOD			(DOTCLK_VF_PORCH + DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_V_PULSE_WIDTH)
+
+#define  FRAMEBUFFERSZIE        0x10000
+#define  LCD_CMD_DATA_OFFSET	FRAMEBUFFERSZIE - 0x400
 
 #define PIX_CLK					10000
 
 const	PRODUCTCODE	 =	0x80;
-const	CTRBYTECOUNT =	39;
+ 
+const	CTRBYTECOUNT =	20+4;
 
 const unsigned char CTRBYTE[CTRBYTECOUNT]={
-	0xe2, 0xe9, 0x2b, 0x24, 0x81, 0xc6, 0xa4, 0xa6, 0xc4, 0xa3,
-	0xd1, 0xd5, 0x84, 0xc8, 0x10, 0xda, 0xf4, 0x25, 0xf6, 0x5a, 
-	0xf5, 0x00, 0xf7, 0x9f, 0xf8, 0x89, 0xad, 0x40, 0xf0, 0xc4,
-	0x90, 0x00, 0x84, 0xf1, 0x9f, 0xf2, 0x00, 0xf3, 0x9f,
+	0xe2, 0xeb, 0x81, 55, 0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
+	0x00, 0xf6, 0x35, 0xf7, 0xa0, 0xf8, 0xd1, 0xd5,
+	0x00, 0x10, 0x60, 0x70,
 };
+
 
 extern DWORD BSPLoadPixelDepthFromRegistry();
 
@@ -55,9 +48,9 @@ DisplayControllerUC1698* DisplayControllerUC1698::SingletonController = NULL;
 
 //------------------------------------------------------------------------------
 //
-// Function: ~DisplayControllerLMS430
+// Function: ~DisplayControllerUC1698
 //
-// Destructor of DisplayControllerLMS430 class.
+// Destructor of DisplayControllerUC1698 class.
 //
 // Parameters:
 //      None.
@@ -68,19 +61,19 @@ DisplayControllerUC1698* DisplayControllerUC1698::SingletonController = NULL;
 //------------------------------------------------------------------------------
 DisplayControllerUC1698::~DisplayControllerUC1698()
 {
-} //~DisplayControllerLMS430
+} //~DisplayControllerUC1698
 
 //------------------------------------------------------------------------------
 //
 // Function: GetInstance
 //
-// This function returns pointer of DisplayControllerLMS430.
+// This function returns pointer of DisplayControllerUC1698.
 //
 // Parameters:
 //      None.
 //
 // Returns:
-//      Pointer of DisplayControllerLMS430.
+//      Pointer of DisplayControllerUC1698.
 //
 //------------------------------------------------------------------------------
 DisplayControllerUC1698* DisplayControllerUC1698::GetInstance()
@@ -90,6 +83,7 @@ DisplayControllerUC1698* DisplayControllerUC1698::GetInstance()
 
     return SingletonController;
 } //GetInstance
+
 
 //------------------------------------------------------------------------------
 //
@@ -164,15 +158,15 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D13,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
-
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
-		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
-		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D13,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
+// 
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
+// 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
+// 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
 
         // setup the pin for LCDIF block
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_CS,   DDK_IOMUX_MODE_00);
@@ -213,31 +207,31 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D12, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D13, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D14, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D15, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-
-		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D18, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D19, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
+//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D12, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D13, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D14, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D15, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+// 
+// 		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D18, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D19, 
+//                  DDK_IOMUX_PAD_DRIVE_8MA, 
+//                  DDK_IOMUX_PAD_PULL_ENABLE,
+//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
    
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_CS, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
@@ -355,7 +349,7 @@ void DisplayControllerUC1698::BSPInitLCDIF(BOOL bReset)
 void DisplayControllerUC1698::BSPResetController()
 {
     LCDIFResetController(LCDRESET_LOW);
-    Sleep(100); //More than 5 frames time interval between PON and Interface signal is required by LMS430 panel.
+    Sleep(100); //More than 5 frames time interval between PON and Interface signal is required by UC1698 panel.
 }
 
 //------------------------------------------------------------------------------
@@ -408,9 +402,9 @@ void DisplayControllerUC1698::DispDrvrPowerHandler(BOOL bOn, BOOL bInit, BOOL bR
 
 //------------------------------------------------------------------------------
 //
-// Function: DisplayControllerLMS430
+// Function: DisplayControllerUC1698
 //
-// Constructor of DisplayControllerLMS430 class.
+// Constructor of DisplayControllerUC1698 class.
 //
 // Parameters:
 //      None   
@@ -437,7 +431,7 @@ DisplayControllerUC1698::DisplayControllerUC1698()
 //------------------------------------------------------------------------------
 DWORD DisplayControllerUC1698::GetWidth()
 {
-    return  DOTCLK_H_ACTIVE;
+    return  (DOTCLK_H_ACTIVE-2);
 }
 
 //------------------------------------------------------------------------------
@@ -517,30 +511,27 @@ void DisplayControllerUC1698::InitLCD(  )
 		CtrByte[i] |= CTRBYTE[i];
 	}
 
-	memcpy( m_pVirtBase,  (const BYTE*)CtrByte, sizeof(CtrByte));
+	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)CtrByte, sizeof(CtrByte));
 
-	// First , send software reset command
-	//while( 1 )
-	//{
-		LCDIFSetTransferCount(1, 1);
-
-		LCDIFDisplayFrameBufferEx( (const void *)m_PhysBase, CMD_MODE );
-	//	Sleep( 1 );
-	//	LCDIFFlush();
-	//}
-
-	Sleep( 150 );
+	LCDIFSetTransferCount(1, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
+	//waits for LCDIF transmit current frame
+	LCDIFFlush();
+	Sleep( 5 );
 
 	// Then beginning of initialization 
 	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+1), CMD_MODE );
-
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET+4 ), CMD_MODE );
 	//waits for LCDIF transmit current frame
 	LCDIFFlush();
+	
+	memset( m_pVirtBase, 0x00, FRAMEBUFFERSZIE-0x400 );
 
 	// UC1698 controller is 3 bytes corresponding 6 pixel
-	LCDIFSetTransferCount(162/6*3, DOTCLK_V_ACTIVE);
+	LCDIFSetTransferCount(81, DOTCLK_V_ACTIVE );
 
+	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase), DATA_MODE );
 }
 
 void DisplayControllerUC1698::SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )
@@ -548,35 +539,56 @@ void DisplayControllerUC1698::SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )
 	m_PhysBase = PhysBase;
 	m_pVirtBase = VirtBase;
 }
-
+DWORD DisplayControllerUC1698::GetVideoMemorySize()
+{
+	return FRAMEBUFFERSZIE;
+}
 void DisplayControllerUC1698::Update( PVOID pSurface )
 {
-	int FrameBufferX, FrameBufferY, SurfaceX, SurfaceY;
-	UINT8	**pSurfaceBuffer;
-	UINT32	**pFrameBuffer;
+
+	int FrameBufferIdx,SurfaceBufIdx, SurfaceX, SurfaceY, MaxSurfaceX;
+	BYTE	*pSurfaceBuffer;
+	UINT32	*pFrameBuffer;
 	int i, var;
 
-	pSurfaceBuffer = (UINT8 **)pSurface;
-	pFrameBuffer = (UINT32 **)m_pVirtBase;
+	pSurfaceBuffer = (BYTE *)pSurface;
+	pFrameBuffer = (UINT32 *)m_pVirtBase;
 
-	FrameBufferX = 0;
-	FrameBufferY = 0;
+	FrameBufferIdx = 0;
+	SurfaceBufIdx = 0;
+	//MaxSurfaceX = (DOTCLK_H_ACTIVE-2)>>3;
+	MaxSurfaceX = 20;
 
 	for( SurfaceY=0; SurfaceY<DOTCLK_V_ACTIVE;SurfaceY++ )
 	{
-		for( SurfaceX=0; SurfaceX<((DOTCLK_H_ACTIVE+2)>>3); SurfaceX++ )
+		for( SurfaceX=0; SurfaceX<MaxSurfaceX;SurfaceX++  )
 		{
-			var = pSurfaceBuffer[SurfaceY][SurfaceX];
+			var = ~pSurfaceBuffer[SurfaceBufIdx++];
 			for( i=0; i<8; i++, i++ )
 			{
+
+				pFrameBuffer[FrameBufferIdx] = 0;
+			
 				if( (0x80>>i)&var )
-					pFrameBuffer[FrameBufferY][FrameBufferX] = 0xf0;
+					pFrameBuffer[FrameBufferIdx] = 0xf0;
 				if( (0x80>>(i+1))&var)
-					pFrameBuffer[FrameBufferY][FrameBufferX] |= 0x0f;
-				FrameBufferX++;
+					pFrameBuffer[FrameBufferIdx] |= 0xc0c;
+
+				FrameBufferIdx++;
+
 			}
 		}
-		FrameBufferY++;
+		pFrameBuffer[FrameBufferIdx] = pFrameBuffer[FrameBufferIdx-1];	
+		FrameBufferIdx++;
 	}
+
+	LCDIFSetIrqEnable( FALSE );
+	LCDIFSetTransferCount(4, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET+((CTRBYTECOUNT-4)<<2) ), CMD_MODE );
+	LCDIFFlush();
+	LCDIFSetTransferCount( 81, DOTCLK_V_ACTIVE );
+	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);   
+	LCDIFDisplayFrameBufferEx( (const void *)m_PhysBase, DATA_MODE );
+	LCDIFClearIrq( LCDIF_IRQ_FRAME_DONE );
 	
 }

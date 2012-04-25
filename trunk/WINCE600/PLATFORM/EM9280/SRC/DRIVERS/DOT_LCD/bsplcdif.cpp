@@ -145,7 +145,8 @@ _donePixel:
 //------------------------------------------------------------------------------
 DWORD BSPGetVideoMemorySize()
 {
-    BOOL result = TRUE;
+	return pLCDDisplay->GetVideoMemorySize();   
+	/*BOOL result = TRUE;
     LONG  error;
     HKEY  hKey;
     DWORD dwSize;
@@ -183,7 +184,7 @@ _doneVMem:
 
     RETAILMSG(1, (TEXT("GetVMemSizeFromRegistry: %s, size is %d!\r\n"), result ? L"succeeds" : L"fails", nVideoMemorySize));
 
-    return nVideoMemorySize;
+    return nVideoMemorySize;*/
 }
 
 //------------------------------------------------------------------------------
@@ -298,18 +299,7 @@ void BSPSetDisplayController()
 //------------------------------------------------------------------------------
 DWORD BSPGetWidth(DWORD modeNumber)
 {
-    DWORD rc = 0;
-
-    switch (modeNumber)
-    {
-    case DISPLAY_MODE_DEVICE:
-        rc = pLCDDisplay->GetWidth();
-        break;
-
-    default:
-        ERRORMSG (1, (L"Invalid mode number!\r\n"));
-    }
-    return rc;
+       return pLCDDisplay->GetWidth();
 }
 
 //------------------------------------------------------------------------------
@@ -328,18 +318,7 @@ DWORD BSPGetWidth(DWORD modeNumber)
 //------------------------------------------------------------------------------
 DWORD BSPGetHeight(DWORD modeNumber)
 {
-    DWORD rc = 0;
-
-    switch (modeNumber)
-    {
-    case DISPLAY_MODE_DEVICE:
-        rc = pLCDDisplay->GetHeight();
-        break;
-
-    default:
-        ERRORMSG (1, (L"Invalid mode number!\r\n"));
-    }
-    return rc;
+	return  pLCDDisplay->GetHeight();
 }
 
 //------------------------------------------------------------------------------
@@ -399,14 +378,12 @@ void BSPGetModeInfoEx(GPEModeEx* pModeEx, int modeNumber)
 
 void BSPGetModeInfo(GPEMode* pMode, int modeNumber)
 {
-	//pMode->height = BSPGetHeight(modeNumber);
-	//pMode->width = BSPGetWidth(modeNumber);
+	pMode->height = BSPGetHeight(modeNumber);
+	pMode->width = BSPGetWidth(modeNumber);
 	pMode->modeId = 0;
-	pMode->height = 160;
-	pMode->width = 160;
-	pMode->Bpp = 2;
+	pMode->Bpp = 1;
 	pMode->frequency = 60;		// not too important
-	pMode->format = gpe2Bpp;
+	pMode->format = gpe1Bpp;
 }
 
 //------------------------------------------------------------------------------

@@ -31,13 +31,13 @@ Notes:
 #include "precomp.h"
 #include "csp.h"
 
-#define PALETTE_SIZE              	4
-RGBQUAD _rgb2bpp[PALETTE_SIZE] =
+
+
+#define PALETTE_SIZE              	2
+RGBQUAD _rgb1bpp[PALETTE_SIZE] =
 {
-    { 0x00, 0x00, 0x00, 0 },    /*   0 */	/* Black        */   	   \
-    { 0x80, 0x80, 0x80, 0 },    /* 248 */	/* Dark Grey         	*/ \
-    { 0xc0, 0xc0, 0xc0, 0 },    /*   7 */	/* Light Grey   */   	   \
-    { 0xff, 0xff, 0xff, 0 }     /* 255 */	/* White         		*/ \
+	{ 0x00, 0x00, 0x00, 0 },    /*   0 */	/* Black        */   	  
+	{ 0xff, 0xff, 0xff, 0 }     /* 255 */	/* White        */
 };
 
 
@@ -108,13 +108,13 @@ Dot_lcd::Dot_lcd()
 
 	AllocPhysicalMemory();
 
-	BSPSetDisplayBuffer( m_nLAWPhysical, m_VirtualMemAddr);
+	BSPSetDisplayBuffer( m_VideoMemPhysicalAddress.LowPart, (PVOID)m_VideoMemVirtualAddress.LowPart);
 
+	InitIrq( );
 	BSPInitLCD(  );
 
-	memset( m_VirtualMemAddr, 0, m_dwFrameBufferSize );
-	InitIrq( );
-	LCDIFDisplayFrameBufferEx( (const void *)m_nLAWPhysical, DATA_MODE );
+	//memset( m_VirtualMemAddr, 0, m_dwFrameBufferSize );
+	
 	
 	BSPBacklightEnable(TRUE);
 	RETAILMSG(1, (L"<--LCDIF Dot_lcd\r\n"));
@@ -145,57 +145,22 @@ BOOL Dot_lcd::AllocPhysicalMemory( )
 {
 	BOOL rc = FALSE;
 
+	m_dwFrameBufferSize = BSPGetVideoMemorySize();
 
-	//DWORD FrameBufferSize = BSPGetVideoMemorySize();
-	m_dwFrameBufferSize = 0x100000;
-	m_pVideoMemory = (PUCHAR)AllocPhysMem(m_dwFrameBufferSize,       // Frame buffer size
-		PAGE_EXECUTE_READWRITE,   // All needed rigth
-		0x400000,                 // The default system alignment is used
-		0,                        // Reserved
-		(ULONG *) &m_nLAWPhysical);
-	DWORD PhysicalMemOffset = m_nLAWPhysical >> 8;
-	void* PhysicalMemAddr = (void *)m_nLAWPhysical;
-	// Check if virtual mapping failed
-	if (!m_pVideoMemory)
-	{
-		ERRORMSG(1,	(TEXT("MmMapIoSpace failed!\r\n")));
-		ASSERT(0);
-		goto _AllocPhysMemdone;
-	}
-	// The hardware is arranged as a DIB
-	// Map it into virtual addr space
-	//Allocate Frame Buffer Space in shared memory
-	HANDLE m_hLAWMapping = CreateFileMapping(
-		INVALID_HANDLE_VALUE,
-		NULL,
-		PAGE_READWRITE,
+	memset(&m_VideoMemPhysicalAddress, 0, sizeof(PHYSICAL_ADDRESS));
+	memset(&m_VideoMemVirtualAddress, 0, sizeof(PHYSICAL_ADDRESS));
+
+	m_VideoMemVirtualAddress.LowPart = (ULONG)AllocPhysMem(m_dwFrameBufferSize,
+		PAGE_READWRITE | PAGE_NOCACHE,
 		0,
-		m_dwFrameBufferSize,
-		NULL);
+		0,
+		&m_VideoMemPhysicalAddress.LowPart);
 
-	if (m_hLAWMapping != NULL) 
+	if (!m_VideoMemVirtualAddress.LowPart)
 	{
-		m_VirtualMemAddr = (unsigned char *)MapViewOfFile(
-			m_hLAWMapping,
-			FILE_MAP_WRITE,
-			0,
-			0,
-			0);
-	} 
-	else 
-	{
-		ERRORMSG(1, (TEXT("AllocPhysicalMemory: failed at MapViewOfFile(), error[%d]\r\n"), m_dwFrameBufferSize, GetLastError()));
+		RETAILMSG(1, (TEXT("HalAllocateCommonBuffer: memory allocation failed (error = 0x%x).\r\n"), GetLastError()));
 		ASSERT(0);
-		goto _AllocPhysMemdone;
-	}
-	
-	BOOL result = VirtualCopy( m_VirtualMemAddr, (LPVOID)PhysicalMemOffset, m_dwFrameBufferSize,
-		PAGE_READWRITE | PAGE_NOCACHE |PAGE_PHYSICAL );
-	if(!result)
-	{
-		RETAILMSG(1, (TEXT("AllocPhysicalMemory: failed at VirtualCopy(), error[%d]\r\n"), m_dwFrameBufferSize, GetLastError()));
-		ASSERT(0);
-		goto _AllocPhysMemdone;        
+		goto _AllocPhysMemdone;  
 	}
 
 	rc = TRUE;
@@ -251,7 +216,6 @@ BOOL Dot_lcd::InitIrq( )
 		goto _done;
 	}
 
-	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
 	result = TRUE;
 
 _done:
@@ -269,19 +233,19 @@ SCODE Dot_lcd::SetMode( int modeId, HPALETTE *pPalette )
 
 	DEBUGMSG(1,(TEXT("SetMode - creating stock palette\r\n")));
 
-	if( pPalette )
-	{
-		*pPalette = EngCreatePalette
-							(
-								PAL_INDEXED,
-								PALETTE_SIZE, 	// i.e. 2
-								(ULONG *)_rgb2bpp,
-								0,
-								0,
-								0
-							);
-//		DEBUGMSG(1,(TEXT("Created 2 Bpp palette, handle = 0x%08x\r\n"),*pPalette));
-	}
+ 	if( pPalette )
+ 	{
+ 		*pPalette = EngCreatePalette
+ 							(
+ 								PAL_INDEXED,
+ 								PALETTE_SIZE, 	// i.e. 2
+ 								(ULONG *)_rgb1bpp,
+ 								0,
+ 								0,
+ 								0
+ 							);
+ //		DEBUGMSG(1,(TEXT("Created 1 Bpp palette, handle = 0x%08x\r\n"),*pPalette));
+ 	}
 
 	DEBUGMSG(1,(TEXT("SetMode done\r\n")));
 
@@ -349,8 +313,9 @@ void Dot_lcd::GetPhysicalVideoMemory
 	unsigned long *pVideoMemorySize
 )
 {
+	// No DDHAL support in 2bpp wrapper
 	*pPhysicalMemoryBase = (unsigned long)(void *)0;//(unsigned long)m_nLAWPhysical;
-	*pVideoMemorySize =20*160/4;// DispDrvr_cdwStride * DispDrvr_cyScreen / 4;
+	*pVideoMemorySize =0;// DispDrvr_cdwStride * DispDrvr_cyScreen / 4;
 }
 
 
@@ -546,10 +511,7 @@ DWORD Dot_lcd::IntrProc( )
 		if( m_bStopIntrProc )
 			break;
 
-		LCDIFDisplayFrameBufferEx( (const void *)m_nLAWPhysical, DATA_MODE );
-		//BSPFrameBufferUpdate( m_pPrimarySurface->Buffer() );
-
-		LCDIFClearIrq( LCDIF_IRQ_FRAME_DONE );
+		BSPFrameBufferUpdate( m_pPrimarySurface->Buffer() );
 		InterruptDone( m_dwlcdcSysintr );
 	}
 	return 0;
@@ -560,7 +522,7 @@ void RegisterDDHALAPI()
 	;	// No DDHAL support in 2bpp wrapper
 }
 
-ulong BitMasks[] = { 0x0001,0x0002,0x0000 };
+ulong BitMasks[] = { 0x0000,0x0001,0x0000 };
 
 ULONG *APIENTRY DrvGetMasks(
     DHPDEV     dhpdev)

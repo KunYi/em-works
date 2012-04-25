@@ -25,7 +25,7 @@ Notes:
 #ifndef __DOT_LCD_H__
 #define __DOT_LCD_H__
 
-#include <dispdrvr.h>	// Contains interface definition for "old-style" 2bpp drivers
+#include <ceddk.h>
 
 class Dot_lcd  : public GPE
 {
@@ -112,9 +112,8 @@ private:
 	DWORD			m_dwlcdcSysintr;
 	HANDLE			m_hSyncThread;
 
-	void			*m_pVideoMemory;
-	void			*m_pLCDMappingMemory;
-	ULONG			m_nLMMPhysical;
+	PHYSICAL_ADDRESS m_VideoMemPhysicalAddress;
+	PHYSICAL_ADDRESS m_VideoMemVirtualAddress;
 	ULONG			m_nLAWPhysical;
 	DWORD			m_dwFrameBufferSize;
 

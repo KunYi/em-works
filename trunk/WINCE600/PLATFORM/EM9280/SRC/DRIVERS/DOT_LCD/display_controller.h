@@ -26,6 +26,8 @@ public:
 	virtual void  InitLCD( ) =0;
 	virtual void  Update( PVOID pSurface )=0;
 	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )=0;
+	virtual DWORD GetVideoMemorySize()=0;
+
 }; //class
 
 #endif /* __DISPLAY_CONTROLLER_H__ */
