@@ -26,13 +26,17 @@ public:
 
     virtual void DispDrvrPowerHandler(BOOL bOn, BOOL bInit, BOOL bReset,BOOL bPowerOff);
     static DisplayControllerUC1698 * GetInstance();
+
     virtual DWORD GetWidth();
     virtual DWORD GetHeight();
+	virtual DWORD GetVideoMemorySize();
+
     virtual void BacklightEnable(BOOL Enable);
     virtual void InitDisplay();
 	virtual void InitLCD( );
 	virtual void  Update( PVOID pSurface );
 	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase );
+	
 
 private:
     DisplayControllerUC1698();
@@ -50,4 +54,4 @@ private:
 
 }; //class
 
-#endif /* __LMS430_CONTROLLER_H__ */
+#endif /* __UC1698_CONTROLLER_H__ */
