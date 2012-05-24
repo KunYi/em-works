@@ -35,7 +35,7 @@ const	PRODUCTCODE	 =	0x80;
 const	CTRBYTECOUNT =	20+4;
 
 const unsigned char CTRBYTE[CTRBYTECOUNT]={
-	0xe2, 0xeb, 0x81, 55, 0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
+	0xe2, 0xeb, 0x81, 60, 0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
 	0x00, 0xf6, 0x35, 0xf7, 0xa0, 0xf8, 0xd1, 0xd5,
 	0x00, 0x10, 0x60, 0x70,
 };
@@ -549,34 +549,25 @@ void DisplayControllerUC1698::Update( PVOID pSurface )
 	int FrameBufferIdx,SurfaceBufIdx, SurfaceX, SurfaceY, MaxSurfaceX;
 	BYTE	*pSurfaceBuffer;
 	UINT32	*pFrameBuffer;
-	int i, var;
+	int var;
 
 	pSurfaceBuffer = (BYTE *)pSurface;
 	pFrameBuffer = (UINT32 *)m_pVirtBase;
 
 	FrameBufferIdx = 0;
 	SurfaceBufIdx = 0;
-	//MaxSurfaceX = (DOTCLK_H_ACTIVE-2)>>3;
-	MaxSurfaceX = 20;
+	
+	MaxSurfaceX = 80;
 
 	for( SurfaceY=0; SurfaceY<DOTCLK_V_ACTIVE;SurfaceY++ )
 	{
 		for( SurfaceX=0; SurfaceX<MaxSurfaceX;SurfaceX++  )
 		{
 			var = ~pSurfaceBuffer[SurfaceBufIdx++];
-			for( i=0; i<8; i++, i++ )
-			{
-
-				pFrameBuffer[FrameBufferIdx] = 0;
-			
-				if( (0x80>>i)&var )
-					pFrameBuffer[FrameBufferIdx] = 0xf0;
-				if( (0x80>>(i+1))&var)
-					pFrameBuffer[FrameBufferIdx] |= 0xc0c;
-
-				FrameBufferIdx++;
-
-			}
+			pFrameBuffer[FrameBufferIdx] = var;
+			//var = var&0x0c;
+			pFrameBuffer[FrameBufferIdx] |= var <<10;
+			FrameBufferIdx++;
 		}
 		pFrameBuffer[FrameBufferIdx] = pFrameBuffer[FrameBufferIdx-1];	
 		FrameBufferIdx++;

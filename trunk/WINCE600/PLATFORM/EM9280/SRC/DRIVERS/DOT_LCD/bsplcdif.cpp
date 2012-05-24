@@ -381,9 +381,9 @@ void BSPGetModeInfo(GPEMode* pMode, int modeNumber)
 	pMode->height = BSPGetHeight(modeNumber);
 	pMode->width = BSPGetWidth(modeNumber);
 	pMode->modeId = 0;
-	pMode->Bpp = 1;
+	pMode->Bpp = 4;
 	pMode->frequency = 60;		// not too important
-	pMode->format = gpe1Bpp;
+	pMode->format = gpe4Bpp;
 }
 
 //------------------------------------------------------------------------------
