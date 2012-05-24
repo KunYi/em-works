@@ -34,10 +34,33 @@ Notes:
 
 
 #define PALETTE_SIZE              	2
+#define PALETTE_4BPP_SIZE          16
+
 RGBQUAD _rgb1bpp[PALETTE_SIZE] =
 {
 	{ 0x00, 0x00, 0x00, 0 },    /*   0 */	/* Black        */   	  
 	{ 0xff, 0xff, 0xff, 0 }     /* 255 */	/* White        */
+};
+
+// Greyscalebpp palette. 
+RGBQUAD _rgb4bpp[PALETTE_4BPP_SIZE] =
+{
+	{ 0x00, 0x00, 0x00, 0 },   \
+	{ 0x10, 0x10, 0x10, 0 },   \
+	{ 0x20, 0x20, 0x20, 0 },   \
+	{ 0x30, 0x30, 0x30, 0 },   \
+	{ 0x40, 0x40, 0x40, 0 },   \
+	{ 0x50, 0x50, 0x50, 0 },   \
+	{ 0x60, 0x60, 0x60, 0 },   \
+	{ 0x70, 0x70, 0x70, 0 },   \
+	{ 0x80, 0x80, 0x80, 0 },   \
+	{ 0x90, 0x90, 0x90, 0 },   \
+	{ 0xa0, 0xa0, 0xa0, 0 },   \
+	{ 0xb0, 0xb0, 0xb0, 0 },   \
+	{ 0xc0, 0xc0, 0xc0, 0 },   \
+	{ 0xd0, 0xd0, 0xd0, 0 },   \
+	{ 0xe0, 0xe0, 0xe0, 0 },   \
+	{ 0xFF, 0xFF, 0xFF, 0 }    \
 };
 
 
@@ -238,8 +261,8 @@ SCODE Dot_lcd::SetMode( int modeId, HPALETTE *pPalette )
  		*pPalette = EngCreatePalette
  							(
  								PAL_INDEXED,
- 								PALETTE_SIZE, 	// i.e. 2
- 								(ULONG *)_rgb1bpp,
+ 								PALETTE_4BPP_SIZE ,        //      4, 	// i.e. 2
+ 								(ULONG *)_rgb4bpp,
  								0,
  								0,
  								0
@@ -522,7 +545,7 @@ void RegisterDDHALAPI()
 	;	// No DDHAL support in 2bpp wrapper
 }
 
-ulong BitMasks[] = { 0x0000,0x0001,0x0000 };
+ulong BitMasks[] = { 0x0000,0x0000,0x0000 };
 
 ULONG *APIENTRY DrvGetMasks(
     DHPDEV     dhpdev)
