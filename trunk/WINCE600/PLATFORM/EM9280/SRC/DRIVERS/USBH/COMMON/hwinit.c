@@ -662,7 +662,38 @@ BOOL BSPUsbHostLowPowerModeEnable(void)
 //------------------------------------------------------------------------------
 void BSPUSBHostVbusControl(BOOL blOn)
 {
-    if (BSPGetUSBControllerType() == USB_SEL_OTG)
+#ifdef EM9283
+
+	if (BSPGetUSBControllerType() == USB_SEL_OTG)
+	{
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO); 
+		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
+
+		if (blOn)
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 1);
+		}
+		else
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0);
+		}
+	}
+	else if (BSPGetUSBControllerType() == USB_SEL_H1)
+	{
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO); 
+		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
+
+		if (blOn)
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 1);
+		}
+		else
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0);
+		}
+	}
+#else
+	if (BSPGetUSBControllerType() == USB_SEL_OTG)
     {
         DDKIomuxSetPinMux(DDK_IOMUX_AUART2_TX_1, DDK_IOMUX_MODE_GPIO); 
         DDKGpioEnableDataPin(DDK_IOMUX_AUART2_TX_1, 1);
@@ -690,6 +721,7 @@ void BSPUSBHostVbusControl(BOOL blOn)
             DDKGpioWriteDataPin(DDK_IOMUX_AUART2_RX_1, 0);
         }
     }
+#endif
 }
 
 
