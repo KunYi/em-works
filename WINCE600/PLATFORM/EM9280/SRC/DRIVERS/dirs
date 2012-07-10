@@ -37,5 +37,6 @@ DIRS=\
 	EM9K_DDK\
 	GPIO\
 	SPI_SERIAL\
-	DOT_LCD
+	DOT_LCD\
+	MKeyPad
 

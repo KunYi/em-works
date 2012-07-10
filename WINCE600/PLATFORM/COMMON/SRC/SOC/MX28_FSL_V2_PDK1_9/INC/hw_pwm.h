@@ -113,6 +113,12 @@ typedef enum _PWM_CHANNEL
     PWM_CHANNEL_3,
     //! \brief TBD
     PWM_CHANNEL_4,
+        //! \brief TBD
+    PWM_CHANNEL_5,
+        //! \brief TBD
+    PWM_CHANNEL_6,
+        //! \brief TBD
+    PWM_CHANNEL_7,
 } PWM_CHANNEL;
 
 //Used to specify active and inactive states

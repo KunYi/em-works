@@ -1,35 +1,50 @@
 BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [00:0000000022:WARNS ] Directory: D:\WINCE600\platform\common\src\soc\COMMON_FSL_V2\INC\ does not exist.
-BUILD: [00:0000000121:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
-BUILD: [00:0000000123:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
-BUILD: [00:0000000129:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
-BUILD: [00:0000000131:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
-BUILD: [00:0000000141:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\inc\ does not exist.
-BUILD: [00:0000000152:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UFNCLASS\inc\ does not exist.
-BUILD: [00:0000000154:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UFNCLASS\inc\ does not exist.
-BUILD: [00:0000000983:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
-BUILD: [00:0000001056:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
-BUILD: [00:0000001057:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
-BUILD: [00:0000001058:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdbusreq.obj does not exist (2).
-BUILD: [00:0000001059:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddevice.obj does not exist (2).
-BUILD: [00:0000001060:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdbus.obj does not exist (2).
-BUILD: [00:0000001061:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdslot.obj does not exist (2).
-BUILD: [00:0000001062:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdclient.obj does not exist (2).
-BUILD: [00:0000001063:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddevinf.obj does not exist (2).
-BUILD: [00:0000001064:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdiofeat.obj does not exist (2).
-BUILD: [00:0000001065:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdworki.obj does not exist (2).
-BUILD: [00:0000001066:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddebug.obj does not exist (2).
-BUILD: [00:0000001087:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemmain.obj does not exist (2).
-BUILD: [00:0000001088:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemdiskio.obj does not exist (2).
-BUILD: [00:0000001089:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemcardio.obj does not exist (2).
-BUILD: [00:0000001107:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
-BUILD: [00:0000001108:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
-BUILD: [00:0000001109:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\sdbus2.lib does not exist (2).
-BUILD: [00:0000001110:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\SDMemory_fsl.lib does not exist (2).
-BUILD: [00:0000001111:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\uce.obj does not exist (2).
-BUILD: [00:0000001112:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\uce_media.obj does not exist (2).
-BUILD: [00:0000001130:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
-BUILD: [00:0000001131:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
-BUILD: [00:0000001132:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\sdbus2.lib does not exist (2).
-BUILD: [00:0000001133:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\SDMemory_fsl.lib does not exist (2).
-BUILD: [00:0000001134:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.lib does not exist (2).
+BUILD: [00:0000000021:WARNS ] Directory: D:\WINCE600\platform\common\src\soc\COMMON_FSL_V2\INC\ does not exist.
+BUILD: [00:0000000120:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
+BUILD: [00:0000000122:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
+BUILD: [00:0000000128:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
+BUILD: [00:0000000130:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\PMIC\inc\ does not exist.
+BUILD: [00:0000000140:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\inc\ does not exist.
+BUILD: [00:0000000151:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UFNCLASS\inc\ does not exist.
+BUILD: [00:0000000153:WARNS ] Directory: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UFNCLASS\inc\ does not exist.
+BUILD: [01:0000003241:WARNN ] cl : Command line warning D9025 : overriding '/QRarch4T' with '/QRarch5T'
+BUILD: [01:0000003245:WARNN ] cl : Command line warning D9025 : overriding '/QRarch4T' with '/QRarch5T'
+BUILD: [01:0000003249:WARNN ] cl : Command line warning D9025 : overriding '/QRarch4T' with '/QRarch5T'
+BUILD: [01:0000003253:WARNN ] cl : Command line warning D9025 : overriding '/QRarch4T' with '/QRarch5T'
+BUILD: [00:0000004624:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005054:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005279:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005345:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005346:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\MS\USBFN\CLASS\STORAGE\EMULATION\SCSI2\BLOCK\obj\ARMV4I\retail\block.obj does not exist (2).
+BUILD: [00:0000005347:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\MS\USBFN\CLASS\STORAGE\EMULATION\SCSI2\BLOCK\obj\ARMV4I\retail\bufferpool.obj does not exist (2).
+BUILD: [00:0000005554:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005555:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
+BUILD: [00:0000005591:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000005592:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
+BUILD: [00:0000005954:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdbusreq.obj does not exist (2).
+BUILD: [00:0000005955:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddevice.obj does not exist (2).
+BUILD: [00:0000005956:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdbus.obj does not exist (2).
+BUILD: [00:0000005957:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdslot.obj does not exist (2).
+BUILD: [00:0000005958:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdclient.obj does not exist (2).
+BUILD: [00:0000005959:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddevinf.obj does not exist (2).
+BUILD: [00:0000005960:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdiofeat.obj does not exist (2).
+BUILD: [00:0000005961:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sdworki.obj does not exist (2).
+BUILD: [00:0000005962:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDBUS\obj\ARMV4I\retail\sddebug.obj does not exist (2).
+BUILD: [00:0000005983:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemmain.obj does not exist (2).
+BUILD: [00:0000005984:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemdiskio.obj does not exist (2).
+BUILD: [00:0000005985:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\SDMEMORY\obj\ARMV4I\retail\sdmemcardio.obj does not exist (2).
+BUILD: [00:0000006250:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000006251:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
+BUILD: [00:0000006252:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\sdbus2.lib does not exist (2).
+BUILD: [00:0000006253:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\SDMemory_fsl.lib does not exist (2).
+BUILD: [00:0000006285:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\block.obj does not exist (2).
+BUILD: [00:0000006286:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\bot.obj does not exist (2).
+BUILD: [00:0000006287:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\utp.obj does not exist (2).
+BUILD: [00:0000006288:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\uce.obj does not exist (2).
+BUILD: [00:0000006289:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\uce_media.obj does not exist (2).
+BUILD: [00:0000006290:WARNN ] File: D:\WINCE600\PLATFORM\COMMON\src\soc\COMMON_FSL_V2_PDK1_9\UUT\obj\ARMV4I\retail\sdboot.obj does not exist (2).
+BUILD: [00:0000006351:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.def does not exist (2).
+BUILD: [00:0000006352:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\USBMSFN.lib does not exist (2).
+BUILD: [00:0000006353:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\sdbus2.lib does not exist (2).
+BUILD: [00:0000006354:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\SDMemory_fsl.lib does not exist (2).
+BUILD: [00:0000006355:WARNN ] File: D:\WINCE600\platform\common\lib\ARMV4I\retail\UUT_common_fsl_v2_pdk1_9.lib does not exist (2).
