@@ -161,7 +161,16 @@ static VOID    PowerSetVdddValue(UINT32 VdddmV);
 static UINT32  PowerGetVdddValue(VOID);
 
 extern BOOL IsUSBDeviceDriverEnable();
-extern BOOL Is5VFromVbus();
+
+#ifdef EM9283  // LQK:Jul 9,2012
+	BOOL g_bIs5VFromVbus=TRUE;
+	static BOOL Is5VFromVbus()
+	{
+		return g_bIs5VFromVbus;
+	}
+#else
+	extern BOOL Is5VFromVbus();
+#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -460,8 +469,14 @@ static BOOL PowerStart4p2HW(VOID)
 
         if(Is5VFromVbus())
         {  
-            // Set current limit to 480mA.    
-            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+            
+#ifdef EM9283
+			// Set current limit to 450mA.    
+            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x24);
+#else
+			// Set current limit to 480mA.    
+			BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+#endif
         }
         else
         {
@@ -1444,6 +1459,47 @@ static BOOL PowerInit()
     BOOL rc = FALSE;
     UINT32 irq = 0;
  
+#ifdef EM9283	// LQK:Jul 9,2012
+	DWORD dwStatus,dwVal,dwSize;
+	HKEY  hKey;
+	TCHAR szName[] = TEXT("Is5VFromUSB");
+
+	dwStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Power"),
+		0,0,&hKey);
+	if (dwStatus != ERROR_SUCCESS)
+	{
+		DEBUGMSG(ZONE_ERROR, (TEXT("PowerInit: OpenDeviceKey failed \r\n")));
+		g_bIs5VFromVbus = TRUE;
+	}
+	else
+	{
+		dwSize = sizeof(DWORD);
+		dwStatus = RegQueryValueEx(hKey, szName, NULL, 
+			NULL, (LPBYTE)&dwVal, &dwSize);
+		if (dwStatus != ERROR_SUCCESS )
+		{
+			RETAILMSG(1, 
+				(TEXT("PowerInit: RegQueryValueEx failed \r\n")));
+			g_bIs5VFromVbus = TRUE;
+		}
+		else
+		{
+			g_bIs5VFromVbus = dwVal;
+		}
+		RegCloseKey(hKey);
+
+	}
+	if( g_bIs5VFromVbus )
+	{
+		RETAILMSG(1, (TEXT("PowerInit: 5V is from USB.\r\n")));
+	}
+	else
+	{
+		RETAILMSG(1, (TEXT("PowerInit: 5V is from Wall charger.\r\n")));
+	}
+#endif
+	
+
     //Map the peripheral register space of the power module
     if (!PowerAlloc())
     {
@@ -2313,17 +2369,24 @@ PMU_POWER_THERMAL_TEMP PmuIoctlThermalGet()
 //-----------------------------------------------------------------------------
 VOID PowerOffChip(void )
 {
-    // Clear auto restart.
+    HANDLE hSysShutDownEvent;
+
+	// Clear auto restart.
     HW_RTC_PERSISTENT0_CLR(BM_RTC_PERSISTENT0_AUTO_RESTART);
 
+	hSysShutDownEvent = CreateEvent(NULL, FALSE, FALSE, 
+		L"PowerManager/SysShutDown_Active");
+	SetEvent( hSysShutDownEvent );
+	Sleep( 2000 );
     SetDevicePower(TEXT("BKL1:"),POWER_NAME | POWER_FORCE,D4);
 
     while(((HW_POWER_STS_RD() & BM_POWER_STS_PSWITCH) >> BP_POWER_STS_PSWITCH) == ((BM_POWER_STS_PSWITCH >> BP_POWER_STS_PSWITCH) & 0x1))
         Sleep(50);
-       
+    
+	CloseHandle( hSysShutDownEvent );
     Sleep(1000);
 
-    // Chip power off
+	// Chip power off
 
     BF_WR(POWER_RESET,UNLOCK,BV_POWER_RESET_UNLOCK__KEY);
     
@@ -2581,6 +2644,18 @@ PMI_IOControl(DWORD hOpenContext, DWORD dwCode, PBYTE pBufIn, DWORD dwLenIn,
             result = TRUE;
         }
         break;
+
+#ifdef EM9283
+	case PMU_IOCTL_GET_POWER_SOURCE:
+		if( pBufOut != NULL )
+		{
+			*(UINT32*)pBufOut = Is5VFromVbus();
+			dwLenOut = sizeof(UINT32);
+
+			result = TRUE;
+		}
+		break;
+#endif
 
     case PMU_IOCTL_VDDD_GET_BRNOUT:
         if (pBufOut != NULL)
@@ -2926,16 +3001,23 @@ static BOOL PowerIRQHandler(void)
                    while((HW_POWER_STS.B.PSWITCH == ((BM_POWER_STS_PSWITCH >> BP_POWER_STS_PSWITCH) & 0x1)) 
                               && (HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime < POWER_OFF_HOLD_TIME))
                        Sleep(30);
-                   //Power Off Chip
-                   if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
-                       PowerOffChip();
+
+				   if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
+				   {
+						//Power Off Chip
+						if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
+							PowerOffChip();
+				   }
 
                    //Clear PSwitch interrupt
                    HW_POWER_CTRL_CLR(BM_POWER_CTRL_PSWITCH_IRQ);                   
                    InterruptDone(SysIntr5V);
                    
                    // ZZZzzz...
-                   SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+				   if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
+				   {
+						SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+				   }
                }
                else
                {

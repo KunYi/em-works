@@ -17,6 +17,13 @@ INCLUDES=\
     $(INCLUDES)
 
 SOURCES=\
-    pmusdk.cpp        
+    pmusdk.cpp    
+    
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF    
 
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    pmusdk.def \
 
