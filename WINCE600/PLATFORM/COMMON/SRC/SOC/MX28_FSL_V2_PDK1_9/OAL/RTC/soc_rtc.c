@@ -164,11 +164,18 @@ BOOL OALRTC_ConfigurePowerUpClockSource()
         use24MHzCrystal = TRUE;
     }
 
+#ifndef EM9283	
     // Force the RTC to use internal 24MHz,because the 32.768KHz is not accurate,
     // this is align with the IC owner.
-    use24MHzCrystal = TRUE;
 
-    // Make final clock source adjustment & power up selected crystal
+	//  2012-6-6 lqk
+	// If RTC use internal 24MHz at all time, The CPU will be consume 250uA current when CPU power down.
+    use24MHzCrystal = TRUE;
+#endif
+
+	use24MHzCrystal = FALSE;
+
+		// Make final clock source adjustment & power up selected crystal
     if(use24MHzCrystal)
     {
         // Clear bits to use 24MHz crystal & power it up
