@@ -526,21 +526,30 @@ BOOL   PWMChSetIOMux(UINT32 u32Channel,DDK_IOMUX_PIN_MUXMODE muxmode)
 {
     switch(u32Channel)
     {
-    //case 0:
-    //    DDKIomuxSetPinMux(DDK_IOMUX_PWM0_0,muxmode);
-    //    break;
-    //case 1:
-    //    DDKIomuxSetPinMux(DDK_IOMUX_PWM1_0,muxmode);
-    //    break;
-    case 2:
-        DDKIomuxSetPinMux(DDK_IOMUX_PWM2,muxmode);
+    case 0:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM0_0,muxmode);	//DDK_IOMUX_MODE_00
         break;
-    //case 3:
-    //    DDKIomuxSetPinMux(DDK_IOMUX_PWM3_0,muxmode);
-    //    break;
-    //case 4:
-    //    DDKIomuxSetPinMux(DDK_IOMUX_PWM4_0,muxmode);
-    //    break;
+    case 1:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM1_0,muxmode);	//DDK_IOMUX_MODE_00
+        break;
+    case 2:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM2,muxmode);		//DDK_IOMUX_MODE_00
+        break;
+    case 3:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1,muxmode);	//DDK_IOMUX_MODE_00
+        break;
+    case 4:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,muxmode);	//DDK_IOMUX_MODE_00
+        break;
+	case 5:
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM5,muxmode);	//DDK_IOMUX_MODE_01
+		break;
+	case 6:
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM6,muxmode);	//DDK_IOMUX_MODE_01
+		break;
+	case 7:
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM7,muxmode);	//DDK_IOMUX_MODE_01
+		break;
     default:
         break;
     }
