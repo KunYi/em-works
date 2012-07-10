@@ -36,5 +36,9 @@
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\IRQ1Set\sources</Path>
       <Guid>f6762cbf-4af1-4300-96d9-0f158aff75d2</Guid>
     </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\Xrusbser\sources</Path>
+      <Guid>cfebf9cd-0761-4451-9006-70a936d5caca</Guid>
+    </Pair>
   </FileGuidMapper>
 </ActiveSourcesFiles></WorkspaceUserOptions>
