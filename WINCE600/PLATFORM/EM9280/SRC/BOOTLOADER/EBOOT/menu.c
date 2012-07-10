@@ -465,8 +465,9 @@ BOOL BLMenu()
         StoreBootCFG(&g_BootCFG);
         ConfigBootCFG(&g_BootCFG);
     }
-    
+#ifndef EM9283_DOTLCD
     TurnOffDisplay();
+#endif
     // configuration parameters previously loaded.
     memcpy(g_pBSPArgs->kitl.mac, g_BootCFG.mac, 6);
 
