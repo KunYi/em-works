@@ -111,14 +111,15 @@ static void LCDIFReset(BOOL bReset)
 
     if(bReset)
     {
-        if (HW_LCDIF_CTRL.B.CLKGATE == 0)
+
+ 		if (HW_LCDIF_CTRL.B.CLKGATE == 0)
         {
-            // if clock is not gated, stop the block first
-            // else the next DMA request can freeze the system
-            HW_LCDIF_CTRL.B.RUN = 0;
+             // if clock is not gated, stop the block first
+             // else the next DMA request can freeze the system
+             HW_LCDIF_CTRL.B.RUN = 0;
             while (HW_LCDIF_CTRL.B.RUN == 1);
         }
-    
+  
         while (HW_LCDIF_CTRL.B.CLKGATE != 0)
             HW_LCDIF_CTRL.B.CLKGATE = 0;
     
@@ -637,7 +638,7 @@ VOID LCDIFSetBusMasterMode(BOOL bEnable)
 //  Returns:
 //      TRUE. successful
 //-----------------------------------------------------------------------------
-BOOL LCDIFDisplayFrameBuffer(const void* pData)
+BOOL LCDIFDisplayFrameBuffer(const void* pData )
 {
     hw_lcdif_ctrl_t ctrl_reg;
     UINT32 physAddress;
@@ -664,6 +665,35 @@ BOOL LCDIFDisplayFrameBuffer(const void* pData)
     HW_LCDIF_CTRL_WR(ctrl_reg.U);
 
     return TRUE;
+}
+
+BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect )
+{
+	hw_lcdif_ctrl_t ctrl_reg;
+	UINT32 physAddress;
+
+	ctrl_reg.U = HW_LCDIF_CTRL_RD();
+	physAddress = (UINT32) pData;
+
+	if (ctrl_reg.B.DOTCLK_MODE || ctrl_reg.B.DVI_MODE) {
+		HW_LCDIF_NEXT_BUF_WR(physAddress);
+
+		if (ctrl_reg.B.RUN != 1)
+			HW_LCDIF_CUR_BUF_WR(physAddress);
+	} else {
+		if (ctrl_reg.B.RUN == 1)
+			while (HW_LCDIF_CTRL.B.RUN == 1) ;
+
+		HW_LCDIF_CUR_BUF_WR(physAddress);
+	} //if/else
+
+	ctrl_reg.B.DATA_SELECT = nDataSelect;
+	ctrl_reg.B.WAIT_FOR_VSYNC_EDGE = ctrl_reg.B.VSYNC_MODE;
+	ctrl_reg.B.RUN = 1;
+
+	HW_LCDIF_CTRL_WR(ctrl_reg.U);
+
+	return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -789,5 +819,11 @@ VOID LCDIFSetupLCDIFClock(UINT32 PixFreq)
         RETAILMSG(1, (L"Display controller init - DDKClockSetGatingMode failed!\r\n"));
     }
 
+}
+
+VOID LCDIFStop( )
+{
+	while (HW_LCDIF_CTRL.B.RUN != 0 )
+		HW_LCDIF_CTRL.B.RUN = 0;
 }
 
