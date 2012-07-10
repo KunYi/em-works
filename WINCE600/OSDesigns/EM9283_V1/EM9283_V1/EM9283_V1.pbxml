@@ -42,8 +42,6 @@
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_fsramrom" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_aygshell" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_console" />
-    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_largekb" />
-    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msim" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_sdbus2" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usbfn_serial" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_sd_memory" />
@@ -74,7 +72,6 @@
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_eth_80211" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_asyncmac" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_flashmdd" />
-    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_binfs" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_commctrl" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_commdlg" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ctlpnl" />
@@ -85,20 +82,18 @@
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_sqlcompact_mp" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_sqlcompact" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usb_printer" />
-    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_battery" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_touch" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_battery" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_qvgap" />
   </FeatureCollection>
   <ConfigurationCollection Name="Configurations" EnforceUniqueItems="False">
     <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Debug" FriendlyName="EM9280 ARMV4I Debug">
       <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed Host:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:MultiPartitionNAND:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280" />
       </FeatureCollection>
       <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
       <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
@@ -107,7 +102,13 @@
         <BuildOption Name="Item" OptionName="IMGNOTALLKMODE" OptionValue="True" />
       </BuildOptionCollection>
       <StringDictionary Name="EnvironmentVariables">
+        <Entry Name="prj_enable_fsreghive">1</Entry>
+        <Entry Name="bsp_ar6102_sdio">1</Entry>
         <Entry Name="imgnand">1</Entry>
+        <Entry Name="bsp_display_dcp">0</Entry>
+        <Entry Name="bsp_em9280">1</Entry>
+        <Entry Name="bsp_em9280_security_write_enable">1</Entry>
+        <Entry Name="bsp_support_demand_paging">1</Entry>
       </StringDictionary>
       <LocaleInfo Name="LocaleInformation" UseStrictLocalization="False" LocalizeTheBuild="True" DefaultLocale="1033">
         <LocaleCollection Name="Locales" EnforceUniqueItems="False">
@@ -188,16 +189,13 @@
       <BoardSupportPackage Name="Bsp" PlatformFolder="EM9280" FriendlyName="EM9280: ARMV4I" />
       <Cpu Name="Cpu" CpuName="ARMV4I" />
     </Configuration>
-    <Configuration Name="Item" TargetBinFilename="chain.lst" BuildType="Retail" FriendlyName="EM9280 ARMV4I Release">
+    <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Retail" FriendlyName="EM9280 ARMV4I Release">
       <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed Host:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:MultiPartitionNAND:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:High Speed OTG Port Full OTG Function:iMX28-EVK-PDK1_9_EM9280" />
       </FeatureCollection>
       <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
       <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
@@ -207,11 +205,11 @@
       <StringDictionary Name="EnvironmentVariables">
         <Entry Name="bsp_display_dcp">0</Entry>
         <Entry Name="imgnand">1</Entry>
-        <Entry Name="bsp_support_demand_paging">1</Entry>
         <Entry Name="bsp_ar6102_sdio">1</Entry>
-        <Entry Name="bsp_nobattery">1</Entry>
-        <Entry Name="bsp_em9280">1</Entry>
+        <Entry Name="bsp_em9283">1</Entry>
         <Entry Name="prj_enable_fsreghive">1</Entry>
+        <Entry Name="bsp_em9280">1</Entry>
+        <Entry Name="bsp_dotlcd">1</Entry>
         <Entry Name="bsp_em9280_security_write_enable">1</Entry>
       </StringDictionary>
       <LocaleInfo Name="LocaleInformation" UseStrictLocalization="False" LocalizeTheBuild="True" DefaultLocale="2052">
