@@ -27,6 +27,11 @@ Notes:
 
 #include <ceddk.h>
 
+// DrvEscape return codes
+#define ESC_FAILED          (-1)
+#define ESC_NOT_SUPPORTED   (0)
+#define ESC_SUCCESS         (1)
+
 class Dot_lcd  : public GPE
 {
 private:
@@ -106,11 +111,23 @@ public:
 						GPEBltParms *pBltParms
 					);
 
+	virtual ULONG DrvEscape
+					(
+						SURFOBJ * pso,
+						ULONG iEsc,
+						ULONG cjIn,
+						PVOID pvIn, 
+						ULONG cjOut, 
+						PVOID pvOut
+					);
+	virtual VOID    PowerHandler(BOOL bOff);
+
 private:
 	HANDLE			m_hSyncEvent;
 	HANDLE			m_bStopIntrProc;
 	DWORD			m_dwlcdcSysintr;
 	HANDLE			m_hSyncThread;
+	HANDLE			m_hSysShutDownEvent;
 
 	PHYSICAL_ADDRESS m_VideoMemPhysicalAddress;
 	PHYSICAL_ADDRESS m_VideoMemVirtualAddress;
@@ -120,9 +137,21 @@ private:
 	unsigned char * m_VirtualMemAddr;
 
 	int				m_nModeNumber;
-
+	GPESurf			*m_pBackUpSurface;
+	PVOID			pCurrentlySurface;
+	// for power management
+	CEDEVICE_POWER_STATE m_Dx;
+	TCHAR m_szDevName[MAX_PATH];   // Device name
+	TCHAR m_szGuidClass[MAX_PATH]; // Class GUID
+	BOOL			ConvertStringToGuid (LPCTSTR pszGuid, GUID *pGuid);
+	
 	BOOL			InitIrq( );
 	BOOL			AllocPhysicalMemory( );
+	BOOL			SetContrast( ContrastCmdInputParm *pContrastCmd, DWORD *pvOut);
+	void			SetDisplayPower(CEDEVICE_POWER_STATE dx);
+	void			PoweroffLCDIF();
+	void			PowerOnLCDIF();
+	BOOL			AdvertisePowerInterface(HMODULE hInst);
 
 public:
 	DWORD IntrProc( );

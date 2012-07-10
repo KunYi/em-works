@@ -38,7 +38,6 @@
 #define DEFAULT_VIDEO_MEM_SIZE                (6*1024*1024) // if can not get from registry, then return 3M bytes for default video RAM size
 #define PIXEL_DEPTH                           TEXT("Bpp")
 
-
 //------------------------------------------------------------------------------
 // Local Variables
 DisplayController * pLCDDisplay = NULL;
@@ -321,6 +320,16 @@ DWORD BSPGetHeight(DWORD modeNumber)
 	return  pLCDDisplay->GetHeight();
 }
 
+
+BOOL BSPSetContrast( DWORD dwContrastLevel )
+{
+	return pLCDDisplay->SetContrast( dwContrastLevel );
+}
+
+BOOL BSPGetContrast( DWORD* dwContrastLevel, DWORD dwFlag )
+{
+	return pLCDDisplay->GetContrast( dwContrastLevel, dwFlag);
+}
 //------------------------------------------------------------------------------
 //
 // Function: BSPGetModeInfoEx

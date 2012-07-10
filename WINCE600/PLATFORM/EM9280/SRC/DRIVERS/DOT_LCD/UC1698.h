@@ -36,6 +36,8 @@ public:
 	virtual void InitLCD( );
 	virtual void  Update( PVOID pSurface );
 	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase );
+	virtual BOOL SetContrast( DWORD dwContrastLevel );
+	virtual BOOL GetContrast( DWORD* dwContrastLevel, DWORD dwFlag );
 	
 
 private:
@@ -45,12 +47,19 @@ private:
     void BSPInitLCDIF(BOOL bReset);
     void BSPResetController();
     BOOL DDKIomuxSetupLCDIFPins(BOOL bPoweroff);
+	//void LCDPowerDown( );
+	void LCDPowerUp( );
+	void LCDPower( UINT32 powerVal );
 
 private:
     static DisplayControllerUC1698 * SingletonController;    
     DWORD m_Bpp;
 	ULONG m_PhysBase;
 	PVOID m_pVirtBase; 
+	BOOL  m_bSetContrast;
+	BYTE m_uContrastLevel;
+	CRITICAL_SECTION cs;
+	BOOL  m_bPowerOff, m_bPowerOn;
 
 }; //class
 
