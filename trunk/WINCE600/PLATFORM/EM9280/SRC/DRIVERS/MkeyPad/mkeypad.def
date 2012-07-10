@@ -1,0 +1,17 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;------------------------------------------------------------------------------
+
+LIBRARY EM9280_GPIO
+
+EXPORTS
+   KPD_Init
+   KPD_Deinit
+   KPD_Open
+   KPD_Close
+   KPD_Read
+   KPD_Write
+   KPD_Seek
+   KPD_PowerDown
+   KPD_PowerUp
+   KPD_IOControl
