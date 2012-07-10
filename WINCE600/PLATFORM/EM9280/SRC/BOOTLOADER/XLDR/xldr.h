@@ -50,7 +50,8 @@
 #define BATTERY_LOW            2400
 #define BATTERY_HIGH           4400
 #define BATTERY_BAD            3500
-#define BATTERY_BOOT           3600
+//#define BATTERY_BOOT           3600
+#define BATTERY_BOOT           3250
 
 // todo The following 5 defines should be configured by the application, not the driver.
 #define EMI_PIN_DRIVE_ADDRESS          PIN_DRIVE_20mA

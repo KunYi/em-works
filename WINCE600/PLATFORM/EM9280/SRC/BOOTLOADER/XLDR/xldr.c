@@ -28,6 +28,9 @@ static BOOL s_bUsb         = FALSE;
 static BOOL s_bBattery     = FALSE;
 static UINT32 BattVoltage  = 0;
 
+#ifdef EM9283 
+	#define BSP_5V_FROM_VBUS 1
+#endif
 //------------------------------------------------------------------------------
 // Local Functions
 
@@ -467,6 +470,12 @@ void InitDebugSerial()
     HW_PINCTRL_MUXSEL7_CLR(1 << 2);       // DBG-TX (bank 3 pin 17) muxmode=10
     HW_PINCTRL_MUXSEL7_CLR(1 << 0);       // DBG-RX (bank 3 pin 16) muxmode=10
 
+	/*HW_PINCTRL_MUXSEL7_SET(0xF000F);          // Switch both pins to GPIO
+	HW_PINCTRL_MUXSEL6_SET(0x00F0);          // Switch both pins to GPIO
+	HW_PINCTRL_MUXSEL6_CLR(1 << 4);       // DBG-TX (bank 3 pin 6) muxmode=10
+	HW_PINCTRL_MUXSEL6_CLR(1 << 6);       // DBG-RX (bank 3 pin 7) muxmode=10
+	*/
+
     // Set the Baud Rate
     HW_UARTDBGIBRD_WR((HW_UARTDBGIBRD_RD() & BM_UARTDBGIBRD_UNAVAILABLE) | GET_UARTDBG_BAUD_DIVINT(DEBUG_BAUD));
     HW_UARTDBGFBRD_WR((HW_UARTDBGFBRD_RD() & BM_UARTDBGFBRD_UNAVAILABLE) | GET_UARTDBG_BAUD_DIVFRAC(DEBUG_BAUD));
@@ -573,8 +582,8 @@ void InitPower()
     HW_POWER_VDDDCTRL_CLR(BM_POWER_VDDDCTRL_DISABLE_STEPPING);
     HW_POWER_VDDACTRL_CLR(BM_POWER_VDDACTRL_DISABLE_STEPPING);
 
-    // Enable auto restart.
-    HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
+	// Enable auto restart.
+	//HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
 
     HW_POWER_5VCTRL.B.HEADROOM_ADJ = 4;
 
@@ -592,6 +601,31 @@ void InitPower()
     XLDRWriteDebugByte('\r');
     XLDRWriteDebugByte('\n');
 
+#ifdef EM9283 //lqk 2012-5-30
+	// Clear auto restart for automatic battery brownout shutdown. 
+	HW_RTC_PERSISTENT0_CLR(BM_RTC_PERSISTENT0_AUTO_RESTART);
+	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=0;
+	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT_5VDETECT_ENABLE=1;
+	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT=1;
+	HW_POWER_BATTMONITOR.B.BRWNOUT_PWD=0;
+	BF_WR(POWER_RESET,UNLOCK,BV_POWER_RESET_UNLOCK__KEY);
+	HW_POWER_RESET_WR((BV_POWER_RESET_UNLOCK__KEY << BP_POWER_RESET_UNLOCK) | BM_POWER_RESET_FASTFALLPSWITCH_OFF);
+
+	//Detect whether there is a good battery
+	if(IsBatteryGood())
+	{
+		XLDRWriteDebugByte('B');
+		XLDRWriteDebugByte('\r');
+		XLDRWriteDebugByte('\n');
+		s_bBattery = TRUE;
+	}
+
+	// Set battery Brownout threshold to 3000mv
+	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=15;
+
+#else 
+	// Enable auto restart.
+	HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
 
     //Detect whether there is a good battery
     if(IsBatteryGood())
@@ -601,6 +635,8 @@ void InitPower()
         XLDRWriteDebugByte('\n');
         s_bBattery = TRUE;
     }
+
+#endif //lqk 2012-5-30
 
     //Detect whether 5V is present
     if(Is5VPresent())
@@ -617,11 +653,25 @@ void InitPower()
         XLDRWriteDebugByte('U');
         XLDRWriteDebugByte('\r');
         XLDRWriteDebugByte('\n');
+
 #ifdef BSP_5V_FROM_VBUS
         BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20);
 #endif    
         s_bUsb = TRUE;
     }
+
+#ifdef EM9283	// lqk 2012-5-30
+	if( s_b5V == TRUE )
+	{
+		BootFrom4P2();
+	}
+	else
+	{
+		//Boot from battery,and turn on PLL
+		BootFromBattery();
+		CPUClock2PLL();
+	}
+#else
 
     //If battery is good
     if(s_bBattery == TRUE)
@@ -640,6 +690,7 @@ void InitPower()
     //Direct boot from USB,current limited to 100mA
     else if(s_b5V == TRUE)
         BootFrom4P2();
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -735,7 +786,30 @@ BOOL IsBatteryGood()
     UINT32 BatteryVoltage = 0;
     BatteryVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
     if((BatteryVoltage > BATTERY_LOW) && (BatteryVoltage < BATTERY_HIGH))
-        return TRUE;
+	{
+		HW_POWER_REFCTRL.B.FASTSETTLING =1;
+		if( HW_POWER_STS.B.BATT_BO == 0 )
+		{
+			HW_POWER_REFCTRL.B.FASTSETTLING =1;
+			XLDRStall(10000);
+			BattVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
+			XLDRWriteDebugByte('B');
+			XLDRWriteDebugByte('A');
+			XLDRWriteDebugByte('T');
+			XLDRWriteDebugByte('T');
+			XLDRWriteDebugByte(':');
+			PrintBatteryVoltage(BattVoltage);
+			XLDRWriteDebugByte('\r');
+			XLDRWriteDebugByte('\n');
+			if( HW_POWER_STS.B.BATT_BO == 0 )
+			{
+				HW_POWER_REFCTRL.B.FASTSETTLING =0;
+				return TRUE;
+			}
+		}
+		HW_POWER_REFCTRL.B.FASTSETTLING =0;
+		return FALSE;
+	}
     else
     {
         BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x3);
@@ -970,8 +1044,9 @@ void ChargeBattery2Boot()
     XLDRWriteDebugByte('(');
     XLDRWriteDebugByte('3');
     XLDRWriteDebugByte('.');
-    XLDRWriteDebugByte('6');
-    XLDRWriteDebugByte('V');
+    XLDRWriteDebugByte('2');
+	XLDRWriteDebugByte('5');
+	XLDRWriteDebugByte('V');
     XLDRWriteDebugByte(')');
     XLDRWriteDebugByte('\r');
     XLDRWriteDebugByte('\n');
