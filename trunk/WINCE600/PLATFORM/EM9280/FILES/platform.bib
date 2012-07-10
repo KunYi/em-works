@@ -253,13 +253,17 @@ ENDIF ; BSP_NOTOUCH !
 ;
 ; @CESYSGEN IF CE_MODULES_DISPLAY
 IF BSP_NODISPLAY !
-  ;  ddraw_mx28.dll		$(_FLATRELEASEDIR)\ddraw_mx28.dll        $(XIPKERNEL)  SHK
-  ;  pxp.dll             $(_FLATRELEASEDIR)\pxp.dll               $(XIPKERNEL)  SHK    
-	Dot_lcd.dll			          $(_FLATRELEASEDIR)\Dot_lcd.dll               $(XIPKERNEL)  SHK    
+IF BSP_DOTLCD
+	Dot_lcd.dll			$(_FLATRELEASEDIR)\Dot_lcd.dll               $(XIPKERNEL)  SHK    
+ELSE
+    ddraw_mx28.dll		$(_FLATRELEASEDIR)\ddraw_mx28.dll        $(XIPKERNEL)  SHK
+    pxp.dll             $(_FLATRELEASEDIR)\pxp.dll               $(XIPKERNEL)  SHK    
+ENDIF BSP_DOTLCD
+;	
 ENDIF
 ; @CESYSGEN ENDIF CE_MODULES_DISPLAY
 ; -----------------------------------------------------------------------------
-
+	mkeypad.dll			          $(_FLATRELEASEDIR)\mkeypad.dll              NK  SHK    
 ; -----------------------------------------------------------------------------
 ; Backlight Driver
 ;
@@ -380,6 +384,7 @@ FILES
     tcal.exe              $(_FLATRELEASEDIR)\tcal.exe             NK      U
     rotate.exe            $(_FLATRELEASEDIR)\rotate.exe           NK      U
     audiorouting.exe      $(_FLATRELEASEDIR)\audiorouting.exe     NK      U
+    ShutDownImage160160.bmp $(_FLATRELEASEDIR)\ShutDownImage160160.bmp    NK      U
 
 IF BSP_USB_HSOTG_CLIENT
     USBSet.exe              $(_FLATRELEASEDIR)\USBSet.exe               NK

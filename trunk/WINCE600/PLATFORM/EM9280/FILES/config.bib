@@ -74,8 +74,8 @@ IF IMGFLASH !
     IF IMGUUT !
         #define NK_SIZE     02800000    ;40MB
     ENDIF    
-    #define RAM_START   82000000
-    #define RAM_SIZE    06000000    ;96MB    
+    #define RAM_START   82A00000
+    #define RAM_SIZE    05600000		;96MB    
 ENDIF
 
 IF IMGFLASH
@@ -248,4 +248,10 @@ IF IMGTRUSTROMONLY
 ELSE
        ROMFLAGS=00
 ENDIF
+
+;IF IMGTRUSTROMONLY
+;       ROMFLAGS=11
+;ELSE
+;       ROMFLAGS=01
+;ENDIF
 ; EOF config.bib
