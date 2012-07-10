@@ -27,6 +27,8 @@ public:
 	virtual void  Update( PVOID pSurface )=0;
 	virtual void SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )=0;
 	virtual DWORD GetVideoMemorySize()=0;
+	virtual BOOL SetContrast( DWORD dwContrastLevel )=0;
+	virtual BOOL GetContrast( DWORD* dwContrastLevel, DWORD dwFlag )=0;
 
 }; //class
 

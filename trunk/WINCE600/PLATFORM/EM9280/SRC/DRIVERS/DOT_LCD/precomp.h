@@ -26,4 +26,6 @@ Notes:
 #include <types.h>
 #include <winddi.h>
 #include <gpe.h>
-#include <DOT_LCD.h>
+#include "DOT_LCD.h"
+#include "bsplcdif.h"
+#include "..\..\INC\image_cfg.h"

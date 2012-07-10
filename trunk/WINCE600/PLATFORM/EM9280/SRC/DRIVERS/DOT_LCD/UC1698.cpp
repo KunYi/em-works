@@ -19,6 +19,7 @@
 #pragma warning(pop)
 #include "csp.h"
 #include "uc1698.h"
+#include "bsplcdif.h"
 
 #define MSG_DUMP_REG			0
 
@@ -26,22 +27,32 @@
 #define DOTCLK_V_ACTIVE         160
 
 #define  FRAMEBUFFERSZIE        0x10000
-#define  LCD_CMD_DATA_OFFSET	FRAMEBUFFERSZIE - 0x400
+#define  LCD_CMD_DATA_OFFSET			FRAMEBUFFERSZIE - 0x400
+
+
+const int  MAX_CONTRAST_LEVEL	= 255;
+const int  DEFAULT_CONTRAST_LEVEL = 60;
 
 #define PIX_CLK					10000
 
 const	PRODUCTCODE	 =	0x80;
  
-const	CTRBYTECOUNT =	20+4;
+const	CTRBYTECOUNT =	20+5;
 
 const unsigned char CTRBYTE[CTRBYTECOUNT]={
-	0xe2, 0xeb, 0x81, 60, 0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
+	0xe2, 0xeb, 0x81, 
+	60,			//Set Inverse display
+	0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
 	0x00, 0xf6, 0x35, 0xf7, 0xa0, 0xf8, 0xd1, 0xd5,
 	0x00, 0x10, 0x60, 0x70,
+	0xa7				//contrast
+	
 };
 
+#define  DISPLAY_LOCATION_DATA_OFFSET	(LCD_CMD_DATA_OFFSET+80)
 
 extern DWORD BSPLoadPixelDepthFromRegistry();
+extern BOOL GetFromRegistry(DWORD *dwState, LPCTSTR lpszRegKey, LPCTSTR lpszContrast) ;
 
 DisplayControllerUC1698* DisplayControllerUC1698::SingletonController = NULL;
 
@@ -61,6 +72,7 @@ DisplayControllerUC1698* DisplayControllerUC1698::SingletonController = NULL;
 //------------------------------------------------------------------------------
 DisplayControllerUC1698::~DisplayControllerUC1698()
 {
+	DeleteCriticalSection(&cs);
 } //~DisplayControllerUC1698
 
 //------------------------------------------------------------------------------
@@ -133,18 +145,18 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
     if(bPoweroff)
     {
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D20,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D21,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D22,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D23,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,DDK_IOMUX_MODE_GPIO);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0, DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D20,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D21,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D22,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D23,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,DDK_IOMUX_MODE_GPIO);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0, DDK_IOMUX_MODE_GPIO);
     }
     else
     {
@@ -158,17 +170,8 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D13,DDK_IOMUX_MODE_00);
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
-// 
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
-//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
-// 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
-// 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
 
-        // setup the pin for LCDIF block
+		// setup the pin for LCDIF block
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_CS,   DDK_IOMUX_MODE_00);
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RS,   DDK_IOMUX_MODE_00);
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_WR_RWN,   DDK_IOMUX_MODE_00);
@@ -207,31 +210,6 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D12, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D13, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D14, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D15, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-// 
-// 		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D18, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
-//         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D19, 
-//                  DDK_IOMUX_PAD_DRIVE_8MA, 
-//                  DDK_IOMUX_PAD_PULL_ENABLE,
-//                  DDK_IOMUX_PAD_VOLTAGE_3V3);
    
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_CS, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
@@ -388,16 +366,95 @@ void DisplayControllerUC1698::BSPResetController()
 void DisplayControllerUC1698::DispDrvrPowerHandler(BOOL bOn, BOOL bInit, BOOL bReset,BOOL bPowerOff)
 {
     UNREFERENCED_PARAMETER(bInit);
+	UNREFERENCED_PARAMETER(bReset);
 
     if(bOn)
     {
-        BSPInitLCDIF(bReset);
+        BSPInitLCDIF(TRUE);
+		LCDPowerUp( );
+		m_bPowerOn = TRUE;
+
     }
     else
     {
-        BSPResetController();
+		
+		m_bPowerOff = TRUE;
+		while( !m_bPowerOff )
+			Sleep( 1 );
+		
+		LCDPower( 0xae);
+		//BSPResetController();
         LCDIFPowerDown(bPowerOff);
     }
+}
+
+
+void DisplayControllerUC1698::LCDPowerUp( )
+{
+	int i;
+
+	UINT32 CtrByte[ CTRBYTECOUNT ];
+
+	for( i=0; i<CTRBYTECOUNT; i++ )
+	{
+		CtrByte[i] = CTRBYTE[i];
+		CtrByte[i] <<= 10;
+		CtrByte[i] |= CTRBYTE[i];
+	}
+
+	//EnterCriticalSection(&cs) ;
+
+	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)CtrByte, sizeof(CtrByte));
+
+	LCDIFSetTransferCount(1, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
+	//waits for LCDIF transmit current frame
+	LCDIFFlush();
+	Sleep( 100 );
+
+	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)(CtrByte+1), sizeof(CtrByte));
+
+	// Then beginning of initialization 
+	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET ), CMD_MODE );
+	//waits for LCDIF transmit current frame
+	LCDIFFlush( );
+
+	memset( m_pVirtBase, 0xff, FRAMEBUFFERSZIE-0x400 );
+
+	// Init contrast level
+	DWORD dwContrastLevel;
+	// 	// Get user contrast level
+	BOOL bResult = GetFromRegistry( &dwContrastLevel, SZREGKEY, SZCONTRASTLEVEL);
+	if( !bResult)
+	{
+		// Get to default contrast level	
+		GetContrast( &dwContrastLevel, DEFAULT_CONTRAST_LEVEL );
+	}
+	SetContrast( dwContrastLevel );
+}
+
+void DisplayControllerUC1698::LCDPower( UINT32 powerVal )
+{
+	UINT32 CtrByte;
+
+	CtrByte = powerVal;
+	CtrByte <<= 10;
+	CtrByte |= powerVal;
+	
+	//EnterCriticalSection(&cs) ;
+	//LCDIFStop( );
+	LCDIFSetIrqEnable( FALSE );
+	
+	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)(&CtrByte), sizeof(CtrByte));
+	
+	LCDIFSetTransferCount(1, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
+	
+	//waits for LCDIF transmit current frame
+	LCDIFFlush();
+	Sleep( 100 );
+	//LeaveCriticalSection(&cs);
 }
 
 //------------------------------------------------------------------------------
@@ -414,6 +471,10 @@ void DisplayControllerUC1698::DispDrvrPowerHandler(BOOL bOn, BOOL bInit, BOOL bR
 //------------------------------------------------------------------------------
 DisplayControllerUC1698::DisplayControllerUC1698()
 {
+	m_bSetContrast = FALSE;
+	m_bPowerOff = FALSE;
+	m_bPowerOn = FALSE;
+	InitializeCriticalSection(&cs);
 }
 
 //------------------------------------------------------------------------------
@@ -450,6 +511,38 @@ DWORD DisplayControllerUC1698::GetWidth()
 DWORD DisplayControllerUC1698::GetHeight()
 {
     return  DOTCLK_V_ACTIVE;
+}
+
+
+BOOL DisplayControllerUC1698::SetContrast( DWORD dwContrastLevel )
+{
+	BOOL bResult=FALSE;
+
+	if( dwContrastLevel >=0 && dwContrastLevel<= 255 )
+	{
+		m_uContrastLevel = (BYTE)dwContrastLevel;
+		m_bSetContrast = TRUE;
+		bResult = TRUE;
+	}
+	return bResult;
+}
+
+BOOL DisplayControllerUC1698::GetContrast( DWORD* dwContrastLevel, DWORD dwFlag )
+{
+	BOOL bResult=TRUE;
+	
+	if( dwFlag == GET_DEFAULT_CONTRAST_LEVEL )
+	{
+		*dwContrastLevel = DEFAULT_CONTRAST_LEVEL;
+	}
+	else if (dwFlag == GET_MAX_CONTRAST_LEVEL)
+	{
+		*dwContrastLevel = MAX_CONTRAST_LEVEL;
+	}
+	else
+		bResult = FALSE;
+
+	return bResult;
 }
 
 //------------------------------------------------------------------------------
@@ -500,6 +593,7 @@ void DisplayControllerUC1698::InitDisplay()
 void DisplayControllerUC1698::InitLCD(  )
 {
 	RETAILMSG(1, (L"Initializing UC1698 controller\r\n"));
+
 	int i;
 
 	UINT32 CtrByte[ CTRBYTECOUNT ];
@@ -511,27 +605,46 @@ void DisplayControllerUC1698::InitLCD(  )
 		CtrByte[i] |= CTRBYTE[i];
 	}
 
+	//EnterCriticalSection(&cs) ;
+
 	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)CtrByte, sizeof(CtrByte));
 
+#ifdef INITLCDTRUE
 	LCDIFSetTransferCount(1, 1);
 	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
 	//waits for LCDIF transmit current frame
 	LCDIFFlush();
-	Sleep( 5 );
+	Sleep( 100 );
+#endif
 
+	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)(CtrByte+1), sizeof(CtrByte));
+
+#ifdef INITLCDTRUE
 	// Then beginning of initialization 
 	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET+4 ), CMD_MODE );
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET ), CMD_MODE );
 	//waits for LCDIF transmit current frame
-	LCDIFFlush();
+	LCDIFFlush( );
+#endif
+
 	
-	memset( m_pVirtBase, 0x00, FRAMEBUFFERSZIE-0x400 );
+	// Init contrast level
+ 	DWORD dwContrastLevel;
+// 	// Get user contrast level
+ 	BOOL bResult = GetFromRegistry( &dwContrastLevel, SZREGKEY, SZCONTRASTLEVEL);
+ 	if( !bResult)
+	{
+		// Get to default contrast level	
+ 		GetContrast( &dwContrastLevel, DEFAULT_CONTRAST_LEVEL );
+	}
+ 	SetContrast( dwContrastLevel );
 
 	// UC1698 controller is 3 bytes corresponding 6 pixel
-	LCDIFSetTransferCount(81, DOTCLK_V_ACTIVE );
-
+	//LCDIFSetTransferCount(81, DOTCLK_V_ACTIVE );
+	LCDIFSetTransferCount(1, 1 );
 	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
 	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase), DATA_MODE );
+	//LeaveCriticalSection(&cs);
 }
 
 void DisplayControllerUC1698::SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )
@@ -539,17 +652,30 @@ void DisplayControllerUC1698::SetDisplayBuffer( ULONG PhysBase, PVOID VirtBase )
 	m_PhysBase = PhysBase;
 	m_pVirtBase = VirtBase;
 }
+
 DWORD DisplayControllerUC1698::GetVideoMemorySize()
 {
 	return FRAMEBUFFERSZIE;
 }
+
 void DisplayControllerUC1698::Update( PVOID pSurface )
 {
 
 	int FrameBufferIdx,SurfaceBufIdx, SurfaceX, SurfaceY, MaxSurfaceX;
 	BYTE	*pSurfaceBuffer;
 	UINT32	*pFrameBuffer;
-	int var;
+	UINT32  nCMDCount=4;
+	//int var;
+
+	if( m_bPowerOff )
+	{
+		m_bPowerOff = FALSE;
+		while( !m_bPowerOn )
+			Sleep( 1 );
+
+		m_bPowerOn = FALSE;
+		//return;
+	}
 
 	pSurfaceBuffer = (BYTE *)pSurface;
 	pFrameBuffer = (UINT32 *)m_pVirtBase;
@@ -559,27 +685,54 @@ void DisplayControllerUC1698::Update( PVOID pSurface )
 	
 	MaxSurfaceX = 80;
 
+	EnterCriticalSection(&cs) ;
 	for( SurfaceY=0; SurfaceY<DOTCLK_V_ACTIVE;SurfaceY++ )
 	{
 		for( SurfaceX=0; SurfaceX<MaxSurfaceX;SurfaceX++  )
 		{
-			var = ~pSurfaceBuffer[SurfaceBufIdx++];
+			/*var = ~pSurfaceBuffer[SurfaceBufIdx++];
 			pFrameBuffer[FrameBufferIdx] = var;
 			//var = var&0x0c;
 			pFrameBuffer[FrameBufferIdx] |= var <<10;
+			FrameBufferIdx++;*/
+			pFrameBuffer[FrameBufferIdx] = pSurfaceBuffer[SurfaceBufIdx];
+			pFrameBuffer[FrameBufferIdx] |= pSurfaceBuffer[SurfaceBufIdx]<<10;
+			SurfaceBufIdx++;
 			FrameBufferIdx++;
 		}
 		pFrameBuffer[FrameBufferIdx] = pFrameBuffer[FrameBufferIdx-1];	
 		FrameBufferIdx++;
 	}
 
+	if( m_bSetContrast )
+	{
+		BYTE ContrastLvele[2];
+		UINT32 ContrastLveleByte[2];
+
+		ContrastLvele[0] = 0x81;
+		ContrastLvele[1] = m_uContrastLevel;
+		for( int i=0; i<2; i++ )
+		{
+			ContrastLveleByte[i] = ContrastLvele[i];
+			ContrastLveleByte[i] <<= 10;
+			ContrastLveleByte[i] |= ContrastLvele[i];
+		}
+		
+		memcpy( (unsigned char *)m_pVirtBase+DISPLAY_LOCATION_DATA_OFFSET+16, (const BYTE*)(ContrastLveleByte), sizeof(ContrastLveleByte));
+		m_bSetContrast = FALSE;
+		nCMDCount = 6;
+//		RETAILMSG(1, (TEXT("SetContrst=%d\r\n"), m_uContrastLevel));
+	}
+
 	LCDIFSetIrqEnable( FALSE );
-	LCDIFSetTransferCount(4, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET+((CTRBYTECOUNT-4)<<2) ), CMD_MODE );
+	LCDIFSetTransferCount(nCMDCount, 1);
+	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+ DISPLAY_LOCATION_DATA_OFFSET), CMD_MODE );
 	LCDIFFlush();
+	
 	LCDIFSetTransferCount( 81, DOTCLK_V_ACTIVE );
 	LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);   
 	LCDIFDisplayFrameBufferEx( (const void *)m_PhysBase, DATA_MODE );
 	LCDIFClearIrq( LCDIF_IRQ_FRAME_DONE );
-	
+	LeaveCriticalSection(&cs);
+
 }

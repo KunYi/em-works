@@ -74,11 +74,13 @@ FILE_VIEW_RESOURCE_FOLDER= \
     DOT_lcd.reg \
 
 FILE_VIEW_INCLUDES_FOLDER= \
+	..\..\INC\image_cfg.h \
     DOT_LCD.h \
     precomp.h \
     display_controller.h \
     display_controller_factory.h \
     UC1698.h \
+    bsplcdif.h \
 
 #xref VIGUID {1a4fca39-2c0a-42f7-91d6-dda607f3b957}
 #xref VSGUID {3b4b199b-739e-4cdb-ae6d-93b61ed97634}
