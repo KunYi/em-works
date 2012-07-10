@@ -42,3 +42,7 @@ INCLUDES=\
     
 SOURCES= \
     battery.c \
+    
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
