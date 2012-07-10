@@ -252,10 +252,10 @@ void OEMPowerOff()
     
         //Suspend 
         SuspendMe();
-        
+        OALMSG(1, (_T("INFO: 1 "), irq));
         // Increase ARM/AHB rate 
         SOCPowerOnCPURate();
-
+		OALMSG(1, (_T("2"), irq));
         // Get interrupt source
         irq = HW_ICOLL_STAT_RD() & BM_ICOLL_STAT_VECTOR_NUMBER;
 
@@ -349,6 +349,7 @@ void OEMPowerOff()
             }
         }
 
+		OALMSG(1, (_T(" 3"), irq));
         // Chance of board-level subordinate interrupt controller
         irq = BSPIntrActiveIrq(irq);
         
@@ -364,7 +365,7 @@ void OEMPowerOff()
     }
     else
     {
-        OALMSG(1, (_T("INFO: No wake sources for OEMPowerOff, system will resume...\r\n")));
+        OALMSG(1, (_T(" No wake sources for OEMPowerOff, system will resume...\r\n")));
     }
 
     // Restore register state

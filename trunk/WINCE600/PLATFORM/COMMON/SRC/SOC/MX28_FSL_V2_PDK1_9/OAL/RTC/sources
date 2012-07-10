@@ -22,3 +22,6 @@ SOURCES= \
     soc_rtc.c \
     rtc_persistent.c \
 
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
