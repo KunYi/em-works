@@ -295,7 +295,10 @@ void OEMInit()
 
 
     // Enable auto restart.
+#ifndef  EM9283
+	// for automatic battery brownout shutdown. lqk 2012-5-30
     HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
+#endif //EM9283
 
 cleanUp:
     OALMSG(OAL_FUNC, (L"-OEMInit\r\n"));
