@@ -10,6 +10,7 @@
     <PBProject Name="Item" Filename="%_winceroot%\OSDesigns\EM9170_Programs\sysinfo\sysinfo.pbpxml" UserAdded="1" />
     <PBProject Name="Item" Filename="%_winceroot%\OSDesigns\EM9170_Programs\ETA503Set\ETA503Set.pbpxml" UserAdded="1" />
     <PBProject Name="Item" Filename="%_winceroot%\OSDesigns\EM9170_Programs\IRQ1Set\IRQ1Set.pbpxml" UserAdded="1" />
+    <PBProject Name="Item" Filename="%_winceroot%\OSDesigns\EM9170_Programs\Xrusbser\xrusbser.pbpxml" UserAdded="1" />
   </PBProjectCollection>
   <FeatureCollection Name="AnchoredFeatures" EnforceUniqueItems="True">
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_auth" />
@@ -202,6 +203,7 @@
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\wstartup\wstartup.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\update\update.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\sysinfo\sysinfo.pbpxml" />
+        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\Xrusbser\xrusbser.pbpxml" />
       </PBPEntryCollection>
       <BoardSupportPackage Name="Bsp" PlatformFolder="EM9170" FriendlyName="EM9170: ARMV4I" />
       <Cpu Name="Cpu" CpuName="ARMV4I" />
@@ -270,6 +272,7 @@
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\wstartup\wstartup.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\update\update.pbpxml" />
         <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\sysinfo\sysinfo.pbpxml" />
+        <PBPEntry Name="Item" AlwaysBuildDebug="False" ExcludedFromBuild="False" ExcludedFromImage="False" PBProjectPath="%_winceroot%\OSDesigns\EM9170_Programs\Xrusbser\xrusbser.pbpxml" />
       </PBPEntryCollection>
       <BoardSupportPackage Name="Bsp" PlatformFolder="EM9170" FriendlyName="EM9170: ARMV4I" />
       <Cpu Name="Cpu" CpuName="ARMV4I" />
