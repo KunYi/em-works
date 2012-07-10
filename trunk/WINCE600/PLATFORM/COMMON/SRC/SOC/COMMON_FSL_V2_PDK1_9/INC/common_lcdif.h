@@ -328,11 +328,13 @@ VOID LCDIFClearIrq(UINT32 irq_mask);
 VOID LCDIFPowerDown(BOOL bPowerOff);
 VOID LCDIFResetController(LCDIF_RESET reset);
 
-BOOL LCDIFDisplayFrameBuffer(const void* pData);
+BOOL LCDIFDisplayFrameBuffer(const void* pData );
+BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect );
 VOID LCDIFFlush(VOID);
 VOID LCDIFSetInterlace(BOOL bEnable);
 
 VOID LCDIFSetupLCDIFClock(UINT32 PixFreq);
+VOID LCDIFStop( );
 
 
 #ifdef __cplusplus
