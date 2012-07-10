@@ -76,10 +76,15 @@ static BOOL InitializeMux(int speed)
     // On OTG port usbfn driver may be switched from host driver,
     // in that case VBUS may still be configured as 5V, need to
     // do a forcefully shutdown here
+#ifdef EM9283
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO); 
+	DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
+	DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0); // turn off VBUS
+#else
     DDKIomuxSetPinMux(DDK_IOMUX_AUART2_TX_1, DDK_IOMUX_MODE_GPIO); 
     DDKGpioEnableDataPin(DDK_IOMUX_AUART2_TX_1, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_AUART2_TX_1, 0); // turn off VBUS
-
+#endif
     return TRUE;
 }
 

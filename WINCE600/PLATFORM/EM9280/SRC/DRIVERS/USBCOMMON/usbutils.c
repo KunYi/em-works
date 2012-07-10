@@ -19,6 +19,8 @@
 
 #include "bsp.h"
 #include "common_usbcommon.h"
+//LQK Jul-9-2012
+#include "pmu.h"
 
 #ifdef GLOBAL_DEBUG
 PUCHAR g_baseMem;
@@ -273,6 +275,7 @@ void BSPUsbSetBusConfig(PUCHAR baseMem)
 void BSPUsbSetCurrentLimitation(BOOL bLimitOn)
 { 
     PVOID pv_HWregPOWER = NULL;
+	UINT32 PowerSource = 1;
     
     PHYSICAL_ADDRESS phyAddr;
     
@@ -287,25 +290,52 @@ void BSPUsbSetCurrentLimitation(BOOL bLimitOn)
         RETAILMSG(TRUE, (L"ERROR:BSPUsbSetCurrentLimitation , pv_HWregPOWER = NULL!\r\n"));
         return;
     }
-    if (bLimitOn)
-    {
-#ifdef BSP_5V_FROM_VBUS
-        // This is in case battery is not present.
-        if(HW_POWER_5VCTRL.B.PWDN_5VBRNOUT == 0)
-            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20); // Set current limit.
-#endif
-    }
-    else
-    {
-#ifdef BSP_5V_FROM_VBUS    
-        // Set current limit to 480mA.    
-        BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+
+#ifdef EM9283	//Lqk:Jul-9-2012
+		PmuGetPowerSource( &PowerSource );
+		if (bLimitOn)
+		{
+			if( PowerSource )
+			{
+				// This is in case battery is not present.
+				if(HW_POWER_5VCTRL.B.PWDN_5VBRNOUT == 0)
+					BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20); // Set current limit.
+			}
+		}
+		else
+		{
+			if( PowerSource )
+			{   
+				// Set current limit to 450mA.    
+				BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x24);
+			}
+			else
+			{
+				// Set current limit to 780mA.    
+				BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x3F);
+			}
+
+		}
 #else
-        // Set current limit to 780mA.    
-        BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x3F);
+		if (bLimitOn)
+		{
+	#ifdef BSP_5V_FROM_VBUS
+			// This is in case battery is not present.
+			if(HW_POWER_5VCTRL.B.PWDN_5VBRNOUT == 0)
+				BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20); // Set current limit.
+	#endif
+		}
+		else
+		{
+	#ifdef BSP_5V_FROM_VBUS    
+			// Set current limit to 480mA.    
+			BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+	#else
+			// Set current limit to 780mA.    
+			BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x3F);
+	#endif
+		}
 #endif
-    }
-    
     MmUnmapIoSpace((PVOID)pv_HWregPOWER, 0x1000);
 }
 

@@ -22,6 +22,10 @@ AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
 SKIPBUILD=1
 !ENDIF
 
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
 TARGETNAME=fsl_usbotg
 TARGETTYPE=DYNLINK
 RELEASETYPE=PLATFORM
@@ -33,6 +37,7 @@ DEFFILE=fsl_usbotg.def
 TARGETLIBS= \
     $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\pmuSdk.lib  
     
 
 SOURCELIBS= \
@@ -45,3 +50,7 @@ SOURCES= \
     fsl_usbotg.cpp \
     i_usbutils.c \
     i_usbclock.c
+    
+INCLUDES = \
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+    $(INCLUDES)
