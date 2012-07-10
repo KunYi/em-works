@@ -79,13 +79,13 @@ void BSPBacklightInitialize()
         return;
     }     
     //Setup IOMUX
-    PWMChSetIOMux(PWM_CHANNEL_2,DDK_IOMUX_MODE_00);
+    PWMChSetIOMux(PWM_CHANNEL_7,DDK_IOMUX_MODE_01);
 
     //Setup initial frequency and duty cycle with 1 kHz
-    PWMChSetConfig(PWM_CHANNEL_2,PWM_STATE_HIGH, PWM_STATE_LOW,
+    PWMChSetConfig(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,
                    BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
     //Enable PWM2
-    PWMChOutputEnable(PWM_CHANNEL_2,TRUE);
+    PWMChOutputEnable(PWM_CHANNEL_7,TRUE);
     RETAILMSG(1, (TEXT("<--BSPBacklightInitialize\r\n")));
 }
 //------------------------------------------------------------------------------
@@ -132,17 +132,16 @@ void BSPBacklightSetIntensity(DWORD level)
     {
         level = MIN_BRIGHTNESS_PERCENTAGE;
     }
-
-    PWMChSetDutyCycle(PWM_CHANNEL_2,PWM_STATE_HIGH, PWM_STATE_LOW,level);
+    PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
     //Level = 0,disable PWM
     if (level == 0) 
     {
-        PWMChOutputEnable(PWM_CHANNEL_2, FALSE);
+        PWMChOutputEnable(PWM_CHANNEL_7, FALSE);
     }
     //Enable PWM
     else 
     {
-        PWMChOutputEnable(PWM_CHANNEL_2, TRUE);
+        PWMChOutputEnable(PWM_CHANNEL_7, TRUE);
     }
 }
 
@@ -159,8 +158,19 @@ void BSPBacklightSetIntensity(DWORD level)
 //      None.
 //
 //------------------------------------------------------------------------------
-void BSPBacklightEnable()
+void BSPBacklightEnable(BOOL Enable)
 {
-
+	if(Enable)
+	{
+		Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_01);//Set to PWM mode to output PWM, 
+		//frequency has been set in backlight
+		//driver already.
+	}
+	else
+	{
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_GPIO);  //Set PWM pin to GPIO mode
+		DDKGpioEnableDataPin(DDK_IOMUX_PWM7,1);   //Enable as output
+		DDKGpioWriteDataPin(DDK_IOMUX_PWM7,0);  //Pull low to display PWM output    
+	}
 }
-
