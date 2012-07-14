@@ -33,7 +33,6 @@ TARGETLIBS=\
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_power_$(_SOCDIR).lib \
     $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\args.lib \
     $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bspcmn.lib \
-    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_rtc_$(_SOCDIR).lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_memory_arm.lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_profiler_gpt_$(_SOCDIR).lib \
     $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_other.lib \
@@ -45,6 +44,16 @@ TARGETLIBS=\
     $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_iomux_$(_SOCDIR).lib    \
     $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_clk_$(_SOCDIR).lib      \
 
+
+!IF "$(BSP_EM9280)" == "1" 
+TARGETLIBS=\
+	$(TARGETLIBS) \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\oal_rtc_isl1208.lib
+!ELSE 
+TARGETLIBS=\
+	$(TARGETLIBS) \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_rtc_$(_SOCDIR).lib 
+!ENDIF
 
 !IF "$(ENABLE_OAL_ILTIMING)" == "1"
 TARGETLIBS=\
@@ -72,4 +81,5 @@ FILE_VIEW_RESOURCE_FOLDER= \
 
 #
 ##    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+#    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_rtc_$(_SOCDIR).lib 
 #

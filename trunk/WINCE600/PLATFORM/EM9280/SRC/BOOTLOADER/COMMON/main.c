@@ -68,6 +68,9 @@ extern BOOL NFC_SetClock(BOOL bEnabled);
 
 //-----------------------------------------------------------------------------
 // External Variables
+extern PVOID pv_HWregPINCTRL;
+extern PVOID pv_HWregCLKCTRL;
+
 extern BOOT_CFG g_BootCFG;
 extern IMAGE_TYPE ImageTypeBIN;
 
@@ -146,6 +149,19 @@ void main(void)
     SpinForever();
 }
 
+//------------------------------------------------------------------------------
+// CS&ZHL MAY-18-2012: move out from esdhc.c
+//------------------------------------------------------------------------------
+void SetupGPIOClock()
+{
+    // Clear SFTRST
+    HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_SFTRST);
+    while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_SFTRST);
+
+    // Clear CLKGATE
+    HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_CLKGATE);
+    while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_CLKGATE);
+}
 
 //------------------------------------------------------------------------------
 //
@@ -240,6 +256,94 @@ BOOL CPUClkInit(VOID)
 }
 
 //------------------------------------------------------------------------------
+// CS&ZHL MAY-29-2012: get debug state
+//------------------------------------------------------------------------------
+BOOL GetDebugMode(void)
+{
+#ifdef	EM9280
+	{
+		DWORD	i;
+		UINT32	uData;
+
+		// switch DUART_TXD pin to GPIO input mode
+		DDKIomuxSetPinMux(DDK_IOMUX_DUART_TX_1, DDK_IOMUX_MODE_GPIO);
+		DDKGpioEnableDataPin(DDK_IOMUX_GPIO3_17, 0);	// output disable -> set as input
+		// Set pin drive to 8mA,enable pull up,3.3V
+		DDKIomuxSetPadConfig(DDK_IOMUX_GPIO3_17, 
+			DDK_IOMUX_PAD_DRIVE_8MA, 
+			DDK_IOMUX_PAD_PULL_ENABLE,
+			DDK_IOMUX_PAD_VOLTAGE_3V3);
+
+		// delay 10ms
+	    OALStall(10000);
+
+		// read state of DBGSLn
+		for(i = 0; i < 10; i++)
+		{
+			DDKGpioReadDataPin(DDK_IOMUX_GPIO3_17, &uData);
+			if(uData)
+			{
+				break;
+			}
+			// delay 100us
+			OALStall(100);
+		}
+
+		// switch DUART_TXD pin back to DUART_TXD mode
+		DDKIomuxSetPinMux(DDK_IOMUX_DUART_TX_1, DDK_IOMUX_MODE_02);
+
+		// final judge
+		if(i >= 10)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+#elif	EM9283
+	{
+		DWORD	i;
+		UINT32	uData;
+
+		// set JTAG_RTCK pin to GPIO input mode
+		DDKIomuxSetPinMux(DDK_IOMUX_JTAG_RTCK, DDK_IOMUX_MODE_GPIO);
+		DDKGpioEnableDataPin(DDK_IOMUX_GPIO4_20, 0);	// output disable -> set as input
+		// Set pin drive to 8mA,enable pull up,3.3V
+		DDKIomuxSetPadConfig(DDK_IOMUX_GPIO4_20, 
+			DDK_IOMUX_PAD_DRIVE_8MA, 
+			DDK_IOMUX_PAD_PULL_ENABLE,
+			DDK_IOMUX_PAD_VOLTAGE_3V3);
+
+		// delay 10ms
+	    OALStall(10000);
+
+		// read state of DBGSLn
+		for(i = 0; i < 10; i++)
+		{
+			DDKGpioReadDataPin(DDK_IOMUX_GPIO4_20, &uData);
+			if(uData)
+			{
+				break;
+			}
+			// delay 100us
+			OALStall(100);
+		}
+
+		// final judge
+		if(i >= 10)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+#else	// -> iMX28EVK
+	return TRUE;
+#endif	//EM9280
+}
+
+
+//------------------------------------------------------------------------------
 //
 //  Function:  OEMPlatformInit
 //
@@ -322,6 +426,13 @@ BOOL OEMPlatformInit (void)
     g_dwBoardID = BOARDID_EVKBOARD;
     // Attempt to initialize the SD/MMC driver
 
+	// CS&ZHL MAY-18-2012: apply clock to PINCTRL module
+	SetupGPIOClock();
+
+#ifdef	EM9280
+	// No SD interface in EM9280
+    g_bSDHCExist = FALSE;
+#else	// -> iMX28EVK or EM9283
     if (!SDMMC_Init())
     {
         KITLOutputDebugString("WARNING: OEMPlatformInit: Failed to initialize SDHC device.\r\n");
@@ -338,10 +449,16 @@ BOOL OEMPlatformInit (void)
             SDMMC_get_ext_csd();
         }
     }
+#endif	//EM9280
+
+	// CS&ZHL MAY-29-2012: get DBGSLn state
+	g_pBSPArgs->bDebugFlag = GetDebugMode();
+    KITLOutputDebugString("OEMPlatformInit: DEBGSLn = %d\r\n", g_pBSPArgs->bDebugFlag);
 
     // This will depend on the boot mode
     g_bNandBootloader = TRUE;
     g_bSDHCBootloader = FALSE;
+    g_bSPIBootloader  = FALSE;    
 
     // check for SDBoot
     if ( ((*(PBYTE)((DWORD)pbOCRAM + OCRAM_BOOT_MODE_OFFSET)) & BOOT_MODE_MASK) == BOOT_MODE_SDMMC)

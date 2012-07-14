@@ -22,6 +22,7 @@
 #include "common_nandfmd.h"
 #include "common_otp.h"
 #include "uce_media.h"
+#include "menu.h"
 #include "sdboot.h"
 
 #define    MAX_BUF_ALLOC_SIZE      8*1024*1024  //the value should be devided by block size of nand flash
@@ -379,6 +380,7 @@ BOOL UcePreWriteRawData(TCHAR * pDiskName, DWORD startAddr, DWORD dwValidDataLen
         g_NANDWrtImgInfo.dwIndex = 0; 
 		// choose IMAGE_EBOOTCFG or IMAGE_SPLASH according to startAddr & dwValidDataLength
 		// size of EbootCFG < SectorSize(=2048 bytes)
+		
 		//if(dwValidDataLength < 2048)
 		//{
 		//	g_NANDWrtImgInfo.dwImgType = IMAGE_EBOOTCFG; 
@@ -389,21 +391,22 @@ BOOL UcePreWriteRawData(TCHAR * pDiskName, DWORD startAddr, DWORD dwValidDataLen
 		//	g_NANDWrtImgInfo.dwImgType = IMAGE_SPLASH; 
 		//	RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_SPLASH startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
 		//}
+
 		//
 		// CS&ZHL MAR-30-2012: choose IMAGE_EBOOTCFG or IMAGE_SPLASH or IMAGE_MBR according to startAddr
 		//
 		RETAILMSG(1, (L"UcePreWriteRawData::startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
-		if( startAddr == 0x00 )
+		if( startAddr == IMAGE_EBOOTCFG )
 		{
 			g_NANDWrtImgInfo.dwImgType = IMAGE_EBOOTCFG; 
 			RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_EBOOTCFG startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
 		}
-		else if( startAddr == 0x01 )
+		else if( startAddr == IMAGE_SPLASH )
 		{
 			g_NANDWrtImgInfo.dwImgType = IMAGE_SPLASH; 
 			RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_SPLASH startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
 		}
-		else if( startAddr == 0x02 )
+		else if( startAddr == IMAGE_MBR )
 		{
 			g_NANDWrtImgInfo.dwImgType = IMAGE_MBR; 
 			RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_MBR startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
@@ -439,18 +442,64 @@ BOOL NANDWriteRawData(LPBYTE pImage, DWORD dwLength)
 
 BOOL UceWriteRawData(PBYTE pbData, DWORD dwValidDataLength)
 {      
-    if(g_MediaType == MEDIA_SDMMC)
+	if(g_MediaType == MEDIA_SDMMC)
     {
         return SDWriteRawData(pbData, dwValidDataLength);
     }
-	// CS&ZHL JAN-9-2012: supporting writeing raw data into NAND, -> EbootCFG and SplashScreen, MBR
+	// CS&ZHL JAN-9-2012: supporting writeing raw data into NAND, -> EbootCFG and SplashScreen
 	else if(g_MediaType == MEDIA_NAND)
 	{
 		//RETAILMSG(1, (L"UceWriteRawData::write raw data 0x%x bytes to NandFlash\r\n", dwValidDataLength));
+		//// CS&ZHL MAY09-2012: EbootCFG -> chang mac with being readed from OTP
+		//if( g_NANDWrtImgInfo.dwImgType == IMAGE_EBOOTCFG )
+		//{
+		//	PBOOT_CFG pCfg;
+		//	
+		//	// modify mac
+		//	pCfg = (PBOOT_CFG)pbData;
+		//	// read mac from OTP
+		//	// rewrite new mac to BOOT_CFG;
+		//}
         return NANDWriteRawData(pbData, dwValidDataLength);
 	}
 
     return TRUE;
+}
+
+//
+// CS&ZHL MAY11-2012: write security info to NandFlash & OTP
+//
+BOOL UceWriteSecurityInfo( PBYTE pbData, DWORD dwValidDataLength )
+{
+	if( g_MediaType == MEDIA_NAND )
+	{
+		g_NANDWrtImgInfo.dwImgType = IMAGE_VID;
+		g_NANDWrtImgInfo.dwIndex = 0;
+        return NANDWriteRawData(pbData, dwValidDataLength);
+	}
+	return TRUE;
+}
+
+
+//
+// CS&ZHL JUN1-2012: Get OTP Info
+//
+BOOL UceGetOTPInfo(DWORD* pdwCUST, DWORD dwLen)
+{
+    BOOL ret;
+
+    //UNREFERENCED_PARAMETER(dwLength);
+    ret = DeviceIoControl(
+        ghStore,
+        IOCTL_DISK_GET_OTP_MAC,
+        NULL,
+        0,
+        pdwCUST,
+        dwLen,					
+		NULL,
+        NULL);        
+
+    return ret;
 }
 
 

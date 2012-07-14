@@ -70,41 +70,35 @@ class GPIOClass
 {
 private:
 
-    //-------------------------------------
-    // GPIO critical section
-    //
-    CRITICAL_SECTION csGpioLock;
-
 	DDK_IOMUX_PIN	*pGpioPinTab;
-	DWORD			dwGpioPinTabLen;
+	DWORD			*pTCA6424APinTab;
+	DWORD			dwPinTabLen;
 
-	DDK_IOMUX_PIN	I2C_SCL_PIN;
-	DDK_IOMUX_PIN	I2C_SDA_PIN;
 	DDK_IOMUX_PIN	TCA6424A_INT_PIN;
 
 	BYTE			uTCA6424A_Addr;
-	DWORD			dwGPIOX_DOUT;			// valid with BIT0 - BIT23 
-	DWORD			dwGPIOX_INV;			// valid with BIT0 - BIT23 
-	DWORD			dwGPIOX_DIR;			// valid with BIT0 - BIT23 
+	BYTE			uPortOut[3];
+	BYTE			uPortDir[3];
+	BYTE			uPortPinState[3];
 
-	__inline void	SCL_SET(void);
-	__inline void	SCL_CLR(void);
-	__inline void	SDA_SET(void);
-	__inline void	SDA_CLR(void);
-	__inline void	SDA_OUTEN(void);
-	__inline void	SDA_OUTDIS(void);
-	__inline UINT32	SDA_STATE(void);
+	BOOL I2CInit();
+	BOOL I2CWrite(BYTE ucCmd, PBYTE pDatBuf, DWORD dwDatLen);
+	BOOL I2CRead(BYTE ucCmd, PBYTE pDatBuf, DWORD dwDatLen);
+	BOOL I2CSet(BYTE ucCmd, BYTE uMask);
+	BOOL I2CClear(BYTE ucCmd, BYTE uMask);
 
-	BOOL GpioI2CInit(void);
-	BOOL TCA6424A_GpioI2CWrite(BYTE ucCmd, PBYTE pDatBuf, DWORD dwDatLen);
-	BOOL TCA6424A_GpioI2CRead(BYTE ucCmd, PBYTE pDatBuf, DWORD dwDatLen);
+	BOOL	bIrqGpioPinEnabled;
+	DWORD	dwDeviceID;				// @field logical interrupt number
+	DWORD	dwIrqGpioPin;			// @filed enum { DDK_IOMUX_GPIO1_16 } 	
+	DWORD   dwSysIntr;
+	HANDLE	hIRQEvent;
 
 public:
     //-------------------------------------
     // ISA CONSTRUCTOR/DESTRUCTOR METHODS
     //
-    GPIOClass(UINT32 index);
-    ~GPIOClass(void);
+    GPIOClass();
+    ~GPIOClass();
  
 	//
 	// GPIO functions
@@ -116,7 +110,10 @@ public:
     BOOL PIO_State( UINT32* pStateBits );
 
 	// other public functions
-	void udelay(DWORD dwMicroSecond);
+	void  udelay(DWORD dwMicroSecond);
+
+	// GPIO input change interrupt function
+	DWORD WaitGpioInterrupt(DWORD dwTimeout);
 };
 
 

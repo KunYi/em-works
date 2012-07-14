@@ -29,8 +29,13 @@ extern PVOID pv_HWregCLKCTRL;
 extern PVOID pv_HWregRTC;
 //------------------------------------------------------------------------------
 // Defines
-#define WD_REFRESH_PERIOD        3000    // tell the OS to refresh watchdog every 3 second.
-#define WD_RESET_PERIOD          4500    // tell the wdog to reset the system after 4.5 seconds.
+#if	(defined EM9280 || defined EM9283)
+#define WD_RESET_PERIOD          10000						// tell the wdog to reset the system after 10 seconds.
+#define WD_REFRESH_PERIOD        (WD_RESET_PERIOD / 2)		// tell the OS to refresh watchdog every 5 second.
+#else	// -> iMX28EVK
+#define WD_REFRESH_PERIOD        3000						// tell the OS to refresh watchdog every 3 second.
+#define WD_RESET_PERIOD          4500						// tell the wdog to reset the system after 4.5 seconds.
+#endif	//EM9280 | EM9283
 
 //------------------------------------------------------------------------------
 // Local Variables
@@ -212,10 +217,19 @@ VOID WdogInit(UINT32 TimeoutMSec)
     // Watchdog is configured as follows:
     HW_RTC_WATCHDOG_WR(TimeoutMSec);
     
-    // Enable the watchdog, BUT ONLY IF KITL IS NOT ENABLED.
+#if (defined EM9280 || defined EM9283)
+	{
+		// CS&ZHL JUN-12-2012: always enable WDT in EM9280
+		HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
+	}
+#else	// -> iMX28EVK
+	{
+		// Enable the watchdog, BUT ONLY IF KITL IS NOT ENABLED.
 #ifdef IMGNOKITL
-    HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
+		HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
 #endif
+	}
+#endif	//EM9280 | EM9283
 
     return;
 }
@@ -266,12 +280,14 @@ void RefreshWatchdogTimer (void)
     if (bFirstTime)
     {
         OALMSG(OAL_FUNC, (L"+RefreshWatchdogTimer: First call, init the Wdog to timeout reset in 4.5 secs\r\n"));
+        //OALMSG(1, (L"+RefreshWatchdogTimer: First call, init the Wdog to timeout reset in 4.5 secs\r\n"));
         WdogInit(WD_RESET_PERIOD);
         bFirstTime = FALSE;
     }
     else
     {
         OALMSG(OAL_FUNC, (L"+RefreshWatchdogTimer: Subsequence calls, refresh the Wdog timeout to 4.5 secs again\r\n"));
+        //OALMSG(1, (L"+RefreshWatchdogTimer: Subsequence calls, refresh the Wdog timeout to 4.5 secs again\r\n"));
         HW_RTC_WATCHDOG_WR(WD_RESET_PERIOD);
     }
 
@@ -286,7 +302,8 @@ void RefreshWatchdogTimer (void)
 //------------------------------------------------------------------------------
 void InitWatchDogTimer (void)
 {
-    OALMSG(OAL_FUNC, (L"+InitWatchDogTimer\r\n"));
+    //OALMSG(OAL_FUNC, (L"+InitWatchDogTimer\r\n"));
+    OALMSG(1, (L"+InitWatchDogTimer\r\n"));
 
     pfnOEMRefreshWatchDog = RefreshWatchdogTimer;
     dwOEMWatchDogPeriod   = WD_REFRESH_PERIOD;

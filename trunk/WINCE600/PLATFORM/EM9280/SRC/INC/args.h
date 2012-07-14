@@ -45,12 +45,13 @@ typedef struct {
     OAL_ARGS_HEADER header;
     UINT8 deviceId[16];             // Device identification
     OAL_KITL_ARGS kitl;
-    UINT32 dbgSerPhysAddr;              // Debug serial physical address
+    UINT32 dbgSerPhysAddr;          // Debug serial physical address
     UINT8 uuid[16];
     BOOL updateMode;
-    BOOL bHiveCleanFlag;                // TRUE = Clean hive at boot
-    BOOL bCleanBootFlag;                // TRUE = Clear RAM, hive, user store at boot
-    BOOL bFormatPartFlag;               // TRUE = Format partion when mounted at boot
+    BOOL bHiveCleanFlag;            // TRUE = Clean hive at boot
+    BOOL bCleanBootFlag;            // TRUE = Clear RAM, hive, user store at boot
+    BOOL bFormatPartFlag;           // TRUE = Format partion when mounted at boot
+	BOOL bDebugFlag;				// CS&ZHL MAY-29-2012: save DBGSLn state
 } BSP_ARGS;
 
 VOID OALArgsInit(BSP_ARGS *pBSPArgs);

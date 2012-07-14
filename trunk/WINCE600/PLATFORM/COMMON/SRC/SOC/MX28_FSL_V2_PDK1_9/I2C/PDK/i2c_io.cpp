@@ -219,6 +219,9 @@ BOOL I2C_Deinit(DWORD hDeviceContext)
 //-----------------------------------------------------------------------------
 DWORD I2C_Open(DWORD hDeviceContext, DWORD AccessCode, DWORD ShareMode)
 {
+    // hOpenContext is a pointer to I2CClass instance!
+    I2CClass* pI2C = (I2CClass*) hDeviceContext;
+
     DEBUGMSG (ZONE_OPEN|ZONE_FUNCTION, (TEXT("I2C_Open +hDeviceContext=0x%x\r\n"),hDeviceContext));
 
     // Remove-W4: Warning C4100 workaround
@@ -226,6 +229,17 @@ DWORD I2C_Open(DWORD hDeviceContext, DWORD AccessCode, DWORD ShareMode)
     UNREFERENCED_PARAMETER(ShareMode);
 
     DEBUGMSG (ZONE_OPEN|ZONE_FUNCTION, (TEXT("I2C_Open -\r\n")));
+
+	// CS&ZHL MAY-21-2012: config pins
+    if (!pI2C->PinConfig())
+    {
+        ERRORMSG(1, (TEXT("%s: Error configuring IOMUX for I2C.\r\n"), __WFUNCTION__));
+        return NULL;
+    }
+
+	// zxw 2012-06-26
+	pI2C->SetMode(I2C_MASTER_MODE); // I2C Master Mode
+	pI2C->SetClockRate(400000);     // I2C Clock : 400KHz
 
     // Open is meaningless!
     return hDeviceContext;
@@ -285,13 +299,26 @@ BOOL I2C_Close(DWORD hOpenContext)
 //-----------------------------------------------------------------------------
 DWORD I2C_Read(DWORD hOpenContext, LPVOID pBuffer, DWORD Count)
 {
-    // Remove-W4: Warning C4100 workaround
-    UNREFERENCED_PARAMETER(hOpenContext);
-    UNREFERENCED_PARAMETER(pBuffer);
-    UNREFERENCED_PARAMETER(Count);
+	BYTE		uHwAddr;
+	DWORD		dwCmd;
+	PBYTE		pDatBuf;
+	DWORD		dwDatLen;
+	DWORD		dwNumberOfByteRead = 0;
+    I2CClass*	pI2C = (I2CClass*)hOpenContext;	    // hOpenContext is a pointer to I2CClass instance!
 
-    // Nothing to read
-    return 0;
+	//// Remove-W4: Warning C4100 workaround
+	//UNREFERENCED_PARAMETER(hOpenContext);
+	//UNREFERENCED_PARAMETER(pBuffer);
+	//UNREFERENCED_PARAMETER(Count);
+
+	// get input parameters
+	uHwAddr  = BSPI2CGetHWAddr(pBuffer, Count);
+	dwCmd    = BSPI2CGetCmd(pBuffer, Count);
+	pDatBuf  = BSPI2CGetDataBuffer(pBuffer, Count);
+	dwDatLen = BSPI2CGetDataLength(pBuffer, Count);
+
+	dwNumberOfByteRead = pI2C->MasterRead(uHwAddr, dwCmd, pDatBuf, dwDatLen);
+    return dwNumberOfByteRead;
 }
 
 
@@ -315,15 +342,29 @@ DWORD I2C_Read(DWORD hOpenContext, LPVOID pBuffer, DWORD Count)
 //      failure.
 //
 //-----------------------------------------------------------------------------
-DWORD I2C_Write(DWORD Handle, LPCVOID pBuffer, DWORD dwNumBytes)
+DWORD I2C_Write(DWORD hOpenContext, LPVOID pBuffer, DWORD dwNumBytes)
 {
-    // Remove-W4: Warning C4100 workaround
-    UNREFERENCED_PARAMETER(Handle);
-    UNREFERENCED_PARAMETER(pBuffer);
-    UNREFERENCED_PARAMETER(dwNumBytes);
+	BYTE		uHwAddr;
+	DWORD		dwCmd;
+	PBYTE		pDatBuf;
+	DWORD		dwDatLen;
+	DWORD		dwNumberOfByteWritten = 0;
+    I2CClass*	pI2C = (I2CClass*)hOpenContext;	    // hOpenContext is a pointer to I2CClass instance!
 
-    // Nothing to write
-    return 0;
+	//// Remove-W4: Warning C4100 workaround
+	//UNREFERENCED_PARAMETER(hOpenContext);
+	//UNREFERENCED_PARAMETER(pBuffer);
+	//UNREFERENCED_PARAMETER(dwNumBytes);
+
+	// get input parameters
+	uHwAddr  = BSPI2CGetHWAddr(pBuffer, dwNumBytes);
+	dwCmd    = BSPI2CGetCmd(pBuffer, dwNumBytes);
+	pDatBuf  = BSPI2CGetDataBuffer(pBuffer, dwNumBytes);
+	dwDatLen = BSPI2CGetDataLength(pBuffer, dwNumBytes);
+
+	dwNumberOfByteWritten = pI2C->MasterWrite(uHwAddr, dwCmd, pDatBuf, dwDatLen);
+
+	return dwNumberOfByteWritten;
 }
 
 
@@ -557,6 +598,7 @@ BOOL I2C_IOControl(DWORD hOpenContext, DWORD dwCode, PBYTE pBufIn,
                     ERRORMSG(1, (L"NumPackets out of range: 1 <= Number of packets <= %d", NUM_BUFFERS_IN_CHAIN));
                     return FALSE;
                 }
+
 
                 MarshalledBuffer_t Marshalled_pPackets(pXferBlock->pI2CPackets, 
                                                        pXferBlock->iNumPackets*sizeof(I2C_PACKET), 

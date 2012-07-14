@@ -416,12 +416,17 @@ VOID WINAPI NLedDriverPowerDown(BOOL power_down)
 //-----------------------------------------------------------------------------
 BOOL   LEDGpioSetIOMux()
 {
+#ifdef	EM9280
+	RETAILMSG(1, (TEXT("LEDGpioSetIOMux::NO Gpio pin allocated yet in EM9280\r\n")));
+#else	// -> iMX28EVK
     //if (g_dwBoardID == BOARDID_DEVBOARD)
     //{
     DDKIomuxSetPinMux(DDK_IOMUX_PWM0_0,DDK_IOMUX_MODE_GPIO);
     DDKGpioEnableDataPin(DDK_IOMUX_PWM0_0,1);
     DDKGpioWriteDataPin(DDK_IOMUX_PWM0_0, 1);
     //}
+#endif	//EM9280
+
     return TRUE;
 }
 
@@ -442,11 +447,17 @@ BOOL   LEDGpioSetIOMux()
 BOOL TurnOnLED(UINT32 u32Channel)
 {
     UNREFERENCED_PARAMETER(u32Channel);
+
+#ifdef	EM9280
+	RETAILMSG(1, (TEXT("TurnOnLED::NO Gpio pin allocated yet in EM9280\r\n")));
+#else	// -> iMX28EVK
     //if (g_dwBoardID == BOARDID_DEVBOARD)
     //{
     DDKGpioWriteDataPin(DDK_IOMUX_PWM0_0, 1);
     //}
-    return TRUE;
+#endif	//EM9280
+
+	return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -466,9 +477,15 @@ BOOL TurnOnLED(UINT32 u32Channel)
 BOOL TurnOffLED(UINT32 u32Channel)
 {
     UNREFERENCED_PARAMETER(u32Channel);
+
+#ifdef	EM9280
+	RETAILMSG(1, (TEXT("TurnOffLED::NO Gpio pin allocated yet in EM9280\r\n")));
+#else	// -> iMX28EVK
     //if (g_dwBoardID == BOARDID_DEVBOARD)
     //{
     DDKGpioWriteDataPin(DDK_IOMUX_PWM0_0, 0);
     //}
-    return TRUE;
+#endif	//EM9280
+
+	return TRUE;
 }

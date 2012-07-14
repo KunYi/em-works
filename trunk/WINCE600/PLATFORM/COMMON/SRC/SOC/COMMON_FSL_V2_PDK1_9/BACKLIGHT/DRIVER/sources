@@ -24,6 +24,3 @@ SOURCES=\
 
 FILE_VIEW_INCLUDES_FOLDER=\
     backlight.h
-FILE_VIEW_RESOURCE_FOLDER= \
-    backlight.def \
-

@@ -313,15 +313,19 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_AUART0_RX                =(0x60),
     DDK_IOMUX_I2C0_SCL_0               =(0x60),
     DDK_IOMUX_DUART_CTS                =(0x60),
+    DDK_IOMUX_GPIO3_0                  =(0x60),
     DDK_IOMUX_AUART0_TX                =(0x61),
     DDK_IOMUX_I2C0_SDA_0               =(0x61),
     DDK_IOMUX_DUART_RTS                =(0x61),
+    DDK_IOMUX_GPIO3_1                  =(0x61),
     DDK_IOMUX_AUART0_CTS               =(0x62),
     DDK_IOMUX_AUART4_RX_1              =(0x62),
     DDK_IOMUX_DUART_RX_0               =(0x62),
+    DDK_IOMUX_GPIO3_2                  =(0x62),
     DDK_IOMUX_AUART0_RTS               =(0x63),
     DDK_IOMUX_AUART4_TX_1              =(0x63),
     DDK_IOMUX_DUART_TX_0               =(0x63),
+    DDK_IOMUX_GPIO3_3                  =(0x63),
     DDK_IOMUX_AUART1_RX                =(0x64),
     DDK_IOMUX_SSP2_CARD_DETECT         =(0x64),
     DDK_IOMUX_PWM0_0                   =(0x64),
@@ -373,18 +377,23 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_PWM2                     =(0x72),
     DDK_IOMUX_USB0_ID_2                =(0x72),
     DDK_IOMUX_USB1_OVERCURRENT_1       =(0x72),
+    DDK_IOMUX_GPIO3_18                 =(0x72),
     DDK_IOMUX_SAIF0_MCLK               =(0x74),
     DDK_IOMUX_PWM3_0                   =(0x74),
     DDK_IOMUX_AUART4_CTS_1             =(0x74),
+    DDK_IOMUX_GPIO3_20                 =(0x74),
     DDK_IOMUX_SAIF0_LRCLK              =(0x75),
     DDK_IOMUX_PWM4_0                   =(0x75),
     DDK_IOMUX_AUART4_RTS_1             =(0x75),
+    DDK_IOMUX_GPIO3_21                 =(0x75),
     DDK_IOMUX_SAIF0_BITCLK             =(0x76),
     DDK_IOMUX_PWM5                     =(0x76),
     DDK_IOMUX_AUART4_RX_2              =(0x76),
+    DDK_IOMUX_GPIO3_22                 =(0x76),
     DDK_IOMUX_SAIF0_SDATA0             =(0x77),
     DDK_IOMUX_PWM6                     =(0x77),
     DDK_IOMUX_AUART4_TX_2              =(0x77),
+    DDK_IOMUX_GPIO3_23                 =(0x77),
     DDK_IOMUX_I2C0_SCL_1               =(0x78),
     DDK_IOMUX_TIMROT_ROTARYA_1         =(0x78),
     DDK_IOMUX_DUART_RX_2               =(0x78),
@@ -396,6 +405,7 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_SAIF1_SDATA0_1           =(0x7A),
     DDK_IOMUX_PWM7                     =(0x7A),
     DDK_IOMUX_SAIF0_SDATA1_1           =(0x7A),
+    DDK_IOMUX_GPIO3_26                 =(0x7A),
     DDK_IOMUX_SPDIF_TX                 =(0x7B),
     DDK_IOMUX_ENET1_RX_ER              =(0x7B),
     DDK_IOMUX_PWM3_1                   =(0x7C),
@@ -419,8 +429,10 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_ENET0_RXD0               =(0x83),
     DDK_IOMUX_GPMI_CE7N                =(0x83),
     DDK_IOMUX_SAIF1_SDATA2_1           =(0x83),
+    DDK_IOMUX_GPIO4_3	               =(0x83),
     DDK_IOMUX_ENET0_RXD1               =(0x84),
     DDK_IOMUX_GPMI_READY4              =(0x84),
+    DDK_IOMUX_GPIO4_4	               =(0x84),
     DDK_IOMUX_ENET0_TX_CLK             =(0x85),
     DDK_IOMUX_HSADC_TRIGGER_1          =(0x85),
     DDK_IOMUX_ENET0_1588_EVENT2_OUT_1  =(0x85),
@@ -428,8 +440,10 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_GPMI_READY5              =(0x86),
     DDK_IOMUX_ENET0_TXD0               =(0x87),
     DDK_IOMUX_GPMI_READY6              =(0x87),
+    DDK_IOMUX_GPIO4_7	               =(0x87),
     DDK_IOMUX_ENET0_TXD1               =(0x88),
     DDK_IOMUX_GPMI_READY7              =(0x88),
+    DDK_IOMUX_GPIO4_8	               =(0x88),
     DDK_IOMUX_ENET0_RXD2               =(0x89),
     DDK_IOMUX_ENET1_RXD0               =(0x89),
     DDK_IOMUX_ENET0_1588_EVENT0_OUT_1  =(0x89),
@@ -454,6 +468,7 @@ typedef enum _DDK_IOMUX_PIN
 
     // BANK 4 MUXSEL0(pins 16-31)
     DDK_IOMUX_CLKCTRL_ENET             =(0x90),
+    DDK_IOMUX_GPIO4_16				   =(0x90),
     DDK_IOMUX_JTAG_RTCK                =(0x94),
     DDK_IOMUX_GPIO4_20                 =(0x94),
     
@@ -515,7 +530,8 @@ typedef enum _DDK_IOMUX_PIN
     DDK_IOMUX_EMI_CKE                  =(0xD8),
 
     DDK_IOMUX_GPIO_MAX_ID              =(224),
-    DDK_IOMUX_GPIO_END_TABLE           =(255)
+	DDK_IOMUX_INVALID_PIN			   =(255),			// CS&ZHL MAY-19-2012: 
+    DDK_IOMUX_GPIO_END_TABLE           =(256),
 } DDK_IOMUX_PIN;
 
 //-----------------------------------------------------------------------------
@@ -602,6 +618,12 @@ BOOL DDKGpioReadDataPin(DDK_IOMUX_PIN pin, UINT32 *pData);
 BOOL DDKGpioReadIntrPin(DDK_IOMUX_PIN pin,UINT32 *pData);
 BOOL DDKGpioEnableDataPin(DDK_IOMUX_PIN pin,UINT32 Data);
 VOID DDKGpioClearIntrPin(DDK_IOMUX_PIN gpio_pin);
+//-------------------------------------------------------------
+// CS&ZHL MAY-17-2012: supporting GPIO interrupt
+//-------------------------------------------------------------
+VOID DDKGpioIntrruptEnable(DDK_IOMUX_PIN gpio_pin);
+VOID DDKGpioIntrruptDisable(DDK_IOMUX_PIN gpio_pin);
+// end of CS&ZHL MAY-17-2012: supporting GPIO interrupt
 
 //
 BOOL DDKIomuxSetPinMux(DDK_IOMUX_PIN pin, DDK_IOMUX_PIN_MUXMODE muxmode);

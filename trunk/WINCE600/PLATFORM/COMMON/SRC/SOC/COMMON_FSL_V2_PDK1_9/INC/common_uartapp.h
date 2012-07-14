@@ -34,9 +34,10 @@ extern "C" {
 #define REGS_UARTAPP1_BASE         (DWORD)pHWHead->pv_HWregUARTApp1
 #define REGS_UARTAPP2_BASE         (DWORD)pHWHead->pv_HWregUARTApp2
 #define REGS_UARTAPP3_BASE         (DWORD)pHWHead->pv_HWregUARTApp3
+#define REGS_UARTAPP4_BASE         (DWORD)pHWHead->pv_HWregUARTApp4
 
-#define REGS_UARTAPP_BASE(x) ( x == 0 ? REGS_UARTAPP0_BASE : x == 1 ? REGS_UARTAPP1_BASE : \
-                    x == 2 ? REGS_UARTAPP2_BASE :  x == 3 ? REGS_UARTAPP3_BASE : 0xffff0000)
+#define REGS_UARTAPP_BASE(x) ( x == 0 ? REGS_UARTAPP0_BASE : x == 1 ? REGS_UARTAPP1_BASE : x == 2 ? REGS_UARTAPP2_BASE : \
+							   x == 3 ? REGS_UARTAPP3_BASE : x == 4 ? REGS_UARTAPP4_BASE : 0xffff0000)
 #endif
 
 //------------------------------------------------------------------------------

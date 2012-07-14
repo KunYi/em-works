@@ -94,11 +94,15 @@ Notes:
 // it is important to include head files "*.h" as above oder! 
 #include "spi_com.h"
 #include "ser_ht45b0f.h"
-#include "em9280_oal_spi.h"
+#include "em9280_oal.h"
 
 #ifndef _PREFAST_
 #pragma warning(disable: 4068) // Disable pragma warnings
 #endif
+
+//! PWM_7 output frequency times 100
+#define COMCLK_OUTPUT_FREQ_TIMES_100		(1846154UL * 100UL)				// 24MHz / 13
+#define	COMCLK_OUTPUT_HIGH_PERCENT			46								// 46% -> (6 / 13)
 
 // Macros to read/write serial registers.
 //#define INB(pInfo, reg) (READ_PORT_UCHAR((UCHAR *)((pInfo)->reg)))
@@ -129,7 +133,7 @@ BYTE INB(PVOID pHead, DWORD dwRegIdx)
 		SpiInfo.dwStartAddr = HT45B0F_CMD_READ | dwRegIdx;
 	}
 
-	if (!KernelIoControl(IOCTL_HAL_GPIOSPI_ACCESS, 
+	if (!KernelIoControl(IOCTL_HAL_SPI_ACCESS, 
 						(PVOID)&SpiInfo, sizeof(SpiAccessInfo), 
 						NULL, 0, 
 						NULL))
@@ -159,7 +163,7 @@ void OUTB(PVOID pHead, DWORD dwRegIdx, BYTE uValue)
 		SpiInfo.dwStartAddr = HT45B0F_CMD_WRITE | dwRegIdx;
 	}
 
-	if (!KernelIoControl(IOCTL_HAL_GPIOSPI_ACCESS, 
+	if (!KernelIoControl(IOCTL_HAL_SPI_ACCESS, 
 						(PVOID)&SpiInfo, sizeof(SpiAccessInfo), 
 						NULL, 0, 
 						NULL))
@@ -274,32 +278,18 @@ ULONG LookUpBaudTableValue( ULONG Key, PLOOKUP_TBL pTbl, PULONG pErrorCode )
     return(0);
 }
 
-#define BAUD_TABLE_SIZE 23
+#define BAUD_TABLE_SIZE 9
 static const PAIRS LS_BaudPairs[BAUD_TABLE_SIZE] =    
 {
-    {50,        2307},
-    {75,        1538},
-    {110,       1049},
-    {135,        858},
-    {150,        769},
-    {300,        384},
-    {600,        192},
-    {1200,        96},
-    {1800,        64},
-    {2000,        58},
-    {2400,        48},
-    {3600,        32},
-    {4800,        24},
-    {7200,        16},
-    {9600,        12},
-    {12800,        9},
-    {14400,        8},
-    {19200,        6},
-    {23040,        5},
-    {28800,        4},
-    {38400,        3},
-    {57600,        2},
-    {115200,       1}
+    {1200,   0x009C},
+    {2400,   0x004E},
+    {4800,   0x019C},
+    {9600,   0x014E},
+    {14400,  0x0134},
+    {19200,  0x0127},
+    {28800,  0x011A},
+    {38400,  0x0114},			// error = +2.4%
+    {57600,  0x010D}
 };
 
 static const LOOKUP_TBL  LS_BaudTable = {BAUD_TABLE_SIZE, (PAIRS *) LS_BaudPairs};
@@ -378,14 +368,8 @@ VOID SL_Open( PVOID pHead )	 // @parm PVOID returned by HWinit.
 {
     PSER_INFO	pSerHead = (PSER_INFO)pHead;   
 
-    DEBUGMSG (ZONE_OPEN, (TEXT("+SL_Open 0x%X\r\n"), pHead));
-
-    // If the device is already open, all we do is increment count
-    if ( pSerHead->OpenCount++ ) 
-	{
-        DEBUGMSG (ZONE_OPEN, (TEXT("-SL_Open 0x%X (%d opens)\r\n"), pHead, pSerHead->OpenCount));
-        return;
-    }
+    //DEBUGMSG (ZONE_OPEN, (TEXT("+SL_Open 0x%X\r\n"), pHead));
+    //RETAILMSG(1, (TEXT("+SL_Open 0x%X\r\n"), pHead));
 
     pSerHead->DroppedBytes = 0;
     pSerHead->CTSFlowOff   = FALSE;  // Not flowed off yet
@@ -396,12 +380,15 @@ VOID SL_Open( PVOID pHead )	 // @parm PVOID returned by HWinit.
     EnterCriticalSection(&(pSerHead->RegCritSec));
 #pragma prefast(disable: 322, "Recover gracefully from hardware failure")
     try {
-        // Set default framing bits.
-		pSerHead->UartHt45.UCR1 = HT45B0F_UCR1_UART_EN | HT45B0F_UCR1_DATABIT_8 | HT45B0F_UCR1_PARITY_DIS | HT45B0F_UCR1_STOPBIT_1;
+		// enable GPIO interrupt
+		DDKGpioIntrruptEnable((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin);
+
+        // Set default framing bits: 8-N-1.
+		pSerHead->UartHt45.UCR1 = HT45B0F_UCR1_UARTEN | HT45B0F_UCR1_DATABIT_8 | HT45B0F_UCR1_PARITY_DIS | HT45B0F_UCR1_STOPBIT_1;
         OUTB(pSerHead, HT45B0F_REG_UCR1, pSerHead->UartHt45.UCR1);
 
 		// enable TX and RX
-		pSerHead->UartHt45.UCR2 = HT45B0F_UCR2_TX_EN | HT45B0F_UCR2_RX_EN | HT45B0F_UCR2_BAUD_DIV16;
+		pSerHead->UartHt45.UCR2 |= (HT45B0F_UCR2_TXEN | HT45B0F_UCR2_RXEN);
         OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
 
         // Get defaults from the DCB structure
@@ -420,6 +407,7 @@ VOID SL_Open( PVOID pHead )	 // @parm PVOID returned by HWinit.
         SL_PostInit( pHead );			// clear interrupt flag in UART hardware register
 
 		// enable interrupt
+        DEBUGMSG(ZONE_OPEN, (TEXT("SL_Open enable RX interrupt\r\n")));
 		pSerHead->UartHt45.UCR2 &= ~(HT45B0F_UCR2_TIDLE_INTEN | HT45B0F_UCR2_TXIF_INTEN);	//disable TX interrupt
 		pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_RX_INTEN;									//enable RX interrupt
         OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
@@ -438,7 +426,8 @@ VOID SL_Open( PVOID pHead )	 // @parm PVOID returned by HWinit.
 #pragma prefast(pop)
     LeaveCriticalSection(&(pSerHead->RegCritSec));
 
-	DEBUGMSG (ZONE_OPEN, (TEXT("-SL_Open::COM%d, IIR 0x%X\r\n"), pSerHead->dwDeviceArrayIndex, pHWHead->IIR));
+	//DEBUGMSG (ZONE_OPEN, (TEXT("-SL_Open::COM%d\r\n"), pSerHead->dwDeviceArrayIndex));
+	//RETAILMSG(1, (TEXT("-SL_Open::COM%d\r\n"), pSerHead->dwDeviceArrayIndex));
 }
 
 //
@@ -452,7 +441,8 @@ VOID SL_Close( PVOID pHead )			// @parm PVOID returned by HWinit.
     ULONG		uTries = 0;
 	UCHAR		ub1;
 
-    DEBUGMSG (ZONE_CLOSE, (TEXT("+SL_Close 0x%X\r\n"), pHead));
+    //DEBUGMSG(ZONE_CLOSE, (TEXT("+SL_Close 0x%X\r\n"), pHead));
+    //RETAILMSG(1, (TEXT("+SL_Close 0x%X\r\n"), pHead));
 
     if ( pSerHead->OpenCount )
         pSerHead->OpenCount--;
@@ -483,6 +473,9 @@ VOID SL_Close( PVOID pHead )			// @parm PVOID returned by HWinit.
 			Sleep(10);
 			ub1 = INB(pSerHead, HT45B0F_REG_USR) & HT45B0F_STATUS_IDLE;
 		}
+
+		// disable GPIO interrupt
+		DDKGpioIntrruptDisable((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin);
     }
     except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
             EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) 
@@ -492,7 +485,8 @@ VOID SL_Close( PVOID pHead )			// @parm PVOID returned by HWinit.
 #pragma prefast(pop)
     LeaveCriticalSection(&(pSerHead->RegCritSec));
 
-    DEBUGMSG (ZONE_CLOSE, (TEXT("-SL_Close 0x%X\r\n"), pHead));
+    //DEBUGMSG (ZONE_CLOSE, (TEXT("-SL_Close 0x%X\r\n"), pHead));
+    //RETAILMSG(1, (TEXT("-SL_Close 0x%X\r\n"), pHead));
 }
 
 //
@@ -510,12 +504,12 @@ SL4_Init(
        )
 {
     PSER_INFO	pSerHead = (PSER_INFO)pHead;
-	UCHAR		ub1;
+	UCHAR		ub1 = 0;
 
     UNREFERENCED_PARAMETER(pRegBase);
     UNREFERENCED_PARAMETER(RegStride);
 
-    DEBUGMSG (ZONE_CLOSE,(TEXT("+SL_INIT, 0x%X\r\n"), pHead));
+    DEBUGMSG (ZONE_CLOSE,(TEXT("+SL4_INIT, 0x%X\r\n"), pHead));
 
     // Store info for callback function
     pSerHead->EventCallback = EventCallback;
@@ -528,25 +522,50 @@ SL4_Init(
         pSerHead->pBaudTable = (LOOKUP_TBL *)&LS_BaudTable;
 
 	// issue a soft reset to the device
-    OUTB(pSerHead, HT45B0F_REG_UCR3, HT45B0F_UCR3_USRT);
+	OUTB(pSerHead, HT45B0F_REG_UCR3, HT45B0F_UCR3_USRT);
 	Sleep(1);
-    OUTB(pSerHead, HT45B0F_REG_UCR3, 0);
-	while(INB(pSerHead, HT45B0F_REG_UCR3) & HT45B0F_UCR3_USRT)
+	ub1 = 0;
+	while((INB(pSerHead, HT45B0F_REG_UCR3) & HT45B0F_UCR3_USRT) && (ub1 < 10))
 	{
-		RETAILMSG(1, (TEXT("+SL_INIT::wait soft-reset completed\r\n")));
+		RETAILMSG(1, (TEXT("SL_INIT::wait soft-reset completed\r\n")));
+		Sleep(1);
+		ub1++;
 	}
+	if(ub1 >= 10)
+	{
+		RETAILMSG(1, (TEXT("SL_INIT:: COM%d soft-reset failed\r\n"), pSerHead->dwDeviceArrayIndex));
+		return(FALSE);
+	}
+
+    // Init HT45 info
+	pSerHead->UartHt45.USR  = INB(pSerHead, HT45B0F_REG_USR);		// = HT45B0F_USR_RIDLE | HT45B0F_USR_TIDLE | HT45B0F_USR_TXIF;
+	pSerHead->UartHt45.UCR1 = 0;
+	pSerHead->UartHt45.UCR2 = HT45B0F_UCR2_BRGH;					// high speed mode: BR = 12MHz / (16 * (BRG + 1))
+	pSerHead->UartHt45.BRG  = 78 - 1;								// default settings => 9600bps
+	pSerHead->UartHt45.UCR3 = 0;
+
 
 	// write default value to registers
     OUTB(pSerHead, HT45B0F_REG_UCR1, pSerHead->UartHt45.UCR1);
+	////debug only
+	//ub1 = INB(pSerHead, HT45B0F_REG_UCR1);
+	//RETAILMSG(1, (TEXT("SL_INIT::WR_UCR1[0x%02x], RD_UCR1[0x%02x]\r\n"), pSerHead->UartHt45.UCR1, ub1));
+
     OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
+	////debug only
+	//ub1 = INB(pSerHead, HT45B0F_REG_UCR2);
+	//RETAILMSG(1, (TEXT("SL_INIT::WR_UCR2[0x%02x], RD_UCR2[0x%02x]\r\n"), pSerHead->UartHt45.UCR2, ub1));
+
     OUTB(pSerHead, HT45B0F_REG_BRG, pSerHead->UartHt45.BRG);
 	// read back value of BRG
 	ub1 = INB(pSerHead, HT45B0F_REG_BRG);
 	if(ub1 != pSerHead->UartHt45.BRG)
 	{
-		RETAILMSG(1, (TEXT("SL_INIT::BRG(0x%02x) != default value 0x%02x\r\n"), ub1, pSerHead->UartHt45.BRG));
+		RETAILMSG(1, (TEXT("SL_INIT::Read BRG[0x%02x] != Write BRG[0x%02x]\r\n"), ub1, pSerHead->UartHt45.BRG));
 		return(FALSE);
 	}
+	//debug only
+	//RETAILMSG(1, (TEXT("SL_INIT::WR_BRG[0x%02x], RD_BRG[0x%02x]\r\n"), pSerHead->UartHt45.BRG, ub1));
 
     pSerHead->FlushDone = CreateEvent(0, FALSE, FALSE, NULL);
     pSerHead->OpenCount = 0;
@@ -568,16 +587,17 @@ SL4_Init(
 		DDK_GPIO_CFG	intrCfg;
 
         DDKIomuxSetPinMux((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin, DDK_IOMUX_MODE_GPIO);
+		DDKGpioEnableDataPin((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin, 0);		// output disable
         DDKIomuxSetPadConfig((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin, 
-                             DDK_IOMUX_PAD_DRIVE_4MA, 
+                             DDK_IOMUX_PAD_DRIVE_8MA, 
                              DDK_IOMUX_PAD_PULL_ENABLE,
                              DDK_IOMUX_PAD_VOLTAGE_3V3);  
 
 		// config GPIO interrupt c
 		intrCfg.DDK_PIN_IO           = DDK_GPIO_INPUT;
 		intrCfg.DDK_PIN_IRQ_CAPABLE  = DDK_GPIO_IRQ_CAPABLE;
-		intrCfg.DDK_PIN_IRQ_ENABLE   = DDK_GPIO_IRQ_ENABLED;
-		intrCfg.DDK_PIN_IRQ_LEVEL    = DDK_GPIO_IRQ_EDGE;
+		intrCfg.DDK_PIN_IRQ_ENABLE   = DDK_GPIO_IRQ_DISABLED;				// DDK_GPIO_IRQ_ENABLED;
+		intrCfg.DDK_PIN_IRQ_LEVEL    = DDK_GPIO_IRQ_EDGE;					// DDK_GPIO_IRQ_LEVEL;
 		intrCfg.DDK_PIN_IRQ_POLARITY = DDK_GPIO_IRQ_POLARITY_LO;			// interrupt trigger on falling edge
 		if(!DDKGpioConfig((DDK_IOMUX_PIN)pSerHead->dwIrqGpioPin, intrCfg))
 		{
@@ -600,16 +620,18 @@ SL4_Init(
 BOOL SL_PostInit( PVOID pHead )			// @parm PVOID returned by HWinit.
 {
     DEBUGMSG (ZONE_INIT,(TEXT("+SL_PostInit, 0x%X\r\n"), pHead));
+    //RETAILMSG (1, (TEXT("+SL_PostInit, 0x%X\r\n"), pHead));
     
     // Since we are just a library which might get used for 
     // builtin ports which init at boot, or by PCMCIA ports
-    // which init at Open, we can't do anything too fancy.
+    // which init at (, we can't do anything too fancy.
     // Lets just make sure we cancel any pending interrupts so
     // that if we are being used with an edge triggered PIC, he
     // will see an edge after the MDD hooks the interrupt.
     ExClearPendingInts( pHead );
     
     DEBUGMSG (ZONE_INIT,(TEXT("-SL_PostInit, 0x%X\r\n"), pHead));
+    //RETAILMSG (1, (TEXT("-SL_PostInit, 0x%X\r\n"), pHead));
     return(TRUE);
 }
 
@@ -665,8 +687,13 @@ VOID SL_SetDTR( PVOID pHead )			// @parm PVOID returned by HWinit.
 // 
 VOID SL_ClearRTS( PVOID pHead )			// @parm PVOID returned by HWinit.
 {
-    UNREFERENCED_PARAMETER(pHead);
-	// nothing to do
+    PSER_INFO   pSerHead = (PSER_INFO)pHead;
+
+	// CS&ZHL JUN-14-2012: setup RTS if(fRtsControl == RTS_CONTROL_TOGGLE)
+	if((pSerHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE) && (pSerHead->dwRtsGpioPin != DDK_IOMUX_INVALID_PIN))
+	{
+		DDKGpioWriteDataPin((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, 1);		// DOUT -> High, active low
+	}
 }
 
 //
@@ -677,8 +704,13 @@ VOID SL_ClearRTS( PVOID pHead )			// @parm PVOID returned by HWinit.
 //
 VOID SL_SetRTS( PVOID pHead )			// @parm PVOID returned by HWinit.
 {
-    UNREFERENCED_PARAMETER(pHead);
-	// nothing to do
+    PSER_INFO   pSerHead = (PSER_INFO)pHead;
+
+	// CS&ZHL JUN-14-2012: setup RTS if(fRtsControl == RTS_CONTROL_TOGGLE)
+	if((pSerHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE) && (pSerHead->dwRtsGpioPin != DDK_IOMUX_INVALID_PIN))
+	{
+		DDKGpioWriteDataPin((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, 0);		// DOUT -> Low, active low
+	}
 }
 
 //
@@ -756,11 +788,20 @@ BOOL SetUARTBaudRate( PVOID pHead, ULONG BaudRate )
 
     if ( divisor ) 
 	{
-       InterruptMask(pSerHead->dwSysIntr, TRUE);
-       pSerHead->UartHt45.BRG = (BYTE)divisor;
-       OUTB(pSerHead, HT45B0F_REG_BRG, pSerHead->UartHt45.BRG);
-       InterruptMask(pSerHead->dwSysIntr, FALSE);
-       return( TRUE );
+		pSerHead->UartHt45.BRG = (BYTE)((divisor & 0xFF) - 1);
+		if((divisor >> 8) & 0xFF)
+		{
+			pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_BRGH;
+		}
+		else
+		{
+			pSerHead->UartHt45.UCR2 &= ~HT45B0F_UCR2_BRGH;
+		}
+		InterruptMask(pSerHead->dwSysIntr, TRUE);
+		OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
+		OUTB(pSerHead, HT45B0F_REG_BRG, pSerHead->UartHt45.BRG);
+		InterruptMask(pSerHead->dwSysIntr, FALSE);
+		return( TRUE );
     } 
 	else 
         return( FALSE );
@@ -888,14 +929,14 @@ BOOL SL_SetParity( PVOID pHead, ULONG Parity )
 
         case MARKPARITY:
 			// markparity => 9-bit with TX8 = 1
-			pSerHead->UartHt45.UCR1 &= ~(HT45B0F_UCR1_PARITY_EN | HT45B0F_UCR1_DATABIT_MASK | HT45B0F_UCR1_TX8_MASK);
-			pSerHead->UartHt45.UCR1 |= (HT45B0F_UCR1_DATABIT_9 | HT45B0F_UCR1_TX8_1);
+			pSerHead->UartHt45.UCR1 &= ~(HT45B0F_UCR1_PARITY_EN | HT45B0F_UCR1_DATABIT_MASK | HT45B0F_UCR1_TX8);
+			pSerHead->UartHt45.UCR1 |= (HT45B0F_UCR1_DATABIT_9 | HT45B0F_UCR1_TX8);
             break;
 
         case SPACEPARITY:
 			// spaceparity => 9-bit with TX8 = 0
-			pSerHead->UartHt45.UCR1 &= ~(HT45B0F_UCR1_PARITY_EN | HT45B0F_UCR1_DATABIT_MASK | HT45B0F_UCR1_TX8_MASK);
-			pSerHead->UartHt45.UCR1 |= (HT45B0F_UCR1_DATABIT_9 | HT45B0F_UCR1_TX8_0);
+			pSerHead->UartHt45.UCR1 &= ~(HT45B0F_UCR1_PARITY_EN | HT45B0F_UCR1_DATABIT_MASK | HT45B0F_UCR1_TX8);
+			pSerHead->UartHt45.UCR1 |= (HT45B0F_UCR1_DATABIT_9);
             break;
 
         case NOPARITY:
@@ -1025,6 +1066,7 @@ INTERRUPT_TYPE SL_GetInterruptType( PVOID pHead )			// Pointer to hardware head
 
     DEBUGMSG (0, (TEXT("+SL_GetInterruptType 0x%X\r\n"), pHead));
 	uIrqFlags = pSerHead->UartHt45.UCR2 & (HT45B0F_UCR2_RX_INTEN | HT45B0F_UCR2_TIDLE_INTEN | HT45B0F_UCR2_TXIF_INTEN);
+    //RETAILMSG (1, (TEXT("SL_GetInterruptType IrqFlag = 0x%X\r\n"), uIrqFlags));
 
 	try {
         pSerHead->UartHt45.USR = INB(pSerHead, HT45B0F_REG_USR);
@@ -1034,9 +1076,9 @@ INTERRUPT_TYPE SL_GetInterruptType( PVOID pHead )			// Pointer to hardware head
 	{
         pSerHead->UartHt45.USR &= ~uIrqFlags;	// simulate no interrupt
     }
-    DEBUGMSG (ZONE_THREAD, (TEXT("+SL_GetInterruptType IIR=%x\r\n"),pHWHead->IIR ));
+    //RETAILMSG(1, (TEXT("SL_GetInterruptType USR=0x%x\r\n"), pSerHead->UartHt45.USR));
 
-    if ( pSerHead->UartHt45.USR & uIrqFlags ) 
+    if ( !(pSerHead->UartHt45.USR & uIrqFlags) ) 
 	{
         // No interrupts pending, vector is useless
         interrupts = INTR_NONE;
@@ -1051,13 +1093,14 @@ INTERRUPT_TYPE SL_GetInterruptType( PVOID pHead )			// Pointer to hardware head
             interrupts |= INTR_RX;
 		}
 
-		if(pSerHead->UartHt45.USR & (HT45B0F_USR_PERR | HT45B0F_USR_FERR | HT45B0F_USR_TXIF))
+		if(pSerHead->UartHt45.USR & (HT45B0F_USR_PERR | HT45B0F_USR_FERR | HT45B0F_USR_OERR))
 		{	// some error encounted
             interrupts |= INTR_LINE;
 		}
 
-		if(pSerHead->UartHt45.USR & (HT45B0F_USR_TIDLE | HT45B0F_USR_OERR))
+		if(pSerHead->UartHt45.USR & (HT45B0F_USR_TIDLE | HT45B0F_USR_TXIF))
 		{	// THR empty
+			//RETAILMSG(1, (TEXT("SL_GetInterruptType INTR_TX found\r\n")));
             interrupts |= INTR_TX;
 		}
     }
@@ -1183,12 +1226,60 @@ VOID SL_TxIntrEx( PVOID pHead, PUCHAR pTxBuffer, ULONG *pBufflen )
     ULONG		NumberOfBytes = *pBufflen;
 
     DEBUGMSG (ZONE_THREAD, (TEXT("Transmit Event\r\n")));
-    DEBUGMSG (ZONE_WRITE, (TEXT("+SL_TxIntrEx 0x%X, Len %d\r\n"), pHead, *pBufflen));
+    //DEBUGMSG (ZONE_WRITE, (TEXT("+SL_TxIntrEx 0x%X, Len %d\r\n"), pHead, *pBufflen));
+    //RETAILMSG (1, (TEXT("+SL_TxIntrEx 0x%X, Len %d\r\n"), pHead, *pBufflen));
 
     // We may be done sending.  If so, just disable the TX interrupts and return to the MDD.  
     if( ! *pBufflen ) 
 	{
         DEBUGMSG (ZONE_WRITE, (TEXT("SL_TxIntrEx: Disable INTR_TX.\r\n")));
+		//
+		// CS&ZHL JUN-14-2012: clear RTS if(fRtsControl == RTS_CONTROL_TOGGLE)
+		//
+		if((pSerHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE) && (pSerHead->dwRtsGpioPin != DDK_IOMUX_INVALID_PIN))
+		{
+			DWORD	dwDelayMilliseconds;
+			DWORD	dwCount;
+			DWORD	dwBitSize;
+			
+			// CS&ZHL APR-24-2012: compute the number of bits for each data
+			dwBitSize = 1 + pSerHead->dcb.ByteSize;		// "1" -> start bit
+			if(pSerHead->dcb.Parity != NOPARITY)
+			{
+				dwBitSize++;							// add parity bit
+			}
+
+			if(pSerHead->dcb.StopBits == ONESTOPBIT)
+			{
+				dwBitSize++;							// add 1 stop bit
+			}
+			else
+			{
+				dwBitSize += 2;							// add 2 stop bits
+			}
+
+			// CS&ZHL APR-24-2012: compute milliseconds need to delay
+			dwDelayMilliseconds = (dwBitSize * 1000) / pSerHead->dcb.BaudRate;
+			if(dwDelayMilliseconds > 2)
+			{
+				Sleep(dwDelayMilliseconds - 2);
+			}
+
+			// CS&ZHL APR-24-2012: use polling to switch clear RTS immediately after data transmit completed
+			dwCount = GetTickCount(); 
+			while((GetTickCount() - dwCount) <= 10)		// timeout check
+			{
+				pSerHead->UartHt45.USR = INB(pSerHead, HT45B0F_REG_USR);
+				// on both Tx FIFO is empty & the last byte is transmitted
+				if((pSerHead->UartHt45.USR & (HT45B0F_USR_TXIF | HT45B0F_USR_TIDLE)) == (HT45B0F_USR_TXIF | HT45B0F_USR_TIDLE))
+				{
+					break;
+				}
+			} 
+
+			DDKGpioWriteDataPin((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, 1);		// DOUT -> High, active low
+		}
+
 		pSerHead->UartHt45.UCR2 &= ~(HT45B0F_UCR2_TIDLE_INTEN | HT45B0F_UCR2_TXIF_INTEN);	//disable TX interrupt
         OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
         return;
@@ -1266,7 +1357,7 @@ VOID SL_TxIntrEx( PVOID pHead, PUCHAR pTxBuffer, ULONG *pBufflen )
     LeaveCriticalSection(&(pSerHead->TransmitCritSec));
 
     DEBUGMSG (ZONE_WRITE, (TEXT("SL_TxIntrEx released CritSec %x.\r\n"), &(pSerHead->TransmitCritSec)));
-    DEBUGMSG (ZONE_WRITE, (TEXT("-SL_TxIntrEx - sent %d.\r\n"), *pBufflen));
+    //DEBUGMSG (ZONE_WRITE, (TEXT("-SL_TxIntrEx - sent %d.\r\n"), *pBufflen));
     //RETAILMSG (1, (TEXT("-SL_TxIntrEx - sent %d.\r\n"), *pBufflen));
     return;
 }
@@ -1479,20 +1570,20 @@ VOID SL_PurgeComm( PVOID pHead, DWORD fdwAction )
 		{
             // Write the TX reset bit.  It is self clearing
             //OUTB(pHWHead, pIIR_FCR, pHWHead->FCR | SERIAL_FCR_TXMT_RESET);
-			pSerHead->UartHt45.UCR2 &= ~HT45B0F_UCR2_TX_EN;									//TX machine disable which clear TX buffer, abort transmission
+			pSerHead->UartHt45.UCR2 &= ~HT45B0F_UCR2_TXEN;									//TX machine disable which clear TX buffer, abort transmission
 			OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
 			Sleep(0);
-			pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_TX_EN;									//TX machine enable again
+			pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_TXEN;									//TX machine enable again
 			OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
         }
 
         if ( fdwAction & PURGE_RXCLEAR ) {
             // Write the RX reset bit.  It is self clearing
             //OUTB(pHWHead, pIIR_FCR, pHWHead->FCR | SERIAL_FCR_RCVR_RESET);
-			pSerHead->UartHt45.UCR2 &= ~HT45B0F_UCR2_RX_EN;									//RX machine disable which clear RX buffer, abort transmission
+			pSerHead->UartHt45.UCR2 &= ~HT45B0F_UCR2_RXEN;									//RX machine disable which clear RX buffer, abort transmission
 			OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
 			Sleep(0);
-			pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_RX_EN;									//RX machine enable again
+			pSerHead->UartHt45.UCR2 |= HT45B0F_UCR2_RXEN;									//RX machine enable again
 			OUTB(pSerHead, HT45B0F_REG_UCR2, pSerHead->UartHt45.UCR2);
         }
     }
@@ -1646,6 +1737,14 @@ BOOL SL_SetDCB( PVOID pHead, LPDCB lpDCB )
 	{
 		//pSerHead->dcb = *lpDCB;		// Now that we have done the right thing, store this DCB
 		memcpy(&pSerHead->dcb, lpDCB, sizeof(DCB));
+
+		// CS&ZHL JUN-14-2012: setup RTS if(fRtsControl == RTS_CONTROL_TOGGLE)
+		if((pSerHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE) && (pSerHead->dwRtsGpioPin != DDK_IOMUX_INVALID_PIN))
+		{
+			DDKIomuxSetPinMux((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, DDK_IOMUX_MODE_GPIO);	// config as GPIO
+			DDKGpioWriteDataPin((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, 1);					// DOUT -> High
+			DDKGpioEnableDataPin((DDK_IOMUX_PIN)pSerHead->dwRtsGpioPin, 1);					// output enable
+		}
 	}
 
     DEBUGMSG (ZONE_FUNCTION, (TEXT("-SL_SetDCB 0x%X\r\n"), pHead));
@@ -1718,6 +1817,93 @@ BOOL SL_Ioctl(PVOID pHead, DWORD dwCode,PBYTE pBufIn,DWORD dwLenIn,
 
 	switch (dwCode) 
 	{
+	// CS&ZHL JUN-14-2012: support GPIO as RTS direction-control if(dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+	case IOCTL_SET_UART_RTS_PIN:
+		{
+			PSER_INFO	pSerHead = (PSER_INFO)pHead;
+			DWORD		dwEM9280_GPIO;
+
+			if(!pBufIn || (dwLenIn != sizeof(DWORD)))
+			{
+				RETAILMSG(1, (TEXT("SL_Ioctl::IOCTL_SET_UART_RTS_PIN: inavlid parameters\r\n")));
+				RetVal = FALSE;
+				break;
+			}
+
+			dwEM9280_GPIO = *((DWORD*)pBufIn);
+			switch(dwEM9280_GPIO)
+			{
+			case GPIO6:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_22;
+				break;
+
+			case GPIO7:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_23;
+				break;
+
+			case GPIO20:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_28;
+				break;
+
+			case GPIO21:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_29;
+				break;
+
+			case GPIO22:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_25;
+				break;
+
+			case GPIO23:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_24;
+				break;
+
+			case GPIO24:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_3;
+				break;
+
+			case GPIO25:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_20;
+				break;
+
+			case GPIO26:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO3_30;
+				break;
+
+			case GPIO27:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO4_20;
+				break;
+
+			case GPIO28:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_4;
+				break;
+
+			case GPIO29:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_6;
+				break;
+
+			case GPIO30:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_7;
+				break;
+
+			case GPIO31:
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_GPIO2_5;
+				break;
+
+			default:
+				RETAILMSG(1, (TEXT("SL_Ioctl::IOCTL_SET_UART_RTS_PIN: GPIO% is NOT supported as RTS!\r\n"), 
+						(31 - _CountLeadingZeros(dwEM9280_GPIO))));
+				pSerHead->dwRtsGpioPin = DDK_IOMUX_INVALID_PIN;
+				RetVal = FALSE;
+			}
+
+			if(RetVal)
+			{
+				RETAILMSG(1, (TEXT("SL_Ioctl: GPIO% is used as RTS of COM%\r\n"), 
+						(31 - _CountLeadingZeros(dwEM9280_GPIO)), pSerHead->dwDeviceArrayIndex));
+			}
+		}
+		break;
+
     // Currently, no defined IOCTLs
     default:
         RetVal = FALSE;

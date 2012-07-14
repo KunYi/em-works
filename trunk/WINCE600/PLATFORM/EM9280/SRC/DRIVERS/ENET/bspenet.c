@@ -185,12 +185,19 @@ BOOL BSPENETIomuxConfig(DWORD index,BOOL bEnable )
 //------------------------------------------------------------------------------
 void BSPPhyReset()
 {
-    DDKIomuxSetPinMux(DDK_IOMUX_ENET0_RX_CLK, DDK_IOMUX_MODE_GPIO);
+#ifdef	EM9280
+    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17, DDK_IOMUX_MODE_GPIO);			// GPIO1_17
+    DDKGpioEnableDataPin(DDK_IOMUX_LCD_D17, 1);
+    DDKGpioWriteDataPin(DDK_IOMUX_LCD_D17, 0);
+    Sleep(200);
+    DDKGpioWriteDataPin(DDK_IOMUX_LCD_D17, 1);
+#else	// -> EM9280
+    DDKIomuxSetPinMux(DDK_IOMUX_ENET0_RX_CLK, DDK_IOMUX_MODE_GPIO);		// GPIO4_13
     DDKGpioEnableDataPin(DDK_IOMUX_ENET0_RX_CLK, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 0);
     Sleep(200);
     DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 1);
-
+#endif	//EM9280
 }
 
 //------------------------------------------------------------------------------
@@ -206,9 +213,15 @@ void BSPPhyReset()
 //------------------------------------------------------------------------------
 void BSPPhyEnable(BOOL bEnable)
 {      
+#ifdef	EM9280
+    UNREFERENCED_PARAMETER(bEnable);
+	//
+	// there is no power control for PHY in EM9280
+	//
+#else	// -> EM9280
     if(bEnable)
     {
-        DDKIomuxSetPinMux(DDK_IOMUX_SSP1_D3_1, DDK_IOMUX_MODE_GPIO);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP1_D3_1, DDK_IOMUX_MODE_GPIO);	// GPIO2_15
         DDKGpioEnableDataPin(DDK_IOMUX_SSP1_D3_1, 1);
         // Disable transeiver by default
         DDKGpioWriteDataPin(DDK_IOMUX_SSP1_D3_1, 0);
@@ -220,6 +233,7 @@ void BSPPhyEnable(BOOL bEnable)
         DDKGpioEnableDataPin(DDK_IOMUX_SSP1_D3_1, 1);
         DDKGpioWriteDataPin(DDK_IOMUX_SSP1_D3_1, 1);
     }
+#endif	//EM9280
     
     BSPPhyReset();
 }
@@ -244,14 +258,24 @@ void BSPENETPowerEnable(DWORD index,BOOL bEnable)
     if(index==MAC1)
         return;
     
+#ifdef	EM9280
+	// there is no power control for PHY in EM9280
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17, DDK_IOMUX_MODE_GPIO);			// GPIO1_17
+	DDKGpioEnableDataPin(DDK_IOMUX_LCD_D17, 1);
+#else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_SSP1_D3_1, DDK_IOMUX_MODE_GPIO);
     DDKGpioEnableDataPin(DDK_IOMUX_SSP1_D3_1, 1);
+#endif	//EM9280
     
     if(bEnable)
-        {
-      
+    {
+#ifdef	EM9280
+		//set PHY_RESET_B to high
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D17, 1);
+#else	// -> iMX28EVK      
         DDKGpioWriteDataPin(DDK_IOMUX_SSP1_D3_1, 0);
         DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 1);
+#endif	//EM9280
 
         DDKIomuxSetPinMux(DDK_IOMUX_CLKCTRL_ENET, DDK_IOMUX_MODE_00);
         DDKIomuxSetPadConfig(DDK_IOMUX_CLKCTRL_ENET, 
@@ -307,13 +331,16 @@ void BSPENETPowerEnable(DWORD index,BOOL bEnable)
                      DDK_IOMUX_PAD_PULL_ENABLE,
                      DDK_IOMUX_PAD_VOLTAGE_3V3);
         
-        }
+    }
     else
-        {
-
-        
+    {
+#ifdef	EM9280
+		//set PHY_RESET_B to low -> reset PHY
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D17, 0);
+#else	// -> iMX28EVK      
         DDKGpioWriteDataPin(DDK_IOMUX_SSP1_D3_1, 1);
         DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 0);
+#endif	//EM9280
         
         DDKIomuxSetPinMux(DDK_IOMUX_ENET0_TX_CLK, DDK_IOMUX_MODE_GPIO);
         DDKGpioEnableDataPin(DDK_IOMUX_ENET0_TX_CLK, 1);
@@ -357,9 +384,7 @@ void BSPENETPowerEnable(DWORD index,BOOL bEnable)
         DDKIomuxSetPinMux(DDK_IOMUX_ENET1_TXD1, DDK_IOMUX_MODE_GPIO);
         DDKGpioEnableDataPin(DDK_IOMUX_ENET1_TXD1, 1);
         DDKGpioWriteDataPin(DDK_IOMUX_ENET1_TXD1, 0);
-
-        
-        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -548,7 +573,7 @@ BOOL BSPFECMacAddress(unsigned char FecMacAddress[6])
 	FecMacAddress[0] = 0xD0;
 	FecMacAddress[1] = 0x9B;
 	FecMacAddress[2] = 0x05;
-#endif	//EM9170
+#endif	//EM9280
 
 	RETAILMSG(1, (TEXT("BSPFECMacAddress: %02x-%02x-%02x-%02x-%02x-%02x\r\n"),
 		FecMacAddress[0], FecMacAddress[1], FecMacAddress[2],

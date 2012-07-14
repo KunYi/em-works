@@ -29,11 +29,15 @@
 #define UCE_QUERY_STORE_STATUS             7
 #define UCE_STORE_READY                    8
 #define UCE_OTP_PROGRAM                     9
+//CS&ZHL JUN01-2012: add for check device mac
+#define UCE_GET_DEVICE_MAC                 10
+
 
 typedef enum {
     Firmware = 0,
     UserFile,
-    RawData
+    RawData,
+	SecurityFile                         /* CS&ZHL MAY09-2012: add filetype for get security info */
 }UceFileType;
 
 

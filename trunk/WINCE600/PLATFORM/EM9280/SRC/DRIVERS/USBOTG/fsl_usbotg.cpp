@@ -172,12 +172,20 @@ BOOL CSTMPOTG::PostInit()
     // Step 2. Enable OTG Interrupt.
 
     // Configure GPIO ID Pin
-    DDKIomuxSetPinMux(DDK_IOMUX_USB0_ID_1, DDK_IOMUX_MODE_01);
+#ifdef	EM9280
+    DDKIomuxSetPinMux(DDK_IOMUX_USB0_ID_2, DDK_IOMUX_MODE_01);		// -> GPIO3_18
+    DDKIomuxSetPadConfig(DDK_IOMUX_USB0_ID_2,
+                         DDK_IOMUX_PAD_DRIVE_8MA,
+                         DDK_IOMUX_PAD_PULL_ENABLE,
+                         DDK_IOMUX_PAD_VOLTAGE_3V3);
+#else	// -> iMX28EVK
+    DDKIomuxSetPinMux(DDK_IOMUX_USB0_ID_1, DDK_IOMUX_MODE_01);		// -> GPIO3_7
     DDKIomuxSetPadConfig(DDK_IOMUX_USB0_ID_1,
                          DDK_IOMUX_PAD_DRIVE_8MA,
                          DDK_IOMUX_PAD_PULL_ENABLE,
                          DDK_IOMUX_PAD_VOLTAGE_3V3);
     //DDKIomuxEnablePullup(DDK_IOMUX_USB_OTG_ID, FALSE);
+#endif	//EM9280
 
     // Enable IDIE
     USB_OTGSC_T otgsc;
@@ -346,9 +354,11 @@ BOOL CSTMPOTG::NewStateAction(USBOTG_STATES usbOtgState, USBOTG_OUTPUT usbOtgOut
             m_bHostDriverRunning = FALSE;
             LoadUnloadHCD(FALSE);
             OUTREG32(&(m_pUsbReg->OTG.USBINTR), 0); //disable all interrupt
+			// CS&ZHL JUN-8-2012: delay for a while
+			Sleep(100);
         }
 
-        Sleep(2000);
+        //Sleep(2000);
 
         if (!m_bDevDriverRunning)
         {
@@ -367,9 +377,11 @@ BOOL CSTMPOTG::NewStateAction(USBOTG_STATES usbOtgState, USBOTG_OUTPUT usbOtgOut
             m_bDevDriverRunning = FALSE;
             LoadUnloadUSBFN(FALSE);
             OUTREG32(&(m_pUsbReg->OTG.USBINTR), 0); //disable all interrupt
+			// CS&ZHL JUN-8-2012: delay for a while
+			Sleep(100);
         }
 
-        Sleep(2000);
+        //Sleep(2000);
 
         if (!m_bHostDriverRunning)
         {

@@ -118,6 +118,8 @@ public:
     spiClass();
     ~spiClass(void);
     BOOL SpiInitialize(DWORD Index);
+
+	void SpiSetCSIndex(DWORD dwCSIndex) { m_dwCSIndex = dwCSIndex; }
     void SpiRelease(void);
 //#ifdef POLLING_MODE
     BOOL SpiEnqueue(PSPI_XCH_PKT_T pXchPkt);
@@ -136,6 +138,15 @@ public:
     
     BOOL m_bUsePolling;
     CEDEVICE_POWER_STATE m_dxCurrent;
+
+	// zxw 2012-06-11
+	UINT m_Index;   
+
+	//zxw 2012-6-27
+	DWORD MasterRead(BOOL Lock_CS, PBYTE pBuf, DWORD dwLength , BYTE BitCount);
+	DWORD MasterWrite(BOOL Lock_CS, PBYTE pBuf, DWORD dwLength , BYTE BitCount);
+	//-----------------------------------------------------------------------------
+
 private:
     LIST_ENTRY m_ListHead;
     CRITICAL_SECTION m_spiCs;
@@ -146,11 +157,15 @@ private:
     HANDLE m_hThread;
     HANDLE m_hHeap;
     BOOL m_bTerminate;
-    UINT m_Index;
+    //UINT m_Index;
     BOOL m_bUseLoopBack;
     BOOL m_bAllowPolling;
     UINT32 m_nondmaTransferCount;
     BOOL m_bUseDMA;
+	
+	//CS&ZHL MAY-15-2012: for SSP0 testing
+	DWORD	m_dwCSIndex;
+
 private:
 //#ifdef POLLING_MODE
     static DWORD WINAPI SpiProcessQueue(LPVOID lpParameter);

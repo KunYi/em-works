@@ -202,15 +202,16 @@ I2CClass::I2CClass(UINT32 index)
 
     DEBUGMSG(ZONE_INIT, (TEXT("I2CClass::I2CClass:InitializeCriticalSection(): Creating I2C_IOControl Critical Section! \r\n")));
 
-    // Configure IOMUX for I2C pins
-    {
-        if (!BSPI2CIOMUXConfig(m_index))
-        {
-            DEBUGMSG(ZONE_ERROR, 
-                (TEXT("%s: Error configuring IOMUX for I2C.\r\n"), __WFUNCTION__));
-            return;
-        }
-    }
+	// CS&ZHL MAY-21-2012: move pin-config to open()
+    //// Configure IOMUX for I2C pins
+    //{
+    //    if (!BSPI2CIOMUXConfig(m_index))
+    //    {
+    //        DEBUGMSG(ZONE_ERROR, 
+    //            (TEXT("%s: Error configuring IOMUX for I2C.\r\n"), __WFUNCTION__));
+    //        return;
+    //    }
+    //}
 
     DEBUGMSG(ZONE_INIT, (TEXT("I2CClass::I2CClass:InitializeCriticalSection(): Creating I2C Bus Critical Section! \r\n")));
 
@@ -420,6 +421,14 @@ I2CClass::~I2CClass(void)
     DEBUGMSG(ZONE_DEINIT, (TEXT("I2CClass::~I2CClass -\r\n")));
 }
 
+//
+// CS&ZHL MAY-21-2012: move Pin config into open
+//
+BOOL  I2CClass::PinConfig(void)
+{
+	return BSPI2CIOMUXConfig(m_index);
+}
+
 //-----------------------------------------------------------------------------
 //
 // Function: I2CClass::Reset
@@ -510,6 +519,7 @@ BOOL I2CClass::ProcessPackets(I2C_PACKET packets[], DWORD numPackets)
         
         goto __exit;
      }
+
 
     bInUse = TRUE;
 
@@ -609,7 +619,7 @@ BOOL I2CClass::ProcessPackets(I2C_PACKET packets[], DWORD numPackets)
         }
 
         *(packets[i].lpiResult) = I2C_NO_ERROR;
-
+		
     }
 
     if(!DDKApbxDmaInitChan(m_index == 0 ? APBX_CHANNEL_I2C0 : APBX_CHANNEL_I2C1, TRUE))
@@ -782,3 +792,118 @@ BOOL I2CClass::DisableSlave(void)
 
 }
 
+//-----------------------------------------------------------------------------
+// CS&ZHL JUN-14-2012: support simple I2C Read/Write in master mode
+//
+// input: 
+//          uHwAddr: 7-bit slave hardware address + 1-bit R/W flag in D0(LSB)
+//			dwCmd = 0xFFFFFFFF: invalid cmd, ignore
+//          dwCmd.D31 = 0: single byte cmd
+//                    = 1: double byte cmd
+//
+DWORD I2CClass::MasterRead(BYTE uHwAddr, DWORD dwCmd, PBYTE pBuf, DWORD dwLength)
+{
+	DWORD	dwNumberOfByteRead = dwLength;
+
+    // Remove-W4: Warning C4100 workaround
+    UNREFERENCED_PARAMETER(uHwAddr);
+    UNREFERENCED_PARAMETER(dwCmd);
+    UNREFERENCED_PARAMETER(pBuf);
+    UNREFERENCED_PARAMETER(dwLength);
+
+	// zxw 2012-6-19
+	int iResult;
+	BYTE  InPutBuff[3],OutPutBuff,*pOutPutBuff;
+	I2C_PACKET  I2Cpacket[3];
+	//////I2C_TRANSFER_BLOCK pRXferBlock;
+
+	pOutPutBuff = pBuf;	
+
+	// the first block ; send RegData
+	InPutBuff[0] = (BYTE)uHwAddr;
+	InPutBuff[1] = (BYTE)dwCmd & 0xff ;
+	if( dwCmd & (1<<31) )
+		InPutBuff[2]=(BYTE)(dwCmd>>8)&0xff;
+	//InPutBuff[1]=(pI2CPar->RegAddr&0xff00)>>8;
+	//InPutBuff[2]=pI2CPar->RegAddr&0xff;
+
+	I2Cpacket[0].byRW = I2C_RW_WRITE;
+	I2Cpacket[0].pbyBuf = InPutBuff;
+	I2Cpacket[0].wLen = 3;
+	I2Cpacket[0].lpiResult = &iResult;
+
+	// the SED block ;send Read Command
+	OutPutBuff = uHwAddr | 1;
+	I2Cpacket[1].byRW = I2C_RW_WRITE;
+	I2Cpacket[1].pbyBuf = &OutPutBuff;
+	I2Cpacket[1].wLen = 1;
+	I2Cpacket[1].lpiResult = &iResult;
+
+	// the THD block ; Read Data
+	I2Cpacket[2].byRW = I2C_RW_READ;
+	I2Cpacket[2].pbyBuf = pOutPutBuff;
+	I2Cpacket[2].wLen = (WORD)dwLength;
+	I2Cpacket[2].lpiResult = &iResult;
+
+	//////pRXferBlock.pI2CPackets = &I2Cpacket[0];
+	//////pRXferBlock.iNumPackets = 3;
+	//////TransferHeard( (PBYTE)(&pRXferBlock) , sizeof(pRXferBlock) );
+
+
+	// //Start I2C
+	if( ProcessPackets( &I2Cpacket[0] , 3 ) )
+		return dwNumberOfByteRead;
+	else
+		return 0;
+}
+
+DWORD I2CClass::MasterWrite(BYTE uHwAddr, DWORD dwCmd, PBYTE pBuf, DWORD dwLength)
+{
+	DWORD	dwNumberOfByteWritten = 0;
+
+    // Remove-W4: Warning C4100 workaround
+    UNREFERENCED_PARAMETER(uHwAddr);
+    UNREFERENCED_PARAMETER(dwCmd);
+    UNREFERENCED_PARAMETER(pBuf);
+    UNREFERENCED_PARAMETER(dwLength);
+	
+
+	// zxw  2011-6-19
+
+	int LastResult;
+	BYTE  *InPutBuff;
+	I2C_PACKET  I2Cpacket;
+	//////I2C_TRANSFER_BLOCK pWXferBlock;
+
+	InPutBuff = NULL;
+	InPutBuff = (BYTE  *)malloc ( dwLength+3 );
+	if ( InPutBuff == NULL )
+		return false;
+
+	InPutBuff[0]=(BYTE)uHwAddr;
+	InPutBuff[1]=(BYTE)dwCmd&0xff;
+	if( dwCmd & (1<<31) )
+	{
+		InPutBuff[2]=(BYTE)(dwCmd>>8)&0xff;
+		memcpy( &InPutBuff[3] ,pBuf , dwLength );
+	}
+	else
+		memcpy( &InPutBuff[2] ,pBuf , dwLength );
+
+	I2Cpacket.byRW = I2C_RW_WRITE;
+	I2Cpacket.pbyBuf = InPutBuff;
+	I2Cpacket.wLen = (WORD)(dwLength+(dwCmd & (1<<31)?3:2));
+	I2Cpacket.lpiResult = &LastResult;
+
+	//////pWXferBlock.pI2CPackets = &I2Cpacket;
+	//////pWXferBlock.iNumPackets = 1;
+	//////TransferHeard( (PBYTE)(&pWXferBlock) , sizeof(pWXferBlock) );
+
+	if( ProcessPackets( &I2Cpacket , 1 ) )
+		dwNumberOfByteWritten = dwLength;
+
+
+	free( InPutBuff );
+	return dwNumberOfByteWritten;
+}
+//-----------------------------------------------------------------------------

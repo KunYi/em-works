@@ -17,4 +17,9 @@ SOURCES=\
     lradcsdk.cpp
     
 FILE_VIEW_INCLUDES_FOLDER= \
+    ..\..\INC\regslradc.h \
+    ..\..\..\COMMON_FSL_V2_PDK1_9\INC\hw_lradc.h \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    lradcsdk.def \
 

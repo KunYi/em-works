@@ -30,6 +30,28 @@
 { IOCTL_HAL_NANDFMD_ACCESS,              0,  OALIoCtlHalNandfmdAccess    },
 #endif	//NAND_PDD
 
+#ifdef	EM9280
+#ifndef	UUT
+// CS&ZHL MAY-13-2012: supporting SSP0 based SPI port
+{ IOCTL_HAL_SPI_ACCESS,                  0,  OALIoCtlHalSpiAccess        },
+// end of CS&ZHL MAY-13-2012: supporting SSP0 based SPI port
+#endif	//UUT
+
+// CS&ZHL MAY-18-2012: supporting GPIO based I2C port
+{ IOCTL_HAL_I2C_ACCESS,                  0,  OALIoCtlHalI2cAccess        },
+// end of CS&ZHL MAY-18-2012: supporting GPIO based I2C port
+#endif	//EM9280
+
+//
+// CS&ZHL APR-06-2012: supporting get board info
+//
+{ IOCTL_HAL_BOARDINFO_READ,				0,  OALIoCtlHalBoardInfoRead },
+{ IOCTL_HAL_TIMESTAMP_READ,				0,  OALIoCtlHalTimeStampRead },
+{ IOCTL_HAL_VENDOR_ID_READ,				0,  OALIoCtlHalVendorIDRead },
+{ IOCTL_HAL_CUSTOMER_ID_READ,			0,  OALIoCtlHalCustomerIDRead },
+{ IOCTL_HAL_BOARD_STATE_READ,			0,  OALIoCtlHalBoardStateRead },
+{ IOCTL_HAL_WATCHDOG_GET,				0,  OALIoCtlHalWatchdogGet },
+
 // CS&ZHL APR-9-2012: read FSL copyright info and chip ID
 { IOCTL_HAL_CPU_INFO_READ,               0,  OALIoCtlHalGetCPUInfo       },
 // end of CS&ZHL APR-9-2012: read FSL copyright info and chip ID

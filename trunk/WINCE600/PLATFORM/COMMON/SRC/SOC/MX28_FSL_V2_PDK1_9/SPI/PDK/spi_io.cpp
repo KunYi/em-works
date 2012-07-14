@@ -24,6 +24,15 @@
 #include "spiclass.h"
 //-----------------------------------------------------------------------------
 // External Functions
+// zxw 2012-06-11
+extern "C" BOOL BSPSPISetIOMux(UINT32 Index);
+extern "C" BOOL BSPSPIReleaseIOMux(UINT32 dwIndex);
+
+// zxw 2012-6-27
+extern "C" PBYTE BSPSPIGetDataBuffer(LPVOID pBuf, DWORD dwLength);
+extern "C" DWORD BSPSPIGetDataLength(LPVOID pBuf, DWORD dwLength);
+extern "C" BOOL BSPSPIGetLCS(LPVOID pBuf, DWORD dwLength);
+extern "C" BYTE BSPSPIGetBitDataLength(LPVOID pBuf, DWORD dwLength);
 
 //-----------------------------------------------------------------------------
 // External Variables
@@ -31,6 +40,7 @@
 //-----------------------------------------------------------------------------
 // Defines
 #define REG_DEVINDEX_VAL_NAME           TEXT("Index")
+#define REG_CSINDEX_VAL_NAME            TEXT("CSIndex")
 
 #ifdef DEBUG
 DBGPARAM dpCurSettings = 
@@ -76,6 +86,7 @@ DWORD SPI_Init(LPCTSTR pContext)
     HKEY    hKey;
     DWORD   dwDataSize;
     DWORD   dwDevIndex;
+	DWORD	dwCSIndex = (DWORD)-1;
     spiClass *pSpi = NULL;
 
     // try to open active device registry key for this context
@@ -96,15 +107,34 @@ DWORD SPI_Init(LPCTSTR pContext)
         (LPBYTE)(&dwDevIndex),      // pointer to buffer receiving value
         &dwDataSize);               // pointer to buffer size
 
-    // close handle to open key
-    RegCloseKey(hKey);
-
     // check for errors during RegQueryValueEx
     if (regError != ERROR_SUCCESS)
     {
         DEBUGMSG(ZONE_ERROR, (TEXT("SPI_Init:  RegQueryValueEx failed!!!\r\n")));
+		// close handle to open key
+		RegCloseKey(hKey);
         return NULL;
     }
+
+    // try to load SPI CS index from registry data
+    dwDataSize = sizeof(DWORD);
+    regError = RegQueryValueEx(
+        hKey,                       // handle to currently open key
+        REG_CSINDEX_VAL_NAME,       // string containing value to query
+        NULL,                       // reserved, set to NULL
+        NULL,                       // type not required, set to NULL
+        (LPBYTE)(&dwCSIndex),       // pointer to buffer receiving value
+        &dwDataSize);               // pointer to buffer size
+
+    // check for errors during RegQueryValueEx
+    if (regError != ERROR_SUCCESS)
+    {
+        DEBUGMSG(ZONE_ERROR, (TEXT("SPI_Init:  CSIndex NOT available!\r\n")));
+		dwCSIndex = (DWORD)-1;
+    }
+
+	// close handle to open key
+    RegCloseKey(hKey);
 
     pSpi = new spiClass();
 
@@ -126,7 +156,9 @@ DWORD SPI_Init(LPCTSTR pContext)
     else
     {
         RETAILMSG(1, (TEXT("SPI_Init: SpiInitialize Sucess: pSpi  0x%x !!\r\n"),pSpi));
+		pSpi->SpiSetCSIndex(dwCSIndex);
     }
+
     // Managed to create the class?
     if (pSpi == NULL)
     {
@@ -193,6 +225,13 @@ DWORD SPI_Open(DWORD hDeviceContext, DWORD AccessCode, DWORD ShareMode)
     // Remove-W4: Warning C4100 workaround
     UNREFERENCED_PARAMETER(AccessCode);
     UNREFERENCED_PARAMETER(ShareMode);
+
+	// zxw 2012-06-11
+	spiClass* pSPI = (spiClass*) hDeviceContext;
+
+	if( BSPSPISetIOMux( pSPI->m_Index ) )	
+		RETAILMSG(1, (TEXT("SPI_Opened SPI:%d\r\n"), hDeviceContext));
+
     return hDeviceContext;
 }
 
@@ -215,6 +254,12 @@ BOOL SPI_Close(DWORD hOpenContext)
 {
     // Remove-W4: Warning C4100 workaround
     UNREFERENCED_PARAMETER(hOpenContext);
+
+	// zxw 2012-06-11
+	spiClass* pSPI = (spiClass*) hOpenContext;
+
+	if( BSPSPIReleaseIOMux( pSPI->m_Index ) )	
+		RETAILMSG(1, (TEXT("SPI_Closed SPI:%d\r\n"), hOpenContext));
 
     // Close is meaningless!
     return TRUE;
@@ -288,8 +333,21 @@ DWORD SPI_Read(DWORD hOpenContext, LPVOID pBuffer, DWORD Count)
     UNREFERENCED_PARAMETER(pBuffer);
     UNREFERENCED_PARAMETER(Count);
 
-    // Nothing to read
-    return 0;
+// zxw 2012-6-27
+	spiClass *pSPI = (spiClass*)hOpenContext;
+
+	PBYTE    pBuf;
+	DWORD    dLen;
+	BOOL     bCS;
+	BYTE     sBitcount;
+
+	bCS = BSPSPIGetLCS( pBuffer , Count );
+	pBuf = BSPSPIGetDataBuffer( pBuffer , Count );
+	dLen = BSPSPIGetDataLength( pBuffer , Count );
+	sBitcount = BSPSPIGetBitDataLength( pBuffer , Count );
+
+	return pSPI->MasterRead( bCS , pBuf , dLen , sBitcount );
+
 }
 //-----------------------------------------------------------------------------
 //
@@ -311,15 +369,31 @@ DWORD SPI_Read(DWORD hOpenContext, LPVOID pBuffer, DWORD Count)
 //      failure.
 //
 //-----------------------------------------------------------------------------
-DWORD SPI_Write(DWORD Handle, LPCVOID pBuffer, DWORD dwNumBytes)
+//DWORD SPI_Write(DWORD Handle, LPCVOID pBuffer, DWORD dwNumBytes)
+DWORD SPI_Write(DWORD Handle, LPVOID pBuffer, DWORD dwNumBytes)
 {
     // Remove-W4: Warning C4100 workaround
     UNREFERENCED_PARAMETER(Handle);
     UNREFERENCED_PARAMETER(pBuffer);
     UNREFERENCED_PARAMETER(dwNumBytes);
 
+	// zxw 2012-6-27
+	spiClass *pSPI = (spiClass*)Handle;
+	PBYTE    pBuf;
+	DWORD    dLen;
+	BOOL     bCS;
+	BYTE     sBitcount;
+
+
+	bCS = BSPSPIGetLCS( pBuffer , dwNumBytes );
+	pBuf = BSPSPIGetDataBuffer( pBuffer , dwNumBytes );
+	dLen = BSPSPIGetDataLength( pBuffer , dwNumBytes );
+	sBitcount = BSPSPIGetBitDataLength( pBuffer , dwNumBytes );
+
+	return pSPI->MasterWrite( bCS , pBuf , dLen , sBitcount );
+
     // Nothing to write
-    return 0;
+    //return 0;
 }
 //-----------------------------------------------------------------------------
 //

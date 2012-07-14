@@ -27,6 +27,7 @@ LRESULT FmdWrapperPdd::Init(DWORD Context)
     LRESULT Result = ERROR_SUCCESS;
 	DWORD	dwStatus = 0;
 	DWORD	dwReturnBytes = 0;
+	DWORD	dwType = 0;					// vendor authentication
     
     m_LoadDone = FALSE;
     BSPNAND_SetClock(TRUE);
@@ -47,8 +48,8 @@ LRESULT FmdWrapperPdd::Init(DWORD Context)
 	}
 
 	// CS&ZHL APR-9-2012: do security check
-	Result = IoControl( IOCTL_DISK_VENDOR_AUTHENTICATION, 
-						NULL, 0,
+	Result = IoControl( IOCTL_DISK_AUTHENTICATION, 
+						(PBYTE)&dwType, sizeof(DWORD),
 						(PBYTE)&dwStatus, sizeof(DWORD),
 						&dwReturnBytes);
 

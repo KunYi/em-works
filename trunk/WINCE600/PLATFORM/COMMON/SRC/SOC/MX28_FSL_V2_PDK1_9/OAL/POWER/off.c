@@ -249,13 +249,14 @@ void OEMPowerOff()
 
         // Decrease ARM/AHB rate 
         SOCPowerOffCPURate();
-    
+
+		//OALMSG(1, (_T("INFO: entering suspend-->\r\n")));
         //Suspend 
         SuspendMe();
-        OALMSG(1, (_T("INFO: 1 "), irq));
+        OALMSG(1, (_T("INFO: OEMPowerOff wakeUp...\r\n")));
         // Increase ARM/AHB rate 
         SOCPowerOnCPURate();
-		OALMSG(1, (_T("2"), irq));
+
         // Get interrupt source
         irq = HW_ICOLL_STAT_RD() & BM_ICOLL_STAT_VECTOR_NUMBER;
 
@@ -349,7 +350,6 @@ void OEMPowerOff()
             }
         }
 
-		OALMSG(1, (_T(" 3"), irq));
         // Chance of board-level subordinate interrupt controller
         irq = BSPIntrActiveIrq(irq);
         
@@ -365,7 +365,7 @@ void OEMPowerOff()
     }
     else
     {
-        OALMSG(1, (_T(" No wake sources for OEMPowerOff, system will resume...\r\n")));
+        OALMSG(1, (_T("INFO: No wake sources for OEMPowerOff, system will resume...\r\n")));
     }
 
     // Restore register state
@@ -1022,7 +1022,8 @@ static VOID SOCPowerOffCPURate(VOID)
     HW_CLKCTRL_HBUS_WR(BF_CLKCTRL_XBUS_AUTO_CLEAR_DIV_ENABLE(1)| 
                        BF_CLKCTRL_XBUS_DIV_FRAC_EN(0) | 
                        BF_CLKCTRL_XBUS_DIV(1023));
-    OALStall(100); 
+	OALStall(100); 
+
 }
 
 //------------------------------------------------------------------------------
@@ -1054,9 +1055,9 @@ static VOID SOCPowerOnCPURate(VOID)
 
     //let CPU sink the CPU_REF clock
     HW_CLKCTRL_CLKSEQ_CLR(BM_CLKCTRL_CLKSEQ_BYPASS_CPU);
-    OALStall(100);
-
-    //OALMSG(0, (L"SOCPowerOnCPURate-- \r\n"));
+	
+	OALStall(100);
+	//OALMSG(0, (L"SOCPowerOnCPURate-- \r\n"));
     
 }
 

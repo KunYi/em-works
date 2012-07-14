@@ -553,7 +553,7 @@ BOOL NANDWriteSB(DWORD dwStartAddr, DWORD dwLength)
     DWORD dwValidImageLength;
     FlashInfo flashInfo;
     
-    EdbgOutputDebugString("->NANDWriteSB\r\n");
+    //EdbgOutputDebugString("->NANDWriteSB\r\n");
 
     // Check for NAND device availability
     if(!g_bNandExist)
@@ -580,7 +580,7 @@ BOOL NANDWriteSB(DWORD dwStartAddr, DWORD dwLength)
     // Get cached image location
     pImage = OEMMapMemAddr(dwStartAddr, dwStartAddr);
     
-    EdbgOutputDebugString("INFO: Programming Firmware.sb image from flash cache address 0x%x, size = %d\r\n", pImage, dwLength);
+    //EdbgOutputDebugString("INFO: Programming Firmware.sb image from flash cache address 0x%x, size = %d\r\n", pImage, dwLength);
 
     //To reduce unnecessary programming
     dwValidImageLength = ((dwLength + flashInfo.dwBytesPerBlock - 1) / flashInfo.dwBytesPerBlock)*flashInfo.dwBytesPerBlock;
@@ -616,7 +616,7 @@ begin_program:
     pSectorBuf = pImage;    
     pVerSectorBuf = pImage + dwValidImageLength;
     //EdbgOutputDebugString("INFO: Programming NAND flash blocks [0x%x - 0x%x].0x%x\r\n", StartLogBlkAddr, EndLogBlkAddr-1,ValidEndLogBlkAddr);
-    EdbgOutputDebugString("INFO: Programming NAND flash blocks [0x%x - 0x%x] within block[0x%x - 0x%x]\r\n", StartLogBlkAddr, ValidEndLogBlkAddr, StartLogBlkAddr, EndLogBlkAddr-1);
+    //EdbgOutputDebugString("INFO: Programming NAND flash blocks [0x%x - 0x%x] within block[0x%x - 0x%x]\r\n", StartLogBlkAddr, ValidEndLogBlkAddr, StartLogBlkAddr, EndLogBlkAddr-1);
     do
     {
         //PhyBlockAddr = StartLogBlkAddr;
@@ -741,7 +741,7 @@ begin_program:
 
     EdbgOutputDebugString("INFO: Verifying image succeed.\r\n");    
     EdbgOutputDebugString("INFO: Updating of SB image completed successfully.\r\n");
-    EdbgOutputDebugString("<-NANDWriteSB\r\n");
+    //EdbgOutputDebugString("<-NANDWriteSB\r\n");
     return(TRUE);
 }
 

@@ -113,11 +113,9 @@ typedef enum _PWM_CHANNEL
     PWM_CHANNEL_3,
     //! \brief TBD
     PWM_CHANNEL_4,
-        //! \brief TBD
+	// CS&ZHL MAY-14-2012: for EM9280
     PWM_CHANNEL_5,
-        //! \brief TBD
     PWM_CHANNEL_6,
-        //! \brief TBD
     PWM_CHANNEL_7,
 } PWM_CHANNEL;
 

@@ -59,8 +59,50 @@ BOOL BSPSPISetIOMux(UINT32 Index)
 {
     BOOL rc = FALSE;
 
-    if(Index == 2)
-    {
+	switch(Index)
+	{
+#ifdef	EM9280
+	case 0:			// -> SSP0
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D0,  DDK_IOMUX_MODE_00);		//-> SPI0_MISO
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_CMD, DDK_IOMUX_MODE_00);		//-> SPI0_MOSI
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_SCK, DDK_IOMUX_MODE_00);		//-> SPI0_SCLK
+        DDKIomuxSetPinMux(DDK_IOMUX_GPIO0_17, DDK_IOMUX_MODE_GPIO);		//-> SPI0_CS0N
+        DDKIomuxSetPinMux(DDK_IOMUX_GPIO0_21, DDK_IOMUX_MODE_GPIO);		//-> SPI0_CS1N
+        DDKIomuxSetPinMux(DDK_IOMUX_GPIO0_28, DDK_IOMUX_MODE_GPIO);		//-> SPI0_CS2N
+
+        //Configure SSP pins data+clk+cmd for 8mA drive strength, 3 volts.
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP0_D0,  DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP0_CMD, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP0_SCK, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+		//SPI_CSxN 
+        DDKIomuxSetPadConfig(DDK_IOMUX_GPIO0_17, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_GPIO0_21, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_GPIO0_28, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+
+		DDKGpioEnableDataPin(DDK_IOMUX_GPIO0_17, 1);		// output enable
+		DDKGpioEnableDataPin(DDK_IOMUX_GPIO0_21, 1);		// output enable
+		DDKGpioEnableDataPin(DDK_IOMUX_GPIO0_28, 1);		// output enable
+
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_17, 1);			// SPI_CS0N -> "1"
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_21, 1);			// SPI_CS0N -> "1"
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_28, 1);			// SPI_CS0N -> "1"
+		rc = TRUE;
+		break;
+#endif	//EM9280
+
+	case 2:			// -> SSP2
+#ifdef EM9280 // zxw JUN05-2012
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D3_0,DDK_IOMUX_MODE_01);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D0_0,DDK_IOMUX_MODE_01);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_CMD_0,DDK_IOMUX_MODE_01);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_SCK_0,DDK_IOMUX_MODE_01);        
+        //Configure SSP pins data+clk+cmd for 8mA drive strength, 3 volts.
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_CMD_0,DDK_IOMUX_PAD_DRIVE_8MA,DDK_IOMUX_PAD_PULL_ENABLE,DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_D0_0,DDK_IOMUX_PAD_DRIVE_8MA,DDK_IOMUX_PAD_PULL_ENABLE,DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_D3_0,DDK_IOMUX_PAD_DRIVE_8MA,DDK_IOMUX_PAD_PULL_ENABLE,DDK_IOMUX_PAD_VOLTAGE_3V3);
+        DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_SCK_0,DDK_IOMUX_PAD_DRIVE_8MA,DDK_IOMUX_PAD_PULL_ENABLE,DDK_IOMUX_PAD_VOLTAGE_3V3);
+        rc = TRUE;
+#else // IMX28 EVB
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D3_1,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D0_1,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_CMD_1,DDK_IOMUX_MODE_00);
@@ -71,7 +113,9 @@ BOOL BSPSPISetIOMux(UINT32 Index)
         DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_D3_1,DDK_IOMUX_PAD_DRIVE_8MA,0,1);
         DDKIomuxSetPadConfig(DDK_IOMUX_SSP2_SCK_1,DDK_IOMUX_PAD_DRIVE_8MA,0,1);
         rc = TRUE;
-    }
+#endif   //EM9280
+		break;
+	}
     
     return rc;
 }
@@ -93,8 +137,34 @@ BOOL BSPSPIReleaseIOMux(UINT32 Index)
 {
     BOOL rc = FALSE;
 
-    if(Index == 2)
-    {
+	switch(Index)
+	{
+#ifdef	EM9280
+	case 0:			// -> SSP0
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D0,  DDK_IOMUX_MODE_GPIO);		//-> SPI0_MISO
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_CMD, DDK_IOMUX_MODE_GPIO);		//-> SPI0_MOSI
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP0_SCK, DDK_IOMUX_MODE_GPIO);		//-> SPI0_SCLK
+
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP0_D0,  0);					// output disable
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP0_CMD, 0);					// output disable
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP0_SCK, 0);					// output disable
+		rc = TRUE;    
+		break;
+#endif	//EM9280
+
+	case 2:			// -> SSP2
+#ifdef EM9280 // zxw
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D3_0,DDK_IOMUX_MODE_GPIO);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D0_0,DDK_IOMUX_MODE_GPIO);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_CMD_0,DDK_IOMUX_MODE_GPIO);
+        DDKIomuxSetPinMux(DDK_IOMUX_SSP2_SCK_0,DDK_IOMUX_MODE_GPIO);
+        
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP2_D3_0,0);
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP2_D0_0,0);
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP2_CMD_0,0);
+        DDKGpioEnableDataPin(DDK_IOMUX_SSP2_SCK_0,0);
+        rc = TRUE;  
+#else // IMX28 EVK
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D3_1,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_D0_1,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_SSP2_CMD_1,DDK_IOMUX_MODE_GPIO);
@@ -105,6 +175,8 @@ BOOL BSPSPIReleaseIOMux(UINT32 Index)
         DDKGpioEnableDataPin(DDK_IOMUX_SSP2_CMD_1,0);
         DDKGpioEnableDataPin(DDK_IOMUX_SSP2_SCK_1,0);
         rc = TRUE;    
+#endif	// EM9280
+		break;
     }
     return rc;
 }
@@ -148,3 +220,110 @@ BOOL BSPSpiIsAllowPolling(UINT8 Index)
     UNREFERENCED_PARAMETER(Index);
     return FALSE;
 }
+
+
+BOOL BSPSpiCSEnable(DWORD dwCSIndex)
+{
+	BOOL	bRet = TRUE;
+
+	switch(dwCSIndex)
+	{
+	case 0:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_17, 0);			// SPI_CS0N -> "0"
+		break;
+
+	case 1:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_21, 0);			// SPI_CS0N -> "0"
+		break;
+
+	case 2:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_28, 0);			// SPI_CS0N -> "0"
+		break;
+
+	default:
+		DEBUGMSG(1, (TEXT("BSPSpiCSEnable: unknown CS index\r\n")));
+		bRet = FALSE;
+	}
+
+	return bRet;
+}
+
+
+BOOL BSPSpiCSDisable(DWORD dwCSIndex)
+{
+	BOOL	bRet = TRUE;
+
+	switch(dwCSIndex)
+	{
+	case 0:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_17, 1);			// SPI_CS0N -> "1"
+		break;
+
+	case 1:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_21, 1);			// SPI_CS0N -> "1"
+		break;
+
+	case 2:
+		DDKGpioWriteDataPin(DDK_IOMUX_GPIO0_28, 1);			// SPI_CS0N -> "1"
+		break;
+
+	default:
+		DEBUGMSG(1, (TEXT("BSPSpiCSEnable: unknown CS index\r\n")));
+		bRet = FALSE;
+	}
+
+	return bRet;
+}
+
+// zxw 2012-6-27
+#ifdef EM9280
+
+PBYTE BSPSPIGetDataBuffer(LPVOID pBuf, DWORD dwLength)//读取数据BUFF指针地址
+{
+	PSPI_INFO pSpiInfo = (PSPI_INFO)pBuf;
+
+	if(!pSpiInfo || (dwLength != sizeof(SPI_INFO)))
+	{
+		return NULL;
+	}
+
+	return pSpiInfo->pDatBuf;
+}
+
+DWORD BSPSPIGetDataLength(LPVOID pBuf, DWORD dwLength)//读取数据操作长度
+{
+	PSPI_INFO pSpiInfo = (PSPI_INFO)pBuf;
+
+	if(!pSpiInfo || (dwLength != sizeof(SPI_INFO)))
+	{
+		return 0;
+	}
+
+	return pSpiInfo->dwDatLen;
+}
+
+BOOL BSPSPIGetLCS(LPVOID pBuf, DWORD dwLength) // 读取CS控制命令
+{
+	PSPI_INFO pSpiInfo = (PSPI_INFO)pBuf;
+
+	if(!pSpiInfo || (dwLength != sizeof(SPI_INFO)))
+	{
+		return 0;
+	}
+
+	return pSpiInfo->bLastTime;			//bLockCS;
+}
+
+BYTE BSPSPIGetBitDataLength(LPVOID pBuf, DWORD dwLength)//读取数据位长度
+{
+	PSPI_INFO pSpiInfo = (PSPI_INFO)pBuf;
+
+	if(!pSpiInfo || (dwLength != sizeof(SPI_INFO)))
+	{
+		return 0;
+	}
+
+	return pSpiInfo->BitCount;
+}
+
+#endif

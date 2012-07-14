@@ -33,17 +33,27 @@ IF BSP_ENET1
    "MACAddress3"=dword:3120
 
 [HKEY_LOCAL_MACHINE\Comm\ENET1\Parms\TcpIp]
-   ; This should be MULTI_SZ
-   "DefaultGateway"=""
-   ; This should be SZ... If null it means use LAN, else WAN and Interface.
-   "LLInterface"=""
-   ; Use zero for broadcast address? (or 255.255.255.255)
-   "UseZeroBroadcast"=dword:0
-   ; Thus should be MULTI_SZ, the IP address list
-   "IpAddress"="0.0.0.0"
-   ; This should be MULTI_SZ, the subnet masks for the above IP addresses
-   "Subnetmask"="0.0.0.0"
-   "EnableDHCP"=dword:1
+   ;; This should be MULTI_SZ
+   ;"DefaultGateway"=""
+   ;; This should be SZ... If null it means use LAN, else WAN and Interface.
+   ;"LLInterface"=""
+   ;; Use zero for broadcast address? (or 255.255.255.255)
+   ;"UseZeroBroadcast"=dword:0
+   ;; Thus should be MULTI_SZ, the IP address list
+   ;"IpAddress"="0.0.0.0"
+   ;; This should be MULTI_SZ, the subnet masks for the above IP addresses
+   ;"Subnetmask"="0.0.0.0"
+   ;"EnableDHCP"=dword:1
+;
+; CS&ZHL JUN-2-2011
+;
+	"EnableDHCP"=dword:0
+	"UseZeroBroadcast"=dword:0
+	"DefaultGateway"="192.168.201.19"
+	"IpAddress"="192.168.201.175"
+	"Subnetmask"="255.255.255.0"
+	"DNS"="61.139.2.69"
+	"WINS"="0.0.0.0"
 
 [HKEY_LOCAL_MACHINE\Comm\TcpIp\Parms]
 

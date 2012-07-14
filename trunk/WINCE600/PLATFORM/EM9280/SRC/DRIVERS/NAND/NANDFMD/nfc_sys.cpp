@@ -18,6 +18,7 @@ extern "C" VOID* BSPNAND_RemapRegister(DWORD PhyAddr, DWORD size);
 extern "C" VOID BSPNAND_UnmapRegister(PVOID VirtAddr, DWORD size);
 //-----------------------------------------------------------------------------
 // External Variables
+extern "C" PVOID pv_HWregOTP;
 
 //-----------------------------------------------------------------------------
 // Defines
@@ -108,7 +109,7 @@ BOOL BSPNAND_SetClock(BOOL bEnabled)
 VOID* BSPNAND_RemapRegister(DWORD PhyAddr, DWORD size)
 {
     PHYSICAL_ADDRESS phyAddr;
-    
+
     phyAddr.QuadPart = PhyAddr;
     return MmMapIoSpace(phyAddr, size, FALSE);
 }

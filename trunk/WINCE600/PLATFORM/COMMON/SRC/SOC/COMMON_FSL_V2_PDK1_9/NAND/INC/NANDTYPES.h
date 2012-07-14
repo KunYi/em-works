@@ -34,11 +34,23 @@ typedef struct _FlashInfo
     WORD        wDataBytesPerSector;
 
 }FlashInfo, *PFlashInfo;
+
+typedef struct _NANDTiming
+{
+    BYTE DataSetup;				// -> tRP or tWP
+    BYTE DataHold;				// -> tRH or tWH
+    BYTE AddressSetup;			// -> tCEA
+    BYTE DataSample;			// -> tREA
+}NANDTiming, *PNANDTiming;
+
 */
 
 NandChipInfo ChipInfo[] = 
 {
-    //CS&ZHL MAR-5-2012: add K9F1G08U0A
+	//---------------------------------------------------------------------------- 
+    // CS&ZHL MAR-5-2012: add K9F1G08U0A with follwing timing parameters:
+	// tREA => DataSample = 20ns, tRP => DataSetup = 30ns > (tREA + 4), no delay required!
+	//---------------------------------------------------------------------------- 
     {
         {NAND, 1024, 2048 * 64, 64, 2048},      //FlashInfo   fi; 
         {0xEC, 0xF1, 0x00, 0x95},				//BYTE        NANDCode[NANDID_LENGTH] -> {MakerID, DevID, 3rdID, 4thID}
@@ -59,7 +71,7 @@ NandChipInfo ChipInfo[] =
         0x10,									//BYTE        CmdWrite2
         0x60,									//BYTE        CmdErase1
         0xD0,									//BYTE        CmdErase2
-        {25, 16, 25, 20}						//NANDTiming  timings
+        {40, 30, 30, 20}						//NANDTiming  timings => {DataSetup, DataHold, AddressSetup, DataSample}
     },
     //CS&ZHL NOV-6-2011: add K9F2G08U0A
     {
@@ -82,7 +94,7 @@ NandChipInfo ChipInfo[] =
         0x10,									//BYTE        CmdWrite2
         0x60,									//BYTE        CmdErase1
         0xD0,									//BYTE        CmdErase2
-        {25, 16, 25, 20}						//NANDTiming  timings
+        {40, 30, 30, 20}						//NANDTiming  timings => {DataSetup, DataHold, AddressSetup, DataSample}
     },
     //MT29F16G08
     {

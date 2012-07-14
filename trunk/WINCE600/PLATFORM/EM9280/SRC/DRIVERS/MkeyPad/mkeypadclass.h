@@ -49,15 +49,14 @@ class MKPDClass
 
 public:
 
-	MKPDClass(UINT32 dwPollingTimeOut, UINT32 dwMkeyPadFromat );
+	MKPDClass(UINT32 dwPollingTimeOut);
 	~MKPDClass(void);
 
 	void MKeyPadHandle( );
 	static BOOL g_bMkeyPadIsOpen;
 
 private:
-	int m_nMaxScanIn;
-	int m_nMaxScanOut;
+
 	UINT32 m_dwPollingTimeOut; 
 	HANDLE m_hThread;
 
@@ -72,8 +71,8 @@ private:
 	void SetDelay( int nDelay );
 	int IsTimeOut( );
 
-	void KeyIoInit( int m_nMaxScanIn, int m_nMaxScanOut);
-	void KeyIoDeInit( int m_nMaxScanIn, int m_nMaxScanOut );
+	void KeyIoInit();
+	void KeyIoDeInit( );
 
 };
 

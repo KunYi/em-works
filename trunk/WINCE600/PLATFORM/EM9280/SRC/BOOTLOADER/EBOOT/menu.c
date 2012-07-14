@@ -245,12 +245,25 @@ BOOL  PrintData(WCHAR key,VOID * dwValue,VOID * mask)
 
 BOOL BLMenuNANDLowLevelFormat(BLMENU_ITEM *pMenu)
 {
+    UINT32 Selection=0;
     volatile BOOL ret = TRUE;
     UNREFERENCED_PARAMETER(pMenu); 
-    NANDLowLevelFormat();
-    while(ret);
-    SpinForever();
-    return TRUE;
+
+	KITLOutputDebugString("\r\nWARNING:  LowLevleFormat of NAND requested.\r\n");
+    KITLOutputDebugString("Do you want to continue (y/n)? ");
+  	do {
+        Selection = OEMReadDebugByte();
+     }while(  Selection == OEM_DEBUG_READ_NODATA );
+    KITLOutputDebugString("\r\n");
+    
+    if (Selection == 'e') 
+    {
+		NANDLowLevelFormat();
+		while(ret);
+		SpinForever();
+	}
+
+    return FALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -323,7 +336,9 @@ BOOL BLMenu()
     UINT32 AutoBootDelay = 0;
     UINT32 StartTime, CurrTime, PrevTime;
     UINT32 Selection, ImageSelection;
-    PrintSoc = (BLMenuPrintDataSoc)PrintData;
+	UINT32 nDBGSL = 1;
+
+	PrintSoc = (BLMenuPrintDataSoc)PrintData;
     
     EdbgOutputDebugString("INFO:  Initial Eboot Screen Display... \r\n");
     DisplayInit();
@@ -337,68 +352,92 @@ BOOL BLMenu()
     }
     else
     {
-        AutoBootDelay = g_BootCFG.delay;
-        switch(g_BootCFG.autoDownloadImage)
-        {
-        case BOOT_CFG_AUTODOWNLOAD_NK_NAND:
-            g_DownloadImage = FALSE;
-            EdbgOutputDebugString("\r\nPress [ENTER] to launch image stored in NAND flash or [SPACE] to cancel.\r\n");
-            EdbgOutputDebugString("\r\nInitiating image launch in %d seconds. ", AutoBootDelay--);
-            break;
+#ifdef EM9280
+		//
+		// CS&ZHL MAY 30-2012: check DBGSLn status
+		//	
+		if( !g_pBSPArgs->bDebugFlag )
+			nDBGSL = 0;
+#endif	//EM9280
+		if( nDBGSL )    // for debug mode
+		{
+			AutoBootDelay = g_BootCFG.delay;
+			switch(g_BootCFG.autoDownloadImage)
+			{
+			case BOOT_CFG_AUTODOWNLOAD_NK_NAND:
+				g_DownloadImage = FALSE;
+				EdbgOutputDebugString("\r\nPress [ENTER] to launch image stored in NAND flash or [SPACE] to cancel.\r\n");
+				EdbgOutputDebugString("\r\nInitiating image launch in %d seconds. ", AutoBootDelay--);
+				break;
 
-        case BOOT_CFG_AUTODOWNLOAD_NK_SD:
-            g_DownloadImage = FALSE;
-            EdbgOutputDebugString("\r\nPress [ENTER] to launch image stored in SD/MMC or [SPACE] to cancel.\r\n");
-            EdbgOutputDebugString("\r\nInitiating image launch in %d seconds. ", AutoBootDelay--);
-            break;
+			case BOOT_CFG_AUTODOWNLOAD_NK_SD:
+				g_DownloadImage = FALSE;
+				EdbgOutputDebugString("\r\nPress [ENTER] to launch image stored in SD/MMC or [SPACE] to cancel.\r\n");
+				EdbgOutputDebugString("\r\nInitiating image launch in %d seconds. ", AutoBootDelay--);
+				break;
 
-        default:
-            g_DownloadImage = TRUE;
-            EdbgOutputDebugString("\r\nPress [ENTER] to download now or [SPACE] to cancel.\r\n");
-            EdbgOutputDebugString("\r\nInitiating image download in %d seconds. ", AutoBootDelay--);
-            break;
-        }
+			default:
+				g_DownloadImage = TRUE;
+				EdbgOutputDebugString("\r\nPress [ENTER] to download now or [SPACE] to cancel.\r\n");
+				EdbgOutputDebugString("\r\nInitiating image download in %d seconds. ", AutoBootDelay--);
+				break;
+			}
 
-        // Get a snapshot of the RTC seconds count.
-        //
-        StartTime     = OEMEthGetSecs();
-        PrevTime      = StartTime;
-        CurrTime      = StartTime;
-        Selection     = (UINT32)OEM_DEBUG_READ_NODATA;
+			// Get a snapshot of the RTC seconds count.
+			//
+			StartTime     = OEMEthGetSecs();
+			PrevTime      = StartTime;
+			CurrTime      = StartTime;
+			Selection     = (UINT32)OEM_DEBUG_READ_NODATA;
 
-        // Allow the user an amount of time to halt the auto boot/download process.
-        // Count down to 0 before proceeding with default operation.
-        //
-        while ((CurrTime - StartTime) < g_BootCFG.delay)
-        {
-            UINT8 i=0;
-            UINT8 j;
+			// Allow the user an amount of time to halt the auto boot/download process.
+			// Count down to 0 before proceeding with default operation.
+			//
+			while ((CurrTime - StartTime) < g_BootCFG.delay)
+			{
+				UINT8 i=0;
+				UINT8 j;
 
-            Selection = OEMReadDebugByte(); 
-            if ((Selection == 0x20) || (Selection == 0x0d))
-            {
-                break;
-            }
-            CurrTime = OEMEthGetSecs();   
-            if (CurrTime > PrevTime)
-            {
-                PrevTime = CurrTime;
-                if (AutoBootDelay < 9)
-                    i = 11;
-                else if (AutoBootDelay < 99)
-                    i = 12;
-                else if (AutoBootDelay < 999)
-                    i = 13;
+				Selection = OEMReadDebugByte(); 
+				if ((Selection == 0x20) || (Selection == 0x0d))
+				{
+					break;
+				}
+				CurrTime = OEMEthGetSecs();   
+				if (CurrTime > PrevTime)
+				{
+					PrevTime = CurrTime;
+					if (AutoBootDelay < 9)
+						i = 11;
+					else if (AutoBootDelay < 99)
+						i = 12;
+					else if (AutoBootDelay < 999)
+						i = 13;
 
-                for (j = 0; j < i; j++)
-                {
-                    OEMWriteDebugByte((BYTE)0x08); // print back space
-                }
+					for (j = 0; j < i; j++)
+					{
+						OEMWriteDebugByte((BYTE)0x08); // print back space
+					}
 
-                KITLOutputDebugString ( "%d seconds. ", AutoBootDelay--);
-            }
-        }
-    }
+					KITLOutputDebugString ( "%d seconds. ", AutoBootDelay--);
+				}
+			}
+		}
+		else                   // for run mode
+		{
+			switch(g_BootCFG.autoDownloadImage)
+			{
+			case BOOT_CFG_AUTODOWNLOAD_NK_NAND:
+			case BOOT_CFG_AUTODOWNLOAD_NK_SD:
+				g_DownloadImage = FALSE;
+				break;
+			default:
+				g_DownloadImage = TRUE;
+				break;
+			}
+			Selection = 0x0d;               // just like [Enter] received
+		}
+	}
 
     switch (Selection)
     {
@@ -465,9 +504,14 @@ BOOL BLMenu()
         StoreBootCFG(&g_BootCFG);
         ConfigBootCFG(&g_BootCFG);
     }
-#ifndef EM9283_DOTLCD
-    TurnOffDisplay();
-#endif
+    
+	//
+	// zxw JUN11-2012: mask turnoffdisplay in EM9280
+	//
+#ifndef EM9280 
+	TurnOffDisplay();
+#endif		//EM9280
+
     // configuration parameters previously loaded.
     memcpy(g_pBSPArgs->kitl.mac, g_BootCFG.mac, 6);
 

@@ -134,7 +134,8 @@ DWORD SHC_Init(LPCTSTR pContext)
     DWORD   dwDataSize;
     DWORD   dwDevIndex;
 
-    DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: +SHC_Init\n")));
+    //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: +SHC_Init\n")));
+    RETAILMSG(1, (TEXT("SDHC: +SHC_Init\n")));
 
     // try to open active device registry key for this context
     hKey = OpenDeviceKey(pContext);
@@ -227,7 +228,8 @@ DWORD SHC_Init(LPCTSTR pContext)
         return 0;
     }
 
-    DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: -SHC_Init\n")));
+    //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: -SHC_Init\n")));
+    RETAILMSG(1, (TEXT("SDHC: -SHC_Init\n")));
 
     // return the Host Controller context
     return (DWORD)pHostContext;

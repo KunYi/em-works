@@ -329,7 +329,8 @@ void DisplayControllerLMS430::BSPInitLCDIF(BOOL bReset)
     LCDIFDOTCLK sLcdifDotclk;
 
     // Start the PIX clock and set frequency
-    LCDIFSetupLCDIFClock(PIX_CLK);
+    //LCDIFSetupLCDIFClock(PIX_CLK, FALSE);
+    LCDIFSetupLCDIFClock( PIX_CLK );
        
     LcdifInit.bBusyEnable = FALSE;
     LcdifInit.eBusMode = BUSMODE_8080;

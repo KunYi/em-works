@@ -121,14 +121,6 @@ extern "C" {
                                         METHOD_BUFFERED,     \
                                         FILE_ANY_ACCESS      \
                                         )
-
-#define PMU_IOCTL_GET_POWER_SOURCE		 CTL_CODE(           \
-										FILE_DEVICE_UNKNOWN, \
-										0x200e,              \
-										METHOD_BUFFERED,     \
-										FILE_ANY_ACCESS      \
-										)
-
                                         
 #ifdef __cplusplus
 }

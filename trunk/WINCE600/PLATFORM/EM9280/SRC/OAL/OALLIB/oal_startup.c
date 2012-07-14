@@ -191,6 +191,7 @@ void OALInitPIXClock(void)
 {
     PDDK_CLK_CONFIG pDdkClkConfig  = (PVOID) OALPAtoUA(IMAGE_WINCE_DDKCLK_RAM_PA_START);    
 
+#ifdef	UUT
     // let Pix sink clock from xtal
     HW_CLKCTRL_CLKSEQ_SET(BM_CLKCTRL_CLKSEQ_BYPASS_DIS_LCDIF);
 
@@ -202,6 +203,65 @@ void OALInitPIXClock(void)
     HW_CLKCTRL_FRAC1_SET(BM_CLKCTRL_FRAC1_CLKGATEPIX);
 
     pDdkClkConfig->clockFreq[DDK_CLOCK_SIGNAL_REF_PIX] = 432000000;    
+
+#else	//-> boot from Eboot
+	DWORD			dwPixFrac;
+	DWORD			dwRefPixInKHz;
+	DWORD			dwEbootLCDIFDiv;
+	DWORD			dwEbootPixClkInKHz;
+	BOOL			bclkgate = FALSE;
+
+	//
+	// CS&ZHL JULY-2-2012: PixClk had been setup with ref_pix(=480MHz on power-up) in Eboot
+	//                     it's required to keep PixClock unchanged to have a stable splash on screen during loading NK
+	//
+    // let Pix sink clock from ref_pix
+	HW_CLKCTRL_CLKSEQ_CLR(BM_CLKCTRL_CLKSEQ_BYPASS_DIS_LCDIF);
+
+	// get Eboot settings
+	dwPixFrac = HW_CLKCTRL_FRAC1_RD() & BM_CLKCTRL_FRAC1_PIXFRAC;
+	dwRefPixInKHz = 480000 * 18 / dwPixFrac;
+	RETAILMSG(1,(TEXT("OALInitPIXClock: default Ref_PIX = %d.%dMHz\r\n"), (dwRefPixInKHz / 1000), (dwRefPixInKHz % 1000)));
+	dwEbootLCDIFDiv = (HW_CLKCTRL_DIS_LCDIF.B.DIV) & 0x1FFF;
+	dwEbootPixClkInKHz = dwRefPixInKHz / dwEbootLCDIFDiv;
+	RETAILMSG(1,(TEXT("OALInitPIXClock: default PIX_CLK = %d.%dMHz\r\n"), (dwEbootPixClkInKHz / 1000), (dwEbootPixClkInKHz % 1000)));
+
+    // let Pix sink clock from xtal
+    //HW_CLKCTRL_CLKSEQ_SET(BM_CLKCTRL_CLKSEQ_BYPASS_DIS_LCDIF);
+
+    // set ref_PIX to 432MHz
+    HW_CLKCTRL_FRAC1_SET(BM_CLKCTRL_FRAC1_CLKGATEPIX);					// ref_pix is off
+    HW_CLKCTRL_FRAC1_WR((HW_CLKCTRL_FRAC1_RD() & ~BM_CLKCTRL_FRAC1_PIXFRAC) | \
+                       BF_CLKCTRL_FRAC1_PIXFRAC(20));   
+
+    HW_CLKCTRL_FRAC1_CLR(BM_CLKCTRL_FRAC1_CLKGATEPIX);					//PIX fractional divider clock is enabled, MUST be enable!
+    pDdkClkConfig->clockFreq[DDK_CLOCK_SIGNAL_REF_PIX] = 432000000;    
+	OALMSG(1, (L"OALInitPIXClock: Ref_PIX Update to 432MHz!\r\n"));
+
+	// compute new divider, and new pixclock
+	dwEbootLCDIFDiv = 432000 / dwEbootPixClkInKHz;
+	dwEbootPixClkInKHz = 432000 / dwEbootLCDIFDiv;
+
+    // Only change DIV when CLKGATE = 0
+    if((HW_CLKCTRL_DIS_LCDIF_RD() & BM_CLKCTRL_DIS_LCDIF_CLKGATE) != 0)
+    {
+        HW_CLKCTRL_DIS_LCDIF_CLR(BM_CLKCTRL_DIS_LCDIF_CLKGATE); 
+        bclkgate = TRUE;
+    }  
+
+    // Change divider
+    // Always use integer divide for PIX clock
+    HW_CLKCTRL_DIS_LCDIF_CLR(BM_CLKCTRL_DIS_LCDIF_DIV_FRAC_EN);
+    // Set divider
+    HW_CLKCTRL_DIS_LCDIF.B.DIV = dwEbootLCDIFDiv;
+	RETAILMSG(1,(TEXT("OALInitPIXClock: New PIX_CLK = %d.%dMHz\r\n"), (dwEbootPixClkInKHz / 1000), (dwEbootPixClkInKHz % 1000)));
+
+    //restore clock gating states
+    if(bclkgate)
+    {
+        HW_CLKCTRL_DIS_LCDIF_SET(BM_CLKCTRL_DIS_LCDIF_CLKGATE);
+    }
+#endif	//UUT
 }
 
 //------------------------------------------------------------------------------
@@ -241,6 +301,35 @@ void OALInitEsdramc(void)
 }
 
 //------------------------------------------------------------------------------
+// CS&ZHL JUN-12-2012: 
+// Function: OALInitHsadcClock
+//
+// Function is called by StartUp to set up the BSP board level clock
+// frequencies. Physical addresses are to be used here.
+//
+// Parameters:
+//       None.
+//
+// Retruns:
+//       None.
+//
+//------------------------------------------------------------------------------
+void OALInitHsadcClock(void)
+{
+    PDDK_CLK_CONFIG pDdkClkConfig  = (PVOID) OALPAtoUA(IMAGE_WINCE_DDKCLK_RAM_PA_START);    
+
+    //OALMSG(1, (L"OALInitHsadcClock: set ref_HSADC to 480MHz\r\n"));
+    // set ref_HSADC to 480MHz
+    HW_CLKCTRL_FRAC1_CLR(BM_CLKCTRL_FRAC1_CLKGATEHSADC);
+    HW_CLKCTRL_FRAC1_WR((HW_CLKCTRL_FRAC1_RD() & ~BM_CLKCTRL_FRAC1_HSADCFRAC) | \
+                       BF_CLKCTRL_FRAC1_HSADCFRAC(18));   
+
+    HW_CLKCTRL_FRAC1_SET(BM_CLKCTRL_FRAC1_CLKGATEHSADC);
+
+    pDdkClkConfig->clockFreq[DDK_CLOCK_SIGNAL_REF_HSADC] = 480000000;    
+}
+
+//------------------------------------------------------------------------------
 //
 // Function: OALInitClock
 //
@@ -261,6 +350,11 @@ void OALClockInit()
     OALInitPIXClock();
     OALInitEsdramc(); 
     OALInitGpio();
+
+	// CS&ZHL JUN-12-2012: set ref_HSADC => 480MHz
+#if	(defined EM9280 || defined EM9283)
+	OALInitHsadcClock();
+#endif	//EM9280 || EM9283
 }
 
 

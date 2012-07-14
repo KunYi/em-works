@@ -1,0 +1,39 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+#!INCLUDE "..\..\sources.inc"
+
+!IF ("$(BSP_UUT)" == "1")
+SKIPBUILD=1
+!ENDIF 
+
+!IF "$(BSP_EM9280)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+TARGETNAME=oal_rtc_isl1208
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+NOMIPS16CODE=1
+
+INCLUDES= \
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\common\src\inc; \
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\OAL\inc; \
+
+
+SOURCES=             \
+    rtc.c            \
+    alarm.c          \
+    soc_rtc.c        \
+    rtc_persistent.c \
+    isl1208.c        \
+
+
+
+#
+#

@@ -28,9 +28,9 @@
 extern void BSPBacklightInitialize();
 extern void BSPBacklightRelease();
 extern void BSPBacklightSetIntensity(DWORD level);
-
+//extern void BSPBacklightEnable();
+// JLY05-2012: LQK
 extern void BSPBacklightEnable( BOOL Enable );
-
 
 //------------------------------------------------------------------------------
 // External Variables
@@ -147,14 +147,13 @@ extern "C" UINT32 BKL_Init(UINT32 dwContext)
                                    &dwType, (LPBYTE) szName, &dwSize);
         if (dwStatus != ERROR_SUCCESS || dwType != DEVLOAD_DEVNAME_VALTYPE)
         {
-            RETAILMSG(1, 
+            DEBUGMSG(ZONE_ERROR, 
                      (TEXT("BKL_Init: RegQueryValueEx('%s', '%s') failed %u\r\n"),
                       dwContext, DEVLOAD_DEVNAME_VALNAME, dwStatus));
             RegCloseKey(hDriverKey);
             goto InitErrCleanup;
         }
-        //DEBUGMSG(ZONE_INIT, (TEXT("device name is '%s'\r\n"), szName));
-		//RETAILMSG(1, (TEXT("device name is '%s'\r\n"), szName));
+        DEBUGMSG(ZONE_INIT, (TEXT("device name is '%s'\r\n"), szName));
     }
 
     // Default settings:
@@ -641,7 +640,6 @@ BKL_IOControl(
                 PPOWER_CAPABILITIES ppc = (PPOWER_CAPABILITIES) pOutBuf;
                 memset(ppc, 0, sizeof(POWER_CAPABILITIES));
                 ppc->DeviceDx = 0x11;   // support D0, D4
-				//ppc->DeviceDx = 0x1f;   // support D0 D1 D4
                 ppc->WakeFromDx = 0x00; // No wake capability
                 ppc->InrushDx = 0x00;       // No in rush requirement
                 ppc->Power[D0] = (DWORD) PwrDeviceUnspecified;
@@ -689,7 +687,7 @@ BKL_IOControl(
                  pdwBytesTransferred != NULL)
             {
                 CEDEVICE_POWER_STATE NewDx = *(PCEDEVICE_POWER_STATE)pOutBuf;
-                //RETAILMSG(1, (TEXT("NewDx = %d\r\n"), NewDx));
+                DEBUGMSG(ZONE_INFO, (TEXT("NewDx = %d\r\n"), NewDx));
                 if (NewDx != CurDx)
                 {
                     if (NewDx == D0)
@@ -697,12 +695,14 @@ BKL_IOControl(
                         // TURN ON BACKLIGHT
                         if (bACOnline)
                         {
-                            BSPBacklightEnable(TRUE);
+                            //BSPBacklightEnable();
+                            BSPBacklightEnable( TRUE );		// JLY05-2012: LQK
                             BSPBacklightSetIntensity(bklSettings.dwACBacklightLevel);
                         }
                         else
-                        {            
-							BSPBacklightEnable(TRUE);
+                        {
+                            //BSPBacklightEnable();
+                            BSPBacklightEnable( TRUE );      // JLY05-2012: LQK
                             BSPBacklightSetIntensity(bklSettings.dwBattBacklightLevel);
                         }
                         DEBUGMSG(ZONE_INFO, (TEXT("BackLight ON\r\n"))); 
@@ -718,7 +718,8 @@ BKL_IOControl(
                         // if asked for a state we don't support, go to the next lower one
                         // which is D4
                         NewDx = D4;
-                        BSPBacklightEnable(FALSE);
+                        //BSPBacklightEnable();
+						BSPBacklightEnable( FALSE );          //JLY05-2012: LQK
                         BSPBacklightSetIntensity(0);
                         DEBUGMSG(ZONE_INFO, (TEXT("BackLight Off\r\n")));
                     }
@@ -728,7 +729,7 @@ BKL_IOControl(
                     *(PCEDEVICE_POWER_STATE)pOutBuf = CurDx;
                 }
                 *pdwBytesTransferred = sizeof(CEDEVICE_POWER_STATE);
-                //RETAILMSG(1, (TEXT("CurDx = %d\r\n"), CurDx));
+                DEBUGMSG(ZONE_INFO, (TEXT("CurDx = %d\r\n"), CurDx));
                 dwErr = ERROR_SUCCESS;
             }
             break;

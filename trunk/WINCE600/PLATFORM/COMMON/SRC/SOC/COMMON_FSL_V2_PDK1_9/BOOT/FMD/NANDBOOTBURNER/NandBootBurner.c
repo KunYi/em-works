@@ -105,27 +105,30 @@ void NANDBootReserved()
     endBlockID = (DWORD)(NANDImageCfg.dwNandSize + flashInfo.dwBytesPerBlock - 1) / (DWORD)flashInfo.dwBytesPerBlock;
     RETAILMSG(TRUE, (_T("INFO: Set NAND flash blocks [0x%x ~ 0x%x] as reserved.\r\n"), startBlockID, endBlockID-1));        
 
-    for(blockID = startBlockID; blockID < endBlockID; blockID++)
+    //for(blockID = startBlockID; blockID < endBlockID; blockID++)
+    for(blockID = startBlockID; startBlockID < endBlockID; blockID++)	// CS&ZHL APR-2-2012: counting valid block number only!		
     {
         dwResult = FMD_GetBlockStatus(blockID);
         
         // Skip bad blocks
         if(dwResult & BLOCK_STATUS_BAD)
         {
-            //RETAILMSG(TRUE, (_T("INFO: Found bad NAND flash block [0x%x].\r\n", blockID);
+            RETAILMSG(TRUE, (_T("INFO: Found bad NAND flash block [0x%x].\r\n"), blockID));
             continue;
         }
 
         // Skip reserved blocks
         if(dwResult & BLOCK_STATUS_RESERVED)
         {
+			// CS&ZHL APR-2-2012: count valid block only!
+			startBlockID++;
             continue;
         }
         
         // Erase the block...
         if(!FMD_EraseBlock(blockID))
         {
-            //RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block [0x%x].\r\n", blockID);
+            RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block [0x%x].\r\n"), blockID));
             FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
             continue;
         }
@@ -133,9 +136,13 @@ void NANDBootReserved()
         //RETAILMSG(TRUE, (_T("Set Block #%d to be reserved.\r\n"), blockID));
         if(!FMD_SetBlockStatus(blockID, BLOCK_STATUS_RESERVED))
         {
-            //RETAILMSG(TRUE, (_T("ERROR: Unable to set block status [0x%x].\r\n", blockID);
+            RETAILMSG(TRUE, (_T("ERROR: Unable to set block status [0x%x].\r\n"), blockID));
+            FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
             continue;
         }
+
+		// CS&ZHL APR-2-2012: count valid block only!
+		startBlockID++;
     }
 
 }

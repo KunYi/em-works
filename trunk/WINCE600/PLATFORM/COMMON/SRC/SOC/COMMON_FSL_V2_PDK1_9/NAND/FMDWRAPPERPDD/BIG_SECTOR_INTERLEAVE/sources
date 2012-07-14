@@ -29,3 +29,6 @@ FILE_VIEW_INCLUDES_FOLDER= \
     ..\fmdwrappermain.h \
     ..\fmdwrapperpdd.h \
 
+FILE_VIEW_RESOURCE_FOLDER= \
+    ..\flashpdd.def \
+

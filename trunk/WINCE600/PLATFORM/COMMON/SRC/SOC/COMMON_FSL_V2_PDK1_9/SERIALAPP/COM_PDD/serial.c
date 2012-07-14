@@ -42,6 +42,7 @@
 //------------------------------------------------------------------------------
 // External Functions
 extern BOOL BSPUartConfigureGPIO(ULONG HWAddr);
+extern BOOL BSPUart2GPIOInput(ULONG HWAddr);		// CS&ZHL JUN-13-2012: supporting GPIO input as initial state
 extern BOOL BSPSerGetDMARequest(ULONG HWAddr, UINT8* reqRx, UINT8* reqTx);
 extern VOID BSPGetDMABuffSize(UINT16* buffRx, UINT16 * buffTx);
 extern BOOL BSPUartGetDMAIrq(ULONG HWAddr,  UINT32* txDMAIrq, UINT32 *rxDMAIrq);
@@ -529,7 +530,10 @@ static PVOID SerInit(BOOL bIR, ULONG Identifier, PVOID pMDDContext, PHWOBJ pHWOb
         InitError = TRUE;
     }
 
-    BSPUartConfigureGPIO(pSerHead->dwIOBase);
+	// CS&ZHL MAY-21-2012: config GPIO pins onto open(..)
+    //BSPUartConfigureGPIO(pSerHead->dwIOBase);
+	// CS&ZHL JUN-13-2012: config UART pin into GPIO input mode with pull-up
+	BSPUart2GPIOInput(pSerHead->dwIOBase);
 
     if (!InitError)
     {
@@ -650,6 +654,7 @@ static PVOID SerInit(BOOL bIR, ULONG Identifier, PVOID pMDDContext, PHWOBJ pHWOb
            return (NULL);
         }
 
+		RETAILMSG(1, (TEXT("SerInit::COM%d hardware init passed\r\n"), pSerHead->dwDevIndex));
         return (pSerHead);
     }
     else
@@ -754,6 +759,11 @@ static BOOL SerOpen(PVOID pContext)
 
     pSerHead->cOpenCount++;
 
+	//
+	// CS&ZHL Jun 29-2011: confige GPIO move them form SerInit( ) function.
+	//
+	BSPUartConfigureGPIO(pSerHead->dwIOBase);
+
     SL_Reset(pSerHead);
     SL_Open(pSerHead);
 
@@ -798,7 +808,8 @@ static ULONG SerClose(PVOID pContext)
         pUARTINTRREG = (DWORD *)( x == 0 ? pSerHead->uart_info.pv_HWregUARTApp0 :
                                   x == 1 ? pSerHead->uart_info.pv_HWregUARTApp1 :
                                   x == 2 ? pSerHead->uart_info.pv_HWregUARTApp2 :
-                                  x == 3 ? pSerHead->uart_info.pv_HWregUARTApp3 : 0xffff0000);
+                                  x == 3 ? pSerHead->uart_info.pv_HWregUARTApp3 :
+                                  x == 4 ? pSerHead->uart_info.pv_HWregUARTApp4 : 0xffff0000);
         pUARTINTRREG += 0x50>>2;
         while(!((*(ULONG *)pUARTINTRREG) & BM_UARTAPPSTAT_TXFE)
               && (uTries++ < 100))

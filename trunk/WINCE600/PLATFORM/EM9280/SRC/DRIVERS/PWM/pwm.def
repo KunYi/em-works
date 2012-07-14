@@ -1,0 +1,17 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;------------------------------------------------------------------------------
+
+LIBRARY WDT
+
+EXPORTS
+   PWM_Init
+   PWM_Deinit
+   PWM_Open
+   PWM_Close
+   PWM_Read
+   PWM_Write
+   PWM_Seek
+   PWM_PowerDown
+   PWM_PowerUp
+   PWM_IOControl

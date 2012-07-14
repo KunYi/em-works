@@ -1,54 +1,107 @@
+IF BSP_SERIAL_UART4
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2]
-   "DeviceArrayIndex"=dword:0
+   "DeviceArrayIndex"=dword:2
    "IoBase"=dword:80072000		; AUART4
    "IoLen"=dword:D4
    "Prefix"="COM"
    "Dll"="csp_serial.dll"
    "Index"=dword:2				; COM2
-   "Order"=dword:3
+   "Order"=dword:3F
    "useDMA"=dword:1
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2\Unimodem]
    "Tsp"="Unimodem.dll"
    "DeviceType"=dword:0
    "FriendlyName"="COM2 UNIMODEM"
    "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+#endif ; BSP_EM9280 BSP_EM9283
+ENDIF ; BSP_SERIAL_UART4
 
+IF BSP_SERIAL_UART0
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM3]
-   "DeviceArrayIndex"=dword:0
+   "DeviceArrayIndex"=dword:3
    "IoBase"=dword:8006A000		; AUART0
    "IoLen"=dword:D4
    "Prefix"="COM"
    "Dll"="csp_serial.dll"
    "Index"=dword:3				; COM3
+   "Order"=dword:3F
+   "useDMA"=dword:1
+#else							; -> iMX28EVK
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:8006A000		;AUART0
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:2
    "Order"=dword:3
    "useDMA"=dword:1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="i.MX28 COM2 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+#endif ; BSP_EM9280 BSP_EM9283
+ENDIF ; BSP_SERIAL_UART0
 
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
-   "DeviceArrayIndex"=dword:0
+IF BSP_SERIAL_UART1
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM4]
+   "DeviceArrayIndex"=dword:4
    "IoBase"=dword:8006C000		; AUART1
    "IoLen"=dword:D4
    "Prefix"="COM"
    "Dll"="csp_serial.dll"
-   "Index"=dword:5				; COM5
-   "Order"=dword:5
+   "Index"=dword:4				; COM4
+   "Order"=dword:3F
    "useDMA"=dword:1
+#endif ; BSP_EM9280 BSP_EM9283
+ENDIF ; BSP_SERIAL_UART1
    
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM6]
-   "DeviceArrayIndex"=dword:0
+IF BSP_SERIAL_UART2
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
+   "DeviceArrayIndex"=dword:5
    "IoBase"=dword:8006E000		; AUART2
    "IoLen"=dword:D4
    "Prefix"="COM"
    "Dll"="csp_serial.dll"
-   "Index"=dword:6				; COM6
-   "Order"=dword:5
+   "Index"=dword:5				; COM5
+   "Order"=dword:3F
    "useDMA"=dword:1
+#endif ; BSP_EM9280 BSP_EM9283
+ENDIF ; BSP_SERIAL_UART2
 
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM7]
-   "DeviceArrayIndex"=dword:0
+IF BSP_SERIAL_UART3
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM6]
+   "DeviceArrayIndex"=dword:6
    "IoBase"=dword:80070000		; AUART3
    "IoLen"=dword:D4
    "Prefix"="COM"
    "Dll"="csp_serial.dll"
-   "Index"=dword:7				; COM7
-   "Order"=dword:5
+   "Index"=dword:6				; COM6
+   "Order"=dword:3F
    "useDMA"=dword:1
+#else							; -> iMX28EVK
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
+   "DeviceArrayIndex"=dword:0
+   "IoBase"=dword:80070000
+   "IoLen"=dword:D4
+   "Prefix"="COM"
+   "Dll"="csp_serial.dll"
+   "Index"=dword:5
+   "Order"=dword:3
+   "useDMA"=dword:1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"="i.MX28 COM5 UNIMODEM"
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+#endif ; BSP_EM9280 BSP_EM9283
+ENDIF ; BSP_SERIAL_UART3
+
+
+

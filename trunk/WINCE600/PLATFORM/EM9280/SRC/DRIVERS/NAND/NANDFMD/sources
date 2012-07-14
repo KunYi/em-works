@@ -34,7 +34,9 @@ SOURCELIBS = \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fmdwrapperpdd_$(_COMMONSOCDIR).lib \
     $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\NandBootBurner.lib \
 
+
 SOURCES=nfc_sys.cpp\
+
     
 INCLUDES=\
     $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\INC; \

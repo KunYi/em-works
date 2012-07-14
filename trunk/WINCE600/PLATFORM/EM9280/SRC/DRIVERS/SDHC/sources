@@ -31,3 +31,7 @@ SOURCELIBS= \
 
 SOURCES = bspsdhc.cpp
 
+FILE_VIEW_RESOURCE_FOLDER= \
+    sdhc.def \
+    sdhc.reg \
+

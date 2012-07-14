@@ -1,4 +1,4 @@
-!IF "$(BSP_EM9280)" == "" 
+!IF "$(BSP_EM9283)" == "" 
 SKIPBUILD=1
 !ENDIF
 

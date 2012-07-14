@@ -88,9 +88,16 @@ VOID OEMInitDebugSerial()
     HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_SFTRST | BM_PINCTRL_CTRL_CLKGATE);
 
     // Configure the GPIO UART pins.
-    HW_PINCTRL_MUXSEL7_SET(0xF);          // Switch both pins to GPIO
-    HW_PINCTRL_MUXSEL7_CLR(1 << 2);       // DBG-TX (bank 3 pin 17) muxmode=10
-    HW_PINCTRL_MUXSEL7_CLR(1 << 0);       // DBG-RX (bank 3 pin 16) muxmode=10
+//#ifdef	EM9280
+//    HW_PINCTRL_MUXSEL7_SET(0xF000F);        // Switch both (GPIO3_16, GPIO3_17) and ((GPIO3_24, GPIO3_25)) to GPIO
+//    HW_PINCTRL_MUXSEL6_SET(0xF0);			// Switch (GPIO3_2, GPIO3_3) to GPIO
+//    HW_PINCTRL_MUXSEL6_CLR(1 << 6);			// DBG-TX (bank 3 pin 3) muxmode=10
+//    HW_PINCTRL_MUXSEL6_CLR(1 << 4);			// DBG-RX (bank 3 pin 2) muxmode=10
+//#else	// -> iMX28EVK
+    HW_PINCTRL_MUXSEL7_SET(0xF);			// Switch both pins to GPIO
+    HW_PINCTRL_MUXSEL7_CLR(1 << 2);			// DBG-TX (bank 3 pin 17) muxmode=10
+    HW_PINCTRL_MUXSEL7_CLR(1 << 0);			// DBG-RX (bank 3 pin 16) muxmode=10
+//#endif	//EM9280
 
     // Set the Baud Rate
     HW_UARTDBGIBRD_WR((HW_UARTDBGIBRD_RD() & BM_UARTDBGIBRD_UNAVAILABLE) | GET_UARTDBG_BAUD_DIVINT(DEBUG_BAUD));

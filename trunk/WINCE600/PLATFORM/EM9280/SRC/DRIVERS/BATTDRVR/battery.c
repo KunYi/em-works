@@ -51,12 +51,12 @@
 #define BATTERY_BAD                     3500
 
 #define UPDATE_BATTERY_INFO_COUNT       20
-
 #define COMPLETE_CHARGE_BATTERY_VOLTAGE 4080
-
-
+#define MAX_CHARGE_BATTERY_VOLTAGE      3200
 #define MAX_SAFE_CURRENT_LEVEL          0x38     //700mA  
 #define MIN_CURRENT_LEVEL               0x7      //80mA   
+#define MAX_CURRENT_LEVEL_WALL_MAX      0x18     //300mA  
+#define MAX_CURRENT_LEVEL_WALL_MIN      0x10     //200mA  
 #define POWER_OFF_HOLD_TIME             2000000
 #define ABSOLUTE_TEMPERATURE_VALUE      273
 #define HIGH_TEMPERATURE_VALUE          353
@@ -65,18 +65,6 @@
 #define VDD5V_MAX                       5200
 #define VDD5V_MIN                       0
 #define VDD5V_FULL_VALID                4800
-
-#ifdef EM9283
-	#define MAX_CHARGE_BATTERY_VOLTAGE      3000
-	#define MAX_CURRENT_LEVEL_WALL_MAX      0x28    //500mA  
-	#define MAX_CURRENT_LEVEL_WALL_MIN      0x10    //200mA  
-	#define MAX_CURRENT_LEVEL_USB_MAX      0x18		//300mA  
-	#define MAX_CURRENT_LEVEL_USB_MIN      0x10     //200mA  
-#else
-	#define MAX_CHARGE_BATTERY_VOLTAGE      3200
-	#define MAX_CURRENT_LEVEL_WALL_MAX      0x18     //300mA  
-	#define MAX_CURRENT_LEVEL_WALL_MIN      0x10     //200mA  
-#endif
 
 #define BATTERY_MAX_VOLTAGE_TEXT     TEXT("MaxBatteryVoltage")
 #define BATTERY_VOLTAGE_HIGH_TEXT    TEXT("BatteryVoltageHighLevel")
@@ -98,7 +86,6 @@ static LPTSTR g_5VDetectEventName    = TEXT("5V_Detect");
 static HANDLE g_h5VIntEvent          = NULL;
 static HANDLE g_h5VIntEventThread    = NULL;
 static HANDLE g_hPwrLRADC            = NULL;
-
 
 DWORD SysIntr5V         = 0;
 PVOID pv_HWregDIGCTL    = NULL;
@@ -205,8 +192,11 @@ static VOID UpdateBatteryStatus(VOID)
     PSYSTEM_POWER_STATUS_EX2 ppowerstatus = &gPowerStatus;
     UINT32 u32MaxChargeCurrent = MAX_CURRENT_LEVEL_WALL_MIN;
     PMU_POWER_SUPPLY_MODE PowerMode;
+
+	//JLY05-2012:LQK
+#ifdef EM9283
 	BOOL bSetCharger;
-	UINT32 PowerSource;
+#endif
     
     //RETAILMSG(1,(TEXT("UpdateBatteryStatus ++\r\n")));
 
@@ -222,9 +212,11 @@ static VOID UpdateBatteryStatus(VOID)
     else
         gfACOnline = FALSE;
 
+	//JLY05-2012:LQK
+#ifndef EM9283
     // range ~3000 - 4200 mV
-    //PmuGetBatteryChargingStatus(&gfBatteryCharging);
-	
+    PmuGetBatteryChargingStatus(&gfBatteryCharging);
+#endif   //EM9283
 
     //RETAILMSG(1,(TEXT("Battery PmuGetBatteryChargingStatus = %d ++\r\n"), gfBatteryCharging)); 
 
@@ -235,33 +227,22 @@ static VOID UpdateBatteryStatus(VOID)
     if(dwUpdateVoltageTime >= UPDATE_BATTERY_INFO_COUNT)
     {
         if(BattGetVDD5V() >= VDD5V_FULL_VALID)
-		{
-			PmuGetPowerSource( &PowerSource );
-			if(PowerSource)
-			{
-				u32MaxChargeCurrent = MAX_CURRENT_LEVEL_USB_MAX;
-			}
-			else
-			{
-				u32MaxChargeCurrent = MAX_CURRENT_LEVEL_WALL_MAX;
-			}
-		}
-			
+            u32MaxChargeCurrent = MAX_CURRENT_LEVEL_WALL_MAX;
+
         gdwDieTemperature = BattGetDieTemperature();
         //if temperature > 65C,set the charge current to 200mA.
-        if(gdwDieTemperature > MID_TEMPERATURE_VALUE)
-            u32MaxChargeCurrent = MAX_CURRENT_LEVEL_WALL_MIN;
-
+        //if(gdwDieTemperature > MID_TEMPERATURE_VALUE)
+        //    u32MaxChargeCurrent = MID_CURRENT_LEVEL;
         BatteryStopCharger();
         gbChargerFlag = FALSE;
         dwUpdateVoltageTime = 0;
         Sleep(500);
         
-
-		PmuGetBatteryVoltage(&gBatteryVoltage);     // Should return a value in
+        PmuGetBatteryVoltage(&gBatteryVoltage);     // Should return a value in
         //RETAILMSG(1,(TEXT("!!!Battery gBatteryVoltage = %d\r\n"),gBatteryVoltage));
         //RETAILMSG(1,(TEXT("gdwDieTemperature = %d\r\n"),gdwDieTemperature - 273));
-
+	// JLY05-2012: LQK
+#ifdef EM9283
         if(gfACOnline && gBatteryVoltage <= gdwBatteryMaxVoltage )
         {
             if(gBatteryVoltage <= MAX_CHARGE_BATTERY_VOLTAGE )
@@ -288,6 +269,23 @@ static VOID UpdateBatteryStatus(VOID)
 			RETAILMSG(1, (TEXT("Battery Charing Falg: %d, BatteryVoltage: %d\r\n"), gbChargerFlag, gBatteryVoltage));
 
         }
+#else
+        if(gfACOnline && gBatteryVoltage <= gdwBatteryMaxVoltage)
+        {
+            if(gBatteryVoltage <= MAX_CHARGE_BATTERY_VOLTAGE )
+            {
+                BatterySetCharger(gBatteryVoltage,MIN_CURRENT_LEVEL);
+                gbMaxCharger = FALSE;
+                gbChargerFlag = TRUE;
+            }
+            else 
+            {
+                BatterySetCharger(gBatteryVoltage,u32MaxChargeCurrent);
+                gbMaxCharger = TRUE;
+                gbChargerFlag = TRUE;
+            }
+        }
+#endif     //EM9283
 
         if(gfACOnline && (gBatteryVoltage >= ppowerstatus->BatteryVoltage))
         {
@@ -305,8 +303,8 @@ static VOID UpdateBatteryStatus(VOID)
         if(gfACOnline && (gBatteryVoltage >= COMPLETE_CHARGE_BATTERY_VOLTAGE))              
             ppowerstatus->BatteryLifePercent = 100;
 
-         if(ppowerstatus->BatteryLifePercent == 100)
-             gbChargerFlag = FALSE;
+        if(ppowerstatus->BatteryLifePercent == 100)
+            gbChargerFlag = FALSE;
         
         if(gBatteryVoltage < gdwBatteryVoltageLow)
             ppowerstatus->BatteryLifePercent = 0;    
@@ -458,8 +456,8 @@ BatteryPDDInitialize(LPCTSTR pszRegistryContext)
     RETAILMSG(1,(TEXT("Deteced gBatteryVoltage = %d\r\n"),gBatteryVoltage));
 
     //if(IsBatteryGood() && (gBatteryVoltage < COMPLETE_CHARGE_BATTERY_VOLTAGE))
-	// lqk 2010-5-25 
-	if(IsBatteryGood())
+	//JLY05-2012: LQK lqk 2010-5-25 
+	if( IsBatteryGood() )
         gbBattery = TRUE;
 
     if(gBatteryVoltage == 0)
@@ -658,7 +656,7 @@ BatteryPDDGetStatus(
             if(gbBattNoConnected == TRUE)
             {        
                 pstatus->BatteryLifePercent   = 0;
-                //RETAILMSG(1,(TEXT("Warning:Battery is lost,please connect battery and reboot!!!\r\n")));    
+                RETAILMSG(1,(TEXT("Warning:Battery is lost,please connect battery and reboot!!!\r\n")));    
             }
         }
         

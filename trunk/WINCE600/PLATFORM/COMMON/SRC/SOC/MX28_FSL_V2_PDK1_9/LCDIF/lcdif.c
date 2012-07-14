@@ -38,6 +38,7 @@
 //-----------------------------------------------------------------------------
 // Global Variables
 static PVOID pv_HWregLCDIF;
+//PVOID pv_HWregLCDIF = NULL;
 
 //-----------------------------------------------------------------------------
 // Local Variables
@@ -111,15 +112,14 @@ static void LCDIFReset(BOOL bReset)
 
     if(bReset)
     {
-
- 		if (HW_LCDIF_CTRL.B.CLKGATE == 0)
+        if (HW_LCDIF_CTRL.B.CLKGATE == 0)
         {
-             // if clock is not gated, stop the block first
-             // else the next DMA request can freeze the system
-             HW_LCDIF_CTRL.B.RUN = 0;
+            // if clock is not gated, stop the block first
+            // else the next DMA request can freeze the system
+            HW_LCDIF_CTRL.B.RUN = 0;
             while (HW_LCDIF_CTRL.B.RUN == 1);
         }
-  
+    
         while (HW_LCDIF_CTRL.B.CLKGATE != 0)
             HW_LCDIF_CTRL.B.CLKGATE = 0;
     
@@ -638,7 +638,7 @@ VOID LCDIFSetBusMasterMode(BOOL bEnable)
 //  Returns:
 //      TRUE. successful
 //-----------------------------------------------------------------------------
-BOOL LCDIFDisplayFrameBuffer(const void* pData )
+BOOL LCDIFDisplayFrameBuffer(const void* pData)
 {
     hw_lcdif_ctrl_t ctrl_reg;
     UINT32 physAddress;
@@ -667,6 +667,21 @@ BOOL LCDIFDisplayFrameBuffer(const void* pData )
     return TRUE;
 }
 
+//
+// add by LQK to support dot_lcd
+//
+//-----------------------------------------------------------------------------
+//  Function:LCDIFDisplayFrameBufferEx()
+//
+//  This function set frame buffer address for LCDIF to display
+//
+//  Parameters:
+//      pData 
+//            [in] Frame buffer address to display
+//
+//  Returns:
+//      TRUE. successful
+//-----------------------------------------------------------------------------
 BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect )
 {
 	hw_lcdif_ctrl_t ctrl_reg;
@@ -795,35 +810,48 @@ VOID LCDIFSetInterlace(BOOL bEnable)
 //  Parameters:
 //      PixFreq
 //          [in] Clock value in KHz
-//
+//      iMode // zxw 2012-6-11
+//			[in] select the clock source
+//               TRUE   direct use PIX Clock
+//               FALSE  according to the input Clock value select the clock source
 //  Returns:
 //      None
 //-----------------------------------------------------------------------------
+// zxw 2012-6-11
+//VOID LCDIFSetupLCDIFClock(UINT32 PixFreq , BOOL bMode )
 VOID LCDIFSetupLCDIFClock(UINT32 PixFreq)
 {
     UINT32 rootfreq, u32Div;
-    if(PixFreq <= MIN_PLL_KHZ)
-    {
-        DDKClockGetFreq(DDK_CLOCK_SIGNAL_REF_XTAL, &rootfreq);
-        u32Div = rootfreq / (PixFreq*1000) + 1;
-        DDKClockConfigBaud(DDK_CLOCK_SIGNAL_DIS_LCDIF, DDK_CLOCK_BAUD_SOURCE_REF_XTAL, u32Div );    
-    }
-    else
-    { 
-        DDKClockGetFreq(DDK_CLOCK_SIGNAL_REF_PIX, &rootfreq);
-        u32Div = rootfreq / (PixFreq*1000) + 1;
-        DDKClockConfigBaud(DDK_CLOCK_SIGNAL_DIS_LCDIF, DDK_CLOCK_BAUD_SOURCE_REF_PIX, u32Div );    
-    }
-    if(!DDKClockSetGatingMode(DDK_CLOCK_GATE_DIS_LCDIF_CLK, FALSE))
+
+	//RETAILMSG(1, (_T("LCDIFSetupLCDIFClock.!\r\n")));
+	//// add by zxw JUN04-2012
+	//if( bMode )
+	//{
+	//	DDKClockGetFreq(DDK_CLOCK_SIGNAL_REF_PIX, &rootfreq);
+	//	u32Div = rootfreq / (PixFreq*1000)+1;
+	//	DDKClockConfigBaud(DDK_CLOCK_SIGNAL_DIS_LCDIF, DDK_CLOCK_BAUD_SOURCE_REF_PIX, u32Div ); 
+	//	RETAILMSG(1, (_T("-->Use PIX!!\r\n")));
+	//}
+	//else
+	{
+		if(PixFreq <= (XTAL_24MHZ_IN_KHZ / 10))		// MIN_PLL_KHZ)
+		{
+			DDKClockGetFreq(DDK_CLOCK_SIGNAL_REF_XTAL, &rootfreq);
+			u32Div = rootfreq / (PixFreq*1000) + 1;
+			DDKClockConfigBaud(DDK_CLOCK_SIGNAL_DIS_LCDIF, DDK_CLOCK_BAUD_SOURCE_REF_XTAL, u32Div );    
+		}
+		else
+		{ 
+			DDKClockGetFreq(DDK_CLOCK_SIGNAL_REF_PIX, &rootfreq);
+			u32Div = rootfreq / (PixFreq*1000) + 1;
+			DDKClockConfigBaud(DDK_CLOCK_SIGNAL_DIS_LCDIF, DDK_CLOCK_BAUD_SOURCE_REF_PIX, u32Div );    
+		}
+	}
+
+	if(!DDKClockSetGatingMode(DDK_CLOCK_GATE_DIS_LCDIF_CLK, FALSE))
     {
         RETAILMSG(1, (L"Display controller init - DDKClockSetGatingMode failed!\r\n"));
     }
 
-}
-
-VOID LCDIFStop( )
-{
-	while (HW_LCDIF_CTRL.B.RUN != 0 )
-		HW_LCDIF_CTRL.B.RUN = 0;
 }
 

@@ -79,7 +79,8 @@ del nkinfo.txt
 @REM Go back to saved dir
 cd %_CURRENTDIR%
 
-set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\iMX28EVK
+if "%BSP_EM9280%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9280
+if "%BSP_EM9283%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9283
 
 cd %_MFGTOOL%
 
@@ -96,7 +97,8 @@ goto end_of_file
 
 :make_binfs_files
 @REM it is case of BinFS, just copy xip.nb0 to nk.nb0
-set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\iMX28EVK
+if "%BSP_EM9280%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9280
+if "%BSP_EM9283%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9283
 
 cd %_MFGTOOL%
 
@@ -134,6 +136,11 @@ copy /Y nk_ivt.sb %_FLATRELEASEDIR%
 @REM Clean up ...
 del xldr.nb0
 del nk.nb0
+
+set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware
+cd %_MFGTOOL%
+
+copy /Y %_FLATRELEASEDIR%\nk_ivt.sb
 
 @REM Go back to saved dir
 cd %_CURRENTDIR%

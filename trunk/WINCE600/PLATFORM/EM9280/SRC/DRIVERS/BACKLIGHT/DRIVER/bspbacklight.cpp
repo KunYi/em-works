@@ -77,7 +77,9 @@ void BSPBacklightInitialize()
     {
         ERRORMSG(1, (TEXT("BSPBacklightInitialize: failed!\r\n")));
         return;
-    }     
+    }
+	// JLY05-2012: LQK
+#ifdef EM9283
     //Setup IOMUX
     PWMChSetIOMux(PWM_CHANNEL_7,DDK_IOMUX_MODE_01);
 
@@ -86,6 +88,17 @@ void BSPBacklightInitialize()
                    BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
     //Enable PWM2
     PWMChOutputEnable(PWM_CHANNEL_7,TRUE);
+#else
+    //Setup IOMUX
+    PWMChSetIOMux(PWM_CHANNEL_2,DDK_IOMUX_MODE_00);
+
+    //Setup initial frequency and duty cycle with 1 kHz
+    PWMChSetConfig(PWM_CHANNEL_2,PWM_STATE_HIGH, PWM_STATE_LOW,
+                   BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
+    //Enable PWM2
+    PWMChOutputEnable(PWM_CHANNEL_2,TRUE);
+#endif   // EM9283
+
     RETAILMSG(1, (TEXT("<--BSPBacklightInitialize\r\n")));
 }
 //------------------------------------------------------------------------------
@@ -132,6 +145,8 @@ void BSPBacklightSetIntensity(DWORD level)
     {
         level = MIN_BRIGHTNESS_PERCENTAGE;
     }
+	// JLY05-2012: LQK
+#ifdef EM9283
     PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
     //Level = 0,disable PWM
     if (level == 0) 
@@ -143,6 +158,19 @@ void BSPBacklightSetIntensity(DWORD level)
     {
         PWMChOutputEnable(PWM_CHANNEL_7, TRUE);
     }
+#else
+    PWMChSetDutyCycle(PWM_CHANNEL_2,PWM_STATE_HIGH, PWM_STATE_LOW,level);
+    //Level = 0,disable PWM
+    if (level == 0) 
+    {
+        PWMChOutputEnable(PWM_CHANNEL_2, FALSE);
+    }
+    //Enable PWM
+    else 
+    {
+        PWMChOutputEnable(PWM_CHANNEL_2, TRUE);
+    }
+#endif    // EM9283
 }
 
 //------------------------------------------------------------------------------
@@ -158,8 +186,11 @@ void BSPBacklightSetIntensity(DWORD level)
 //      None.
 //
 //------------------------------------------------------------------------------
+//void BSPBacklightEnable()
+// JLY05-2012: LQK
 void BSPBacklightEnable(BOOL Enable)
 {
+#ifdef EM9283
 	if(Enable)
 	{
 		Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
@@ -173,4 +204,6 @@ void BSPBacklightEnable(BOOL Enable)
 		DDKGpioEnableDataPin(DDK_IOMUX_PWM7,1);   //Enable as output
 		DDKGpioWriteDataPin(DDK_IOMUX_PWM7,0);  //Pull low to display PWM output    
 	}
+#endif      // EM9283
 }
+

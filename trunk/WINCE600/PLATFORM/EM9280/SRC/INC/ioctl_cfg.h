@@ -53,8 +53,8 @@ extern "C" {
 #endif
 
 #define BOOT_MODE_MASK				0xF
-#define BOOT_MODE_SDMMC			0x9
-#define BOOT_MODE_SPI					0x2
+#define BOOT_MODE_SDMMC				0x9
+#define BOOT_MODE_SPI				0x2
 
 //------------------------------------------------------------------------------
 //  Define:  IOCTL_PROCESSOR_VENDOR/NAME/CORE
@@ -110,16 +110,15 @@ typedef struct __BootMode__
     BootSource  source;
 }BootMode, *PBootMode;
 
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
 // CS&ZHL MAR-8-2012: OEM IOCTL CODE for EM9280
-//------------------------------------------------------------------------------
-#ifdef	EM9280
-
+//---------------------------------------------------------------------------------------------------------------
 #define IOCTL_HAL_NANDFMD_ACCESS			CTL_CODE(FILE_DEVICE_HAL, 4000, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_HAL_SPI_ACCESS				CTL_CODE(FILE_DEVICE_HAL, 4004, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_HAL_I2C_ACCESS				CTL_CODE(FILE_DEVICE_HAL, 4006, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_HAL_TIMESTAMP_WRITE			CTL_CODE(FILE_DEVICE_HAL, 4010, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_HAL_SHARE_INTERRUPT			CTL_CODE(FILE_DEVICE_HAL, 4012, METHOD_BUFFERED, FILE_ANY_ACCESS)
-
-#endif	//EM9280
+#define IOCTL_HAL_WATCHDOG_GET				CTL_CODE(FILE_DEVICE_HAL, 4014, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #define IOCTL_HAL_CPU_INFO_READ				CTL_CODE(FILE_DEVICE_HAL, 4018, METHOD_BUFFERED, FILE_ANY_ACCESS)
 

@@ -45,6 +45,11 @@ BOOL PartialWriteImage(LPBYTE pImage, DWORD dwLength);
 BOOL EndPartialWriteImage();
 BOOL UcePreWriteRawData(TCHAR * pDiskName, DWORD startAddr, DWORD dwValidDataLength);
 BOOL UceWriteRawData(PBYTE pbData, DWORD dwValidDataLength);
+// CS&ZHL MAY11-2012: write security info to NandFlash & OTP
+BOOL UceWriteSecurityInfo( PBYTE pbData, DWORD dwValidDataLength );
 BOOL UceCreatePartitions(INT iPartition, PARTITION_CONT partCont);
 BOOL GetDeviceHandle(TCHAR *pDiskName);
+
+// CS&ZHL JUN1-2012: Get OTP Info
+BOOL UceGetOTPInfo(DWORD* pdwCUST, DWORD dwLen);
 #endif //_UCE_MEDIA_H__

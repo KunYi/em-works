@@ -12,6 +12,8 @@ DIRS=              \
     BSPENET        \
     NANDBOOTBURNER \
     NANDFMD        \
+    ISL1208        \
+    
     
 
 

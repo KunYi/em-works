@@ -24,7 +24,12 @@
 //
 //-----------------------------------------------------------------------------
 #include <bsp.h>
+#include <bsp_drivers.h>			// CS&ZHL MAY-30-2012: supporting board state
 #include <usbkitl.h>
+//#ifdef	EM9280
+#include <em9280_oal.h>
+//#endif	//EM9280
+
 //-----------------------------------------------------------------------------
 // External Functions
 extern VOID ResetChip();
@@ -80,6 +85,30 @@ CRITICAL_SECTION	g_oalNfcMutex;
 
 extern BOOL OALFMD_Access(VOID* pInpBuffer, UINT32 inpSize);
 #endif	//NAND_PDD	
+
+//---------------------------------------------------------------------------------
+// OAL operations for EM9280 only
+#ifdef	EM9280
+#ifndef	UUT
+//
+// CS&ZHL MAR-8-2012: supporting multiple SPI ports of UART(HT45B0F)
+//
+CRITICAL_SECTION	g_oalSpiMutex;
+
+extern void OALSSP0SpiInit(void);
+extern BOOL OALSPI_Access(VOID* pInpBuffer, UINT32 inpSize);
+#endif	//UUT
+
+//
+// CS&ZHL MAR-18-2012: supporting I2C bus for RTC and GPIOX
+//
+CRITICAL_SECTION	g_oalI2cMutex;
+
+extern void OALGpioI2cInit(void);
+extern BOOL OALI2C_Access(VOID* pInpBuffer, UINT32 inpSize);
+#endif	//EM9280
+//
+//---------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 //
@@ -158,9 +187,27 @@ BOOL OALIoCtlHalPostInit(
 	// CS&ZHL FEB-28-2012: supporting multiple partitions of NandFlash
 	//
 #ifdef NAND_PDD
-	RETAILMSG(1, (TEXT("OALIoCtlHalPostInit::InitializeCriticalSection(&g_oalNfcMutex)\r\n")));
+    OALMSG(1, (L"OALIoCtlHalPostInit::InitializeCriticalSection(&g_oalNfcMutex)\r\n"));
 	InitializeCriticalSection(&g_oalNfcMutex);
 #endif	//NAND_PDD
+
+#ifdef	EM9280
+#ifndef	UUT
+	//
+	// CS&ZHL MAR-8-2012: supporting multiple SPI ports of UART(HT45B0F)
+	//
+    OALMSG(1, (L"OALIoCtlHalPostInit::InitializeCriticalSection(&g_oalSpiMutex)\r\n"));
+	InitializeCriticalSection(&g_oalSpiMutex);
+	OALSSP0SpiInit();		// init SPI port
+#endif	//UUT
+
+	//
+	// CS&ZHL MAR-18-2012: supporting GPIO based I2C for RTC and GPIOX
+	//
+    OALMSG(1, (L"OALIoCtlHalPostInit::InitializeCriticalSection(&g_oalI2cMutex)\r\n"));
+	InitializeCriticalSection(&g_oalI2cMutex);
+	OALGpioI2cInit();		// init I2C port
+#endif	//EM9280
 
 	return(TRUE);
 }
@@ -580,12 +627,6 @@ BOOL OALIoCtlSetUpdateSig (
     return !dwErr;
 }
 
-//----------------------------------------------------------------------------
-// EM9280 IOCTL routines
-//----------------------------------------------------------------------------
-#ifdef EM9280
-#endif	//EM9280
-
 //
 // CS&ZHL FEB-28-2012: supporting multiple partitions of NandFlash
 //
@@ -610,6 +651,262 @@ BOOL OALIoCtlHalNandfmdAccess(
 	return bResult;
 }
 #endif	//NAND_PDD
+
+//----------------------------------------------------------------------------
+// EM9280 IOCTL routines
+//----------------------------------------------------------------------------
+#ifdef  EM9280
+#ifndef UUT
+
+// CS&ZHL MAR-8-2012: access GPIO based SPI port
+BOOL OALIoCtlHalSpiAccess(
+    UINT32 code, VOID* pInpBuffer, UINT32 inpSize, VOID* pOutBuffer, 
+    UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL bResult;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	//OALMSG(1, (L"->OALIoCtlHalSpiAccess\r\n"));
+
+	EnterCriticalSection(&g_oalSpiMutex);
+	bResult = OALSPI_Access(pInpBuffer, inpSize);
+	LeaveCriticalSection(&g_oalSpiMutex);
+
+	return bResult;
+}
+#endif	//UUT
+
+// CS&ZHL MAY-18-2012: access GPIO based I2C bus
+BOOL OALIoCtlHalI2cAccess(
+    UINT32 code, VOID* pInpBuffer, UINT32 inpSize, VOID* pOutBuffer, 
+    UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL bResult;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	//OALMSG(1, (L"->OALIoCtlHalI2cAccess\r\n"));
+
+	EnterCriticalSection(&g_oalI2cMutex);
+	bResult = OALI2C_Access(pInpBuffer, inpSize);
+	LeaveCriticalSection(&g_oalI2cMutex);
+
+	return bResult;
+}
+#endif	//EM9280
+
+//
+// CS&ZHL APR-06-2012: read various info about EM9280
+//
+BOOL OALIoCtlHalBoardInfoRead(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, 
+										VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL	bResult = FALSE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	/*
+	if(!pOutBuffer || (outSize != sizeof(DWORD)))
+	{
+		OALMSG(1, (L"OALIoCtlHalBoardInfoRead: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	if(pOutSize != NULL)
+	{
+		*pOutSize = sizeof(DWORD);
+	}
+exit:
+	*/
+
+	return bResult;
+}
+
+
+BOOL OALIoCtlHalTimeStampRead(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, 
+										VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL	bResult = TRUE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+
+	if(!pOutBuffer || (outSize < (g_dwBuiltTimeStampLength + 1)))
+	{
+		OALMSG(1, (L"OALIoCtlHalTimeStampRead: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	// copy built timestamp string to output buffer
+	memcpy(pOutBuffer, g_BuiltTimeStamp, g_dwBuiltTimeStampLength);
+	
+	if(pOutSize != NULL)
+	{
+		*pOutSize = g_dwBuiltTimeStampLength;
+	}
+
+exit:
+	return bResult;
+}
+
+BOOL OALIoCtlHalVendorIDRead(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, 
+										VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL	bResult = FALSE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	/*
+	if(!pOutBuffer || (outSize != sizeof(DWORD)))
+	{
+		OALMSG(1, (L"OALIoCtlHalVendorIDRead: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	if(pOutSize != NULL)
+	{
+		*pOutSize = sizeof(DWORD);
+	}
+
+exit:
+	*/
+
+	return bResult;
+}
+
+BOOL OALIoCtlHalCustomerIDRead(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, 
+											VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL	bResult = FALSE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	/*
+	if(!pOutBuffer || (outSize != sizeof(DWORD)))
+	{
+		OALMSG(1, (L"OALIoCtlHalVendorIDRead: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	if(pOutSize != NULL)
+	{
+		*pOutSize = sizeof(DWORD);
+	}
+
+exit:
+	*/
+
+	return bResult;
+}
+
+BOOL OALIoCtlHalBoardStateRead(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, 
+											VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	DWORD		dwBoardState = 0;
+	BOOL		bResult = TRUE;
+    BSP_ARGS	*pBspArgs = (BSP_ARGS *)IMAGE_SHARE_ARGS_UA_START;
+
+#define	EM9280_BOARD_STATE_DBGSL		(1 << 7)
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+
+	if(!pOutBuffer || (outSize != sizeof(DWORD)))
+	{
+		OALMSG(1, (L"OALIoCtlHalBoardStateRead: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	// get DBGSLn state
+	if(pBspArgs->bDebugFlag)
+	{
+		dwBoardState |= EM9280_BOARD_STATE_DBGSL;
+	}
+
+	//copy board state info to output buffer
+	memcpy(pOutBuffer, &dwBoardState, sizeof(DWORD));
+	
+	if(pOutSize != NULL)
+	{
+		*pOutSize = sizeof(DWORD);
+	}
+
+exit:
+	return bResult;
+}
+
+BOOL OALIoCtlHalWatchdogGet(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	PWATCHDOG_INFO	pWDT;
+	BOOL			bResult = TRUE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+
+	if(!pOutBuffer || (outSize != sizeof(WATCHDOG_INFO)))
+	{
+		OALMSG(1, (L"OALIoCtlHalWatchdogGet: parameter error\r\n"));
+		bResult = FALSE;
+		goto exit;
+	}
+
+	if((pfnOEMRefreshWatchDog != NULL) && (dwOEMWatchDogPeriod != 0))
+	{
+		//
+		// call OEMInitWatchDogTimer(DWORD dwWatchdogPeriod) before
+		//
+		pfnOEMRefreshWatchDog( );		//refresh WDT first
+
+		// transfer kernel wdt info out
+		pWDT = (PWATCHDOG_INFO)pOutBuffer;
+		pWDT->pfnKickWatchDog = pfnOEMRefreshWatchDog;
+		pWDT->dwWatchDogPeriod = dwOEMWatchDogPeriod;
+		pWDT->dwWatchDogThreadPriority = 100;						//dwNKWatchDogThreadPriority;
+
+		//pfnOEMRefreshWatchDog = NULL;
+		dwOEMWatchDogPeriod = 0;
+
+		if(pOutSize != NULL)
+		{
+			*pOutSize = sizeof(WATCHDOG_INFO);
+		}
+	}
+
+exit:
+	return bResult;
+}
+
+
 
 BOOL OALIoCtlHalGetCPUInfo(
     UINT32 code, VOID* pInpBuffer, UINT32 inpSize, VOID* pOutBuffer, 

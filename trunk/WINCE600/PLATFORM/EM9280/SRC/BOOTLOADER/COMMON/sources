@@ -32,8 +32,8 @@ CDEFINES= $(CDEFINES) -DBSP_DISPLAY_LMS430HF02
 CDEFINES=$(CDEFINES) -DEM9280
 !ENDIF
 
-!IF ("$(BSP_DOTLCD)" == "1")
-CDEFINES=$(CDEFINES) -DEM9283_DOTLCD
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
 !ENDIF
 
 LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
@@ -61,5 +61,4 @@ FILE_VIEW_INCLUDES_FOLDER= \
     ..\..\INC\image_cfg.h \
     bitmap.h \
     ..\..\INC\bsp.h \
-    display_panel.h \
 

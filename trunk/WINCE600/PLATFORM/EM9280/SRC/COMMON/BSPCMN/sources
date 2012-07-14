@@ -14,3 +14,9 @@ SOURCES=\
     debugserial.c\
     bsputils.c
 
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+

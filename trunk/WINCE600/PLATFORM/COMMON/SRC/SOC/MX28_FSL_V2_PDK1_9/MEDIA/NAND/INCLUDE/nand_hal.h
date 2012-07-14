@@ -37,7 +37,7 @@
 #define NAND_READ_PAGE_TIMEOUT      (2000000)
 #define NAND_RESET_TIMEOUT          (10000000)
 #define NAND_WRITE_PAGE_TIMEOUT     (10000000)
-#define NAND_ERASE_BLOCK_TIMEOUT    (20000000)
+#define NAND_ERASE_BLOCK_TIMEOUT    (40000000)
 
 typedef enum {
     eNandProgCmdReadID                    = 0x000090,

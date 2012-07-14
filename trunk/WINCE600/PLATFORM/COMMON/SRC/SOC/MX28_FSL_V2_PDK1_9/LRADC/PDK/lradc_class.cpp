@@ -368,13 +368,29 @@ BOOL LRADCClass::ConfigureChannel(STLRADCCONFIGURE *stLRADCConfig)
 {
     RETAILMSG(0,(TEXT("Configure Channel ++ \r\n")));
 
+	switch(stLRADCConfig->eChannel)
+	{
+	case LRADC_CH0:
+		BF_WR(LRADC_CTRL4, LRADC0SELECT, LRADC_CH0);
+		break;
+
+	case LRADC_CH1:
+		BF_WR(LRADC_CTRL4, LRADC1SELECT, LRADC_CH1);
+		break;
+
+	case LRADC_CH6:
+		BF_WR(LRADC_CTRL4, LRADC6SELECT, LRADC_CH6);
+		break;
+	}
+
     //DumpRegister();
     if(stLRADCConfig->bEnableDivideByTwo){
 
         // Enable the divide-by-two of a LRADC channel
         BF_SETV(LRADC_CTRL2, DIVIDE_BY_TWO, (1 << stLRADCConfig->eChannel));
     }
-    else{
+    else
+	{
         // Disable the divide-by-two of a LRADC channel
         BF_CLRV(LRADC_CTRL2, DIVIDE_BY_TWO, (1 << stLRADCConfig->eChannel));
     }
@@ -475,8 +491,16 @@ BOOL LRADCClass::EnableInterrupt(LRADC_CHANNEL Channel, BOOL bValue)
         ClearInterruptFlag(Channel);
     }
 
-    RETAILMSG(0,(TEXT("EnableInterrupt -- \r\n")));
+	//for debug
+	if((Channel == LRADC_CH0) || (Channel == LRADC_CH1))
+	{
+		DWORD	dwCTRL1;
 
+		dwCTRL1 = HW_LRADC_CTRL1_RD();
+		RETAILMSG(1, (TEXT("EnableInterrupt: HW_LRADC_CTRL1 = 0x%08x\r\n"), dwCTRL1));
+	}
+
+	RETAILMSG(0,(TEXT("EnableInterrupt -- \r\n")));
     return TRUE;
 }
 //-----------------------------------------------------------------------------
@@ -701,7 +725,31 @@ BOOL LRADCClass::ScheduleChannel(LRADC_CHANNEL eChannel)
 {
     // Set the SCHEDULE bitfield of HW_LRADC_CTRL0 register
     BF_SETV(LRADC_CTRL0, SCHEDULE, (1 << eChannel));
-    return TRUE;
+
+	////for debug
+	//if((eChannel == LRADC_CH0) || (eChannel == LRADC_CH1))
+	//{
+	//	DWORD	dwCTRL0;
+
+	//	dwCTRL0 = HW_LRADC_CTRL0_RD();
+	//	RETAILMSG(1, (TEXT("ScheduleChannel: HW_LRADC_CTRL0 = 0x%08x\r\n"), dwCTRL0));
+	//}
+
+	return TRUE;
+}
+
+// CS&ZHL JUN-6-2012: return schedule state of specified channel
+BOOL LRADCClass::ScheduleState(LRADC_CHANNEL eChannel)
+{
+	DWORD	dwCTRL0;
+
+	dwCTRL0 = HW_LRADC_CTRL0_RD();
+	if(dwCTRL0 & (1 << eChannel))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -1430,18 +1478,22 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     UINT16 i;
     LRADC_TEMPSENSOR TempSensor;
 
+	// RETAILMSG(TRUE,(TEXT("MeasureBatteryTemperature: use LRADC_CH%d\r\n"), BattTempChannel));
     // Check the channel.  Only channel 0 or 1 should be used since the others
     // are reserved or cannot induce current.
     if(BattTempChannel == LRADC_CH0)
     {
         TempSensor = TEMP_SENSOR0;
     }
-    else if(BattTempChannel == LRADC_CH1)
+    //else if(BattTempChannel == LRADC_CH1)
+	// CS&ZHL MAY-23-2012: should be LRADC_CH6 for TEMP_SENSOR_IENABLE1 ?
+    else if(BattTempChannel == LRADC_CH6)
     {
         TempSensor = TEMP_SENSOR1;
     }
     else
     {
+		RETAILMSG(TRUE,(TEXT("MeasureBatteryTemperature: invalid parameters = %d\r\n"), BattTempChannel));
         return 0;
     }
 
@@ -1452,6 +1504,7 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     // the current ramps up.
     SetTempSensorCurrent(TempSensor,TEMP_SENSOR_CURRENT_HIGH_READING);
     //hw_digctl_MicrosecondWait(TEMP_SENSOR_CURRENT_RAMP_DELAY);
+    Sleep(10);
 
     // Set up a loop to take a specified number of samples.  Then take the
     // average of the samples.
@@ -1466,6 +1519,7 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
         // for the next reading.
         u32HighCurrentReading += GetAccumValue(BattTempChannel);
         ClearAccum( BattTempChannel );
+		Sleep(10);
     }
     // Take the average the high current readings.
     u32HighCurrentReading /= NUM_TEMP_READINGS_TO_AVG;
@@ -1475,6 +1529,7 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     // the current ramps up.
     SetTempSensorCurrent(TempSensor,TEMP_SENSOR_CURRENT_LOW_READING);
     //hw_digctl_MicrosecondWait(TEMP_SENSOR_CURRENT_RAMP_DELAY);
+    Sleep(10);
 
     // Set up a loop to take a specified number of samples.  Then take the
     // average of the samples.
@@ -1489,6 +1544,7 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
         // for the next reading.
         u32LowCurrentReading += GetAccumValue(BattTempChannel);
         ClearAccum( BattTempChannel );
+		Sleep(10);
     }
     // Take the average the low current readings.
     u32LowCurrentReading /= NUM_TEMP_READINGS_TO_AVG;
@@ -1504,8 +1560,7 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
         // This is the conversion if using a 1N4148 diode without compensating
         // for any routing impedance to the diode.
         {
-            u16Temp = (UINT16)((u32HighCurrentReading-u32LowCurrentReading) *
-                               TEMP_SENSOR_CONVERSION_CONSTANT)/1000;
+            u16Temp = (UINT16)(((u32HighCurrentReading - u32LowCurrentReading) * TEMP_SENSOR_CONVERSION_CONSTANT) / 1000);
         }
     }
 
@@ -1533,13 +1588,13 @@ UINT32 LRADCClass::MeasureDieTemperature()
 
     EnableTempSensor(TRUE);
 
-    BF_WR(LRADC_CTRL4, LRADC0SELECT, 0x9);
+	BF_WR(LRADC_CTRL4, LRADC0SELECT, 0x9);
     HW_LRADC_CTRL2_CLR(0x1000000);// Clear Channel0's DIVEDE_BY_TWO bit.
 
     if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC0_IRQ_EN) == 0)
         BF_WR(LRADC_CTRL1, LRADC0_IRQ_EN, 0x1);
 
-    BF_WRn(LRADC_CHn, LRADC_CH0, VALUE,0);
+    BF_WRn(LRADC_CHn, LRADC_CH0, VALUE, 0);
 
     BF_WR(LRADC_CTRL4, LRADC6SELECT, 0x8);
 
@@ -1583,6 +1638,71 @@ UINT32 LRADCClass::MeasureDieTemperature()
     return u32Temp;
 }
 
+
+UINT32 LRADCClass::MeasureNormalChannel(LRADC_CHANNEL Channel)
+{
+    UINT32			u32Temp = (UINT32)(-1);
+    UINT16			i;
+
+	if((Channel != LRADC_CH0) && (Channel != LRADC_CH1))
+	{
+		RETAILMSG(TRUE,(TEXT("MeasureNormalChannel: not support LRADC_CH%d\r\n"), Channel));
+		goto exit;
+	}
+
+	// setup channel
+	if(Channel == LRADC_CH0)
+	{
+		BF_WR(LRADC_CTRL4, LRADC0SELECT, LRADC_CH0);					// LRADC_CH0 connect to external physical channel
+		HW_LRADC_CTRL2_SET(0x1000000);									// set Channel0's DIVEDE_BY_TWO bit.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
+		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC0_IRQ_EN) == 0)	// enable Channel0's interrupt
+		{
+			BF_WR(LRADC_CTRL1, LRADC0_IRQ_EN, 0x1);
+		}
+		BF_WRn(LRADC_CHn, LRADC_CH0, VALUE, 0);							// clear accum
+	}
+	else		// -> LRADC_CH1
+	{
+		BF_WR(LRADC_CTRL4, LRADC1SELECT, LRADC_CH1);					// LRADC_CH0 connect to external physical channel
+		HW_LRADC_CTRL2_SET(0x2000000);									// set Channel1's DIVEDE_BY_TWO bit.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
+		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC1_IRQ_EN) == 0)	// enable Channel0's interrupt
+		{
+			BF_WR(LRADC_CTRL1, LRADC1_IRQ_EN, 0x1);
+		}
+		BF_WRn(LRADC_CHn, LRADC_CH1, VALUE, 0);							// clear accum
+	}
+
+    Sleep(10);
+	u32Temp = 0;
+    for(i = 0; i < NUM_TEMP_READINGS_TO_AVG; i++)
+    {
+        // Schedule the measurement and wait for it to complete.
+        ScheduleChannel(Channel);
+        while((GetInterruptFlag(Channel) == 0));
+		ClearInterruptFlag(Channel);
+		//while(ScheduleState(Channel));		// wait until schedule bit => 0
+		//if(GetInterruptFlag(Channel))
+		//{
+		//	ClearInterruptFlag(Channel);
+		//}
+
+        // Read the measurement and then clear the accumulator to prepare
+        // for the next reading.
+        u32Temp += GetAccumValue(Channel);
+        ClearAccum(Channel);
+        Sleep(10);
+    }
+    // Take the average the low current readings.
+    u32Temp /= NUM_TEMP_READINGS_TO_AVG;
+
+exit:
+	return u32Temp;
+}
+
 //------------------------------------------------------------------------------
 //
 // Function: MeasureVDD5V
@@ -1601,6 +1721,7 @@ UINT32 LRADCClass::MeasureVDD5V()
     UINT16 i;
 
     BF_WR(LRADC_CTRL4, LRADC0SELECT, 0xF);
+    HW_LRADC_CTRL2_CLR(0x1000000);				// CS&ZHL JUN-6-2012: Clear Channel0's DIVEDE_BY_TWO bit.
 
     if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC0_IRQ_EN) == 0)
         BF_WR(LRADC_CTRL1, LRADC0_IRQ_EN, 0x1);

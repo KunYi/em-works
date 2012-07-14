@@ -68,6 +68,10 @@ CDEFINES=$(CDEFINES) -DDDI -DROTATE
 CDEFINES=$(CDEFINES) -DDO_DISPPERF
 !ENDIF
 
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
 TARGETLIBS= \
 		$(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
         $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
@@ -104,4 +108,11 @@ INCLUDES= \
 FILE_VIEW_RESOURCE_FOLDER= \
     ddraw_mx28.def \
     ddraw_mx28.reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    43wvf1g.h \
+    display_controller.h \
+    display_controller_factory.h \
+    lms430.h \
+    ..\..\INC\display_panel.h \
 

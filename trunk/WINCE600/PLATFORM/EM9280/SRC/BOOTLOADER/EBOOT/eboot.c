@@ -326,7 +326,7 @@ void ResetDefaultBootCFG(BOOT_CFG *pBootCFG)
     pBootCFG->numBootMe          = 50;
     pBootCFG->delay              = 5;					//3;
 
-    pBootCFG->IP                 = inet_addr("192.168.201.162");
+    pBootCFG->IP                 = inet_addr("192.168.201.172");
     pBootCFG->subnetMask         = inet_addr("255.255.255.0");
     pBootCFG->DHCPEnable         = FALSE;										//TRUE;
 

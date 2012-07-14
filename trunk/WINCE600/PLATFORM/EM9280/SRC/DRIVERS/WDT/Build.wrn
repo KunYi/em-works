@@ -1,0 +1,4 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000033:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\WDT\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
+BUILD: [00:0000000034:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\WDT\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.
+BUILD: [01:0000000071:WARNN ] wdt_io.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\wdt.pdb' is missing debugging information for referencing module; linking object as if no debug info

@@ -15,8 +15,6 @@
     <BspItemId>Item:Emtronix:EthernetBootloader:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:AUDIO:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:DUART1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
-    <BspItemId>Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
-    <BspItemId>Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:I2CBUS2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:EmtronixWVF1G(WVGA):iMX28-EVK-PDK1_9_EM9280</BspItemId>
@@ -44,6 +42,12 @@
     <BspItemId>Item:Emtronix:DVFC:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:PHDC Support_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:MultiPartitionNAND:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART1:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART0:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART3:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:UART4:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:CDItem:Emtronix:LCD:iMX28-EVK-PDK1_9_EM9280:iMX28-EVK-PDK1_9_EM9280</BspItemId>
   </Bsp>
   <Item Id="Item:Emtronix:EthernetBootloader:iMX28-EVK-PDK1_9_EM9280">
     <Title>#FSL:iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Title</Title>
@@ -69,41 +73,41 @@
     </SourceCode>
   </Item>
   <Item Id="Item:Emtronix:DUART1:iMX28-EVK-PDK1_9_EM9280">
-    <Title>#FSL:iMX28-EVK-PDK1_9:DUART1:Title</Title>
-    <Description>#FSL:iMX28-EVK-PDK1_9:DUART1:Description</Description>
+    <Title>DUART</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:DUART:Description</Description>
     <Comment />
     <Type>BspSpecific</Type>
-    <Variable>BSP_SERIAL_DUART1</Variable>
+    <Variable>BSP_SERIAL_DUART</Variable>
     <Module>debug_serial.dll</Module>
     <Location ConditionLocation="">Device Drivers\SERIAL</Location>
     <SourceCode>
-      <Title>#FSL:IMX233-EVK:DUART1DETAIL:TITLE</Title>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIALDEBUG</Title>
       <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIALDEBUG</Path>
     </SourceCode>
   </Item>
-  <Item Id="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280">
-    <Title>#FSL:iMX28-EVK-PDK1_9:UART2:Title</Title>
-    <Description>#FSL:iMX28-EVK-PDK1_9:UART2:Description</Description>
+  <Item Id="Item:Emtronix:UART0:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UART0</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART0:Description</Description>
     <Comment />
     <Type>BspSpecific</Type>
-    <Variable>BSP_SERIAL_UART2</Variable>
+    <Variable>BSP_SERIAL_UART0</Variable>
     <Module>csp_serial.dll</Module>
     <Location ConditionLocation="">Device Drivers\SERIAL</Location>
     <SourceCode>
-      <Title>#FSL:IMX28-EVK-PDK1_9:UART2DETAIL:TITLE</Title>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Title>
       <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
     </SourceCode>
   </Item>
-  <Item Id="Item:Emtronix:UART5:iMX28-EVK-PDK1_9_EM9280">
-    <Title>#FSL:iMX28-EVK-PDK1_9:UART5:Title</Title>
-    <Description>#FSL:iMX28-EVK-PDK1_9:UART5:Description</Description>
+  <Item Id="Item:Emtronix:UART1:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UART1</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART1:Description</Description>
     <Comment />
     <Type>BspSpecific</Type>
-    <Variable>BSP_SERIAL_UART5</Variable>
+    <Variable>BSP_SERIAL_UART1</Variable>
     <Module>csp_serial.dll</Module>
     <Location ConditionLocation="">Device Drivers\SERIAL</Location>
     <SourceCode>
-      <Title>#FSL:IMX28-EVK-PDK1_9:UART5DETAIL:TITLE</Title>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Title>
       <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
     </SourceCode>
   </Item>
@@ -163,10 +167,10 @@
     <Variable>BSP_DISPLAY_43WVF1G-0</Variable>
     <Module>ddraw_mx28.dll</Module>
     <ChooseOneGroup>true</ChooseOneGroup>
-    <Location>Device Drivers\Display</Location>
+    <Location ConditionLocation="">Device Drivers\Display</Location>
     <SourceCode>
-      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\DISPLAY</Title>
-      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY\DISPLAY</Path>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DISPLAY</Path>
     </SourceCode>
   </Item>
   <Item Id="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280">
@@ -190,6 +194,7 @@
     <Title>#FSL:iMX28-EVK-PDK1_9:Battery:Title</Title>
     <Description>#FSL:iMX28-EVK-PDK1_9:Battery:Description</Description>
     <Type>BspSpecific</Type>
+    <Variable>BSP_MOUNT_BATT_DRIVER</Variable>
     <Module>battdrvr.dll</Module>
     <Location>Device Drivers\Battery</Location>
     <SourceCode>
@@ -237,6 +242,7 @@
     <Title>#FSL:iMX28-EVK-PDK1_9:KEYPAD:Title</Title>
     <Description>LRADC-based Keypad Driver</Description>
     <Type>BspSpecific</Type>
+    <Variable>BSP_MX28EVK_KEYPAD</Variable>
     <Module>keypad.dll</Module>
     <Location>Device Drivers\KEYPAD</Location>
     <SourceCode>
@@ -449,6 +455,52 @@
     <SourceCode>
       <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDPDD</Title>
       <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\NAND\NANDPDD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UART2</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART2:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART2</Variable>
+    <Location>Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART3:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UART3</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART3:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART3</Variable>
+    <Location>Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:UART4:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UART4</Title>
+    <Description>#FSL:iMX28-EVK-PDK1_9:UART4:Description</Description>
+    <Type>BspSpecific</Type>
+    <Variable>BSP_SERIAL_UART4</Variable>
+    <Location>Device Drivers\SERIAL</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\SERIAL</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:CDItem:Emtronix:LCD:iMX28-EVK-PDK1_9_EM9280:iMX28-EVK-PDK1_9_EM9280">
+    <Title>UC1698</Title>
+    <Description>UC1698</Description>
+    <Comment />
+    <Type>BspSpecific</Type>
+    <Variable>BSP_DISPLAY_UC1698</Variable>
+    <ChooseOneGroup>true</ChooseOneGroup>
+    <Location ConditionLocation="">Device Drivers\Display</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD</Path>
     </SourceCode>
   </Item>
 </CatalogFile>

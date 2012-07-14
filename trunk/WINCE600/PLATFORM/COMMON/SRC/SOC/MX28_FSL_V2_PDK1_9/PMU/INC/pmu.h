@@ -233,7 +233,6 @@ BOOL PmuGetVddd(UINT32 *VdddmV );
 BOOL PmuGetVdddBrownont(UINT32 *VdddBo );
 BOOL PmuSetFets(PMU_POWER_FETSSET bFetsMode);
 BOOL PmuPowerGetSupplyMode(PMU_POWER_SUPPLY_MODE *PowerMode);
-BOOL PmuGetPowerSource(UINT32 *powerSource);
 
 #ifdef __cplusplus
 }

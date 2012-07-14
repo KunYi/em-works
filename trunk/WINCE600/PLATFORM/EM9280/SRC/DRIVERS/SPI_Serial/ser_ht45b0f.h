@@ -44,32 +44,30 @@ extern "C" {
 #define	HT45B0F_REG_UCR2			0x02
 #define	HT45B0F_REG_BRG				0x03
 #define	HT45B0F_REG_UCR3			0x04
-#define	HT45B0F_REG_DAT				0x07			// special flag
+#define	HT45B0F_REG_DAT				0x07				// special flag
 
-#define	HT45B0F_CMD_READ_DATA		0x00			// read UART Data Register
-#define	HT45B0F_CMD_WRITE_DATA		0x08			// wriet UART Data Register
-#define	HT45B0F_CMD_READ_USR		0x10			// read UART Staus Register
-#define	HT45B0F_CMD_READ_UCR1		0x11			// read UART Control Register 1
-#define	HT45B0F_CMD_READ_UCR2		0x12			// read UART Control Register 2
-#define	HT45B0F_CMD_READ_BRG		0x13			// read Baud Rate Generator
-#define	HT45B0F_CMD_READ_UCR3		0x14			// read UART Control Register 3
-#define	HT45B0F_CMD_WRITE_UCR1		0x19			// write UART Control Register 1
-#define	HT45B0F_CMD_WRITE_UCR2		0x1A			// write UART Control Register 2
-#define	HT45B0F_CMD_WRITE_BRG		0x1B			// write Baud Rate Generator
-#define	HT45B0F_CMD_WRITE_UCR3		0x1C			// write UART Control Register 3
+#define	HT45B0F_CMD_READ_DATA		0x00				// read UART Data Register
+#define	HT45B0F_CMD_WRITE_DATA		0x08				// wriet UART Data Register
+#define	HT45B0F_CMD_READ_USR		0x10				// read UART Staus Register
+#define	HT45B0F_CMD_READ_UCR1		0x11				// read UART Control Register 1
+#define	HT45B0F_CMD_READ_UCR2		0x12				// read UART Control Register 2
+#define	HT45B0F_CMD_READ_BRG		0x13				// read Baud Rate Generator
+#define	HT45B0F_CMD_READ_UCR3		0x14				// read UART Control Register 3
+#define	HT45B0F_CMD_WRITE_UCR1		0x19				// write UART Control Register 1
+#define	HT45B0F_CMD_WRITE_UCR2		0x1A				// write UART Control Register 2
+#define	HT45B0F_CMD_WRITE_BRG		0x1B				// write Baud Rate Generator
+#define	HT45B0F_CMD_WRITE_UCR3		0x1C				// write UART Control Register 3
 
-#define	HT45B0F_USR_TXIF		(1 << 0)			//Tx Data Register Empty
-#define	HT45B0F_USR_TIDLE		(1 << 1)			//Tx Shift-Transmitting is Idle
-#define	HT45B0F_USR_RXIF		(1 << 2)			//Rx Data Register has available data
-#define	HT45B0F_USR_RIDLE		(1 << 3)			//Rx Shift-Receiving is Idle
-#define	HT45B0F_USR_OERR		(1 << 4)			//overrun error is detected
-#define	HT45B0F_USR_FERR		(1 << 5)			//framing error is detected
-#define	HT45B0F_USR_NF			(1 << 6)			//noise is detected
-#define HT45B0F_USR_PERR		(1 << 7)			//parity error is detected
+#define	HT45B0F_USR_TXIF			(1 << 0)			//Tx Data Register Empty
+#define	HT45B0F_USR_TIDLE			(1 << 1)			//Tx Shift-Transmitting is Idle
+#define	HT45B0F_USR_RXIF			(1 << 2)			//Rx Data Register has available data
+#define	HT45B0F_USR_RIDLE			(1 << 3)			//Rx Shift-Receiving is Idle
+#define	HT45B0F_USR_OERR			(1 << 4)			//overrun error is detected
+#define	HT45B0F_USR_FERR			(1 << 5)			//framing error is detected
+#define	HT45B0F_USR_NF				(1 << 6)			//noise is detected
+#define HT45B0F_USR_PERR			(1 << 7)			//parity error is detected
 
-#define HT45B0F_UCR1_TX8_0			(0 << 0)			//Transmit data bit 8 for 9-bit data transfer format (write only)
-#define HT45B0F_UCR1_TX8_1			(1 << 0)			//Transmit data bit 8 for 9-bit data transfer format (write only)
-#define HT45B0F_UCR1_TX8_MASK		(1 << 0)			//Transmit data bit 8 for 9-bit data transfer format (write only)
+#define HT45B0F_UCR1_TX8			(1 << 0)			//Transmit data bit 8 for 9-bit data transfer format (write only)
 #define HT45B0F_UCR1_RX8			(1 << 1)			//Receive data bit 8 for 9-bit data transfer format (read only)
 #define HT45B0F_UCR1_TX_BREAK		(1 << 2)			//break characters transmit
 #define HT45B0F_UCR1_STOPBIT_1		(0 << 3)			//one stop bit format is used
@@ -83,8 +81,7 @@ extern "C" {
 #define HT45B0F_UCR1_DATABIT_8		(0 << 6)			//8-bit data transfer
 #define HT45B0F_UCR1_DATABIT_9		(1 << 6)			//9-bit data transfer
 #define HT45B0F_UCR1_DATABIT_MASK	(1 << 6)			//9-bit data transfer
-#define HT45B0F_UCR1_UART_DIS		(0 << 7)			//disable UART. TX and RX pins are in the state of high impedance
-#define HT45B0F_UCR1_UART_EN		(1 << 7)			//enable UART. TX and RX pins function as UART pins
+#define HT45B0F_UCR1_UARTEN			(1 << 7)			//enable UART. TX and RX pins function as UART pins
 
 #define HT45B0F_UCR2_TXIF_INTEN		(1 << 0)			//transmitter empty interrupt is enabled
 #define HT45B0F_UCR2_TIDLE_INTEN	(1 << 1)			//transmitter idle interrupt is enabled
@@ -93,12 +90,9 @@ extern "C" {
 #define HT45B0F_UCR2_WAKE_EN		(1 << 3)			//RX pin falling edge wake-up function is enabled
 #define HT45B0F_UCR2_ADDR_DIS		(0 << 4)			//address detect function is disabled
 #define HT45B0F_UCR2_ADDR_EN		(1 << 4)			//address detect function is enabled
-#define HT45B0F_UCR2_BAUD_DIV64		(0 << 5)			//low speed baud rate
-#define HT45B0F_UCR2_BAUD_DIV16		(1 << 5)			//high speed baud rate
-#define HT45B0F_UCR2_RX_DIS			(0 << 6)			//UART receiver is disabled
-#define HT45B0F_UCR2_RX_EN			(1 << 6)			//UART receiver is enabled
-#define HT45B0F_UCR2_TX_DIS			(0 << 7)			//UART transmitter is disabled
-#define HT45B0F_UCR2_TX_EN			(1 << 7)			//UART transmitter is enabled
+#define HT45B0F_UCR2_BRGH  			(1 << 5)			//high speed mode
+#define HT45B0F_UCR2_RXEN			(1 << 6)			//UART receiver is enabled
+#define HT45B0F_UCR2_TXEN			(1 << 7)			//UART transmitter is enabled
 
 #define HT45B0F_UCR3_USRT			(1 << 7)			//UART reset occurs
 

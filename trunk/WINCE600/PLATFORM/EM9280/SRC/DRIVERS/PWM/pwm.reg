@@ -1,0 +1,27 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2012, Emtronix, Inc. All Rights Reserved.
+;//------------------------------------------------------------------------------
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM1]
+   "Prefix"="PWM"
+   "Dll"="pwm.dll"
+   "Index"=dword:1
+   "Order"=dword:12
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM2]
+   "Prefix"="PWM"
+   "Dll"="pwm.dll"
+   "Index"=dword:2
+   "Order"=dword:12
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM3]
+   "Prefix"="PWM"
+   "Dll"="pwm.dll"
+   "Index"=dword:3
+   "Order"=dword:12
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PWM4]
+   "Prefix"="PWM"
+   "Dll"="pwm.dll"
+   "Index"=dword:4
+   "Order"=dword:12
+

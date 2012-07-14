@@ -162,14 +162,15 @@ typedef struct __LOOKUP_TBL {
 typedef VOID (*EVENT_FUNC)(PVOID Arg1, ULONG Arg2);
 
 typedef struct {
-    DWORD dwIndex;
+    DWORD dwIndex;				// = 0 - 4 -> Physical UART0 - UART4
     DWORD pv_HWregUARTApp0;
     DWORD pv_HWregUARTApp1;
     DWORD pv_HWregUARTApp2;
     DWORD pv_HWregUARTApp3;
+    DWORD pv_HWregUARTApp4;
 
     ULONG ulDiscard;
-    BOOL UseIrDA;
+    BOOL  UseIrDA;
     ULONG HwAddr;
 
     // We have an event callback into the MDD

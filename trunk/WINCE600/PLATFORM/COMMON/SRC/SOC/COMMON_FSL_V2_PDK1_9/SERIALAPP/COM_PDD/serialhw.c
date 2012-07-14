@@ -49,6 +49,7 @@
 //------------------------------------------------------------------------------
 // External Functions
 extern DWORD BSPUartGetIndex(ULONG HWAddr);
+extern BOOL  BSPUartConfigureHandshake(ULONG HWAddr);	// CS&ZHL JUN-14-2012: RTS/CTS config
 
 //------------------------------------------------------------------------------
 // External Variables
@@ -677,9 +678,10 @@ BOOL SL_Init(BOOL bIR,ULONG HWAddress, PUCHAR pRegBase,
 
     DEBUGMSG(ZONE_INIT,(TEXT("SL_INIT+ \r\n")));
 
-    pHWHead->UseIrDA =bIR;
-    pHWHead->HwAddr = HWAddress;
+    pHWHead->UseIrDA = bIR;
+    pHWHead->HwAddr  = HWAddress;
     pHWHead->dwIndex = BSPUartGetIndex(HWAddress);
+	//RETAILMSG(1, (TEXT("SL_INIT:: Index=%d, HwAddr = 0x%x, pRegBase = 0x%x\r\n"), pHWHead->dwIndex, pHWHead->HwAddr, pRegBase));
 
     switch(pHWHead->dwIndex)
     {
@@ -694,6 +696,9 @@ BOOL SL_Init(BOOL bIR,ULONG HWAddress, PUCHAR pRegBase,
             break;
         case 3:
             pHWHead->pv_HWregUARTApp3 = (DWORD)pRegBase;
+            break;
+        case 4:
+            pHWHead->pv_HWregUARTApp4 = (DWORD)pRegBase;
             break;
         default:
             ERRORMSG(TRUE, (TEXT("AUART Index invalid\r\n")));
@@ -778,6 +783,7 @@ VOID SL_Open(PVOID pContext)
     UINT8 i;
 
     DEBUGMSG(ZONE_OPEN, (TEXT("SL_Open+ \r\n")));
+	RETAILMSG(1, (TEXT("SL_Open:: Index=%d\r\n"), pHWHead->dwIndex));
 
     SL_ClearPendingInts(pHWHead);
 
@@ -901,6 +907,7 @@ VOID SL_Close(PVOID pContext)
     PSER_INFO pSerHead = (PSER_INFO)pContext;
 
     DEBUGMSG(ZONE_CLOSE,(TEXT("SL_Close+ \r\n")));
+	RETAILMSG(1, (TEXT("SL_Close:: Index=%d\r\n"), pHWHead->dwIndex));
 
     EnterCriticalSection(&(pHWHead->RegCritSec));
     try
@@ -2099,8 +2106,11 @@ BOOL SL_SetDCB(PVOID pHead,LPDCB lpDCB)
         {
             if (lpDCB->fRtsControl == RTS_CONTROL_HANDSHAKE)
             {
+				// CS&ZHL JUN-14-2012: config RTS/CTS pins if required
+				BSPUartConfigureHandshake(pHWHead->HwAddr);
+
                 HW_UARTAPPCTRL2_SET(pHWHead->dwIndex, BM_UARTAPPCTRL2_RTSEN);
-            }
+			}
             else
             {
                 HW_UARTAPPCTRL2_CLR(pHWHead->dwIndex, BM_UARTAPPCTRL2_RTSEN);

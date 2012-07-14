@@ -30,14 +30,14 @@
 
 //-----------------------------------------------------------------------------
 // External Variables
-extern PVOID pv_HWregOTP;
-
 #ifdef NAND_PDD
+extern PVOID pv_HWregOTP;
 extern PVOID pv_HWregCLKCTRL;
 extern PVOID pv_HWregPOWER;
 #else
 //-----------------------------------------------------------------------------
 // Global Variables
+PVOID pv_HWregOTP = NULL;
 PVOID pv_HWregCLKCTRL = NULL;
 PVOID pv_HWregPOWER = NULL;
 #endif	//NAND_PDD
@@ -77,6 +77,11 @@ void InitOTP(void)
 		pv_HWregPOWER = (PVOID)OALPAtoVA(CSP_BASE_REG_PA_POWER, FALSE);
 	}
 
+    if (pv_HWregOTP == NULL)
+    {
+		pv_HWregOTP = (PVOID)OALPAtoVA(CSP_BASE_REG_PA_OCOTP, FALSE);
+	}
+
 #else	// -> for Flash driver
     PHYSICAL_ADDRESS phyAddr;
 
@@ -109,6 +114,22 @@ void InitOTP(void)
             return;
         }
     }
+
+	if (pv_HWregOTP == NULL)
+    {
+        phyAddr.QuadPart = CSP_BASE_REG_PA_OCOTP;
+
+        // Map peripheral physical address to virtual address
+        pv_HWregOTP = (PVOID) MmMapIoSpace(phyAddr, 0x1000,FALSE);
+
+        // Check if virtual mapping failed
+        if (pv_HWregOTP == NULL)
+        {
+            ERRORMSG(1, (_T("OTPAlloc::MmMapIoSpace failed!\r\n")));
+            return;
+        }
+    }
+
 #endif	//NAND_PDD
 }
 //-----------------------------------------------------------------------------
@@ -127,8 +148,9 @@ void InitOTP(void)
 void DeInitOTP(void)
 {
 #ifdef  NAND_PDD
-    pv_HWregCLKCTRL = NULL;
-    pv_HWregPOWER   = NULL;
+	//pv_HWregCLKCTRL = NULL;
+	//pv_HWregPOWER   = NULL;
+	//pv_HWregOTP = NULL;
 
 #else	// -> for Flash driver
     if (pv_HWregCLKCTRL)
@@ -142,6 +164,13 @@ void DeInitOTP(void)
         MmUnmapIoSpace(pv_HWregPOWER, 0x1000);
         pv_HWregPOWER = NULL;
     }
+
+    if (pv_HWregOTP)
+    {
+        MmUnmapIoSpace(pv_HWregOTP, 0x1000);
+        pv_HWregOTP = NULL;
+    }
+
 #endif	//NAND_PDD
 }
 
@@ -359,7 +388,7 @@ BOOL OTPRead(POtpProgram pOtp)
     //pOtp->OtpData = HW_OCOTP_CUSTn_RD(0);
     //RETAILMSG(TRUE, (L"pOtp->OtpData is 0x%x.\r\n",pOtp->OtpData));
     pOtp->OtpData = (*(volatile hw_ocotp_data_t *) (REGS_OCOTP_BASE+pOtp->OtpAddr)).U;
-    RETAILMSG(TRUE, (L"The value of Otp address 0x%x is 0x%x.\r\n", pOtp->OtpAddr, pOtp->OtpData));
+    //RETAILMSG(TRUE, (L"The value of Otp address 0x%x is 0x%08x.\r\n", pOtp->OtpAddr, pOtp->OtpData));
     
     //Clear RD_BANK_OPEN
     BW_OCOTP_CTRL_RD_BANK_OPEN(0);

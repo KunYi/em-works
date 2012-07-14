@@ -1,0 +1,17 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;------------------------------------------------------------------------------
+
+LIBRARY WDT
+
+EXPORTS
+   WDT_Init
+   WDT_Deinit
+   WDT_Open
+   WDT_Close
+   WDT_Read
+   WDT_Write
+   WDT_Seek
+   WDT_PowerDown
+   WDT_PowerUp
+   WDT_IOControl
