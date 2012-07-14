@@ -72,7 +72,8 @@ BOOL InitRTC()
     BOOL rc = FALSE;
     UINT32 uSpare;
 
-    OALMSG(OAL_RTC&&OAL_FUNC, (L"+InitRTC(...)\r\n"));
+    //OALMSG(OAL_RTC&&OAL_FUNC, (L"+InitRTC(...)\r\n"));
+    OALMSG(1, (L"+InitRTC(...)\r\n"));
 
     // MAP the Hardware registers
     if(pv_HWregRTC == NULL)
@@ -106,13 +107,16 @@ BOOL InitRTC()
     // Remove clock gate
     HW_RTC_CTRL_CLR(BM_RTC_CTRL_CLKGATE);
 
+    OALMSG(1, (L"+1HW_RTC_STAT_RD - BM_RTC_STAT_STALE_REGS \r\n"));
     while(HW_RTC_STAT_RD() & BM_RTC_STAT_STALE_REGS);
+    OALMSG(1, (L"-1HW_RTC_STAT_RD - BM_RTC_STAT_STALE_REGS \r\n"));
 
     // Configure clock source & power up/down appropriate crystals
 
     OALRTC_ConfigurePowerUpClockSource();
 
     //
+    OALMSG(1, (L"+2HW_RTC_STAT_RD - BM_RTC_STAT_STALE_REGS \r\n"));
     while(HW_RTC_STAT_RD() & BM_RTC_STAT_STALE_REGS);
 
     // Clearing AUTO_RESTART
@@ -130,7 +134,8 @@ BOOL InitRTC()
 
     rc = TRUE;
 
-    OALMSG(OAL_RTC&&OAL_FUNC, (L"-InitRTC(...)\r\n"));
+    //OALMSG(OAL_RTC&&OAL_FUNC, (L"-InitRTC(...)\r\n"));
+    OALMSG(1, (L"+InitRTC(...)\r\n"));
 
 cleanUp:
     return rc;
@@ -164,18 +169,14 @@ BOOL OALRTC_ConfigurePowerUpClockSource()
         use24MHzCrystal = TRUE;
     }
 
-#ifndef EM9283	
     // Force the RTC to use internal 24MHz,because the 32.768KHz is not accurate,
     // this is align with the IC owner.
-
-	//  2012-6-6 lqk
+    //  2012-6-6 lqk
 	// If RTC use internal 24MHz at all time, The CPU will be consume 250uA current when CPU power down.
-    use24MHzCrystal = TRUE;
-#endif
+	// JLY05-2012: skip force 24MHz.
+ 	// use24MHzCrystal = TRUE;
 
-	use24MHzCrystal = FALSE;
-
-		// Make final clock source adjustment & power up selected crystal
+    // Make final clock source adjustment & power up selected crystal
     if(use24MHzCrystal)
     {
         // Clear bits to use 24MHz crystal & power it up

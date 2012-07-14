@@ -1,10 +1,8 @@
 ;//------------------------------------------------------------------------------
 ;//  Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
 ;//------------------------------------------------------------------------------
-IF BSP_EM9280
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PIO1]
    "Prefix"="PIO"
    "Dll"="em9280_gpio.dll"
    "Index"=dword:1			; MUST BE = 1
    "Order"=dword:0			; CS&ZHL SEP-3-2011: it should be loaded on first time, ->0x10
-ENDIF ; BSP_EM9280

@@ -18,8 +18,15 @@
 # Lib files
 # 
 #  $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\com_mdd2.lib \
+#    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\PWM_$(_SOCDIR).lib \
+#    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\com_mdd2_$(_COMMONSOCDIR).lib \
+# DLLENTRY=_DllEntryCRTStartup
 # DLLENTRY=DllEntry
 # 
+
+!IF ("$(BSP_EM9280)" == "")
+SKIPBUILD=1
+!ENDIF 
 
 RELEASETYPE=PLATFORM
 TARGETNAME=spi_serial
@@ -36,12 +43,13 @@ CDEFINES=$(CDEFINES) -DEM9280
 
 
 TARGETLIBS=\
-    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
-    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
-    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib      \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib    \
+
     
-SOURCELIBS=\
-    $(_PUBLICROOT)\common\oak\lib\$(_CPUINDPATH)\com_mdd2.lib
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\com_mdd2_$(_COMMONSOCDIR).lib \
 
 
 INCLUDES=\
@@ -61,11 +69,8 @@ FILE_VIEW_RESOURCE_FOLDER= \
 FILE_VIEW_INCLUDES_FOLDER= \
     spi_com.h \
     ser_ht45b0f.h \
-    ..\..\INC\em9280_oal_spi.h \
-    ..\..\INC\ioctl_cfg.h \
     serpriv.h \
+    ..\..\INC\em9280_oal.h \
+    ..\..\INC\bsp_drivers.h \
 
 
-!IF "$(BSP_EM9280_GPIO_SPI)" == "" 
-SKIPBUILD=1
-!ENDIF

@@ -34,6 +34,9 @@ extern "C" BOOL BSPSPIReleaseIOMux(UINT32 dwIndex);
 extern "C" BOOL BSPSpiIsAllowPolling(UINT8 Index);
 extern "C" BOOL BSPSpiIsDMAEnabled(UINT8 Index);
 extern "C" BOOL BSPSpiExchange(VOID *lpInBuf, LPVOID pRxBuf, UINT32 nOutBufSize, LPDWORD BytesReturned);
+extern "C" BOOL BSPSpiCSEnable(DWORD dwCSIndex);
+extern "C" BOOL BSPSpiCSDisable(DWORD dwCSIndex);
+
 //-----------------------------------------------------------------------------
 // External Variables
 //-----------------------------------------------------------------------------
@@ -124,6 +127,10 @@ spiClass::spiClass()
     m_Index = 0;
     m_bUsePolling = FALSE;
     m_bAllowPolling = FALSE;
+
+	// CS&ZHL MAY-15-2012
+	m_dwCSIndex = (DWORD)-1;
+
     DEBUGMSG(ZONE_INIT, (TEXT("spiClass -\r\n")));
 }
 //-----------------------------------------------------------------------------
@@ -157,6 +164,9 @@ spiClass::~spiClass()
 BOOL spiClass::SpiInitialize(DWORD Index)
 {
     PHYSICAL_ADDRESS phyAddr;
+
+	RETAILMSG(1, (TEXT("SpiInitialize: Index = %d\r\n"), Index));
+
     m_Index = Index;
 //#ifdef POLLING_MODE
     // create global heap for internal queues/buffers
@@ -231,10 +241,11 @@ BOOL spiClass::SpiInitialize(DWORD Index)
 
     m_bAllowPolling = BSPSpiIsAllowPolling((UINT8)Index);
 
+	// zxw JUN05-2012
     // Configure IOMUX 
-    BSPSPISetIOMux(Index);
+    //BSPSPISetIOMux(Index);
 
-    // Map peripheral physical address to virtual address
+	// Map peripheral physical address to virtual address
     switch(m_Index)
     {
         case 0:
@@ -345,7 +356,7 @@ void spiClass::SpiRelease()
     }
 //#endif
     // Release IOMUX pins
-    BSPSPIReleaseIOMux(m_Index);
+    //BSPSPIReleaseIOMux(m_Index);
 
 //#ifdef POLLING_MODE
     // destroy the heap
@@ -1229,10 +1240,10 @@ UINT32 spiClass::SpiNonDMADataExchange(PSPI_XCH_PKT0_T pXchPkt)
     PSPI_BUSCONFIG_T pBusCnfg = pXchPkt->pBusCnfg;
     LPVOID pBuf = pXchPkt->pBuf;
     volatile UINT32 tmp;
-    BOOL bXchDone;
     UINT32 xchCnt = 0;
     UINT32 (*pfnBufRd)(LPVOID);
     void (*pfnBufWrt)(LPVOID, UINT32);
+
 
     //BOOL bReqPolling;
     UINT8 bufIncr =0;
@@ -1281,92 +1292,224 @@ UINT32 spiClass::SpiNonDMADataExchange(PSPI_XCH_PKT0_T pXchPkt)
         DEBUGMSG(ZONE_WARN, (TEXT("SpiMasterDataExchange:  unsupported bitcount!\r\n")));
         return 0;
     }
-    
-    // set client SPI bus configuration based
-    HW_SSP_CTRL0_WR(m_Index,pBusCnfg->SspCtrl0.U);
 
-    if(pBusCnfg->bCmd)
-    {
-        HW_SSP_CMD0_WR(m_Index,pBusCnfg->SspCmd.U);
-        HW_SSP_CMD1_WR(m_Index,pBusCnfg->SspArg.U);
-    }
+	// zxw 2012-06-11
+	{
 
-    bXchDone = FALSE;
+		int			count;  
+		
+		xchCnt = pXchPkt->xchCnt;
 
-    // until we are done with requested transfers
-    while(!bXchDone)
-    {
-        if(pBuf != NULL)
-        {
-            // Process the SDMMC Data Buffer
-            if( pBusCnfg->bRead == TRUE)
-            {
-                while (xchCnt < pXchPkt->xchCnt) 
-                {
-                    
-                    //RETAILMSG(1, (TEXT("start exchange m_Index = %d\r\n"),m_Index));
-                    // start exchange
-                    HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
-                    while((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_EMPTY) != 0);
-                    {
-                        tmp = HW_SSP_DATA_RD(m_Index);                           
-                        // if receive data is not to be discarded
-                        if (pBuf != NULL)
-                        {
-                            // get next Rx data from SPI FIFO
-                            pfnBufWrt(pBuf, tmp);
-                            // increment Rx Buffer to next data point
-                            pBuf = (LPVOID) ((UINT) pBuf + bufIncr);
-                        }
+		HW_SSP_CTRL0_WR(m_Index,pBusCnfg->SspCtrl0.U);
 
-                        // increment Rx exchange counter
-                        xchCnt++;
-                    }
-                // set flag to indicate requested exchange done
-                bXchDone = TRUE;
-                }
-            }
-            else 
-            {
-                //RETAILMSG(1, (TEXT("load FIFO m_Index = %d\r\n"),m_Index));
-                // load FIFO until full, or until we run out of data
-                while (xchCnt < pXchPkt->xchCnt)
-                {
-                    HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
-                    // put next Tx data into SPI FIFO
-                    if((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_FULL) == 0)
-                    {
-                        HW_SSP_DATA_WR(m_Index,pfnBufRd(pBuf));
-                    }
-                    else
-                    {
-                        while((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_EMPTY) == 0);
-                    }
-                    // increment Tx Buffer to next data point
-                    pBuf = (LPVOID) ((UINT) pBuf + bufIncr);
-                    
-                    //Sleep(10);
-                    //tmp = INREG32(&m_pSPI->DATA);
+		if(pBusCnfg->bCmd)
+		{
+			HW_SSP_CMD0_WR(m_Index,pBusCnfg->SspCmd.U);
+			HW_SSP_CMD1_WR(m_Index,pBusCnfg->SspArg.U);
+		}
 
-                    // increment exchange counter
-                    xchCnt++;
-                }
-                // set flag to indicate requested exchange done
-                bXchDone = TRUE;
-            }
-        }
-        else{
-              // Process the SDMMC Command
-                if(pXchPkt->xchCnt == 0)
-                {
-                // start exchange
-                    HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
-                    bXchDone = TRUE;
-                }
-        }
-    } // while(!bXchDone)
-    
-    DEBUGMSG(ZONE_THREAD, (TEXT("SpiDataExchange -\r\n")));
+		//__raw_writel(mxs_spi_cs(cs), ss->regs + HW_SSP_CTRL0_SET);
+		HW_SSP_CTRL0_CLR(m_Index, (BM_SSP_CTRL0_WAIT_FOR_IRQ | BM_SSP_CTRL0_WAIT_FOR_CMD));		//clear these two bits 
+
+		// zxw 2012-6-11  Enable CSn
+		//HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_IGNORE_CRC);
+		// zxw 2012-6-29  Enable CSn
+		HW_SSP_CTRL0_CLR(m_Index,BM_SSP_CTRL0_IGNORE_CRC);
+		HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_LOCK_CS);
+
+		while (xchCnt--) 
+		{
+			
+			// zxw 2012-6-11  Disable CSn
+			/*if( xchCnt == 1 )
+			{
+				HW_SSP_CTRL0_CLR(m_Index,BM_SSP_CTRL0_LOCK_CS);
+				HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_IGNORE_CRC);
+			}*/
+
+			// zxw 2012-6-27
+			if( (xchCnt == 0) && (pBusCnfg->SspCtrl0.B.LOCK_CS == 1))
+			{
+				HW_SSP_CTRL0_CLR(m_Index,BM_SSP_CTRL0_LOCK_CS);
+				HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_IGNORE_CRC);
+			}
+
+			//__raw_writel(BM_SSP_CTRL0_XFER_COUNT, ss->regs + HW_SSP_CTRL0_CLR);
+			HW_SSP_CTRL0_CLR(m_Index, BM_SSP_CTRL0_XFER_COUNT);
+			//__raw_writel(1, ss->regs + HW_SSP_CTRL0_SET);	// byte-by-byte 
+			HW_SSP_CTRL0_SET(m_Index, 1);						// transfer data byte by byte
+
+			if (pBusCnfg->bRead != TRUE)
+			{
+				//__raw_writel(BM_SSP_CTRL0_READ, ss->regs + HW_SSP_CTRL0_CLR);
+				HW_SSP_CTRL0_CLR(m_Index, BM_SSP_CTRL0_READ);	// clear READ flag
+			}
+			else
+			{
+				//__raw_writel(BM_SSP_CTRL0_READ, ss->regs + HW_SSP_CTRL0_SET);
+				HW_SSP_CTRL0_SET(m_Index, BM_SSP_CTRL0_READ);	// set READ flag
+			}
+
+			//--------------------------------------
+			// Run! 
+			//--------------------------------------
+			//__raw_writel(BM_SSP_CTRL0_RUN, ss->regs + HW_SSP_CTRL0_SET);
+			HW_SSP_CTRL0_SET(m_Index, BM_SSP_CTRL0_RUN);
+			count = 10000;
+			//while (((__raw_readl(ss->regs + HW_SSP_CTRL0) & BM_SSP_CTRL0_RUN) == 0) && count--)
+			while (((HW_SSP_CTRL0_RD(m_Index) & BM_SSP_CTRL0_RUN) == 0) && count--)
+			{
+				continue;
+			}
+			if (count <= 0) 
+			{
+				//printk(KERN_ERR "%c: timeout on line %s:%d\n", write ? 'W' : 'C', __func__, __LINE__);
+				RETAILMSG(1, (L"mxs_spi_txrx_pio-%c: timeout on waiting CTRL0_RUN set\r\n", pBusCnfg->bRead == TRUE ? 'R' : 'W'));
+				break;
+			}
+
+			if (pBusCnfg->bRead != TRUE)
+			{
+				//__raw_writel(*buf, ss->regs + HW_SSP_DATA);
+				HW_SSP_DATA_WR(m_Index, pfnBufRd(pBuf) );
+			}
+
+			// Set TRANSFER 
+			//__raw_writel(BM_SSP_CTRL0_DATA_XFER, ss->regs + HW_SSP_CTRL0_SET);
+			HW_SSP_CTRL0_SET(m_Index, BM_SSP_CTRL0_DATA_XFER);
+
+			if (pBusCnfg->bRead == TRUE) 
+			{
+				count = 10000;
+				//while (count-- && (__raw_readl(ss->regs + HW_SSP_STATUS) & BM_SSP_STATUS_FIFO_EMPTY))
+				while (count-- && (HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_EMPTY))
+				{
+					continue;
+				}
+				if (count <= 0) 
+				{
+					//printk(KERN_ERR "%c: timeout on line %s:%d\n", write ? 'W' : 'C', __func__, __LINE__);
+					RETAILMSG(1, (L"mxs_spi_txrx_pio-%c: timeout on waiting FIFO_EMPTY\r\n", pBusCnfg->bRead == TRUE ? 'R' : 'W'));
+					break;
+				}
+				//*buf = (__raw_readl(ss->regs + HW_SSP_DATA) & 0xFF);
+				tmp = HW_SSP_DATA_RD(m_Index);
+				pfnBufWrt( pBuf , tmp );
+			}
+
+			count = 10000;
+			//while ((__raw_readl(ss->regs + HW_SSP_CTRL0) & BM_SSP_CTRL0_RUN) && count--)
+			while ((HW_SSP_CTRL0_RD(m_Index) & BM_SSP_CTRL0_RUN) && count--)
+			{
+				continue;
+			}
+			if (count <= 0) 
+			{
+				//printk(KERN_ERR "%c: timeout on line %s:%d\n", write ? 'W' : 'C', __func__, __LINE__);
+				RETAILMSG(1, (L"mxs_spi_txrx_pio-%c: timeout on waiting CRTL0_RUN cleared\r\n", pBusCnfg->bRead == TRUE ? 'R' : 'W'));
+				break;
+			}
+
+			// advance to the next byte
+			pBuf = (LPVOID) ((UINT) pBuf + bufIncr);
+		}
+	}				
+
+	// // zxw 2012-6-11 IMX28 EVK
+	//////{
+	//////	// CS&ZHL MAY-15-2012: SSP0 testing
+	//////	BSPSpiCSEnable(m_dwCSIndex);
+
+	//////	// set client SPI bus configuration based
+	//////	HW_SSP_CTRL0_WR(m_Index,pBusCnfg->SspCtrl0.U);
+
+	//////	if(pBusCnfg->bCmd)
+	//////	{
+	//////		HW_SSP_CMD0_WR(m_Index,pBusCnfg->SspCmd.U);
+	//////		HW_SSP_CMD1_WR(m_Index,pBusCnfg->SspArg.U);
+	//////	}
+
+	//////	bXchDone = FALSE;
+
+	//////	// until we are done with requested transfers
+	//////	while(!bXchDone)
+	//////	{
+	//////		if(pBuf != NULL)
+	//////		{
+	//////			// Process the SDMMC Data Buffer
+	//////			if( pBusCnfg->bRead == TRUE)
+	//////			{
+	//////				while (xchCnt < pXchPkt->xchCnt) 
+	//////				{
+	//////                    
+	//////					//RETAILMSG(1, (TEXT("start exchange m_Index = %d\r\n"),m_Index));
+	//////					// start exchange
+	//////					HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
+	//////					while((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_EMPTY) != 0);
+	//////					{
+	//////						tmp = HW_SSP_DATA_RD(m_Index);                           
+	//////						// if receive data is not to be discarded
+	//////						if (pBuf != NULL)
+	//////						{
+	//////							// get next Rx data from SPI FIFO
+	//////							pfnBufWrt(pBuf, tmp);
+	//////							// increment Rx Buffer to next data point
+	//////							pBuf = (LPVOID) ((UINT) pBuf + bufIncr);
+	//////						}
+
+	//////						// increment Rx exchange counter
+	//////						xchCnt++;
+	//////					}
+	//////				// set flag to indicate requested exchange done
+	//////				bXchDone = TRUE;
+	//////				}
+	//////			}
+	//////			else 
+	//////			{
+	//////				//RETAILMSG(1, (TEXT("load FIFO m_Index = %d\r\n"),m_Index));
+	//////				// load FIFO until full, or until we run out of data
+	//////				while (xchCnt < pXchPkt->xchCnt)
+	//////				{
+	//////					HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
+	//////					// put next Tx data into SPI FIFO
+	//////					if((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_FULL) == 0)
+	//////					{
+	//////						HW_SSP_DATA_WR(m_Index,pfnBufRd(pBuf));
+	//////					}
+	//////					else
+	//////					{
+	//////						while((HW_SSP_STATUS_RD(m_Index) & BM_SSP_STATUS_FIFO_EMPTY) == 0);
+	//////					}
+	//////					// increment Tx Buffer to next data point
+	//////					pBuf = (LPVOID) ((UINT) pBuf + bufIncr);
+	//////                    
+	//////					//Sleep(10);
+	//////					//tmp = INREG32(&m_pSPI->DATA);
+
+	//////					// increment exchange counter
+	//////					xchCnt++;
+	//////				}
+	//////				// set flag to indicate requested exchange done
+	//////				bXchDone = TRUE;
+	//////			}
+	//////		}
+	//////		else{
+	//////			  // Process the SDMMC Command
+	//////				if(pXchPkt->xchCnt == 0)
+	//////				{
+	//////				// start exchange
+	//////					HW_SSP_CTRL0_SET(m_Index,BM_SSP_CTRL0_RUN);
+	//////					bXchDone = TRUE;
+	//////				}
+	//////		}
+	//////	} // while(!bXchDone)
+	//////    
+	//////	// CS&ZHL MAY-15-2012: SSP0 testing
+	//////	BSPSpiCSDisable(m_dwCSIndex);
+	//////}
+	//////// 
+
+	DEBUGMSG(ZONE_THREAD, (TEXT("SpiDataExchange -\r\n")));
     return xchCnt;
 }
 
@@ -1516,3 +1659,79 @@ void spiClass::SpiBufWrt32(LPVOID pBuf, UINT32 data)
     *p = data;
 }
 
+
+//zxw 2012-6-27
+
+DWORD spiClass::MasterRead(BOOL Lock_CS, PBYTE pBuf, DWORD dwLength , BYTE BitCount)
+{
+
+    UNREFERENCED_PARAMETER(Lock_CS);
+    UNREFERENCED_PARAMETER(pBuf);
+    UNREFERENCED_PARAMETER(dwLength);
+    UNREFERENCED_PARAMETER(BitCount);
+
+
+	SPI_BUSCONFIG_T SPIBusConfig;
+	SPI_XCH_PKT0_T  SPIDataBox;
+
+	SSP_CTRL0 sSPI_CTRL0;
+	SSP_CMD0  sSPI_CMD0;
+	SSP_CMD1  sSPI_CMD1;
+
+	sSPI_CTRL0.U = Lock_CS?0x9000001:0x1000001;
+	sSPI_CMD0.U = 0;
+	sSPI_CMD1.U = 0;
+
+	SPIBusConfig.SspCtrl0 = sSPI_CTRL0; 
+    SPIBusConfig.SspCmd = sSPI_CMD0;
+    SPIBusConfig.SspArg = sSPI_CMD1;
+    SPIBusConfig.usedma = 0;
+    SPIBusConfig.usepolling = 0;
+    SPIBusConfig.bitcount = BitCount; 
+    SPIBusConfig.bRead = TRUE;
+    SPIBusConfig.bCmd = 0;
+
+	SPIDataBox.pBusCnfg = &SPIBusConfig; // 指定SPI
+	SPIDataBox.pBuf = pBuf;//要发送的数据输出
+	SPIDataBox.xchCnt = dwLength;//要发送的个数
+	SPIDataBox.xchEvent = NULL;//不产生事件
+
+	return SpiNonDMADataExchange( &SPIDataBox);
+
+}
+
+DWORD spiClass::MasterWrite(BOOL Lock_CS, PBYTE pBuf, DWORD dwLength ,BYTE BitCount )
+{
+
+    UNREFERENCED_PARAMETER(Lock_CS);
+    UNREFERENCED_PARAMETER(pBuf);
+    UNREFERENCED_PARAMETER(dwLength);
+    UNREFERENCED_PARAMETER(BitCount);
+	
+	SPI_BUSCONFIG_T SPIBusConfig;
+	SPI_XCH_PKT0_T  SPIDataBox;
+	SSP_CTRL0 sSPI_CTRL0;
+	SSP_CMD0  sSPI_CMD0;
+	SSP_CMD1  sSPI_CMD1;
+
+	sSPI_CTRL0.U = Lock_CS?0x9000001:0x1000001;
+	sSPI_CMD0.U = 0;
+	sSPI_CMD1.U = 0;
+
+	SPIBusConfig.SspCtrl0 = sSPI_CTRL0; 
+    SPIBusConfig.SspCmd = sSPI_CMD0;
+    SPIBusConfig.SspArg = sSPI_CMD1;
+    SPIBusConfig.usedma = FALSE;
+    SPIBusConfig.usepolling = FALSE;
+    SPIBusConfig.bitcount = BitCount; 
+    SPIBusConfig.bRead = FALSE;
+    SPIBusConfig.bCmd = 0;
+
+
+	SPIDataBox.pBusCnfg = &SPIBusConfig; // 指定SPI
+	SPIDataBox.pBuf = pBuf;//要发送的数据输出
+	SPIDataBox.xchCnt = dwLength;//要发送的个数
+	SPIDataBox.xchEvent = NULL;//不产生事件
+
+	return SpiNonDMADataExchange( &SPIDataBox);
+}

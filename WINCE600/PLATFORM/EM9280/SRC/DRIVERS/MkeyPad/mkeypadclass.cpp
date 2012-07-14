@@ -47,37 +47,9 @@ void MKeyPadHandleThread( MKPDClass *pMKpd )
 //--------------------------------------------------------------------------------
 
 
-MKPDClass::MKPDClass( UINT32 dwPollingTimeOut, UINT32 dwMkeyPadFromat )
+MKPDClass::MKPDClass( UINT32 dwPollingTimeOut )
 {
-	switch( dwMkeyPadFromat )
-	{
-	case 0:
-		m_nMaxScanIn = 3; 
-		m_nMaxScanOut = 3;
-		break;
-	case 1:
-		m_nMaxScanIn = 4; 
-		m_nMaxScanOut = 3;
-		break;
-	case 2:
-		m_nMaxScanIn = 4; 
-		m_nMaxScanOut = 4;
-		break;
-	case 3:
-		m_nMaxScanIn = 5; 
-		m_nMaxScanOut = 4;
-		break;
-	case 4:
-		m_nMaxScanIn = 5; 
-		m_nMaxScanOut = 5;
-		break;
-	default :
-		RETAILMSG (1, (TEXT("MKPDClass:: Error parameters. Default setting 3x3\r\n")));
-		m_nMaxScanIn = 3; 
-		m_nMaxScanOut = 3;
-		break;
-	}
-	KeyIoInit( m_nMaxScanIn, m_nMaxScanOut );
+	KeyIoInit( );
 	m_dwPollingTimeOut = dwPollingTimeOut;
 	m_nkeyState = KEYSTART;
 
@@ -92,14 +64,14 @@ MKPDClass::MKPDClass( UINT32 dwPollingTimeOut, UINT32 dwMkeyPadFromat )
 	}
 	CeSetThreadPriority(m_hThread, 145 );		// PS2 KeyBoard Priority
 	CloseHandle(m_hThread);
-	RETAILMSG (1, (TEXT("MKPDClass:: Keypad Fromat: (in)%dx(out)%d\r\n"), m_nMaxScanIn, m_nMaxScanOut ));
+
 error:;
 }
 
 MKPDClass::~MKPDClass(void)
 {
 	g_bMkeyPadIsOpen = FALSE;
-	KeyIoDeInit( m_nMaxScanIn, m_nMaxScanOut );
+	KeyIoDeInit( );
 	Sleep(100);
 	RETAILMSG (1, (TEXT("MKPDClass::~MKPDClass:MKPD_DeInit\r\n")));
 }
@@ -124,7 +96,7 @@ void MKPDClass::MKeyPadHandle()
 			Din = GetDin(  );
 			if( Din != ALLHIGH ) 
 			{
-				for( i=0; i<m_nMaxScanOut; i++ )
+				for( i=0; i<MAXOUT; i++ )
 				{
 					Dout = i;
 					PutDout( Dout );
@@ -132,7 +104,7 @@ void MKPDClass::MKeyPadHandle()
 					if( Din != ALLHIGH ) 
 						break;
 				}
-				if( i < m_nMaxScanOut )
+				if( i < MAXOUT )
 				{
 					m_ucScanWord = Din;
 					m_nkeyState = KEYPRESS;
@@ -155,14 +127,11 @@ void MKPDClass::MKeyPadHandle()
 				case 0xfb: i = 2; break;
 				case 0xf7: i = 3; break;
 				case 0xef: i = 4; break;
-				case 0xdf: i = 5; break;
-				case 0xbf: i = 6; break;
-				case 0x7f: i = 7; break;
+				//case 0xdf: i = 5; break;
+				//case 0xbf: i = 6; break;
+				//case 0x7f: i = 7; break;
 				default: goto IDONNOTKNOW_KEY;
 				}
-				if( i >= m_nMaxScanIn )
-					goto IDONNOTKNOW_KEY;
-
 				VKey = (UINT)g_uVkeyCode[(i*MAXOUT)+Dout];
 				uScanCode = MapVirtualKey(VKey, 0);
 				//RETAILMSG (1, (TEXT("Vkey:0x%x ScanCode:0x%x\r\n"), VKey, uScanCode));
@@ -240,9 +209,9 @@ BYTE MKPDClass::GetDin()
 
 	uVal = 0xff;
 	
-	for( i=0; i<m_nMaxScanIn; i++ )
+	for( i=0; i<MAXIN; i++ )
 	{
-		DDKGpioReadDataPin(g_dwKeyIn[m_nMaxScanIn-i-1], &uData);
+		DDKGpioReadDataPin(g_dwKeyIn[MAXIN-i-1], &uData);
 		uVal <<= 1;
 		uVal |= (uData&0x1);
 	}
@@ -259,18 +228,18 @@ void MKPDClass::PutDoutAll( int nVal )
 {
 	int i;
 
-	for( i=0; i<m_nMaxScanOut; i++ )
+	for( i=0; i<MAXOUT; i++ )
 	{
 		DDKGpioWriteDataPin(g_dwKeyOut[i],nVal );
 	}
 }
 
-void MKPDClass::KeyIoInit( int m_nMaxScanIn, int m_nMaxScanOut )
+void MKPDClass::KeyIoInit()
 {
 	int i;
 	
 	// initializtion Key in pin
-	for( i=0; i<m_nMaxScanIn; i++ )
+	for( i=0; i<MAXIN; i++ )
 	{
 		DDKIomuxSetPinMux(g_dwKeyIn[i],DDK_IOMUX_MODE_GPIO);
 		DDKIomuxSetPadConfig(g_dwKeyIn[i], 
@@ -281,7 +250,7 @@ void MKPDClass::KeyIoInit( int m_nMaxScanIn, int m_nMaxScanOut )
 	}
 
 	// initializtion Key out pin
-	for( i=0; i<m_nMaxScanOut; i++ )
+	for( i=0; i<MAXOUT; i++ )
 	{
 		DDKIomuxSetPinMux(g_dwKeyOut[i],DDK_IOMUX_MODE_GPIO);
 		DDKIomuxSetPadConfig(g_dwKeyOut[i], 
@@ -293,11 +262,8 @@ void MKPDClass::KeyIoInit( int m_nMaxScanIn, int m_nMaxScanOut )
 
 }
 
-void MKPDClass::KeyIoDeInit( int m_nMaxScanIn, int m_nMaxScanOut )
+void MKPDClass::KeyIoDeInit( )
 {
-	// Remove-W4: Warning C4100 workaround
-	UNREFERENCED_PARAMETER(m_nMaxScanIn);
-
-	for( int i=0; i<m_nMaxScanOut; i++ )
+	for( int i=0; i<MAXOUT; i++ )
 		DDKGpioEnableDataPin( g_dwKeyOut[i], 0 );
 }

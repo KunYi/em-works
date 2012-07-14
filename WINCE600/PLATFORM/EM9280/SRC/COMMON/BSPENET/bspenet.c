@@ -111,9 +111,13 @@ void OALKitlENETBSPInit(void)
                          DDK_IOMUX_PAD_VOLTAGE_3V3);
 
     // Power on PHY
+#ifdef	EM9280
+	// VDD3V3 is applied on LAN8720A directly
+#else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_SSP1_D3_1, DDK_IOMUX_MODE_GPIO);
     DDKGpioEnableDataPin(DDK_IOMUX_SSP1_D3_1, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_SSP1_D3_1, 0);
+#endif	//EM9280
 
     // Set up 50 MHz clock for PHY (This must be done before resetting PHY)
     // 
@@ -127,11 +131,20 @@ void OALKitlENETBSPInit(void)
     BW_CLKCTRL_ENET_CLK_OUT_EN(1);
 
     // Reset PHY
+#ifdef	EM9280
+	// CS&ZHL MAY-8-2012: use GPIO1_17 as PHY_RESET, active low
+    DDKIomuxSetPinMux(DDK_IOMUX_GPIO1_17, DDK_IOMUX_MODE_GPIO);
+    DDKGpioEnableDataPin(DDK_IOMUX_GPIO1_17, 1);
+    DDKGpioWriteDataPin(DDK_IOMUX_GPIO1_17, 0);
+    OALStall(200);
+    DDKGpioWriteDataPin(DDK_IOMUX_GPIO1_17, 1);
+#else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_ENET0_RX_CLK, DDK_IOMUX_MODE_GPIO);
     DDKGpioEnableDataPin(DDK_IOMUX_ENET0_RX_CLK, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 0);
     OALStall(200);
     DDKGpioWriteDataPin(DDK_IOMUX_ENET0_RX_CLK, 1);
+#endif	//EM9280
 }
 
 //------------------------------------------------------------------------------

@@ -662,10 +662,23 @@ BOOL BSPUsbHostLowPowerModeEnable(void)
 //------------------------------------------------------------------------------
 void BSPUSBHostVbusControl(BOOL blOn)
 {
-#ifdef EM9283
+    if (BSPGetUSBControllerType() == USB_SEL_OTG)
+    {
+#ifdef	EM9280
+		// use GPIO1_1 as USB0_PWR_EN
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO); 
+		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
 
-	if (BSPGetUSBControllerType() == USB_SEL_OTG)
-	{
+		if (blOn)
+        {
+            DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 1); // turn on VBUS
+        }
+        else
+        {
+            DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0); // turn off VBUS
+        }
+#else	// -> EM9283 or iMX28EVK
+#ifdef EM9283
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO); 
 		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
 
@@ -677,24 +690,7 @@ void BSPUSBHostVbusControl(BOOL blOn)
 		{
 			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0);
 		}
-	}
-	else if (BSPGetUSBControllerType() == USB_SEL_H1)
-	{
-		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO); 
-		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
-
-		if (blOn)
-		{
-			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 1);
-		}
-		else
-		{
-			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0);
-		}
-	}
 #else
-	if (BSPGetUSBControllerType() == USB_SEL_OTG)
-    {
         DDKIomuxSetPinMux(DDK_IOMUX_AUART2_TX_1, DDK_IOMUX_MODE_GPIO); 
         DDKGpioEnableDataPin(DDK_IOMUX_AUART2_TX_1, 1);
 
@@ -706,9 +702,29 @@ void BSPUSBHostVbusControl(BOOL blOn)
         {
             DDKGpioWriteDataPin(DDK_IOMUX_AUART2_TX_1, 0);
         }
+#endif  //EM9283
+#endif	//EM9280
     }
     else if (BSPGetUSBControllerType() == USB_SEL_H1)
     {
+#ifdef	EM9280
+		//
+		// USB HOST port has no VBUS control in EM9280
+		//
+#else	// -> EM9283 or iMX28EVK
+#ifdef  EM9283
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO); 
+		DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
+
+		if (blOn)
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 1);
+		}
+		else
+		{
+			DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0);
+		}
+#else
         DDKIomuxSetPinMux(DDK_IOMUX_AUART2_RX_1, DDK_IOMUX_MODE_GPIO); 
         DDKGpioEnableDataPin(DDK_IOMUX_AUART2_RX_1, 1);
 
@@ -720,8 +736,9 @@ void BSPUSBHostVbusControl(BOOL blOn)
         {
             DDKGpioWriteDataPin(DDK_IOMUX_AUART2_RX_1, 0);
         }
+#endif  //EM9283
+#endif	//EM9280
     }
-#endif
 }
 
 

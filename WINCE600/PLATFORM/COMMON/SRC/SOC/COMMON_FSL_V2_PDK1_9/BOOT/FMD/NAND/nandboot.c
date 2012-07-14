@@ -200,7 +200,7 @@ void NANDBootReserved()
     DWORD dwResult;
     BLOCK_ID blockID, startBlockID, endBlockID;
     
-    EdbgOutputDebugString("->NANDBootReserved\r\n");
+    //EdbgOutputDebugString("->NANDBootReserved\r\n");
     if(!FMD_GetInfo(&flashInfo))
     {
         EdbgOutputDebugString("ERROR: Unable to get NAND flash information.\r\n");
@@ -212,7 +212,7 @@ void NANDBootReserved()
 
     startBlockID = 0;
     endBlockID = (DWORD)(NANDImageCfg.dwNandSize + flashInfo.dwBytesPerBlock - 1) / (DWORD)flashInfo.dwBytesPerBlock;
-	EdbgOutputDebugString("NANDBootReserved::set block[0x%x - 0x%x] as BLOCK_STATUS_RESERVED.\r\n", startBlockID, (endBlockID - 1));
+	//EdbgOutputDebugString("NANDBootReserved::set block[0x%x - 0x%x] as BLOCK_STATUS_RESERVED.\r\n", startBlockID, (endBlockID - 1));
     //for(blockID = startBlockID; blockID < endBlockID; blockID++)
     for(blockID = startBlockID; startBlockID < endBlockID; blockID++)	// CS&ZHL APR-2-2012: counting valid block number only!		
     {
@@ -457,7 +457,7 @@ BOOL NANDWriteImage(PNANDWrtImgInfo pNANDWrtImgInfo, DWORD dwImageStart, DWORD d
     ValidEndLogBlkAddr = StartLogBlkAddr + dwValidImageBlock - 1;
     EndLogBlkAddr = StartLogBlkAddr + (dwImageSize + flashInfo.dwBytesPerBlock - 1) / flashInfo.dwBytesPerBlock-1;
 
-    RETAILMSG(TRUE, (_T("INFO: Programming NAND flash blocks [0x%x - 0x%x].\r\n"), StartLogBlkAddr, ValidEndLogBlkAddr));
+    //RETAILMSG(TRUE, (_T("INFO: Programming NAND flash blocks [0x%x - 0x%x].\r\n"), StartLogBlkAddr, ValidEndLogBlkAddr));
     
     if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
     {
@@ -704,10 +704,10 @@ BOOL NANDLoadNK(VOID)
 
 	// CS&ZHL MAR-13-2012: use temp buffer
 	pSectorBuf = SectorBuffer.pSectorBuf;
-	EdbgOutputDebugString("INFO: use RAM buffer at 0x%x as temp buffer\r\n", (DWORD)pSectorBuf);
+	//EdbgOutputDebugString("INFO: use RAM buffer at 0x%x as temp buffer\r\n", (DWORD)pSectorBuf);
 
 	StartLogBlkAddr  = NANDImageCfg.dwMBROffset / flashInfo.dwBytesPerBlock;
-	EdbgOutputDebugString("INFO: Search MBR start from NAND flash block [0x%x].\r\n", StartLogBlkAddr);
+	//EdbgOutputDebugString("INFO: Search MBR start from NAND flash block [0x%x].\r\n", StartLogBlkAddr);
 
 	// convert logical block number to usable physical block number
     if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
@@ -792,11 +792,11 @@ BOOL NANDLoadNK(VOID)
 		dwValidImageBlock = (dwActualLength + flashInfo.dwBytesPerBlock - 1) / flashInfo.dwBytesPerBlock;  
 		EndLogBlkAddr = StartLogBlkAddr +  dwValidImageBlock -1;				// actual last logical block 
 	}
-    EdbgOutputDebugString("INFO: NK is allocated at logical block[0x%x -0x%x]\r\n", StartLogBlkAddr, EndLogBlkAddr);
+    //EdbgOutputDebugString("INFO: NK is allocated at logical block[0x%x -0x%x]\r\n", StartLogBlkAddr, EndLogBlkAddr);
 
 	// Set image load address, this is a fixed address = dwLaunchAddr
     pSectorBuf = (LPBYTE) OALPAtoUA(NANDImageCfg.dwNkRamStart);
-    EdbgOutputDebugString("INFO: NK will be loaded into RAM[0x%x]\r\n", pSectorBuf);
+    //EdbgOutputDebugString("INFO: NK will be loaded into RAM[0x%x]\r\n", pSectorBuf);
 
 	// get the 1st usable physical block number of NK image
     if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
@@ -1383,7 +1383,7 @@ BOOL NANDMakeMBR(void)
     sectorInfo.bOEMReserved &= ~OEM_BLOCK_READONLY;
 
 	StartLogBlkAddr = NANDImageCfg.dwMBROffset / flashInfo.dwBytesPerBlock;
-    EdbgOutputDebugString("INFO: Write MBR -> find a good block start from [0x%x].\r\n", StartLogBlkAddr);
+    //EdbgOutputDebugString("INFO: Write MBR -> find a good block start from [0x%x].\r\n", StartLogBlkAddr);
 
 	// convert logical block number to usable physical block number
     if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
@@ -1398,7 +1398,7 @@ BOOL NANDMakeMBR(void)
         EdbgOutputDebugString("ERROR: Unable to erase NAND physical block [0x%x].\r\n", PhyBlockAddr);
         return(FALSE);
     }
-    EdbgOutputDebugString("INFO: MBR will be writen into NAND physical block [0x%x].\r\n", PhyBlockAddr);
+    //EdbgOutputDebugString("INFO: MBR will be writen into NAND physical block [0x%x].\r\n", PhyBlockAddr);
 
 	// MBR will be saved in the first sector of that block, get sector address
 	sectorAddr = PhyBlockAddr * flashInfo.wSectorsPerBlock;
@@ -1545,7 +1545,8 @@ BOOL NANDStoreBootCFG(BYTE *pBootCfg, DWORD cbBootCfgSize)
         return FALSE;
     }   
 
-    EdbgOutputDebugString("INFO: Storing boot configuration to NAND block [0x%x].\r\n", NANDImageCfg.dwCfgOffset / flashInfo.dwBytesPerBlock);  
+    //EdbgOutputDebugString("INFO: Storing boot configuration to NAND block [0x%x].\r\n", NANDImageCfg.dwCfgOffset / flashInfo.dwBytesPerBlock);  
+    EdbgOutputDebugString("INFO: Storing boot configuration to NAND ...\r\n" );  
 
     if (!FMD_EraseBlock(PhyBlockAddr))
     {
@@ -2254,6 +2255,88 @@ BOOL NANDLoadIPL(VOID)
 
 //-----------------------------------------------------------------------------
 //
+// CS&ZHL MAY28-2012: Only format the Block0-Block15 regions of NAND
+//
+//  Function:  NANDFormatBoot
+//
+//  This function formats (erases) the entire NAND flash memory.
+//
+//  Parameters:
+//      None.     
+//
+//  Returns:
+//      TRUE indicates success. FALSE indicates failure.
+//
+//-----------------------------------------------------------------------------
+BOOL NANDFormatBoot(void)
+{
+    UINT32 blockID, startBlockID, endBlockID;
+    UINT32 percentComplete, lastPercentComplete;
+
+    // Get NAND flash data bytes per sector.
+    //
+    if(!g_bNandExist)
+    {
+        EdbgOutputDebugString("WARNING: NAND device doesn't exist - unable to read image.\r\n");
+        return FALSE;
+    }
+    
+    // Get NAND flash data bytes per sector.
+    //
+    if(!FMD_GetInfo(&flashInfo))
+    {
+        EdbgOutputDebugString("ERROR: Unable to get NAND flash information.\r\n");
+        return FALSE;
+    }
+
+    // Calculate the physical block range for the enrire NAND device
+    startBlockID = 0;
+    //endBlockID = flashInfo.dwNumBlocks;
+    endBlockID = 16;
+
+    EdbgOutputDebugString("INFO: Starting format of boot NAND regions.\r\n");
+
+    lastPercentComplete = 0;
+
+    for (blockID = startBlockID; blockID < endBlockID ; blockID++)
+    {
+        // Is the block bad?
+        //
+        if (FMD_GetBlockStatus(blockID) == BLOCK_STATUS_BAD)
+        {
+            EdbgOutputDebugString("INFO: Found bad NAND flash block [0x%x].\r\n", blockID);
+            continue;
+        }
+
+        // Erase the block...
+        //
+        if (!FMD_EraseBlock(blockID))
+        {
+			FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
+            EdbgOutputDebugString("ERROR: Unable to erase NAND flash block 0x%x.\r\n", blockID);
+            continue;
+        }
+
+		// show progress
+        percentComplete = 100 * (blockID - startBlockID + 1) / (endBlockID - startBlockID);
+
+        // If percentage complete has changed, show the progress
+        if (lastPercentComplete != percentComplete)
+        {
+            lastPercentComplete = percentComplete;
+            //OEMWriteDebugByte('\r');
+            //EdbgOutputDebugString("INFO: Format is %d%% complete.", percentComplete);
+			// CS&ZHL DEC-9-2011: show progresss bar
+			EdbgOutputDebugString("#");
+        }
+    }
+    
+    EdbgOutputDebugString("\r\nINFO: Format of boot NAND regions completed successfully.\r\n");
+    return(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+//
 //  Function:  NANDFormatAll
 //
 //  This function formats (erases) the entire NAND flash memory.
@@ -2371,6 +2454,7 @@ BOOL NANDLowLevelFormat(void)
         //
         if (!FMD_EraseBlock(blockID))
         {
+			//FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
             RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block 0x%x.\r\n"), blockID));
             continue;
         }

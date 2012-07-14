@@ -31,9 +31,9 @@
 // These values are used to initialize the GPMI NAND pins.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_GPMI_CLK_FREQUENCY_kHZ (120000)
-#define FLASH_BUSY_TIMEOUT          10000000  //!< Busy Timeout time in nsec. (10msec)
-#define FLASH_BUSY_TIMEOUT_DIV_4096 ((FLASH_BUSY_TIMEOUT + 4095) / 4096)
+#define MAX_GPMI_CLK_FREQUENCY_kHZ				(120000)
+#define FLASH_BUSY_TIMEOUT						10000000  //!< Busy Timeout time in nsec. (10msec)
+#define FLASH_BUSY_TIMEOUT_DIV_4096				((FLASH_BUSY_TIMEOUT + 4095) / 4096)
 #define DDI_NAND_HAL_GPMI_SOFT_RESET_LATENCY    (1)
 #define DDI_NAND_HAL_GPMI_SOFT_RESET_TIMEOUT    (5000)
 
@@ -42,14 +42,35 @@
      BF_GPMI_TIMING0_DATA_HOLD(DataHold) | \
      BF_GPMI_TIMING0_DATA_SETUP(DataSetup))
 
+// CS&ZHL MAY-31-2012
+//typedef struct _NANDTiming
+//{
+//    BYTE DataSetup;
+//    BYTE DataHold;
+//    BYTE AddressSetup;
+//    BYTE DataSample;
+//}NANDTiming, *PNANDTiming;
+
 //! Default structure that should be more than safe for initial reads.
 const NANDTiming zFailsafeTimings =
 {
-    100,          //!< Data Setup (ns)
-    80,          //!< Data Hold (ns)
-    120,          //!< Address Setup (ns)
-    10            //!< DSAMPLE_TIME (ns)
+	100,          //!< Data Setup (ns)
+	80,           //!< Data Hold (ns)
+	120,          //!< Address Setup (ns)
+	10            //!< DSAMPLE_TIME (ns)
 };
+
+////---------- linux code -----------------
+//static struct gpmi_nfc_timing  safe_timing = {
+//	.data_setup_in_ns        = 80,
+//	.data_hold_in_ns         = 60,
+//	.address_setup_in_ns     = 25,
+//	.gpmi_sample_delay_in_ns =  6,
+//	.tREA_in_ns              = -1,
+//	.tRLOH_in_ns             = -1,
+//	.tRHOH_in_ns             = -1,
+//};
+////---------- linux code -----------------
 
 ////////////////////////////////////////////////////////////////////////////////
 // Prototypes
@@ -187,6 +208,65 @@ static INT FindGpmiCycles(UINT32 u32NandTime_ns, UINT32 u32GpmiPeriod_ns)
 
 VOID GPMI_SetTiming(NANDTiming * pNewNANDTiming, UINT32 u32GpmiPeriod_ns)
 {
+    NANDTiming	*pNANDTiming = (NANDTiming *) pNewNANDTiming;
+    UINT32		u32AddressSetup;
+    UINT32		u32DataSetup;
+    UINT32		u32DataHold;
+    UINT32		u32BusyTimeout;
+    UINT32		u32Delay_ns = 0;	// default = 0: Non-EDO			//DataSampleTime;
+	UINT32		u32ReadDelay = 0;
+
+    
+    // If u32GpmiPeriod is passed in as 0, we get the current GPMI_CLK frequency
+    // and compute the period in ns.
+    if (u32GpmiPeriod_ns == 0)
+    {
+        UINT32 freq_kHz = MAX_GPMI_CLK_FREQUENCY_kHZ; 
+        u32GpmiPeriod_ns = 1000000 / freq_kHz;
+    }
+
+	//
+	// CS&ZHL JUN-1-2012: computing if read_delay is required
+	//                    DataSetup => tRP, DataSample => tREA, DELAY = tREA + 4ns - tRP 
+	//
+	if((pNANDTiming->DataSample + 4) > pNANDTiming->DataSetup)
+    {
+		u32Delay_ns = pNANDTiming->DataSample + 4 - pNANDTiming->DataSetup;
+		u32ReadDelay = (u32Delay_ns * 8) / pNANDTiming->DataSetup;
+	}
+
+    u32AddressSetup = FindGpmiCycles(pNANDTiming->AddressSetup, u32GpmiPeriod_ns);
+    u32DataSetup = FindGpmiCycles(pNANDTiming->DataSetup, u32GpmiPeriod_ns);
+    u32DataHold = FindGpmiCycles(pNANDTiming->DataHold, u32GpmiPeriod_ns);
+    HW_GPMI_TIMING0_WR(NAND_GPMI_TIMING0(u32AddressSetup, u32DataSetup, u32DataHold));
+
+	// setup read delay
+	BW_GPMI_CTRL1_DLL_ENABLE(0);				// DLL_ENABLE = 0
+	BW_GPMI_CTRL1_HALF_PERIOD(0);				// HALF_PERIOD = 0
+	if(u32ReadDelay)
+	{
+        BW_GPMI_CTRL1_RDN_DELAY(u32ReadDelay);	// change RDN_DELAY
+		BW_GPMI_CTRL1_DLL_ENABLE(1);			// DLL_ENABLE = 1
+	}
+	else
+	{
+		BW_GPMI_CTRL1_RDN_DELAY(0);				// RDN_DELAY = 0
+	}
+
+    // Number of cycles / 4096.
+    u32BusyTimeout = FindGpmiCycles(FLASH_BUSY_TIMEOUT_DIV_4096, u32GpmiPeriod_ns);
+    HW_GPMI_TIMING1_WR( BF_GPMI_TIMING1_DEVICE_BUSY_TIMEOUT(u32BusyTimeout));
+
+    HW_GPMI_TIMING2_WR(0x02020101);				// What's this?
+
+	// wait at least 2us > 64 GPMI clock cycles
+    u32BusyTimeout = HW_DIGCTL_MICROSECONDS_RD();
+    while((HW_DIGCTL_MICROSECONDS_RD() - u32BusyTimeout) < 2);
+}
+
+/*
+VOID GPMI_SetTiming(NANDTiming * pNewNANDTiming, UINT32 u32GpmiPeriod_ns)
+{
     NANDTiming * pNANDTiming = (NANDTiming *) pNewNANDTiming;
     
     // If u32GpmiPeriod is passed in as 0, we get the current GPMI_CLK frequency
@@ -198,11 +278,11 @@ VOID GPMI_SetTiming(NANDTiming * pNewNANDTiming, UINT32 u32GpmiPeriod_ns)
     }
 
     {
-        UINT32 u32AddressSetup ;
-        UINT32 u32DataSetup ;
-        UINT32 u32DataHold ;
-        UINT32 u32DataSampleTime ;
-        UINT32 u32BusyTimeout ;
+        UINT32 u32AddressSetup;
+        UINT32 u32DataSetup;
+        UINT32 u32DataHold;
+        UINT32 u32DataSampleTime;
+        UINT32 u32BusyTimeout;
 
         u32AddressSetup = FindGpmiCycles(pNANDTiming->AddressSetup, u32GpmiPeriod_ns);
         u32DataSetup = FindGpmiCycles(pNANDTiming->DataSetup, u32GpmiPeriod_ns);
@@ -219,4 +299,4 @@ VOID GPMI_SetTiming(NANDTiming * pNewNANDTiming, UINT32 u32GpmiPeriod_ns)
         HW_GPMI_TIMING2_WR(0x02020101);
     }
 }
-
+*/

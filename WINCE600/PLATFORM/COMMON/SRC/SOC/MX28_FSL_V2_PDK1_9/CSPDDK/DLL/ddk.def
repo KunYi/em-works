@@ -45,6 +45,8 @@ EXPORTS
     DDKGpioReadIntrPin
     DDKGpioEnableDataPin
     DDKGpioClearIntrPin
+	DDKGpioIntrruptEnable
+	DDKGpioIntrruptDisable
 
     DDKIomuxSetPinMux
     DDKIomuxGetPinMux

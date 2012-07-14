@@ -86,6 +86,10 @@ VOID BSPNAND_GetBufferPointer(PBBTBuffer pBBT)
 //-----------------------------------------------------------------------------
 VOID BSPNAND_ConfigIOMUX(DWORD CsNum)
 {
+#ifdef	EM9280
+    UNREFERENCED_PARAMETER(CsNum);
+#endif	//EM9280
+
     // Wake up PINCTRL for GPMI use (i.e. bring out of reset and clkgate).
     //HW_PINCTRL_CTRL_CLR( BM_PINCTRL_CTRL_SFTRST | BM_PINCTRL_CTRL_CLKGATE);
 
@@ -116,14 +120,14 @@ VOID BSPNAND_ConfigIOMUX(DWORD CsNum)
     DDKIomuxSetPinMux(DDK_IOMUX_GPMI_ALE,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_GPMI_CLE,DDK_IOMUX_MODE_00);
 
-	// CS&ZHL JUN-2-2012: Set ALE, CLE, WRN, and RDN pins drive to 8mA, enable pull up, 3.3V
-	DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_RDN, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_WRN, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_ALE, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_CLE, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+    // CS&ZHL JUN-2-2012: Set the ALE, CLE, WRN, and RDN pins drive to 8mA, enable pull up, 3.3V
+    DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_RDN, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+    DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_WRN, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+    DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_ALE, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+    DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_CLE, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
 
 	//// Set the pin drive for the RDN pin to 8mA.
-    //DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_RDN,DDK_IOMUX_PAD_DRIVE_8MA,(DDK_IOMUX_PAD_PULL)0,(DDK_IOMUX_PAD_VOLTAGE)0);
+	//DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_RDN,DDK_IOMUX_PAD_DRIVE_8MA,(DDK_IOMUX_PAD_PULL)0,(DDK_IOMUX_PAD_VOLTAGE)0);
 
     // Power up the appropriate Chip Enable and Ready/Busy Lines.
     // Alway enable NAND0
@@ -132,9 +136,14 @@ VOID BSPNAND_ConfigIOMUX(DWORD CsNum)
         DDKIomuxSetPinMux(DDK_IOMUX_GPMI_READY0,DDK_IOMUX_MODE_00);
 
         // Power up CE0 by setting bit field to b10
-        DDKIomuxSetPinMux(DDK_IOMUX_GPMI_CE0N,DDK_IOMUX_MODE_00);
-
+        DDKIomuxSetPinMux(DDK_IOMUX_GPMI_CE0N, DDK_IOMUX_MODE_00);
+		// CS&ZHL JUN-2-2012: add pad drive
+		DDKIomuxSetPadConfig(DDK_IOMUX_GPMI_CE0N, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
     }
+
+#ifdef	EM9280
+	// Only one NandFlash chip in EM9280
+#else	// -> iMX28EVK
     if (CsNum >= 1)
     {
         // Power up Ready Busy for NAND1
@@ -142,6 +151,7 @@ VOID BSPNAND_ConfigIOMUX(DWORD CsNum)
         // Power up CE1 by setting bit field to b00
         DDKIomuxSetPinMux(DDK_IOMUX_GPMI_CE1N,DDK_IOMUX_MODE_00);
     }
+#endif	//EM9280
 
     // this is called gpmi_wpn in data spec!
     // DDKIomuxSetPinMux(DDK_IOMUX_GPMI_WPN,DDK_IOMUX_MODE_00);   

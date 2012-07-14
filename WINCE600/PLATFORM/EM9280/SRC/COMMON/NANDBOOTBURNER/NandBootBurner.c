@@ -28,6 +28,7 @@
 #include "nandboot.h"
 #include "bcb.h"
 #include "otp.h"
+#include "security.h"		// CS&ZHL APR-12-2012: support security fucntion
 #pragma warning(pop)
 //-----------------------------------------------------------------------------
 // External Functions
@@ -52,12 +53,30 @@ SECTOR_BUFFER	SectorBuffer;
 //-----------------------------------------------------------------------------
 // Local Variables
 BYTE sectorBuf[NANDFC_BOOT_SIZE];
-// CS&ZHL MAR-21-2012: use local buffer to avoid using functions of coredll
-//BYTE g_pSectorBuffer[4096];
+
+// CS&ZHL APR-13-2012: setup flag to control SyncVendorInfo
+#ifdef	EM9280_SYNC_VENDOR_INFO
+BOOL	g_bAbortVendorInfoSync = FALSE;
+#else
+BOOL	g_bAbortVendorInfoSync = TRUE;
+#endif	//EM9280_SYNC_VENDOR_INFO
+
+// CS&ZHL MAY-29-2012: buffer for security info from nandflash
+VENDOR_SECURITY_INFO	g_SecurityInfo;
 
 //-----------------------------------------------------------------------------
 // Local Functions
 VOID NANDGetImgInfo(PNANDImgInfo pInfo);
+
+// CS&ZHL APR-11-2012: routines for NandFlash Security
+BOOL OTPSyncEbootCfg(PBYTE pBuf, DWORD dwBufSize);
+BOOL OTPSyncVendorInfo(PBYTE pBuf, DWORD dwBufSize);
+BOOL NANDVendorAuthentication(void);
+BOOL NANDUserAuthentication(PBYTE pBuf, DWORD dwBufSize);
+
+// get bad block layout info
+// return = number of blocks in the nandflash chip
+DWORD GetBadBlockInfo(PBYTE pBuf, DWORD dwBufSize);
 
 //------------------------------------------------------------------------------
 //
@@ -211,19 +230,20 @@ void NANDBootReserved()
     BLOCK_ID		blockID, startBlockID, endBlockID;
 	static DWORD	dwNANDBootReservedCount = 0;
     
-	if(dwNANDBootReservedCount)
-	{
-        RETAILMSG(TRUE, (_T("INFO: NANDBootReserved() called %d already.\r\n"), dwNANDBootReservedCount++));
-		return;
-	}
+    //RETAILMSG(TRUE, (_T("->NANDBootReserved %d\r\n"), dwNANDBootReservedCount));
+	//if(!dwNANDBootReservedCount)	// for test
+	//{
+	//	// turn off GPMI_CLK
+	//	RETAILMSG(TRUE, (_T("NANDBootReserved: turn off GPMI_CLK\r\n")));
+	//  DDKClockSetGatingMode(DDK_CLOCK_GATE_GPMI_CLK, TRUE);
+	//	RETAILMSG(TRUE, (_T("NANDBootReserved: sleep 100ms\r\n")));
+	//	Sleep(100);
+	//	// turn on GPMI_CLK again
+	//	DDKClockSetGatingMode(DDK_CLOCK_GATE_GPMI_CLK, FALSE);
+	//	RETAILMSG(TRUE, (_T("NANDBootReserved: turn on GPMI_CLK again\r\n")));
+	//}
 	dwNANDBootReservedCount++;
 
-    if(!FMD_GetInfo(&flashInfo))
-    {
-        RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
-        return;
-    }
-    
     // Boot Configuration and Buffer
     if(!NANDBootInit())
     {
@@ -231,19 +251,29 @@ void NANDBootReserved()
         return ;
     }
     
+    if(!FMD_GetInfo(&flashInfo))
+    {
+        RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
+        return;
+    }
+   
     startBlockID = 0;
     endBlockID = (DWORD)(NANDImageCfg.dwNandSize + flashInfo.dwBytesPerBlock - 1) / (DWORD)flashInfo.dwBytesPerBlock;
-    RETAILMSG(TRUE, (_T("INFO: Set NAND flash blocks [0x%x ~ 0x%x] as reserved.\r\n"), startBlockID, endBlockID-1));        
+    //RETAILMSG(TRUE, (_T("INFO: Set NAND flash blocks [0x%x ~ 0x%x] as reserved.\r\n"), startBlockID, endBlockID-1));        
 
     //for(blockID = startBlockID; blockID < endBlockID; blockID++)
     for(blockID = startBlockID; startBlockID < endBlockID; blockID++)	// CS&ZHL APR-2-2012: counting valid block number only!		
 	{
         dwResult = FMD_GetBlockStatus(blockID);
-        
+		//if( dwResult != 0 )
+		//{
+		//	RETAILMSG(TRUE, (_T("Result:0x%x blockID:0x%x startBlockID:0x%x\r\n"), dwResult, blockID, startBlockID));        
+		//}
+
         // Skip bad blocks
         if(dwResult & BLOCK_STATUS_BAD)
         {
-			RETAILMSG(TRUE, (_T("INFO: Found bad NAND flash block [0x%x].\r\n"), blockID));        
+			RETAILMSG(TRUE, (_T("INFO: Found bad NAND flash block [0x%x].\r\n"), blockID));  
             continue;
         }
 
@@ -274,7 +304,29 @@ void NANDBootReserved()
 		// CS&ZHL APR-2-2012: count valid block only!
 		startBlockID++;
     }
+
+	//RETAILMSG(TRUE, (_T("<-NANDBootReserved\r\n")));
 }
+
+/*
+	if(!dwNANDBootReservedCount)
+	{
+	    SectorInfo	sectorInfo;
+		LPBYTE		pSectorBuf;
+
+		RETAILMSG(TRUE, (_T("NANDBootReserved: do dummy read\r\n")));
+
+		// setup dummy buffer
+		pSectorBuf = sectorBuf;
+		memset(&sectorInfo, 0xFF, sizeof(sectorInfo));		// Fill the sectorInfo
+		sectorInfo.bOEMReserved &= ~OEM_BLOCK_RESERVED;		// Set Reserved flag
+
+		if (!FMD_ReadSector(0, pSectorBuf, &sectorInfo, 1))
+        {
+            RETAILMSG(TRUE, (_T("NANDBootReserved: dummy read failed\r\n")));
+        }
+	}
+*/
 
 //-----------------------------------------------------------------------------
 //
@@ -317,6 +369,7 @@ BOOL NANDLowLevelFormat(void)
         if (!FMD_EraseBlock(blockID))
         {
             //RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block 0x%x.\r\n"), blockID));
+			//FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
             continue;
         }
         else
@@ -344,7 +397,67 @@ BOOL NANDLowLevelFormat(void)
     return(TRUE);
 }
 
+//----------------------------------------------------------------------------------------
+//
+//  Function:  NANDLowLevelFormat
+// 
+//	This function gets bad block layout info
+//
+//  Parameters:
+//      pBuf      - bad block flag table. 1'b1 -> bad block, 1'b0 -> good block
+//      dwBufSize - pBuf Size in byte
+//
+//  Returns:
+//      number of blocks statisticesed in pBuf
+//
+//----------------------------------------------------------------------------------------
+DWORD GetBadBlockInfo(PBYTE pBuf, DWORD dwBufSize)
+{
+    DWORD			dwResult;
+    FlashInfo		flashInfo;
+    BLOCK_ID		blockID;
+	DWORD			dwNumBlocks;
+	DWORD			dwByteIndex, dwBitIndex;
+    
+	//make reserved first
+	//NANDBootReserved();
 
+    if(!FMD_GetInfo(&flashInfo))
+    {
+        RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
+        return 0;
+    }
+    
+	// clear the buffer
+	memset(pBuf, 0, dwBufSize);
+
+	dwNumBlocks = 8 * dwBufSize;						// max 4096 blocks
+	if(dwNumBlocks > flashInfo.dwNumBlocks)
+	{
+		dwNumBlocks = flashInfo.dwNumBlocks;
+	}
+
+	for(blockID = 0; blockID < dwNumBlocks; blockID++ ) 
+	{
+        dwResult = FMD_GetBlockStatus(blockID);
+        
+        if(dwResult & BLOCK_STATUS_BAD)
+        {
+			// set flags for each bad blocks
+			dwByteIndex = blockID / 8;
+			dwBitIndex  = blockID % 8;
+			pBuf[dwByteIndex] |= (1 << dwBitIndex);
+			//RETAILMSG(TRUE, (_T("0x%x - %d: 0x%x\r\n"), blockID, dwByteIndex, pBuf[dwByteIndex] ));
+        }
+	}
+
+	return dwNumBlocks;
+}
+
+
+//----------------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------------
 static BOOL GetGoodPhyBlock(DWORD LogBlockAddr, DWORD *pGoodBlkAddr)
 {
     DWORD StartPhyBlockAddr = 0;
@@ -489,7 +602,21 @@ VOID NANDClearNCB(SBPosition Pos)
     
     for(i = CHIP_NCB_NAND_OFFSET; i < CHIP_NCB_SEARCH_RANGE; i++)
     {
-        FMD_EraseBlock(i);
+        //FMD_EraseBlock(i);
+		// CS&ZHL JUN-2-2012: set bad mark for
+        if(!FMD_EraseBlock(i))
+        {
+			RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND block [0x%x]. Mark as bad block!\r\n"), i));        
+            FMD_SetBlockStatus(i, BLOCK_STATUS_BAD);
+            continue;
+        }
+        
+        // Set reserved flag
+        if(!FMD_SetBlockStatus(i, BLOCK_STATUS_RESERVED))
+        {
+			RETAILMSG(TRUE, (_T("ERROR: Unable to set flag to NAND block [0x%x]. Mark as bad block!\r\n"), i));        
+            FMD_SetBlockStatus(i, BLOCK_STATUS_BAD);
+        }
     }
 }
 
@@ -594,14 +721,24 @@ BOOL NANDWriteNCB(PFlashInfoExt pFlashInfo, SBPosition Pos)
     memset(&si, 0xff, sizeof(SectorInfo));
     si.bOEMReserved = (BYTE)(~OEM_BLOCK_RESERVED);
     
+	//-----------------------------------------------------------------
+	// mx28_nandlayout.h:
+	// CHIP_NCB_NAND_OFFSET = 0, 
+	// CHIP_NCB_SEARCH_RANGE = 4
+	// CHIP_BCB_SECTOR_STRIDE = 64
+	//-----------------------------------------------------------------
     for(i = CHIP_NCB_NAND_OFFSET; i < CHIP_NCB_SEARCH_RANGE; i++)
     {
-        if(!FMD_EraseBlock(i))
-        {
-            ERRORMSG(TRUE, (_T("erase block %d failed, set to bad\r\n"),i));
-            FMD_SetBlockStatus(i, BLOCK_STATUS_BAD);
-        }
-        else
+        //if(!FMD_EraseBlock(i))
+        //{
+        //    ERRORMSG(TRUE, (_T("erase block %d failed, set to bad\r\n"),i));
+        //    FMD_SetBlockStatus(i, BLOCK_STATUS_BAD);
+        //}
+        //else
+		//
+        // CS&ZHL JUN-2-2012: Skip bad blocks
+		//
+        if(FMD_GetBlockStatus(i) & BLOCK_STATUS_RESERVED)
         {
             for(j = 0; j < pFlashInfo->fi.wSectorsPerBlock; j += CHIP_BCB_SECTOR_STRIDE)
             {
@@ -843,6 +980,7 @@ BOOL NANDWriteSB(PNANDIORequest pRequest, LPBYTE pImage, DWORD dwLength)
     LPBYTE pOriginalImage = pImage;
     DWORD dwOriginalLength = dwLength;
 
+    //RETAILMSG(TRUE, (_T("->NANDWriteSB\r\n")));
     if(!FMD_GetInfo(&flashInfo))
     {
         RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
@@ -889,18 +1027,27 @@ BOOL NANDWriteSB(PNANDIORequest pRequest, LPBYTE pImage, DWORD dwLength)
     {
         StartLogBlkAddr = IMAGE_BOOT_BOOTIMAGE_NAND_OFFSET + IMAGE_BOOT_BOOTIMAGE_NAND_BLOCKS / 2;
     }
+
+	// CS&ZHL JUN-2-2012: should clear NCB before programming SB image
+    if(pRequest->dwIndex == 0)
+    {
+		RETAILMSG(TRUE, (_T("NANDWriteSB: clear NCB before programming SB image\r\n")));
+        NANDClearNCB(pRequest->SBPos);   
+    }
+
 begin_program:    
     StartLogBlkAddr += pRequest->dwIndex;
     
-    RETAILMSG(TRUE, (_T("INFO: Programming NAND flash blocks 0x%x\r\n"), StartLogBlkAddr));
+    //RETAILMSG(TRUE, (_T("NANDWriteSB: Programming logical blocks[0x%x]"), StartLogBlkAddr));
     
-    if(pRequest->dwIndex == 0)
-    {
-        NANDClearNCB(pRequest->SBPos);   
-    }
+    //if(pRequest->dwIndex == 0)
+    //{
+    //    NANDClearNCB(pRequest->SBPos);   
+    //}
+retry:
     if(!GetGoodPhyBlock(StartLogBlkAddr, &PhyBlockAddr))
     {
-        ERRORMSG(TRUE, (_T("GetGoodPhyBlock failed: 0x%x\r\n"),StartLogBlkAddr));  
+        ERRORMSG(TRUE, (_T("\r\nGetGoodPhyBlock failed: 0x%x\r\n"),StartLogBlkAddr));  
         return FALSE; 
     }
     
@@ -910,11 +1057,16 @@ begin_program:
         FMD_SetBlockStatus(PhyBlockAddr, BLOCK_STATUS_BAD);
         if(!(FMD_GetBlockStatus(PhyBlockAddr) & BLOCK_STATUS_BAD))
         {
-            RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block [0x%x].\r\n"), PhyBlockAddr));
+            RETAILMSG(TRUE, (_T("\r\nNANDWriteSB: erase block[0x%x] failed, exit!!\r\n"), PhyBlockAddr));
             return FALSE;
         }
+        else
+        {
+            goto retry;
+        }
     }
-    
+    //RETAILMSG(TRUE, (_T(" -> physical blocks[0x%x]\r\n"), PhyBlockAddr));
+
     // Compute sector address based on current physical block
     startSectorAddr = PhyBlockAddr * flashInfo.wSectorsPerBlock;
     endSectorAddr = startSectorAddr + flashInfo.wSectorsPerBlock;
@@ -969,6 +1121,7 @@ begin_program:
     { 
         LocalFree(pVerSectorBuf);
     }
+    //RETAILMSG(TRUE, (_T("<-NANDWriteSB\r\n")));
     return(TRUE);
 }
 
@@ -1191,7 +1344,8 @@ BOOL NANDWriteImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLeng
         dwStartOffset = NANDImageCfg.dwCfgOffset;
         if(!pNANDWrtImgInfo->dwIndex)
         {
-            RETAILMSG(TRUE, (_T("INFO: Writing EbootCFG to NAND 0x%x (please wait)...\r\n"), dwStartOffset));
+            //RETAILMSG(TRUE, (_T("INFO: Writing EbootCFG to NAND 0x%x (please wait)...\r\n"), dwStartOffset));
+            RETAILMSG(TRUE, (_T("INFO: Writing EbootCFG to NAND (please wait)...\r\n") ));
         }        
     }                
     else if(pNANDWrtImgInfo->dwImgType == IMAGE_SPLASH)
@@ -1199,7 +1353,7 @@ BOOL NANDWriteImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLeng
         dwStartOffset = NANDImageCfg.dwSplashOffset;
         if(!pNANDWrtImgInfo->dwIndex)
         {
-            RETAILMSG(TRUE, (_T("INFO: Writing SplashScreen image to NAND 0x%x (please wait)...\r\n"), dwStartOffset));
+            RETAILMSG(TRUE, (_T("INFO: Writing SplashScreen image to NAND (please wait)...\r\n")));
         }        
     }                
 	//
@@ -1210,8 +1364,27 @@ BOOL NANDWriteImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLeng
         dwStartOffset = NANDImageCfg.dwMBROffset;
         if(!pNANDWrtImgInfo->dwIndex)
         {
-            RETAILMSG(TRUE, (_T("INFO: Writing MBR image to NAND 0x%x (please wait)...\r\n"), dwStartOffset));
-            RETAILMSG(TRUE, (_T("INFO: MBR 0x%x 0x%x 0x%x 0x%x 0x%x\r\n"), pImage[0], pImage[1], pImage[2], pImage[510], pImage[511]));
+            RETAILMSG(TRUE, (_T("INFO: Writing MBR image to NAND (please wait)...\r\n") ));
+            //RETAILMSG(TRUE, (_T("INFO: MBR 0x%x 0x%x 0x%x 0x%x 0x%x\r\n"), pImage[0], pImage[1], pImage[2], pImage[510], pImage[511]));
+        }        
+    }                
+	//
+	// CS&ZHL APR-12-2012: add Image Type for both VID and UID
+	//
+	else if(pNANDWrtImgInfo->dwImgType == IMAGE_VID)
+    {
+        dwStartOffset = NANDImageCfg.dwVIDOffset;
+        if(!pNANDWrtImgInfo->dwIndex)
+        {
+            RETAILMSG(TRUE, (_T("INFO: Writing VendorID image to NAND (please wait)...\r\n") ));
+        }        
+    }                
+	else if(pNANDWrtImgInfo->dwImgType == IMAGE_UID)
+    {
+        dwStartOffset = NANDImageCfg.dwUIDOffset;
+        if(!pNANDWrtImgInfo->dwIndex)
+        {
+            RETAILMSG(TRUE, (_T("INFO: Writing UserID image to NAND (please wait)...\r\n") ));
         }        
     }                
     else
@@ -1236,12 +1409,12 @@ BOOL NANDWriteImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLeng
 
     StartLogBlkAddr = dwStartOffset / flashInfo.dwBytesPerBlock + pNANDWrtImgInfo->dwIndex; 
 
-    //RETAILMSG(TRUE, (_T("INFO: Programming NAND flash blocks 0x%x\r\n"), StartLogBlkAddr));
     
+	//RETAILMSG(TRUE, (_T("NANDWriteImage: Programming logical blocks[0x%x]"), StartLogBlkAddr));
 retry:
     if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
     {
-        RETAILMSG(TRUE, (_T("Error: No good block found - unable to store image!\r\n")));
+        RETAILMSG(TRUE, (_T("\r\nNANDWriteImage: No good block found, exit!\r\n")));
         return FALSE; 
     }
 
@@ -1251,7 +1424,7 @@ retry:
         FMD_SetBlockStatus(PhyBlockAddr, BLOCK_STATUS_BAD);
         if(!(FMD_GetBlockStatus(PhyBlockAddr) & BLOCK_STATUS_BAD))
         {
-            RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block [0x%x].\r\n"), PhyBlockAddr));
+            RETAILMSG(TRUE, (_T("\r\nNANDWriteImage: erase physical block[0x%x] failed, exit!\r\n"), PhyBlockAddr));
 			return FALSE; 
         }
         else
@@ -1260,6 +1433,30 @@ retry:
         }
     }
     
+	// show physical block index
+	//switch(pNANDWrtImgInfo->dwImgType)
+	//{
+	//case IMAGE_EBOOTCFG:
+ //       RETAILMSG(TRUE, (_T("-> IMAGE_EBOOTCFG -> PhyBlock[0x%x]\r\n"), PhyBlockAddr));
+	//	break;
+
+	//case IMAGE_SPLASH:
+ //       RETAILMSG(TRUE, (_T("-> IMAGE_SPLASH %d -> PhyBlock[0x%x]\r\n"), pNANDWrtImgInfo->dwIndex, PhyBlockAddr));
+	//	break;
+
+	//case IMAGE_MBR:
+ //       RETAILMSG(TRUE, (_T("-> IMAGE_MBR -> PhyBlock[0x%x]\r\n"), PhyBlockAddr));
+	//	break;
+
+	//case IMAGE_VID:
+ //       RETAILMSG(TRUE, (_T("-> IMAGE_VID -> PhyBlock[0x%x]\r\n"), PhyBlockAddr));
+	//	break;
+
+	//case IMAGE_UID:
+ //       RETAILMSG(TRUE, (_T("-> IMAGE_UID -> PhyBlock[0x%x]\r\n"), PhyBlockAddr));
+	//	break;
+	//}
+
     // Compute sector address based on current physical block
     startSectorAddr = PhyBlockAddr * flashInfo.wSectorsPerBlock;
     endSectorAddr = startSectorAddr + (dwLength / flashInfo.wDataBytesPerSector);		//flashInfo.wSectorsPerBlock;
@@ -1293,6 +1490,120 @@ retry:
 
     return(TRUE);
 }
+
+//----------------------------------------------------------------------------------------
+//
+//  CS&ZHL APR-10-2012: -> NANDReadImage
+//
+//  This function reads some boot images from NAND flash memory.
+//
+//  Parameters:
+//      pNANDWrtImgInfo 
+//          [in] Image information contains image type, nand address to be written, etc.
+//      pImage
+//          [in] buffer which contains image to be read.
+//      dwLength 
+//          [in] Length of the Boot image, in bytes, to be read from flash
+//          memory.            
+//
+//  Returns:
+//      TRUE indicates success. FALSE indicates failure.
+//----------------------------------------------------------------------------------------
+BOOL NANDReadImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLength)
+{
+    FlashInfo	flashInfo;
+    SECTOR_ADDR sectorAddr, startSectorAddr, endSectorAddr;
+    DWORD		StartLogBlkAddr, PhyBlockAddr, dwStartOffset;
+	LPBYTE		pDestSectorBuf;		// destination buffer
+    LPBYTE		pSectorBuf;			// temp bffer
+                
+    // Boot Configuration and Buffer
+    if(!NANDBootInit())
+    {
+        RETAILMSG(TRUE, (_T("WARNING: NANDBootInit fail\r\n")));
+        return FALSE;
+    }
+
+    if(!FMD_GetInfo(&flashInfo))
+    {
+        RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
+        return FALSE;
+    }
+
+    // Check parameters
+    if(dwLength > flashInfo.dwBytesPerBlock)
+    {
+        ERRORMSG(TRUE, (_T("length size(0x%x) is differen with expected (0x%x)\r\n"), dwLength, flashInfo.dwBytesPerBlock));
+        return FALSE;
+    }
+
+	switch(pNANDWrtImgInfo->dwImgType)
+	{
+	case IMAGE_EBOOTCFG:
+        dwStartOffset = NANDImageCfg.dwCfgOffset;
+		break;
+
+	case IMAGE_VID:
+        dwStartOffset = NANDImageCfg.dwVIDOffset;
+        RETAILMSG(TRUE, (_T("INFO: reading vendor info (please wait)\r\n")));
+		break;
+
+	case IMAGE_UID:
+        dwStartOffset = NANDImageCfg.dwUIDOffset;
+        RETAILMSG(TRUE, (_T("INFO: reading user info (please wait)\r\n")));
+		break;
+
+	default:
+        RETAILMSG(TRUE, (_T("ERROR: NOT supported image type.\r\n")));
+        return FALSE;
+	}
+
+	// CS&ZHL JAN-9-2012: setup init parameters
+    pDestSectorBuf = pImage;    
+    pSectorBuf = sectorBuf;
+
+	// compute logical block number
+    StartLogBlkAddr = dwStartOffset / flashInfo.dwBytesPerBlock + pNANDWrtImgInfo->dwIndex; 
+    if(!GetPhyBlkAddr(StartLogBlkAddr, &PhyBlockAddr))
+    {
+        RETAILMSG(TRUE, (_T("Error: No good block found - unable to store image!\r\n")));
+        return FALSE; 
+    }
+
+    // Compute sector address based on current physical block
+    startSectorAddr = PhyBlockAddr * flashInfo.wSectorsPerBlock;
+    endSectorAddr = startSectorAddr + (dwLength / flashInfo.wDataBytesPerSector);		//flashInfo.wSectorsPerBlock;
+	if(dwLength % flashInfo.wDataBytesPerSector)
+	{
+		endSectorAddr++;
+	}
+    
+    for (sectorAddr = startSectorAddr; sectorAddr < endSectorAddr; sectorAddr++)
+    {
+        if (!FMD_ReadSector(sectorAddr, pSectorBuf, NULL, 1))
+        {
+            RETAILMSG(TRUE, (_T("ERROR: read sectorAddr 0x%x failed.\r\n"), sectorAddr));
+			return FALSE; 
+        }
+
+		if(dwLength > flashInfo.wDataBytesPerSector)
+		{
+			memcpy(pDestSectorBuf, pSectorBuf, flashInfo.wDataBytesPerSector);
+			dwLength -= flashInfo.wDataBytesPerSector;
+			pDestSectorBuf += flashInfo.wDataBytesPerSector;
+		}
+		else
+		{
+			memcpy(pDestSectorBuf, pSectorBuf, dwLength);
+			dwLength = 0;
+			// this is the last part of data, so break the loop
+			break;
+		}
+    }
+
+    return(TRUE);
+}
+
 
 
 BOOL NANDCopyBack(SBPosition SrcPos, SBPosition DestPos)
@@ -1417,17 +1728,24 @@ BOOL NANDCopyBack(SBPosition SrcPos, SBPosition DestPos)
     return TRUE;
 }
 
-BOOL ReadOTPCUST(DWORD* pdwCUST, DWORD dwLen)
+//-----------------------------------------------------------------------------
+// CS&ZHL APR-11-2012: routines of OTP
+//-----------------------------------------------------------------------------
+BOOL OTP_CUST_Read(DWORD* pdwCUST, DWORD dwLen)
 {
 	OtpProgram	Otp;
 	DWORD		dwCUSTRegNum[4];
 	DWORD		i1;
+
+	//RETAILMSG(TRUE, (_T("-->OTP_CUST_READ\r\n")));
 
 	InitOTP();
 	dwCUSTRegNum[0] = OCOTP_CUST0_REG_NUM;
 	dwCUSTRegNum[1] = OCOTP_CUST1_REG_NUM;
 	dwCUSTRegNum[2] = OCOTP_CUST2_REG_NUM;
 	dwCUSTRegNum[3] = OCOTP_CUST3_REG_NUM;
+
+	//RETAILMSG(TRUE, (_T("Reg: 0x%x 0x%x 0x%x 0x%x\r\n"), dwCUSTRegNum[0], dwCUSTRegNum[1], dwCUSTRegNum[2], dwCUSTRegNum[3]));
 
 	// read register CUST0 - CUST3
 	if(dwLen > 4)
@@ -1449,173 +1767,7 @@ BOOL ReadOTPCUST(DWORD* pdwCUST, DWORD dwLen)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------------------
-// CS&ZHL APR-10-2012: use to read block of VID, UID, EbootCFG, etc. 
-//----------------------------------------------------------------------------------------
-BOOL NANDReadImage(PNANDWrtImgInfo pNANDWrtImgInfo, LPBYTE pImage, DWORD dwLength)
-{
-    UNREFERENCED_PARAMETER(pNANDWrtImgInfo);
-    UNREFERENCED_PARAMETER(pImage);
-    UNREFERENCED_PARAMETER(dwLength);
 
-	return FALSE;
-}
-
-BOOL NANDBadBlockMatch(LPBYTE pBBT, DWORD dwBBTLength)
-{
-    UNREFERENCED_PARAMETER(pBBT);
-    UNREFERENCED_PARAMETER(dwBBTLength);
-
-	return FALSE;
-}
-
-//-----------------------------------------------------------------------------
-// CS&ZHL APR-9-2012: security check -> item 1: OTP consistent check
-//                                      item 2: bad block consistent check
-//-----------------------------------------------------------------------------
-BOOL NANDSecurityCheck(void)
-{
-	BOOL  bRet = FALSE;
-
-	InitOTP();
-
-#ifdef	EM9280_SECURITY_WRITE_ENABLE
-	// pass security check in case of EM9280_SECURITY_WRITE_ENABLE
-	bRet = TRUE;
-#else
-	// do real security check in normal case
-	{
-		OtpProgram				Otp;
-		DWORD					dwCUST[2];
-		BYTE					ucChkSum;
-		VENDOR_SECURITY_INFO	SecurityInfo;
-		DWORD					dwLength;
-		PBYTE					pBuf;
-		DWORD					i1, i2;
-		NANDWrtImgInfo			NANDSecurityImgInfo;
-
-
-		// read register CUST0 & CUST1
-		if(!ReadOTPCUST(dwCUST, 2))
-		{
-			RETAILMSG(TRUE, (_T("read HW_OCOTP_CUST failed\r\n")));
-			goto abort;
-		}
-
-		// OTP valid check 
-		if((dwCUST[0] == 0) && (dwCUST[1] == 0))
-		{
-			RETAILMSG(TRUE, (_T("HW_OCOTP_CUST0 & HW_OCOTP_CUST1 are blank\r\n")));
-			goto abort;
-		}
-
-		// do checksum to CUST0 & CUST1
-		for(ucChkSum = 0, i1 = 0; i1 < 2; i1++)
-		{
-			for(i2 = 0; i2 < 4; i2++)
-			{
-				ucChkSum += (BYTE)((dwCUST[i1] >> (1 << (i2 * 8)));
-			}
-		}
-		if(uxChkSum != 0)
-		{
-			RETAILMSG(TRUE, (_T("HW_OCOTP_CUST0 & HW_OCOTP_CUST1 CheckSum failed\r\n")));
-			goto abort;
-		}
-
-		// read vendor security info
-		NANDSecurityImgInfo.dwImgType = IMAGE_VID;
-		NANDSecurityImgInfo.dwIndex = 0;
-		NANDSecurityImgInfo.dwImgSizeUnit = 0x20000;			// 128KB for large sector
-		if(!NANDReadImage(&NANDSecurityImgInfo, (LPBYTE)&SecurityInfo, sizeof(SecurityInfo)))
-		{
-			RETAILMSG(TRUE, (_T("Read Vendor Security Info failed\r\n")));
-			goto abort;
-		}
-
-		// check valid of vendor security info
-		if(SecurityInfo.wFlag != 0x55AA)
-		{
-			RETAILMSG(TRUE, (_T("Vendor Security Info error flag 0x%x\r\n"), SecurityInfo.wFlag));
-			goto abort;
-		}
-		ucChkSum = 0;
-		pBuf = (PBYTE)&SecurityInfo;
-		dwLength = sizeof(SecurityInfo);
-		while(dwLength)
-		{
-			ucChkSum += *pBuf;
-			pBuf++;
-			dwLength--;
-		}
-		if(ucChkSum != 0)
-		{
-			RETAILMSG(TRUE, (_T("Invalid Vendor Security Info\r\n")));
-			goto abort;
-		}
-		
-		// decoding security info
-		pBuf = (PBYTE)SecurityInfo.CrytoCode;
-		dwLength = sizeof(SecurityInfo.CrytoKey);
-		for(i1 = 0; i1 < dwLength; i1++)
-		{
-			pBuf[i1] = pBuf[i1] ^ SecurityInfo.CrytoKey[i1];
-		}
-
-		// check security info size
-		if(SecurityInfo.dwActualLength != (sizeof(DWORD) * 2))
-		{
-			RETAILMSG(TRUE, (_T("Wrong Info Size 0x%x\r\n"), SecurityInfo.dwActualLength));
-			goto abort;
-		}
-
-		// check contents of security info
-		i1 = *((DWORD*)&SecurityInfo.CrytoCode[0]);
-		i2 = *((DWORD*)&SecurityInfo.CrytoCode[4]);
-		if((i1 != dwCUST[0]) || (i2 != dwCUST[1]))
-		{
-			RETAILMSG(TRUE, (_T("SecurityInfo is NOT match with OTP: 0x%x, 0x%x\r\n"), dwCUST0, dwCUST1));
-			goto abort;
-		}
-
-		// Bad Block Match check
-		if(!NANDBadBlockMatch(SecurityInfo.BadBlockTable, sizeof(SecurityInfo.BadBlockTable)))
-		{
-			RETAILMSG(TRUE, (_T("Bad Blocks are NOT macthed\r\n")));
-			goto abort;
-		}
-
-		// pass all the check, set TRUE 
-		bRet = TRUE;
-abort:
-	}
-#endif	//EM9280_SECURITY_WRITE_ENABLE
-
-	return bRet;
-}
-
-BOOL NANDSecurityWrite(BOOT_CFG *pBootCfg)
-{
-	/*
-	OtpProgram	Otp;
-	DWORD		dwCUST0, dwCUST1;
-	BYTE		ucChkSum;
-	BOOL		bNeedProgram = FALSE;
-
-	InitOTP();
-
-#ifdef	EM9280_SECURITY_WRITE_ENABLE
-	if(bNeedProgram)
-	{
-		//rc = OTPProgram(&Otp);
-	}
-#endif	//EM9280_SECURITY_WRITE_ENABLE
-	*/
-
-    UNREFERENCED_PARAMETER(pBootCfg);
-
-	return FALSE;    
-}
 
 //-----------------------------------------------------------------------------
 //
@@ -1659,6 +1811,7 @@ BOOL BSP_OEMIoControl(DWORD dwIoControlCode, PBYTE pInBuf, DWORD nInBufSize,
     PBYTE pOutBuf, DWORD nOutBufSize, PDWORD pBytesReturned)
 {
     BOOL rc = FALSE;
+	DWORD  dwCUST[2];
     
     switch (dwIoControlCode)
 	{
@@ -1795,22 +1948,70 @@ BOOL BSP_OEMIoControl(DWORD dwIoControlCode, PBYTE pInBuf, DWORD nInBufSize,
 			BSPNAND_SetClock(TRUE);
 			pNANDWrtImgInfo = (PNANDWrtImgInfo)pInBuf;
 	        
-			if(pNANDWrtImgInfo->dwImgType == IMAGE_NK)
+			//if(pNANDWrtImgInfo->dwImgType == IMAGE_NK)
+			//{
+			//	rc = NANDWriteNK(pNANDWrtImgInfo->dwIndex, pOutBuf,nOutBufSize);
+			//}
+			//else if((pNANDWrtImgInfo->dwImgType == IMAGE_EBOOTCFG) 
+			//	 || (pNANDWrtImgInfo->dwImgType == IMAGE_SPLASH) 
+			//	 || (pNANDWrtImgInfo->dwImgType == IMAGE_MBR))					// CS&ZHL APR-2-2012: add MBR boot mode
+			//{
+			//	rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
+			//}
+			//else
+			//{
+			//	NANDIORequest NANDIORequest;  
+			//	NANDIORequest.SBPos = BothBoot;
+			//	NANDIORequest.dwIndex = pNANDWrtImgInfo->dwIndex;
+			//	rc = NANDWriteSB(&NANDIORequest, pOutBuf, nOutBufSize);                    
+			//}
+			//
+			// CS&ZHL APR-11-2012: add more image types
+			//
+			switch(pNANDWrtImgInfo->dwImgType)
 			{
+			case IMAGE_NK:
 				rc = NANDWriteNK(pNANDWrtImgInfo->dwIndex, pOutBuf,nOutBufSize);
-			}
-			else if((pNANDWrtImgInfo->dwImgType == IMAGE_EBOOTCFG) 
-				 || (pNANDWrtImgInfo->dwImgType == IMAGE_SPLASH) 
-				 || (pNANDWrtImgInfo->dwImgType == IMAGE_MBR))					// CS&ZHL APR-2-2012: add MBR boot mode
-			{
+				break;
+
+			case IMAGE_EBOOTCFG:
+				// use the MAC stored in OTP if possible
+				OTPSyncEbootCfg(pOutBuf, nOutBufSize);
+				pNANDWrtImgInfo->dwIndex = 0;	// force 0
 				rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
-			}
-			else
-			{
-				NANDIORequest NANDIORequest;  
-				NANDIORequest.SBPos = BothBoot;
-				NANDIORequest.dwIndex = pNANDWrtImgInfo->dwIndex;
-				rc = NANDWriteSB(&NANDIORequest, pOutBuf, nOutBufSize);                    
+				break;
+
+			case IMAGE_SPLASH:
+				rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
+				break;
+
+			case IMAGE_MBR:
+				pNANDWrtImgInfo->dwIndex = 0;	// force 0
+				rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
+				break;
+
+			case IMAGE_VID:
+				if(!OTPSyncVendorInfo(pOutBuf, nOutBufSize))
+				{
+					RETAILMSG(TRUE, (L"OTP Sync Vendor Info failed.\r\n"));    
+					break;
+				}
+				pNANDWrtImgInfo->dwIndex = 0;	// force 0
+				rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
+				break;
+
+			case IMAGE_UID:
+				pNANDWrtImgInfo->dwIndex = 0;	// force 0
+				rc = NANDWriteImage(pNANDWrtImgInfo, pOutBuf, nOutBufSize);
+				break;
+
+			default:
+				{
+					NANDIORequest NANDIORequest;  
+					NANDIORequest.SBPos = BothBoot;
+					NANDIORequest.dwIndex = pNANDWrtImgInfo->dwIndex;
+					rc = NANDWriteSB(&NANDIORequest, pOutBuf, nOutBufSize);  
+				}
 			}
 
 			BSPNAND_SetClock(FALSE);
@@ -1847,45 +2048,574 @@ BOOL BSP_OEMIoControl(DWORD dwIoControlCode, PBYTE pInBuf, DWORD nInBufSize,
             break;    
         }
         
-	case IOCTL_DISK_VENDOR_OTP_READ:
-		{
-			POtpProgram pOtp;
-
-			if(!pOutBuf || nOutBufSize < sizeof(OtpProgram))
-            {
-                ERRORMSG(TRUE, (_T("invalid parameters\r\n")));
-                break;
-            }             
-			pOtp = (POtpProgram)pOutBuf;
-			InitOTP();
-			rc = OTPRead(pOtp);
-		}
-		break;
-
-	case IOCTL_DISK_VENDOR_AUTHENTICATION:
+	case IOCTL_DISK_AUTHENTICATION:
 		RETAILMSG(TRUE, (_T("INFO: DISK_VENDOR_AUTHENTICATION\r\n")));
+        if(!pInBuf || (nInBufSize == 0))
+		{
+			ERRORMSG(TRUE, (_T("IOCTL_DISK_VENDOR_AUTHENTICATION: invalid parameters\r\n")));
+		}
 		if(!pOutBuf || (nOutBufSize != sizeof(DWORD)))
 		{
 			ERRORMSG(TRUE, (_T("IOCTL_DISK_VENDOR_AUTHENTICATION: invalid parameters\r\n")));
             break;
 		}
 
-		*((PDWORD)pOutBuf) = 0;
-		if(NANDSecurityCheck())
+#ifdef NAND_PDD
 		{
-			*((PDWORD)pOutBuf) = 1;
-		}
+			DWORD	dwType = *((DWORD*)pInBuf);
 
+			if((dwType == 0) && (nInBufSize == sizeof(DWORD)))
+			{
+				// do vendor authentication
+				rc = NANDVendorAuthentication();
+			}
+			else
+			{
+				// do user authentication
+				rc = NANDUserAuthentication(pInBuf, nInBufSize);
+			}
+
+			if(!rc)
+			{
+				RETAILMSG(TRUE, (_T("IOCTL_DISK_VENDOR_AUTHENTICATION: failed\r\n")));
+				*((PDWORD)pOutBuf) = 0;
+			}
+			else
+			{
+				// vendor authentication passed
+				*((PDWORD)pOutBuf) = 1;
+			}
+
+			if(pBytesReturned)
+			{
+				*pBytesReturned = sizeof(DWORD);
+			}
+			rc = TRUE;
+		}
+#else
+		// vendor authentication passed
+		*((PDWORD)pOutBuf) = 1;
 		if(pBytesReturned)
 		{
 			*pBytesReturned = sizeof(DWORD);
 		}
 		rc = TRUE;
+#endif    // NAND_PDD
 		break;
+	//
+	// CS&ZHL JUN-1-2012: code for EM9280 uce to check OTP mac
+	//
+	case IOCTL_DISK_GET_OTP_MAC:
 
+		//RETAILMSG(TRUE, (_T("INFO: DISK_GET_OTP_MAC\r\n")));
+		if( !pOutBuf || (nOutBufSize != 2*sizeof(DWORD)))
+		{
+			ERRORMSG(TRUE, (_T("IOCTL_DISK_GET_OTP_MAC: invalid parameters\r\n")));
+            break;
+		}
+		
+		if(!OTP_CUST_Read( dwCUST, 2))
+		{
+			RETAILMSG(TRUE, (_T("Read OTP failed\r\n")));
+			dwCUST[0] = 0;
+			dwCUST[1] = 0;
+		}
+		//RETAILMSG(TRUE, (_T("Read OTP 0x%08x 0x%08x\r\n"),dwCUST[0], dwCUST[1] ));
+
+		memcpy( pOutBuf, (PBYTE)dwCUST, 8 );
+		if(pBytesReturned)
+		{
+			*pBytesReturned = 2*sizeof(DWORD);
+		}
+		rc = TRUE;
+		break;
 	default:
 		break;
     }
 
     return(rc);
+}
+
+
+BYTE GetSum(PBYTE pBuf, DWORD dwLen)
+{
+	BYTE ub1 = 0;
+
+	while(dwLen)
+	{
+		//ub1 += *pBuf;
+		ub1 = ub1 + (*pBuf);
+		pBuf++;
+		dwLen--;
+	}
+
+	return ub1;
+}
+
+BOOL OTP_CUST_Program(DWORD* pdwCUST, DWORD dwLen)
+{
+	OtpProgram	Otp;
+	DWORD		dwCUSTRegNum[4];
+	DWORD		i1;
+	DWORD		dwLockBits;
+	BOOL		bRet=TRUE;
+	DWORD		dwReadCUST[4];
+
+	RETAILMSG(TRUE, (_T("-->OTP_CUST_Program\r\n")));
+
+	InitOTP();
+	dwCUSTRegNum[0] = OCOTP_CUST0_REG_NUM;
+	dwCUSTRegNum[1] = OCOTP_CUST1_REG_NUM;
+	dwCUSTRegNum[2] = OCOTP_CUST2_REG_NUM;
+	dwCUSTRegNum[3] = OCOTP_CUST3_REG_NUM;
+
+	// read register CUST0 - CUST3
+	if(dwLen > 4)
+	{
+		dwLen = 4;
+	}
+
+	dwLockBits = 0;
+	for(i1 = 0; i1 < dwLen; i1++)
+	{
+		dwLockBits |= (1 << i1);
+		Otp.OtpAddr = OCOTP_ADDR_OFFSET(dwCUSTRegNum[i1]);
+		Otp.OtpData = pdwCUST[i1];
+		if(!OTPProgram(&Otp))
+		{
+			RETAILMSG(TRUE, (_T("program HW_OCOTP_CUST[%d] failed\r\n"), i1));
+			bRet = FALSE;
+			//return FALSE;
+		}
+	}
+
+	if( !bRet )
+		return FALSE;
+
+	//
+	// CS&ZHL JUN01-2012: check the chusum of pdwCUST[0] pdwCUST[1]
+	//
+	// read back
+	for(i1 = 0; i1 < dwLen; i1++)
+	{
+		Otp.OtpAddr = OCOTP_ADDR_OFFSET(dwCUSTRegNum[i1]);
+		if(!OTPRead(&Otp))
+		{
+			RETAILMSG(TRUE, (_T("read HW_OCOTP_CUST[%d] failed\r\n"), i1));
+			return FALSE;
+		}
+		dwReadCUST[i1] = Otp.OtpData;
+	}
+	
+	if( GetSum((PBYTE)dwReadCUST, 8)==0 )                        // lock  
+	{
+		// read OTP lock register
+		Otp.OtpAddr = OCOTP_ADDR_OFFSET(OCOTP_LOCK_REG_NUM);
+		if(!OTPRead(&Otp))
+		{
+			RETAILMSG(TRUE, (_T("read HW_OCOTP_LOCK failed\r\n")));
+			return FALSE;
+		}
+
+		//program lock bits if required
+		if(((DWORD)Otp.OtpData & dwLockBits) != dwLockBits)
+		{
+			Otp.OtpAddr  = OCOTP_ADDR_OFFSET(OCOTP_LOCK_REG_NUM);
+			Otp.OtpData |= dwLockBits;
+			if(!OTPProgram(&Otp))
+			{
+				RETAILMSG(TRUE, (_T("program HW_OCOTP_LOCK failed\r\n")));
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
+}
+
+
+BOOL SecurityInfo2OTPCUST(PVENDOR_SECURITY_INFO pSecurityInfo, PDWORD pdwCUST)
+{
+	DWORD	dwTmp;
+	BYTE	ub1;
+
+	// setp 1: get MAC ID
+	dwTmp = pSecurityInfo->mac[1] & 0xFF00;							// retrieve MAC_ADDR3
+	pdwCUST[0] = dwTmp << 16;										// make MAC_ADDR3
+	dwTmp = pSecurityInfo->mac[2] & 0x00FF;							// retrieve MAC_ADDR4
+	pdwCUST[0] = pdwCUST[0] | (dwTmp << 16);						// make MAC_ADDR4
+	dwTmp = pSecurityInfo->mac[2] & 0xFF00;							// retrieve MAC_ADDR5
+	pdwCUST[0] = pdwCUST[0] | dwTmp;								// make MAC_ADDR5
+	dwTmp = pSecurityInfo->dwNumOfPort & 0xFF;						// retrieve number of ethernet ports
+	pdwCUST[0] = pdwCUST[0] | dwTmp;								// make MAC_ADDR5
+	// setp 2: get date info
+	dwTmp = pSecurityInfo->dwDay & 0xFF;							// retrieve DAY
+	pdwCUST[1]  = dwTmp;											// make DAY
+	dwTmp = pSecurityInfo->dwMonth & 0xFF;							// retrieve MONTH
+	pdwCUST[1] |= (dwTmp << 8);										// make Month
+	if(pSecurityInfo->dwYear >= 2000)
+	{
+		dwTmp = (pSecurityInfo->dwYear - 2000) & 0xFF;				// retrieve YEAR
+	}
+	else
+	{
+		dwTmp = pSecurityInfo->dwYear & 0xFF;						// retrieve YEAR
+	}
+	pdwCUST[1] |= (dwTmp << 16);									// make Year
+
+	// step 3: make checksum
+	ub1 = GetSum((PBYTE)pdwCUST, 7);
+	//RETAILMSG(TRUE, (_T("SUM7 = 0x%02X\r\n"), ub1));
+	ub1 = ~ub1 + 1;
+	pdwCUST[1] |= ((DWORD)ub1) << 24;								// put into chusum
+
+	// step4: dump message for debug
+	RETAILMSG(TRUE, (_T("MAC = %02X-%02X-%02X-%02X-%02X-%02X\r\n"), 
+						(pSecurityInfo->mac[0] & 0xFF),
+						((pSecurityInfo->mac[0] >> 8) & 0xFF),
+						(pSecurityInfo->mac[1] & 0xFF),
+						((pSecurityInfo->mac[1] >> 8) & 0xFF),
+						(pSecurityInfo->mac[2] & 0xFF),
+						((pSecurityInfo->mac[2] >> 8) & 0xFF)));
+	RETAILMSG(TRUE, (_T("Date = %d-%d-%d\r\n"), pSecurityInfo->dwYear, pSecurityInfo->dwMonth, pSecurityInfo->dwDay));
+	//RETAILMSG(TRUE, (_T("CUST0 = 0x%08X, CUST1 = 0x%08X\r\n"), pdwCUST[0], pdwCUST[1]));
+
+	return TRUE;
+}
+
+//----------------------------------------------------------------------------------------
+//
+// do security processing
+//
+// pBuf      - data buffer pointer
+// dwBufSize - data buffer size in byte
+// bLockFlag = TRUE: lock to data in buffer
+//           = FALSE: unlock to data in buffer
+//
+//----------------------------------------------------------------------------------------
+BOOL DoSecurityProcessing(PBYTE pBuf, DWORD dwBufSize, BOOL bLockFlag)
+{
+    UNREFERENCED_PARAMETER(pBuf);
+    UNREFERENCED_PARAMETER(dwBufSize);
+    UNREFERENCED_PARAMETER(bLockFlag);
+
+	return TRUE;
+}
+
+
+//--------------------------------------------------------------------------------
+// CS&ZHL APR-11-2012: routines for NandFlash Security
+//--------------------------------------------------------------------------------
+BOOL OTPSyncEbootCfg(PBYTE pBuf, DWORD dwBufSize)
+{
+	PBOOT_CFG				pBootCFG = (PBOOT_CFG)pBuf;
+	BOOL					bRet = TRUE;
+	DWORD					dwCUST[2];						// for HW_OCOTP_CUST0 - HW_OCOTP_CUST1
+	WORD					wTemp;
+	DWORD					dwSecurityInfoSize;
+    NANDWrtImgInfo			NANDSecurityImgInfo;
+
+    UNREFERENCED_PARAMETER(dwBufSize);
+
+	if(!OTP_CUST_Read(dwCUST, 2))
+	{
+		RETAILMSG(TRUE, (_T("Read OTP failed\r\n")));
+		goto read_vid;
+	}
+
+	// check HW_OCOTP_CUST0
+	if((dwCUST[0] == 0) || (GetSum((PBYTE)dwCUST, 8) != 0))
+	{
+		RETAILMSG(TRUE, (_T("Invalid OTP_CUST\r\n")));
+		goto read_vid;
+	}
+
+	// sync MAC ID to BootCFG
+    pBootCFG->mac[0] = 0x9BD0;						// OUI => D0-9B-05
+	wTemp = (WORD)(dwCUST[0] >> 16) & 0xFF00;		// get MAC_ADDR3
+    pBootCFG->mac[1] = wTemp | 0x0005;
+	wTemp = (WORD)(dwCUST[0] >> 16) & 0x00FF;		// get MAC_ADDR4
+    pBootCFG->mac[2] = wTemp;
+	wTemp = (WORD)(dwCUST[0] >> 0) & 0xFF00;		// get MAC_ADDR5
+    pBootCFG->mac[2] = pBootCFG->mac[2] | wTemp;
+	goto end_otp_sync;
+
+read_vid:
+	dwSecurityInfoSize = sizeof(VENDOR_SECURITY_INFO);
+	// read use ID data 
+	NANDSecurityImgInfo.dwImgType = IMAGE_VID;
+	NANDSecurityImgInfo.dwIndex = 0;
+	NANDSecurityImgInfo.dwImgSizeUnit = 0x20000;			// 128KB for large sector
+	if(!NANDReadImage(&NANDSecurityImgInfo, (PBYTE)&g_SecurityInfo, dwSecurityInfoSize))
+	{
+        ERRORMSG(TRUE, (_T("read IMAGE_VID failed!\r\n")));
+		bRet = FALSE;
+		return bRet;
+	}
+	// copy mac info
+	memcpy( pBootCFG->mac, g_SecurityInfo.mac, 6 );
+
+end_otp_sync:
+	RETAILMSG(TRUE, (_T("EbootCFG MAC = %02X-%02X-%02X-%02X-%02X-%02X\r\n"), 
+						(pBootCFG->mac[0] & 0xFF),
+						((pBootCFG->mac[0] >> 8) & 0xFF),
+						(pBootCFG->mac[1] & 0xFF),
+						((pBootCFG->mac[1] >> 8) & 0xFF),
+						(pBootCFG->mac[2] & 0xFF),
+						((pBootCFG->mac[2] >> 8) & 0xFF)));
+	return bRet;
+}
+
+//--------------------------------------------------------------------------------
+// if OTP is bank, program MAC & Date info into OTP.
+// otherwise, sync OTP to Vendor Info
+//--------------------------------------------------------------------------------
+BOOL OTPSyncVendorInfo(PBYTE pBuf, DWORD dwBufSize)
+{
+	PVENDOR_SECURITY_INFO	pSecurityInfo;
+	DWORD					dwCUST[2];			// for HW_OCOTP_CUST0 - HW_OCOTP_CUST1
+	WORD					wTemp;
+	BYTE					ub1;
+
+	if( g_bAbortVendorInfoSync )
+	{
+		RETAILMSG(TRUE, (_T("Abort Vendor Info Sync\r\n")));
+		return FALSE;
+	}
+
+	if(!pBuf || (dwBufSize != sizeof(VENDOR_SECURITY_INFO)))
+	{
+		RETAILMSG(TRUE, (_T("OTPSyncVendorInfo::invalid input parameter\r\n")));
+		return FALSE;
+	}
+	pSecurityInfo = (PVENDOR_SECURITY_INFO)pBuf;
+
+	if(!OTP_CUST_Read(dwCUST, 2))
+	{
+		RETAILMSG(TRUE, (_T("Read OTP failed\r\n")));
+		return FALSE;
+	}
+	
+	//RETAILMSG(TRUE, (_T("Read OTP 0x%x 0x%x\r\n"),dwCUST[0], dwCUST[1] ));
+
+	// OTP is blank, program it!
+	if((dwCUST[0] == 0) && (dwCUST[1] == 0))
+	{
+		RETAILMSG(TRUE, (_T("Program OTP...\r\n")));
+		// convert security info into OTP_CUST format
+		SecurityInfo2OTPCUST(pSecurityInfo, dwCUST);
+
+		// then program OTP 
+		if(!OTP_CUST_Program(dwCUST, 2))
+		{
+			RETAILMSG(TRUE, (_T("Program OTP failed\r\n")));
+			return FALSE;
+		}
+	}
+	else
+	{	
+		RETAILMSG(TRUE, (_T("Convert OTP...\r\n")));
+		// OTP is burned already, sync it to SecurityInfo
+		pSecurityInfo->mac[0] = 0x9BD0;								// OUI => D0-9B-05
+		wTemp = (WORD)(dwCUST[0] >> 16) & 0xFF00;					// get MAC_ADDR3
+		pSecurityInfo->mac[1] = wTemp | 0x0005;
+		wTemp = (WORD)(dwCUST[0] >> 16) & 0x00FF;					// get MAC_ADDR4
+		pSecurityInfo->mac[2] = wTemp;
+		wTemp = (WORD)(dwCUST[0] >> 0) & 0xFF00;					// get MAC_ADDR5
+		pSecurityInfo->mac[2] = pSecurityInfo->mac[2] | wTemp;
+
+		// sync date info to SecurityInfo
+		pSecurityInfo->dwDay   = (dwCUST[1] >>  0) & 0xFF;
+		pSecurityInfo->dwMonth = (dwCUST[1] >>  8) & 0xFF;
+		pSecurityInfo->dwYear  = ((dwCUST[1] >> 16) & 0xFF) + 2000;
+
+		// dump message for debug
+		RETAILMSG(TRUE, (_T("Read MAC = %02X-%02X-%02X-%02X-%02X-%02X\r\n"), 
+							(pSecurityInfo->mac[0] & 0xFF),
+							((pSecurityInfo->mac[0] >> 8) & 0xFF),
+							(pSecurityInfo->mac[1] & 0xFF),
+							((pSecurityInfo->mac[1] >> 8) & 0xFF),
+							(pSecurityInfo->mac[2] & 0xFF),
+							((pSecurityInfo->mac[2] >> 8) & 0xFF)));
+		RETAILMSG(TRUE, (_T("Read Date = %d-%d-%d\r\n"), pSecurityInfo->dwYear, pSecurityInfo->dwMonth, pSecurityInfo->dwDay));
+	}
+
+	// get bad block layout info
+	pSecurityInfo->dwNumOfBlocks = GetBadBlockInfo(pSecurityInfo->BadBlockTable, sizeof(pSecurityInfo->BadBlockTable));
+
+	// do security processing -> lock the info
+	DoSecurityProcessing(pBuf, dwBufSize, TRUE);
+
+	// finally, make checksum of SecurityInfo
+	ub1 = GetSum((PBYTE)pSecurityInfo, sizeof(VENDOR_SECURITY_INFO) - 1);
+	ub1 = ~ub1 + 1;
+	pSecurityInfo->ucCheckSum = ub1;
+
+	return TRUE;
+}
+
+//--------------------------------------------------------------------------------
+// CS&ZHL MAY-29-2012: routines for NandFlash Bad Block Table
+//--------------------------------------------------------------------------------
+BOOL NandBadBlockTableIsValid( PBYTE pTab1, PBYTE pTab2, DWORD dwSize )
+{
+    FlashInfo		flashInfo;
+	DWORD			dwByteIndex;
+
+    
+    if(!FMD_GetInfo(&flashInfo))
+    {
+        RETAILMSG(TRUE, (_T("ERROR: Unable to get NAND flash information.\r\n")));
+        return 0;
+    }
+    
+	/* get system for reserved blockID/8 */
+	dwByteIndex = IMAGE_BOOT_NANDDEV_RESERVED_SIZE / flashInfo.dwBytesPerBlock / 8;
+
+	if( ( dwByteIndex > dwSize )||( memcmp( pTab1, pTab2, dwByteIndex )!=0 ) )
+	{
+		return FALSE;
+	}
+
+	for( ; dwByteIndex < dwSize; dwByteIndex++ ) 
+	{
+		if( pTab2[dwByteIndex]!=0 )
+		{
+			if( (pTab1[dwByteIndex] & pTab2[dwByteIndex]) != pTab2[dwByteIndex] )
+				return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
+//--------------------------------------------------------------------------------
+// CS&ZHL APR-11-2012: routines for NandFlash Security
+//--------------------------------------------------------------------------------
+BOOL NANDVendorAuthentication(void)
+{
+	BOOL					bRet = TRUE;
+	DWORD					dwOTP_CUST[2];			// HW_OCOTP_CUST0 - HW_OCOTP_CUST1 in OTP registers
+	PVENDOR_SECURITY_INFO	pSecurityInfo;
+	DWORD					dwSecurityInfoSize;
+    NANDWrtImgInfo			NANDSecurityImgInfo;
+	DWORD					dwNAND_CUST[2];			// HW_OCOTP_CUST0 - HW_OCOTP_CUST1 in IMAGE_VID
+	BYTE					pBadBlockTable[512];
+	DWORD					dwNumOfBlocks;
+
+	// read OTP info
+	if(!OTP_CUST_Read(dwOTP_CUST, 2))
+	{
+		ERRORMSG(TRUE, (_T("Read OTP failed\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+	//RETAILMSG(TRUE, (_T("OTP 0x%x 0x%x\r\n"), dwOTP_CUST[0], dwOTP_CUST[1]));
+
+	if((dwOTP_CUST[0] == 0) && (dwOTP_CUST[1] == 0))
+	{
+		RETAILMSG(TRUE, (_T(" Vendor Authentication Failed!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+
+
+	dwSecurityInfoSize = sizeof(VENDOR_SECURITY_INFO);
+	pSecurityInfo = (PVENDOR_SECURITY_INFO)&g_SecurityInfo;
+	
+	// read use ID data 
+	NANDSecurityImgInfo.dwImgType = IMAGE_VID;
+	NANDSecurityImgInfo.dwIndex = 0;
+	NANDSecurityImgInfo.dwImgSizeUnit = 0x20000;			// 128KB for large sector
+	if(!NANDReadImage(&NANDSecurityImgInfo, (PBYTE)pSecurityInfo, dwSecurityInfoSize))
+	{
+        ERRORMSG(TRUE, (_T("read IMAGE_VID failed!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+	
+
+	// verify checksum
+	if(GetSum((PBYTE)pSecurityInfo, dwSecurityInfoSize) != 0)
+	{
+        RETAILMSG(TRUE, (_T("IMAGE_VID checksum failed!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+    //RETAILMSG(TRUE, (_T("IMAGE_VID checksum OK!\r\n")));
+
+	// do security processing -> unlock the info
+	DoSecurityProcessing((PBYTE)pSecurityInfo, dwSecurityInfoSize, FALSE);
+
+	// convert security info into OTP_CUST format with chksum
+	SecurityInfo2OTPCUST(pSecurityInfo, dwNAND_CUST);
+	//RETAILMSG(TRUE, (_T("Nand 0x%x 0x%x\r\n"), dwNAND_CUST[0], dwNAND_CUST[1]));
+
+	// check OTP info
+	if(memcmp(dwOTP_CUST, dwNAND_CUST, 8) != 0)
+	{
+        RETAILMSG(TRUE, (_T("OTP is NOT matched!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+
+	// get bad block layout info
+	dwNumOfBlocks = GetBadBlockInfo(pBadBlockTable, sizeof(pSecurityInfo->BadBlockTable));
+	if(dwNumOfBlocks != pSecurityInfo->dwNumOfBlocks)
+	{
+        RETAILMSG(TRUE, (_T("Bad Block Table Size is NOT matched!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+
+	// compare the bad block table
+	//if(memcmp(pBadBlockTable, pSecurityInfo->BadBlockTable, sizeof(pSecurityInfo->BadBlockTable)) != 0)
+	if( NandBadBlockTableIsValid( pBadBlockTable, pSecurityInfo->BadBlockTable, sizeof(pSecurityInfo->BadBlockTable )) == FALSE )
+	{
+        RETAILMSG(TRUE, (_T("Bad Block Table is NOT matched!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+
+cleanup:
+	return bRet;
+}
+
+
+BOOL NANDUserAuthentication(PBYTE pBuf, DWORD dwBufSize)
+{
+    NANDWrtImgInfo  NANDSecurityImgInfo;
+	PBYTE			pSrcBuf;
+	BOOL			bRet = TRUE;
+
+	// allocate source data buffer
+    pSrcBuf = (PBYTE) LocalAlloc(LPTR, dwBufSize); 
+	if(pSrcBuf == NULL)
+	{
+        ERRORMSG(TRUE, (_T("Allocate memory with size of 0x%x failed!\r\n"), dwBufSize));
+        return FALSE;
+	}
+
+	// read use ID data 
+	NANDSecurityImgInfo.dwImgType = IMAGE_UID;
+	NANDSecurityImgInfo.dwIndex = 0;
+	NANDSecurityImgInfo.dwImgSizeUnit = 0x20000;			// 128KB for large sector
+	if(!NANDReadImage(&NANDSecurityImgInfo, pSrcBuf, dwBufSize))
+	{
+        ERRORMSG(TRUE, (_T("read IMAGE_UID failed!\r\n")));
+		bRet = FALSE;
+		goto cleanup;
+	}
+
+	// compare the data
+	if(memcmp(pBuf, pSrcBuf, dwBufSize) != 0)
+	{
+        RETAILMSG(TRUE, (_T("User Authentication Failed!\r\n")));
+		bRet = FALSE;
+	}
+
+cleanup:
+	LocalFree(pSrcBuf); 
+
+	return bRet;
 }

@@ -97,23 +97,18 @@ UINT32 dwSSPIndex = 0;
 //-----------------------------------------------------------------------------
 void SDConfigPins(void)
 {
-    OALMSG(OAL_FUNC, (TEXT("SDConfigPins Begin\r\n")));
+    //OALMSG(OAL_FUNC, (TEXT("SDConfigPins Begin\r\n")));
+    OALMSG(1, (TEXT("SDConfigPins Begin\r\n")));
     
-    // Clear SFTRST
-    HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_SFTRST);
-    while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_SFTRST)
-    {
-        ;
-    }
+    //// Clear SFTRST
+    //HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_SFTRST);
+    //while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_SFTRST);
 
-    // Clear CLKGATE
-    HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_CLKGATE);
-    while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_CLKGATE)
-    {
-        ;
-    }
-    
-    // PWM3
+    //// Clear CLKGATE
+    //HW_PINCTRL_CTRL_CLR(BM_PINCTRL_CTRL_CLKGATE);
+    //while(HW_PINCTRL_CTRL_RD() & BM_PINCTRL_CTRL_CLKGATE);
+
+	// PWM3
     DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_GPIO);
     DDKGpioEnableDataPin(DDK_IOMUX_PWM3_1, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_PWM3_1, 0);
@@ -202,8 +197,11 @@ BOOL SDInterface_Init(void)
 
     DWORD dwClockRate = ESDHC_INIT_CLOCK_RATE;
 
+    OALMSG(1, (TEXT("->SDInterface_Init\r\n")));
+
     if(!SDHC_IsCardPresent())
     {
+		OALMSG(1, (TEXT("SDInterface_Init: Card is not present\r\n")));
         return FALSE; 
     }
 

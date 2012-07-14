@@ -18,3 +18,6 @@ SOURCES=\
     
 FILE_VIEW_INCLUDES_FOLDER= \
 
+FILE_VIEW_RESOURCE_FOLDER= \
+    spisdk.def \
+

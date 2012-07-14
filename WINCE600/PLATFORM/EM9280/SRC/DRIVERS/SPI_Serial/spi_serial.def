@@ -38,7 +38,7 @@
 ;	DllEntry
 ;**********************************************************************
 
-LIBRARY 	SERIAL
+LIBRARY 	SPI_SERIAL
 
 EXPORTS COM_Init
 		COM_Deinit

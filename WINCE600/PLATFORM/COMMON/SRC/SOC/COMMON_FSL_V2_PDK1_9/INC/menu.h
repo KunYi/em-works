@@ -46,6 +46,7 @@ typedef enum
     STR_DEVICE_SDMMC
 } ETH_DEVICE_TYPE;
 
+
 typedef struct
 {
     DWORD autoDownloadImage;
@@ -56,12 +57,10 @@ typedef struct
     DWORD DHCPEnable;
     DWORD dwPhysStart;
     DWORD dwPhysLen;
-    DWORD dwLaunchAddr;					// CS&ZHL MAY-23-2011: physical start address of NK in RAM
-    WORD  mac[4];						// Increase from 3 to 4 for pad purpose
-    DWORD dwNumOfPort;					// CS&ZHL APR-10-2012: number of ethernet ports, default = 1
-    DWORD dwYear;						// CS&ZHL APR-10-2012: start from 2012
-    DWORD dwMonth;						// CS&ZHL APR-10-2012: 1 - 12
-    DWORD dwDay;						// CS&ZHL APR-10-2012: 1 - 31
+    DWORD dwNandImageStart;				// CS&ZHL MAR-27-2012: virtual start address of OS image in NandFlash
+    DWORD dwNandImageLength;			// CS&ZHL MAR-27-2012: byte length of OS image in NandFlash
+    DWORD dwLaunchAddr;						// CS&ZHL MAY-23-2011: physical start address of NK in RAM
+    WORD  mac[4]; // Increase from 3 to 4 for pad purpose
     DWORD ConfigMagicNumber;
     DWORD Channel;
     DWORD dwSerPhysAddr;
@@ -121,8 +120,8 @@ typedef BOOL (*BLMenuPrintDataSoc)(WCHAR,VOID *,VOID *);
 #define Format_OS {\
     L'7', L"Format OS NAND Region", BLMenuFormatNandOS,NULL, NULL, NULL\
     }
-#define Format_All {\
-    L'8', L"Format All NAND Regions", BLMenuFormatAllNand,NULL, NULL, NULL\
+#define Format_Boot {\
+    L'8', L"Format Boot NAND Regions", BLMenuFormatBootNand,NULL, NULL, NULL\
     }
 #define Boot_Shell {\
     L'9', L"Bootloader Shell", BLMenuBootShell,NULL, NULL, NULL\
@@ -151,13 +150,16 @@ typedef BOOL (*BLMenuPrintDataSoc)(WCHAR,VOID *,VOID *);
 #define MMC_SD_Utilities {\
     L'M', L"MMC and SD Utilities", BLMenuMMCSDUtilities,NULL, NULL, NULL\
     }
+#define Format_All {\
+    L'A', L"Format ALL NAND Regions", BLMenuFormatAllNand,NULL, NULL, NULL\
+    }
 #define Null_Menu {\
     0, NULL, NULL,NULL, NULL, NULL\
     }
 
-#define CommonMenu IP_Address,IP_Mask,Boot_Delay,DHCP,Reset,Select_Boot_Device,MAC,Format_OS,Format_All,\
+#define CommonMenu IP_Address,IP_Mask,Boot_Delay,DHCP,Reset,Select_Boot_Device,MAC,Format_OS,Format_Boot,\
 Boot_Shell,KITL_Work_Mode,KITL_Enable_Mode,KITL_Passive_Mode,Save_Setting,Download_Image,Launch_Flash_Image,Select_Ether_Device,\
-MMC_SD_Utilities,Null_Menu
+MMC_SD_Utilities,Format_All,Null_Menu
 
 
 #define eMMC_Toggle_Boot_Partition {\
@@ -207,6 +209,12 @@ BOOL BLMenuReturn(BLMENU_ITEM *pMenu);
 BOOL BLMenuFormatAllSDMMC(BLMENU_ITEM *pMenu);
 BOOL BLMenuCreateFileSystemOnSDMMC(BLMENU_ITEM *pMenu);
 
+//
+// CS&ZHL MAY28-2012: Only format  the Block0-Block15 regions of NAND
+//
+BOOL BLMenuFormatBootNand(BLMENU_ITEM *pMenu);
+
+
 UINT32 BLMenuReadLine(LPWSTR buffer, UINT32 charCount);
 BOOL   BLMenuPrintData(WCHAR key,VOID * dwValue,VOID * mask);
 extern INT OEMReadDebugByte();
@@ -215,6 +223,7 @@ extern void ResetDefaultBootCFG(BOOT_CFG *pBootCFG);
 extern BOOL StoreBootCFG(BOOT_CFG *BootCFG);
 extern void ConfigBootCFG(BOOT_CFG *pBootCFG);
 extern BOOL NANDFormatNK(VOID);
+extern BOOL NANDFormatBoot(VOID);
 extern BOOL NANDFormatAll(VOID);
 extern BOOL SDHCFormatAll(VOID);
 extern BOOL SDHCCreateFileSystemPartition(VOID);

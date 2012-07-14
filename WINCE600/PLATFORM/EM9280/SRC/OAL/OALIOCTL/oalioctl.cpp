@@ -46,6 +46,7 @@
 #include <oalioctl.h>
 #include <oal.h>
 #include "ioctl_cfg.h"
+#include "bsp_drivers.h"		// CS&ZHL MAY-26-2012: supporting EM9280 IOCTL
 #pragma warning(pop)
 
 PFN_Ioctl g_pfnExtOALIoctl;
@@ -103,18 +104,29 @@ IOControl(
     // addresses are within the user process space.
     //
     switch (dwIoControlCode) {
-    //  MSFT Standard kernel IOCTLs
-    case IOCTL_HAL_GET_CACHE_INFO:
-    case IOCTL_HAL_GET_DEVICE_INFO:
-    case IOCTL_HAL_GET_DEVICEID:
-    case IOCTL_HAL_GET_UUID:
-    case IOCTL_PROCESSOR_INFORMATION:
-    case IOCTL_HAL_REBOOT:
-    case IOCTL_HAL_POWER_OFF_ENABLE:
-    case IOCTL_HAL_QUERY_BOOT_MODE:
-    case IOCTL_HAL_SET_BOOT_SOURCE:
-    case IOCTL_HAL_QUERY_UPDATE_SIG:
-    case IOCTL_HAL_SET_UPDATE_SIG:
+		//  MSFT Standard kernel IOCTLs
+		case IOCTL_HAL_GET_CACHE_INFO:
+		case IOCTL_HAL_GET_DEVICE_INFO:
+		case IOCTL_HAL_GET_DEVICEID:
+		case IOCTL_HAL_GET_UUID:
+		case IOCTL_PROCESSOR_INFORMATION:
+		case IOCTL_HAL_REBOOT:
+		case IOCTL_HAL_POWER_OFF_ENABLE:
+		case IOCTL_HAL_QUERY_BOOT_MODE:
+		case IOCTL_HAL_SET_BOOT_SOURCE:
+		case IOCTL_HAL_QUERY_UPDATE_SIG:
+		case IOCTL_HAL_SET_UPDATE_SIG:
+		case IOCTL_HAL_CPU_INFO_READ:			// read iMX copyright info
+//#ifdef	EM9280
+		//
+		// CS&ZHL APR-06-2012: add more kernel IOcontrol
+		//
+		case IOCTL_HAL_BOARDINFO_READ:
+		case IOCTL_HAL_TIMESTAMP_READ:
+		case IOCTL_HAL_VENDOR_ID_READ:
+		case IOCTL_HAL_CUSTOMER_ID_READ:
+		case IOCTL_HAL_BOARD_STATE_READ:
+//#endif	//EM9280
         // request is to service the ioctl - forward the call to OAL code
         // OAL code will set the last error if there is a failure
         fRet = (*g_pfnExtOALIoctl)(dwIoControlCode, pInBuf, nInBufSize, pOutBuf, nOutBufSize, pBytesReturned);

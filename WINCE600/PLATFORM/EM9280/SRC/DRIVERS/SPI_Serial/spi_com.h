@@ -49,8 +49,9 @@ typedef struct _UART_HT45B0F_INFO
 typedef struct __SER_INFO {
 	DWORD				dwDeviceArrayIndex;	// @field COM logical index = 4, 8, 9
 	DWORD				dwLocalIndex;		// @field local index of HT45B0F
-	DWORD				dwIrqNum;			// @field interrupt request number for the UART
-	DWORD				dwIrqGpioPin;		// @filed enum { DDK_IOMUX_GPIO2_8, DDK_IOMUX_GPIO2_9, DDK_IOMUX_GPIO2_10 } 	
+	DWORD				dwDeviceID;			// @field logical interrupt number
+	DWORD				dwIrqGpioPin;		// @filed enum { DDK_IOMUX_GPIO2_1, DDK_IOMUX_GPIO2_9, DDK_IOMUX_GPIO2_2 } 	
+	DWORD				dwRtsGpioPin;		// support GPIO as RTS, dcb.fRtsControl == RTS_CONTROL_TOGGLE
 
 	UART_HT45B0F_INFO	UartHt45;
     DWORD				dwSysIntr;			// @field System Interrupt number for the UART

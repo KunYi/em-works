@@ -147,37 +147,72 @@ ExSerInit(
         LocalFree(pHead);
         return(NULL);
     }
-
-	// get interrupt request number for each HT45B0F
-    datasize = sizeof(DWORD);
-    if ( RegQueryValueEx(hKey, L"IrqNum", NULL, NULL, (LPBYTE)&pHead->dwIrqNum, &datasize) ) 
-	{
-        RETAILMSG(1, (TEXT("ExSerInit::Failed to get IrqNum value\r\n")));
-        RegCloseKey (hKey);
-        LocalFree(pHead);
-        return(NULL);
-    }
-
-	// get interrupt GPIO pin number for each HT45B0F
-    datasize = sizeof(DWORD);
-    if ( RegQueryValueEx(hKey, L"IrqGpioPin", NULL, NULL, (LPBYTE)&pHead->dwIrqGpioPin, &datasize) ) 
-	{
-        RETAILMSG(1, (TEXT("ExSerInit::Failed to get IrqGpioPin value\r\n")));
-        RegCloseKey (hKey);
-        LocalFree(pHead);
-        return(NULL);
-    }
 	RegCloseKey (hKey);
 
-	RETAILMSG(1, (TEXT("ExSerInit::COM%d - Init HT45B0F\r\n"), pHead->dwDeviceArrayIndex));
+	//RETAILMSG(1, (TEXT("ExSerInit::COM%d - Init HT45B0F\r\n"), pHead->dwDeviceArrayIndex));
+
+	// CS&ZHL SEP-2-2011: get device interrupt number
+	switch(pHead->dwLocalIndex)
+	{
+	case 0:
+		pHead->dwDeviceID = IRQ_GPIO2_PIN1;
+		pHead->dwIrqGpioPin = DDK_IOMUX_GPIO2_1;
+		break;
+
+	case 1:
+		pHead->dwDeviceID = IRQ_GPIO2_PIN9;
+		pHead->dwIrqGpioPin = DDK_IOMUX_GPIO2_9;
+		//pHead->dwDeviceID = IRQ_GPIO0_PIN21;
+		//pHead->dwIrqGpioPin = DDK_IOMUX_GPIO0_21;
+		break;
+
+	case 2:
+		pHead->dwDeviceID = IRQ_GPIO2_PIN2;
+		pHead->dwIrqGpioPin = DDK_IOMUX_GPIO2_2;
+		break;
+
+	default:
+		RETAILMSG(1, (TEXT("ExSerInit::can not get Ex-UART interrupt number\r\n")));
+		LocalFree(pHead);
+		return(NULL);
+	}
+
+	// CS&ZHL JUN-14-2012: support GPIO as RTS direction-control if(dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+	pHead->dwRtsGpioPin = DDK_IOMUX_INVALID_PIN;
+
+	// setup GPIO interrupt function
+	{
+		//DDK_GPIO_CFG	intrCfg;
+
+		//DDKIomuxSetPinMux((DDK_IOMUX_PIN)pHead->dwIrqGpioPin, DDK_IOMUX_MODE_GPIO);
+		//DDKGpioEnableDataPin((DDK_IOMUX_PIN)pHead->dwIrqGpioPin, 0);		// output disable
+		//DDKIomuxSetPadConfig((DDK_IOMUX_PIN)pHead->dwIrqGpioPin, 
+  //                           DDK_IOMUX_PAD_DRIVE_8MA, 
+  //                           DDK_IOMUX_PAD_PULL_ENABLE,
+  //                           DDK_IOMUX_PAD_VOLTAGE_3V3);  
+
+		// config GPIO interrupt c
+		//intrCfg.DDK_PIN_IO           = DDK_GPIO_INPUT;
+		//intrCfg.DDK_PIN_IRQ_CAPABLE  = DDK_GPIO_IRQ_CAPABLE;
+		//intrCfg.DDK_PIN_IRQ_ENABLE   = DDK_GPIO_IRQ_DISABLED;				// DDK_GPIO_IRQ_ENABLED;
+		//intrCfg.DDK_PIN_IRQ_LEVEL    = DDK_GPIO_IRQ_EDGE;					// DDK_GPIO_IRQ_LEVEL;
+		//intrCfg.DDK_PIN_IRQ_POLARITY = DDK_GPIO_IRQ_POLARITY_LO;			// interrupt trigger on falling edge
+		//if(!DDKGpioConfig((DDK_IOMUX_PIN)pHead->dwIrqGpioPin, intrCfg))
+		//{
+		//	RETAILMSG(1,(TEXT("ExSerInit: config interrupt pin %d# failed\r\n"), (DDK_IOMUX_PIN)pHead->dwIrqGpioPin));
+		//	LocalFree(pHead);
+		//	return(NULL);
+		//}
+		//DDKGpioClearIntrPin((DDK_IOMUX_PIN)pHead->dwIrqGpioPin);
+	}
 
 	//
 	// CS&ZHL JLY-17-2008: Request SysIntr for the device
 	//
 	pHead->dwSysIntr = (DWORD)SYSINTR_UNDEFINED;
 	if (!KernelIoControl(IOCTL_HAL_REQUEST_SYSINTR, 
-						(PVOID)&pHead->dwIrqNum, 
-						sizeof(pHead->dwIrqNum), 
+						(PVOID)&pHead->dwDeviceID, 
+						sizeof(pHead->dwDeviceID), 
 						(PVOID)&pHead->dwSysIntr, 
 						sizeof(pHead->dwSysIntr), NULL))
 	{
@@ -194,7 +229,7 @@ ExSerInit(
 
     // Legacy - We have 2 identical fields because registry used to contain IRQ
     pHead->pHWObj->dwIntID = pHead->dwSysIntr;
-    DEBUGMSG (1|ZONE_INIT, (TEXT("ExSerInit - SYSINTR %d\r\n"),  pHead->pHWObj->dwIntID));
+    DEBUGMSG (ZONE_INIT, (TEXT("ExSerInit - SYSINTR %d\r\n"),  pHead->pHWObj->dwIntID));
 
     // Set up our Comm Properties data    
     pHead->CommProp.wPacketLength   = 0xffff;
@@ -214,38 +249,22 @@ ExSerInit(
             PCF_TOTALTIMEOUTS |
             PCF_XONXOFF;
 
-    if(pHead->dwDeviceArrayIndex)
-    {
-        pHead->CommProp.dwProvCapabilities |= PCF_DTRDSR | PCF_RLSD | PCF_RTSCTS;
-    }
+    //if(pHead->dwDeviceArrayIndex)
+    //{
+    //    pHead->CommProp.dwProvCapabilities |= PCF_DTRDSR | PCF_RLSD | PCF_RTSCTS;
+    //}
     
-    pHead->CommProp.dwSettableBaud      =
-    BAUD_075 | BAUD_110 | BAUD_150 | BAUD_300 | BAUD_600 |
-    BAUD_1200 | BAUD_1800 | BAUD_2400 | BAUD_4800 |
-    BAUD_7200 | BAUD_9600 | BAUD_14400 |
-    BAUD_19200 | BAUD_38400 | BAUD_56K | BAUD_128K |
-    BAUD_115200 | BAUD_57600 | BAUD_USER;
+    pHead->CommProp.dwSettableBaud = BAUD_1200 | BAUD_2400 | BAUD_4800 | BAUD_9600 | BAUD_14400 | BAUD_19200 | BAUD_38400 | BAUD_57600;
 
-    pHead->CommProp.dwSettableParams    =
-    SP_BAUD | SP_DATABITS | SP_HANDSHAKING | SP_PARITY |
-    SP_PARITY_CHECK | SP_RLSD | SP_STOPBITS;
+    pHead->CommProp.dwSettableParams = SP_BAUD | SP_DATABITS | SP_HANDSHAKING | SP_PARITY | SP_PARITY_CHECK | SP_RLSD | SP_STOPBITS;
 
-    pHead->CommProp.wSettableData       =
-    DATABITS_5 | DATABITS_6 | DATABITS_7 | DATABITS_8;
+    //pHead->CommProp.wSettableData = DATABITS_5 | DATABITS_6 | DATABITS_7 | DATABITS_8;
+    pHead->CommProp.wSettableData = DATABITS_8;			// only 8-bit!
 
-    pHead->CommProp.wSettableStopParity =
-    STOPBITS_10 | STOPBITS_20 |
-    PARITY_NONE | PARITY_ODD | PARITY_EVEN | PARITY_SPACE |
-    PARITY_MARK;
+    pHead->CommProp.wSettableStopParity = STOPBITS_10 | STOPBITS_20 |
+									      PARITY_NONE | PARITY_ODD | PARITY_EVEN | PARITY_SPACE | PARITY_MARK;
 
     pHead->fIRMode  = FALSE;   // Select wired by default
-
-    // Init HT45 info
-	pHead->UartHt45.USR  = HT45B0F_USR_RIDLE | HT45B0F_USR_TIDLE | HT45B0F_USR_TXIF;
-	pHead->UartHt45.UCR1 = 0;
-	pHead->UartHt45.UCR2 = HT45B0F_UCR2_BAUD_DIV16;				// BaudRate = 1.8432MHz / (16 * (BRG + 1)) => same with 16C550
-	pHead->UartHt45.BRG  = 12 - 1;								// default settings => 9600bps
-	pHead->UartHt45.UCR3 = 0;
 
     DEBUGMSG (ZONE_INIT, (TEXT("ExSerInit - Init ht45b0f data\r\n")));
     if(!SL4_Init(pHead,				// @parm points to device head
@@ -256,17 +275,23 @@ ExSerInit(
 		NULL))						// BaudRate Table = NULL: use default baud table
 	{
 		RETAILMSG(1, (TEXT("ExSerInit::COM%d hardware init failed\r\n"), pHead->dwDeviceArrayIndex));
-		// release system interrupt resource
-		KernelIoControl(IOCTL_HAL_RELEASE_SYSINTR, 
-						&pHead->dwSysIntr, sizeof(pHead->dwSysIntr), 
-						NULL, 0, 0);
+		// release system interrupt resource if necessary
+		if(pHead->dwSysIntr != SYSINTR_UNDEFINED)
+		{
+			KernelIoControl(IOCTL_HAL_RELEASE_SYSINTR, 
+							&pHead->dwSysIntr, sizeof(pHead->dwSysIntr), 
+							NULL, 0, 0);
+		}
 		
 		LocalFree(pHead);
 		return(NULL);
 	}
 
 	RETAILMSG(1, (TEXT("ExSerInit::COM%d hardware init passed\r\n"), pHead->dwDeviceArrayIndex));
-    return (pHead);
+	return (pHead);
+	//RETAILMSG(1, (TEXT("ExSerInit::COM%d not installed for debug\r\n"), pHead->dwDeviceArrayIndex));
+	//LocalFree(pHead);
+	//return(NULL);
 }
 
 /*

@@ -1,0 +1,8 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;//------------------------------------------------------------------------------
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WDT1]
+   "Prefix"="WDT"
+   "Dll"="wdt.dll"
+   "Index"=dword:1
+   "Order"=dword:11

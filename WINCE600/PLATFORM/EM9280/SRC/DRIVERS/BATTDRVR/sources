@@ -26,6 +26,10 @@ TARGETTYPE=DYNLINK
 
 DEFFILE=BATTDRVR.def
 
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
 TARGETLIBS= \
     $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
     $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
@@ -42,7 +46,3 @@ INCLUDES=\
     
 SOURCES= \
     battery.c \
-    
-!IF ("$(BSP_EM9283)" == "1")
-CDEFINES=$(CDEFINES) -DEM9283
-!ENDIF

@@ -71,19 +71,22 @@ extern "C" {
 #define ZONE_ERROR      DEBUGZONE(ZONEID_ERROR)
 #endif // DEBUG
 
+// CS&ZHL JLY-6-2012: LRADC channel config
+#define	BOARD_TYPE_EM9280		9280
+#define	BOARD_TYPE_EM9283		9283
+
 //------------------------------------------------------------------------------
 // Types
-
 //------------------------------------------------------------------------------
 
 
 class LRADCClass
 {
 public:
-    CEDEVICE_POWER_STATE m_dxCurrent;
+    CEDEVICE_POWER_STATE	m_dxCurrent;
 
     // LRADC CONSTRUCTOR/DESTRUCTOR METHODS
-    LRADCClass(/*UINT32 index*/);
+    LRADCClass();
     ~LRADCClass(void)
     {
     };
@@ -171,6 +174,10 @@ public:
 
     BOOL DumpRegister(VOID);
 
+	// CS&ZHL JUN-6-2012: return schedule state of specified channel
+    BOOL   ScheduleState(LRADC_CHANNEL Channel);
+    UINT32 MeasureNormalChannel(LRADC_CHANNEL Channel);
+
 private:
 
 public:
@@ -178,6 +185,27 @@ public:
 };
 
 
+//--------------------------------------------------------------------------------------------------------
+// CS&ZHL MAY-23-2012: definitions for AD in EM9280
+//
+#define	EM9280_DAQ_VOLTAGE_CH0			0
+#define	EM9280_DAQ_VOLTAGE_CH1			1
+#define	EM9280_DAQ_VDD_5V				2
+#define	EM9280_DAQ_VDDIO_3V3			3
+#define	EM9280_DAQ_VDDA_1V8				4
+#define	EM9280_DAQ_VDDD_1V45			5
+#define	EM9280_DAQ_CPU_TEMPERATURE		6
+#define	EM9280_DAQ_BOARD_TEMPERATURE	7
+
+typedef struct
+{
+	DWORD		dwCmd;			// = 0, 1, 2, ....
+	DWORD		dwData;			// data value
+	char		UnitName[16];	// return unit string: "Voltage", "Kalvin"
+} DAQ_INFO, *PDAQ_INFO;
+//
+// end of CS&ZHL MAY-23-2012: definitions for AD in EM9280
+//--------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Functions

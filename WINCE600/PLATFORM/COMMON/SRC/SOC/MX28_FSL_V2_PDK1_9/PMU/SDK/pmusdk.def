@@ -17,4 +17,3 @@ PmuGetVddd
 PmuGetVdddBrownont
 PmuSetFets
 PmuPowerGetSupplyMode
-PmuGetPowerSource

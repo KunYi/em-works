@@ -356,7 +356,7 @@ BOOL SingleOTPRead(POtpProgram pOtp)
     //pOtp->OtpData = HW_OCOTP_CUSTn_RD(0);
     //RETAILMSG(TRUE, (L"pOtp->OtpData is 0x%x.\r\n",pOtp->OtpData));
     pOtp->OtpData = (*(volatile hw_ocotp_data_t *) (REGS_OCOTP_BASE+pOtp->OtpAddr)).U;
-    RETAILMSG(TRUE, (L"The value of Otp address 0x%x is 0x%x.\r\n", pOtp->OtpAddr, pOtp->OtpData));
+    //RETAILMSG(TRUE, (L"The value of Otp address 0x%x is 0x%x.\r\n", pOtp->OtpAddr, pOtp->OtpData));
     
     //Clear RD_BANK_OPEN
     BW_OCOTP_CTRL_RD_BANK_OPEN(0);

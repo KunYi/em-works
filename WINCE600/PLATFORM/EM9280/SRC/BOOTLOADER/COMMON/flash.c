@@ -388,12 +388,12 @@ BOOL OEMWriteFlash(DWORD dwStartAddr, DWORD dwLength)
 				//
 				// CS&ZHL MAY-23-2011: save nand flash start address and length into BootCFG if required
 				//
-				//if((g_BootCFG.dwNandImageStart != dwStartAddr) || (g_BootCFG.dwNandImageLength != dwLength))
-				//{
-				//	g_BootCFG.dwNandImageStart = dwStartAddr;		//virtual start address of OS image in NandFlash
-				//	g_BootCFG.dwNandImageLength = dwLength;		//byte length of OS image in NandFlash
-				//	rc = NANDStoreBootCFG((BYTE *)&g_BootCFG, sizeof(BOOT_CFG));
-				//}
+				if((g_BootCFG.dwNandImageStart != dwStartAddr) || (g_BootCFG.dwNandImageLength != dwLength))
+				{
+					g_BootCFG.dwNandImageStart = dwStartAddr;		//virtual start address of OS image in NandFlash
+					g_BootCFG.dwNandImageLength = dwLength;		//byte length of OS image in NandFlash
+					rc = NANDStoreBootCFG((BYTE *)&g_BootCFG, sizeof(BOOT_CFG));
+				}
 			}
 			break;
 

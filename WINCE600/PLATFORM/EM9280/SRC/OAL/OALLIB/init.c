@@ -47,7 +47,7 @@ extern void OALClockInit(void);
 extern void OALPowerInit();
 extern VOID OALTimerNotifyReschedule(DWORD dwThrdId, DWORD dwPrio, DWORD dwQuantum, DWORD dwFlags);
 
-#define ENABLE_WATCH_DOG
+#define ENABLE_WATCH_DOG		1
 
 #ifdef ENABLE_WATCH_DOG
 extern void InitWatchDogTimer (void);
@@ -107,6 +107,10 @@ PVOID    pv_HWregOTP        = NULL;
 PVOID    pv_HWRegPWM        = NULL;
 PVOID    pv_HWregLCDIF      = NULL;
 PVOID    pv_HWregICOLL      = NULL;			// CS&ZHL MAR-17-2012: move from $(_SOCDIR)\OAL\intr.c, discard //extern PVOID    pv_HWregICOLL;
+PVOID	 pv_HWregSSP0       = NULL;			// CS&ZHL MAY-15-2012: use SSP0_SPI to access expanded UART (HT45B0F*3)
+PVOID	 pv_HWregSSP1       = NULL;
+PVOID	 pv_HWregSSP2       = NULL;
+PVOID	 pv_HWregSSP3       = NULL;
 //PVOID    pv_HWregGPMI       = NULL;
 //PVOID    pv_HWregBCH        = NULL;
 //PVOID    pv_HWregDIGCTL     = NULL;
@@ -167,7 +171,8 @@ void OEMInit()
     // (1 << OAL_LOG_VERBOSE)
     //);
 
-    OALMSG(OAL_FUNC, (L"+OEMInit\r\n"));
+    //OALMSG(OAL_FUNC, (L"+OEMInit\r\n"));
+    OALMSG(1, (L"+OEMInit\r\n"));
     
     pv_HWregUARTDbg   =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_UARTDBG,   FALSE);
     pv_HWregPOWER     =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_POWER,     FALSE);
@@ -190,6 +195,10 @@ void OEMInit()
     pv_HWRegPWM       =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_PWM,       FALSE);
     pv_HWregBCH       =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_BCH,       FALSE);
     pv_HWregLCDIF     =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_LCDIF,     FALSE);
+	pv_HWregSSP0	  =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_SSP0,      FALSE);			// CS&ZHL MAY-15-2012: SSP0_SPI to access expanded UART (HT45B0F*3)
+	pv_HWregSSP1	  =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_SSP1,      FALSE);
+	pv_HWregSSP2	  =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_SSP2,      FALSE);
+	pv_HWregSSP3	  =(PVOID) OALPAtoVA(CSP_BASE_REG_PA_SSP3,      FALSE);
 
     pControlFunc      =(FUNC_POWER_CONTROL) OALPAtoVA(IMAGE_WINCE_POWEROFF_IRAM_OFFSET,  FALSE);
 
@@ -247,6 +256,7 @@ void OEMInit()
                                        g_oalCacheInfo.L1DSize));
     OALPowerInit();
     OALClockInit();
+    OALMSGS(1, (_T("OALClockInit done\r\n")));
 
 	// CS&ZHL MAR-17-2012: init CSPDDK
     if(!ClockAlloc())
@@ -272,7 +282,7 @@ void OEMInit()
         goto cleanUp;
     }
 
-    // Initialize the system clock.
+	// Initialize the system clock.
     if (!OALTimerInit(RESCHED_PERIOD, OEM_TICKS_PER_1MS, OEM_TICKS_MARGIN))
     {
         OALMSG(OAL_ERROR,(L"ERROR: OEMInit: Failed to initialize system clock\r\n"));
@@ -293,15 +303,16 @@ void OEMInit()
     // Map reschedule notification kernel function to perform CPU load tracking
     g_pOemGlobal->pfnNotifyReschedule = OALTimerNotifyReschedule;
 
-
-    // Enable auto restart.
+//JLY05-2012: LQK
+// for automatic battery brownout shutdown. lqk 2012-5-30
 #ifndef  EM9283
-	// for automatic battery brownout shutdown. lqk 2012-5-30
+	// Enable auto restart. 
     HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
-#endif //EM9283
+#endif   // EM9283
 
 cleanUp:
-    OALMSG(OAL_FUNC, (L"-OEMInit\r\n"));
+    //OALMSG(OAL_FUNC, (L"-OEMInit\r\n"));
+    OALMSG(1, (L"-OEMInit\r\n"));
 }
 
 //------------------------------------------------------------------------------

@@ -152,7 +152,24 @@ public:
         return dwLastClkRate;
     }
 
+	//
+	// CS&ZHL MAY-21-2012: move Pin config into open
+	//
+	BOOL  PinConfig(void);
 
+	//-----------------------------------------------------------------------------
+	// CS&ZHL JUN-14-2012: support simple I2C Read/Write in master mode
+	//
+	// input: 
+	//          uHwAddr: 7-bit slave hardware address + 1-bit R/W flag in D0(LSB)
+	//			dwCmd = 0xFFFFFFFF: invalid cmd, ignore
+	//          dwCmd.D31 = 0: single-byte cmd
+	//                    = 1: double-byte cmd, NOTE: hi-byte send first!
+	//
+	DWORD MasterRead(BYTE uHwAddr, DWORD dwCmd, PBYTE pBuf, DWORD dwLength);
+	DWORD MasterWrite(BYTE uHwAddr, DWORD dwCmd, PBYTE pBuf, DWORD dwLength);
+	//-----------------------------------------------------------------------------
+	
     //
     // Last Operation Result
     //
@@ -271,6 +288,7 @@ private:
     CE_DMA_ADAPTER m_DMAAdapter;
     DMA_BUFFERED_BUFFER m_DMABuffers[NUM_BUFFERS_IN_CHAIN];
 
+
 public:
     BOOL bInUse;
 
@@ -282,8 +300,12 @@ public:
 // Functions
 //------------------------------------------------------------------------------
 
-extern BOOL BSPI2CIOMUXConfig(DWORD index);
+extern BOOL  BSPI2CIOMUXConfig(DWORD index);
 extern DWORD BSPI2CGetTimeout();
+extern BYTE	 BSPI2CGetHWAddr(LPVOID pBuf, DWORD dwLength);
+extern DWORD BSPI2CGetCmd(LPVOID pBuf, DWORD dwLength);
+extern PBYTE BSPI2CGetDataBuffer(LPVOID pBuf, DWORD dwLength);
+extern DWORD BSPI2CGetDataLength(LPVOID pBuf, DWORD dwLength);
 
 #ifdef __cplusplus
 }

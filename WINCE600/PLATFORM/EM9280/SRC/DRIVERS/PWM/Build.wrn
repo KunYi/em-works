@@ -1,0 +1,5 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000034:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\sdk\lib\ARMV4I\retail\coredll.lib.
+BUILD: [00:0000000035:WARNN ] D:\WINCE600\PLATFORM\EM9280\SRC\DRIVERS\PWM\: Missing source file: D:\WINCE600\public\common\oak\lib\ARMV4I\retail\ceddk.lib.
+BUILD: [01:0000000073:WARNN ] pwmclass.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\pwm.pdb' is missing debugging information for referencing module; linking object as if no debug info
+BUILD: [01:0000000074:WARNN ] pwm_io.obj : warning LNK4204: 'd:\wince600\platform\em9280\target\armv4i\retail\pwm.pdb' is missing debugging information for referencing module; linking object as if no debug info

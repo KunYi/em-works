@@ -85,7 +85,7 @@ DWORD PIO_Init(LPCTSTR pContext)
     HKEY	hKey;
     DWORD	dwIndex, dwSize;
 
-    RETAILMSG (1, (TEXT("PIO_Init +\r\n")));
+    RETAILMSG (1, (TEXT("->PIO_Init\r\n")));
 
     // try to open active device registry key for this context
     hKey = OpenDeviceKey(pContext);
@@ -116,14 +116,14 @@ DWORD PIO_Init(LPCTSTR pContext)
     }
 
     // Construct the GPIO Module Class
-    GPIOClass* pGpio = new GPIOClass(dwIndex);
+    GPIOClass* pGpio = new GPIOClass( );
     if (pGpio == NULL)	// Managed to create the class?
     {
 		RETAILMSG (1, (TEXT("PIO_Init: Allocate GPIOClass failed\r\n")));
         return NULL;
     }
 
-	RETAILMSG (1, (TEXT("PIO_Init - hDev=0x%x\r\n"), pGpio));
+	RETAILMSG (1, (TEXT("<-PIO_Init - hDev=0x%x\r\n"), pGpio));
 	return (DWORD)pGpio;
 }
 
@@ -498,6 +498,30 @@ BOOL PIO_IOControl(DWORD hOpenContext, DWORD dwCode, PBYTE pBufIn,
 		if(pdwActualOut != NULL)
 		{
 			*pdwActualOut = dwLenOut;
+		}
+		break;
+
+	case IOCTL_WAIT_FOR_IRQ:
+		if(!pBufIn || (dwLenIn < sizeof(DWORD)))
+		{
+			RETAILMSG(1, (TEXT("PIO_IOControl::IOCTL_WAIT_FOR_IRQ: input parameter error\r\n")));
+			bRet = FALSE;
+			break;
+		}
+
+		if(!pBufOut || (dwLenOut < sizeof(DWORD)))
+		{
+			RETAILMSG(1, (TEXT("PIO_IOControl::IOCTL_WAIT_FOR_IRQ: output parameter error\r\n")));
+			bRet = FALSE;
+			break;
+		}
+
+		// return = WAIT_OBJECT_0, WAIT_TIMEOUT and WAIT_FAILED
+		*((PDWORD)pBufOut) = pGpio->WaitGpioInterrupt( *((PDWORD)pBufIn) );
+
+		if(pdwActualOut != NULL)
+		{
+			*pdwActualOut = (DWORD)(sizeof(DWORD));
 		}
 		break;
 	}

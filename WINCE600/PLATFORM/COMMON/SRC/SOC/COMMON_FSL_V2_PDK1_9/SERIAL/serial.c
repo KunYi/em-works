@@ -554,7 +554,7 @@ static PVOID SerInit(BOOL bIR, ULONG Identifier, PVOID pMDDContext, PHWOBJ pHWOb
 
     if (!InitError)
     {
-      pSerHead->pBaseAddress = Ser_InternalMapRegisterAddresses(
+		pSerHead->pBaseAddress = Ser_InternalMapRegisterAddresses(
                                         pSerHead->dwIOBase, pSerHead->dwIOLen);
 
         pSerHead->pHWObj = pHWObj;
@@ -645,27 +645,27 @@ static PVOID SerInit(BOOL bIR, ULONG Identifier, PVOID pMDDContext, PHWOBJ pHWOb
             PCF_PARITY_CHECK | PCF_SPECIALCHARS |
             PCF_TOTALTIMEOUTS | PCF_XONXOFF;
 
-            pSerHead->CommProp.dwSettableBaud =
+		pSerHead->CommProp.dwSettableBaud =
             BAUD_075 | BAUD_110 | BAUD_150 | BAUD_300 |
             BAUD_600 | BAUD_1200 | BAUD_1800 | BAUD_2400 |
             BAUD_4800 | BAUD_7200 | BAUD_9600 | BAUD_14400 |
             BAUD_19200 | BAUD_38400 | BAUD_56K | BAUD_128K |
             BAUD_115200 | BAUD_57600 | BAUD_USER;
   
-            pSerHead->CommProp.dwSettableParams =
+        pSerHead->CommProp.dwSettableParams =
             SP_BAUD | SP_DATABITS | SP_HANDSHAKING | SP_PARITY |
             SP_PARITY_CHECK | SP_RLSD | SP_STOPBITS;
 
-            pSerHead->CommProp.wSettableData =
+        pSerHead->CommProp.wSettableData =
             DATABITS_7 | DATABITS_8;
 
-            pSerHead->CommProp.wSettableStopParity =
+        pSerHead->CommProp.wSettableStopParity =
             STOPBITS_10 | STOPBITS_20 |
             PARITY_NONE | PARITY_ODD | PARITY_EVEN;
 
-            pSerHead->fIRMode = bIR;
+        pSerHead->fIRMode = bIR;
 
-            SL_Init(bIR, type, pSerHead->dwIOBase, pSerHead->pBaseAddress,
+        SL_Init(bIR, type, pSerHead->dwIOBase, pSerHead->pBaseAddress,
             pSerHead, EvaluateEventFlag, pMDDContext, (PLOOKUP_TBL)&BaudTable);
 
         return (pSerHead);

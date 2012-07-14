@@ -199,6 +199,7 @@ ENDIF BSP_NOPMU!
 ; @CESYSGEN IF CE_MODULES_BATTDRVR
 IF BSP_NOBATTERY !
 IF BSP_LRADC
+IF BSP_MOUNT_BATT_DRIVER
 ; These registry entries load the battery driver.  The IClass value must match
 ; the BATTERY_DRIVER_CLASS definition in battery.h -- this is how the system
 ; knows which device is the battery driver.  Note that we are using 
@@ -221,6 +222,7 @@ IF BSP_LRADC
 [HKEY_LOCAL_MACHINE\System\Events]
     "SYSTEM/BatteryAPIsReady"="Battery Interface APIs"
 
+ENDIF ;BSP_MOUNT_BATT_DRIVER
 ENDIF ;BSP_LRADC
 ENDIF ;BSP_NOBATTERY !
 ; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
@@ -253,9 +255,8 @@ ENDIF ; BSP_LRADC
 ; Keypad Driver
 ;
 ; @CESYSGEN IF CE_MODULES_KEYBD
-IF BSP_NOKEYPAD !
-IF BSP_EM9280 !
 IF BSP_LRADC
+IF BSP_MX28EVK_KEYPAD
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KEYPADS]
    "Prefix"="KPD"
    "Dll"="keypad.dll"
@@ -304,9 +305,8 @@ IF BSP_LRADC
    "Voltage"    =dword:00000550
    "Flag"       =dword:00000001
    "VirtualKey" =dword:0000ffff
+ENDIF ; BSP_MX28EVK_KEYPAD
 ENDIF ; BSP_LRADC
-ENDIF ; BSP_EM9280 !
-ENDIF ; BSP_NOKEYPAD !
 ; @CESYSGEN ENDIF CE_MODULES_KEYBD
 ;;------------------------------------------------------------------------------
 
@@ -346,7 +346,7 @@ ENDIF ; BSP_I2CBUS2
 ; Serial/UART Driver
 ;
 ; @CESYSGEN IF CE_MODULES_SERIAL 
-IF BSP_SERIAL_DUART1
+IF BSP_SERIAL_DUART
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM0]
    "DeviceArrayIndex"=dword:0
    "IoBase"=dword:80074000
@@ -362,46 +362,21 @@ IF BSP_SERIAL_DUART1
    "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
 ENDIF ; BSP_SERIAL_DUART1
 
+#if (defined BSP_SERIAL_UART0 || defined BSP_SERIAL_UART1 || defined BSP_SERIAL_UART2 || defined BSP_SERIAL_UART3 || defined BSP_SERIAL_UART4)
 ;
-; CS&ZHL MAR-12-2012: support all 5 serial ports on iMX28 for EM9280
+; CS&ZHL MAR-12-2012: support upto all 5 serial ports on iMX28
 ;
-IF BSP_EM9280_GPIO_SPI
 	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\SERIAL\csp_serial.reg"
-ELSE		; -> iMX28EVK
-IF BSP_SERIAL_UART2
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2]
-   "DeviceArrayIndex"=dword:0
-   "IoBase"=dword:8006A000
-   "IoLen"=dword:D4
-   "Prefix"="COM"
-   "Dll"="csp_serial.dll"
-   "Index"=dword:2
-   "Order"=dword:3
-   "useDMA"=dword:1
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM2\Unimodem]
-   "Tsp"="Unimodem.dll"
-   "DeviceType"=dword:0
-   "FriendlyName"="i.MX28 COM2 UNIMODEM"
-   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
-ENDIF ; BSP_SERIAL_UART2
+#endif
 
-IF BSP_SERIAL_UART5
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5]
-   "DeviceArrayIndex"=dword:0
-   "IoBase"=dword:80070000
-   "IoLen"=dword:D4
-   "Prefix"="COM"
-   "Dll"="csp_serial.dll"
-   "Index"=dword:5
-   "Order"=dword:3
-   "useDMA"=dword:1
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\COM5\Unimodem]
-   "Tsp"="Unimodem.dll"
-   "DeviceType"=dword:0
-   "FriendlyName"="i.MX28 COM5 UNIMODEM"
-   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
-ENDIF	;BSP_SERIAL_UART5
-ENDIF	;BSP_EM9280_GPIO_SPI
+IF BSP_EM9280
+IF BSP_UUT !
+;
+; CS&ZHL MAY-14-2012: registry of three expanded uart ports (HT45B0F)
+;
+	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\SPI_SERIAL\spi_serial.reg"
+ENDIF	; BSP_UUT !
+ENDIF	; BSP_EM9280
 ; @CESYSGEN ENDIF CE_MODULES_SERIAL
 ;------------------------------------------------------------------------------
 
@@ -435,8 +410,8 @@ IF BSP_UUT!
     "Depend90"=hex:14,00,1e,00 ; Wait for standard initialization
                                ; modules to load first (GWES.dll and
                                ; Device.exe).
-ENDIF; BSP_UUT !
-ENDIF ;BSP_NOUPDATETOOL!                               
+ENDIF	;BSP_UUT !
+ENDIF	;BSP_NOUPDATETOOL!                               
 
 ; END HIVE BOOT SECTION
 ;------------------------------------------------------------------------------
@@ -450,7 +425,7 @@ IF BSP_USBOTG
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\UsbOtg]
     "Dll"="fsl_usbotg.dll"
     "Prefix"="OTG"
-    "Order"=dword:10
+    "Order"=dword:25			;iMX28EVK => 10
     "MemBase"=dword:80080000    
     "MemLen"=dword:1000        
     "Irq"=dword:5D
@@ -716,14 +691,12 @@ ENDIF ; BSP_NOUSB !
 
 ; @CESYSGEN IF CE_MODULES_DISPLAY
 IF BSP_NODISPLAY !
-IF BSP_DOTLCD
-	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\DOT_LCD\DOT_LCD.reg"
+IF BSP_DISPLAY_UC1698
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\DOT_LCD\DOT_LCD.reg"
 ELSE
 	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\DISPLAY\ddraw_mx28.reg"
-ENDIF	BSP_DOTLCD
+ENDIF ;BSP_DISPLAY_UC1698
 ENDIF BSP_NODISPLAY !
-
-	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\MKeyPad\mkeypad.reg"
 
 [HKEY_LOCAL_MACHINE\System\GDI\Rotation]
     "Angle"=dword:0      ;; no rotation
@@ -737,11 +710,11 @@ ENDIF BSP_NODISPLAY !
    
 ;IF BSP_PXP
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PXP]
-  "Prefix"="PXP"
- "Dll"="pxp.dll"
-  "Order"=dword:20
-  "Index"=dword:1
-//ENDIF ; BSP_PXP
+   "Prefix"="PXP"
+   "Dll"="pxp.dll"
+   "Order"=dword:20
+   "Index"=dword:1
+;ENDIF ; BSP_PXP
 ; @CESYSGEN ENDIF CE_MODULES_DISPLAY
 ;;------------------------------------------------------------------------------
 ;
@@ -847,7 +820,7 @@ ENDIF ; BSP_NOAUDIO !
 #include "$(_TARGETPLATROOT)\SRC\Drivers\SDHC\sdhc.reg"
 IF BSP_AR6102_SDIO
 #include "$(_FLATRELEASEDIR)\AR6102.reg"
-ENDIF BSP_AR6102_SDIO
+ENDIF ; BSP_AR6102_SDIO
 ; @CESYSGEN ENDIF CE_MODULES_SDBUS
 
 IF BSP_SDBUS_FSL
@@ -868,7 +841,7 @@ ENDIF BSP_SDBUS_FSL
 ; @CESYSGEN IF CE_MODULES_NDIS
 #if (defined BSP_ENET1 || defined BSP_ENET2)
     #include "$(_TARGETPLATROOT)\SRC\DRIVERS\ENET\mx28_enet.reg"
-ENDIF ;
+#endif
 ; @CESYSGEN ENDIF CE_MODULES_NDIS
 ;-------------------------------------------------------------------------------
 
@@ -888,10 +861,7 @@ ENDIF BSP_ENETSWI
 ;; SPI Bus Driver
 ;;
 IF BSP_SSP2_SPI
-[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SPI2]
-   "Prefix"="SPI"
-   "Dll"="spi.dll"
-   "Index"=dword:2
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\SPI\PDK\imx28_spi.reg"
 ENDIF ;BSP_SSP2_SPI
 ;;------------------------------------------------------------------------------
 ;------------------------------------------------------------------------------
@@ -946,6 +916,28 @@ IF BSP_DVFC
    "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"    ; PMCLASS_GENERIC_DEVICE
 ENDIF ;BSP_DVFC
 ;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; CS&ZHL MAY-21-2012: EM9280 specified driver
+;
+IF BSP_EM9280
+IF BSP_UUT !
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\GPIO\em9280_gpio.reg"
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\ISA_IRQ\isa_irq.reg"
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\WDT\wdt.reg"
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\PWM\pwm.reg"
+ENDIF ; BSP_UUT !
+ENDIF ; BSP_EM9280
+;------------------------------------------------------------------------------
+
+
+IF BSP_EM9283
+IF BSP_UUT !
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\GPIO\em9280_gpio.reg"
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\WDT\wdt.reg"
+    #include "$(_TARGETPLATROOT)\SRC\DRIVERS\PWM\pwm.reg"
+ENDIF	; BSP_UUT !
+ENDIF	; BSP_EM9283
 
 ; @CESYSGEN ENDIF CE_MODULES_DEVICE
 ;******************************************************************************
@@ -1023,9 +1015,9 @@ ENDIF ;BSP_DVFC
     "ACUserIdle"=dword:0        ; in seconds
     "ACSystemIdle"=dword:0      ; in seconds
     "ACSuspend"=dword:0     ; in seconds
-    "BattUserIdle"=dword:5     ; in seconds
-    "BattSystemIdle"=dword:20    ; in seconds
-    "BattSuspend"=dword:60       ; in seconds
+    "BattUserIdle"=dword:0     ; in seconds
+    "BattSystemIdle"=dword:0    ; in seconds
+    "BattSuspend"=dword:0       ; in seconds
 ; @CESYSGEN ENDIF PM_PM_DEFAULT_PDD
 ;;;     "BatteryPoll"=dword:1f4         ; battery polling interval, in milliseonds
 ; END HIVE BOOT SECTION
@@ -1116,13 +1108,6 @@ IF BSP_EM9280
 	"RecoveryRefresh"=dword:1B7740		; 30 minutes
 	"Threshold"=dword:5265C00			; 1 day
 	"Server"="pool.ntp.org"
-
-;
-;LQK JUL-9-2012:Select Power source from wall charger or USB.
-;
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power]
-	"Is5VFromUSB"=dword:1
-
 
 ENDIF	;BSP_EM9280
 

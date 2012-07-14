@@ -153,6 +153,8 @@ BOOL OALFMD_Access(VOID* pInpBuffer, UINT32 inpSize)
 			//OALMSG(1, (L"->OALFMD_Access->FMD_ACCESS_CODE_HWINIT\r\n"));
 			if(!g_bNandfmdInitialized)
 			{
+				DWORD	dwType = 0;			// -> vendor authentication
+
 				BSPNAND_SetClock(TRUE);		//enable nfc clock
 
 				// init NandFlash
@@ -175,9 +177,9 @@ BOOL OALFMD_Access(VOID* pInpBuffer, UINT32 inpSize)
 					break;
 				}
 
-				// CS&ZHL APR-9-2012: do security check
-				bRet = FMD_OEMIoControl(IOCTL_DISK_VENDOR_AUTHENTICATION,
-										NULL, 0,
+				// CS&ZHL APR-9-2012: do vendor security check
+				bRet = FMD_OEMIoControl(IOCTL_DISK_AUTHENTICATION,
+										(PBYTE)&dwType, sizeof(DWORD),
 										(PBYTE)&dwStatus, sizeof(DWORD),
 										&dwReturnBytes);
 				if(bRet && (dwReturnBytes == sizeof(DWORD)) && (dwStatus == 1))

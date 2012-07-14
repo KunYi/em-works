@@ -593,6 +593,12 @@ BOOL DDKGpioReadIntrPin(DDK_IOMUX_PIN pin, UINT32 *pData)
         case 2:  
             *pData=HW_PINCTRL_IRQSTAT2_RD();
             break;
+        case 3:  
+            *pData=HW_PINCTRL_IRQSTAT3_RD();
+            break;
+        case 4:  
+            *pData=HW_PINCTRL_IRQSTAT4_RD();
+            break;
         default: 
             goto cleanUp;
     }
@@ -649,3 +655,60 @@ VOID DDKGpioClearIntrPin(DDK_IOMUX_PIN gpio_pin)
 
 }
 
+//-------------------------------------------------------------
+// CS&ZHL MAY-17-2012: supporting GPIO interrupt
+//-------------------------------------------------------------
+VOID DDKGpioIntrruptEnable(DDK_IOMUX_PIN gpio_pin)
+{
+    UINT32 BankNo = DDK_GPIO_GET_BANK(gpio_pin);
+    UINT32 bit =  DDK_GPIO_GET_BIT(gpio_pin); 
+
+    switch( BankNo )
+    {
+        case 0: 
+            HW_PINCTRL_IRQEN0_SET(bit);
+            break;
+        case 1:  
+            HW_PINCTRL_IRQEN1_SET(bit);
+            break;
+        case 2:  
+            HW_PINCTRL_IRQEN2_SET(bit); 
+            break;
+        case 3: 
+            HW_PINCTRL_IRQEN3_SET(bit);
+            break;
+        case 4: 
+            HW_PINCTRL_IRQEN3_SET(bit);
+            break;
+        default: 
+            break;
+    } 
+}
+
+VOID DDKGpioIntrruptDisable(DDK_IOMUX_PIN gpio_pin)
+{
+    UINT32 BankNo = DDK_GPIO_GET_BANK(gpio_pin);
+    UINT32 bit =  DDK_GPIO_GET_BIT(gpio_pin); 
+
+    switch( BankNo )
+    {
+        case 0: 
+            HW_PINCTRL_IRQEN0_CLR(bit);
+            break;
+        case 1:  
+            HW_PINCTRL_IRQEN1_CLR(bit);
+            break;
+        case 2:  
+            HW_PINCTRL_IRQEN2_CLR(bit); 
+            break;
+        case 3: 
+            HW_PINCTRL_IRQEN3_CLR(bit);
+            break;
+        case 4: 
+            HW_PINCTRL_IRQEN3_CLR(bit);
+            break;
+        default: 
+            break;
+    } 
+}
+// end of CS&ZHL MAY-17-2012: supporting GPIO interrupt

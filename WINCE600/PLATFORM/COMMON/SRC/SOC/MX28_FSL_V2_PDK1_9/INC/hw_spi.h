@@ -92,8 +92,8 @@ typedef enum _SPEEDENUM
 //brief Data structure passed into the Initialization function.
 typedef struct _SSP_INIT
 {
-    SSP_MODE  eMode;             // SSP mode of operation
-    SSP_WORDLENGTH eLength;      // data word length
+    SSP_MODE  eMode;				// SSP mode of operation
+    SSP_WORDLENGTH eLength;			// data word length
     BOOL bDmaEnable;                // 0: dma disabled, 1: dma enabled
     BOOL b_ceata_ccs_err_en;        // CEATA Unexpected CCS Error logic enable. 0: disabled, 1: enabled
     BOOL bPhase;                    // SPI, MemStick, and SD modes

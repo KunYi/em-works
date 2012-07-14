@@ -43,6 +43,10 @@ private:
     static DisplayController43WVF1G * SingletonController;    
     DWORD m_Bpp;
 
+	// CS&ZHL MAY-8-2012: display format
+	DWORD	m_dwWidth;
+	DWORD	m_dwHeight;
+
 }; //class
 
 #endif /* __43WVF1G_CONTROLLER_H__ */

@@ -27,6 +27,7 @@
 #include "uce.h"
 #include "uce_media.h"
 #include "common_nandfmd.h"
+#include "security.h"
 #pragma warning(pop)
 
 #define    MAX_FILE_NAME_LENGTH    256
@@ -50,6 +51,11 @@ TCHAR   g_FileName[MAX_FILE_NAME_LENGTH];
 TCHAR   g_FolderName[MAX_STORE_NAME_LENGTH];
 TCHAR   g_DiskName[6];
 HANDLE  g_hFile=INVALID_HANDLE_VALUE;
+
+//
+// CS&ZHL MAY09-2012: add security info
+//
+VENDOR_SECURITY_INFO  g_SecurityInfo;
 
 static DWORD dwStartTime=0, dwElapsedTime=0;
 
@@ -461,7 +467,7 @@ BOOL Cmd_filename(char * pbCmd,DWORD CmdLength)
 BOOL Cmd_send(PUTP_MSG pUTPMsg)
 {
     RETAILMSG(1, (_T("UTP command:Send data.\r\n")));
-    g_UtpCmdState = UCE_RECV_FILE_DATA;
+        g_UtpCmdState = UCE_RECV_FILE_DATA;
     g_MinBufSize = GetMinImgBufSize();
     DEBUGMSG(1, (_T("Minimun image buffer size is : 0x%x.\r\n"),g_MinBufSize));  
     
@@ -511,7 +517,7 @@ BOOL Cmd_send(PUTP_MSG pUTPMsg)
         DEBUGMSG(1,(_T("UceCommandDeal: g_PayloadBuf = g_pCurPayloadBuf is 0x%x. \r\n"),g_pCurPayloadBuf));
         g_RecvDataNum = 0;                           
     }
-    else if(g_FileType == UserFile)
+    else if( (g_FileType == UserFile) || (g_FileType == SecurityFile) )
     {
         RETAILMSG(1, (_T("Prepare to receive file data...\r\n")));
         g_PayloadFinished = 0;
@@ -592,7 +598,19 @@ BOOL Cmd_save()
     {
         RETAILMSG(TRUE, (L"Writing File data: 100%% is finished.\r\n"));
         UceCloseFile(g_hFile);    
-    }            
+    }
+	/* CS&ZHL MAY10-2012: add command for processing the file security.nb0 
+	                      in the case, processing the security receiveing data */
+	else if( g_FileType == SecurityFile )
+	{
+        RETAILMSG(TRUE, (L"Security File data: 100%% is finished.\r\n"));
+		// write security info through OTP
+		RETAILMSG(TRUE, (L"Recv MAC: %02x:%02x:%02x:%02x:%02x:%02x\r\n", g_SecurityInfo.mac[0]&0xff, (g_SecurityInfo.mac[0]>>8 )&0xff, 
+			                                                             g_SecurityInfo.mac[1]&0xff, (g_SecurityInfo.mac[1]>>8 )&0xff,
+																		 g_SecurityInfo.mac[2]&0xff, (g_SecurityInfo.mac[2]>>8 )&0xff));
+        RETAILMSG(TRUE, (L"Time: %04d-%02d-%02d\r\n", g_SecurityInfo.dwYear, g_SecurityInfo.dwMonth, g_SecurityInfo.dwDay ));
+		UceWriteSecurityInfo( (PBYTE)&g_SecurityInfo, sizeof(g_SecurityInfo) );
+	}
     g_UtpCmdState = UCE_IDLE;  
 
     return TRUE;
@@ -630,6 +648,31 @@ void UceCmdInfoPage(PBYTE pBuf)
 
     SetUTPMsgReply(UTP_MSG_REPLAY_PASS, 0);    
 }
+
+// CS&ZHL JUN-1-2012: code for EM9280 uce to check OTP mac
+void UceCmdSecuritySataus(PBYTE pBuf)
+{
+	DWORD	dwCUST[2];
+
+	char *p = (char *)pBuf;
+    
+	dwCUST[0] = dwCUST[1] = 0;
+	// CS&ZHL JUN-1-2012: do otp check
+	UceGetOTPInfo( dwCUST, 8 );
+	
+	if( (dwCUST[0]==0)&&(dwCUST[1]==0) )
+	{
+		strcpy( p, "0\n" );
+	}
+	else
+	{
+		sprintf( p, "1 - MAC:0x%08X Time:0x%08X\n", dwCUST[0], dwCUST[1] );
+	}
+	// end of CS&ZHL JUN-1-2012: do otp check
+
+    SetUTPMsgReply(UTP_MSG_REPLAY_PASS, 0);    
+}
+
 
 // ----------------------------------------------------------------------------
 // Function: UtpMessagePoll
@@ -701,6 +744,11 @@ void UceCommandDeal(
         g_UtpCmdState = UCE_GET_DEVICE_INFO;
         SetUTPMsgReply(UTP_MSG_REPLAY_SIZE, 0x7F);    
     }
+    if (strncmp(pbCmd, "s?", 2) == 0) {
+        RETAILMSG(1, (_T("UTP command:Get device mac info.\r\n")));
+        g_UtpCmdState = UCE_GET_DEVICE_MAC;
+        SetUTPMsgReply(UTP_MSG_REPLAY_SIZE, 0x7F);    
+    }
     else if (strncmp(pbCmd, "!2", 2) == 0) {
         RETAILMSG(1, (_T("UTP command:Reboot device.\r\n")));      
         KernelIoControl(IOCTL_HAL_REBOOT, NULL,0, NULL, 0, NULL);
@@ -756,6 +804,12 @@ void UceCommandDeal(
         g_StartAddr = Char2Int32(pbCmd+6,(CmdLength-6));
         RETAILMSG(1, (_T("UTP command:Write raw data, starting address is 0x%x.\r\n"),g_StartAddr));        
     }    
+	/* CS&ZHL MAY10-2012: add command for processing the file security.nb0 */
+    else if (strncmp(pbCmd,"scr",3) == 0) {    
+        g_UtpCmdState = UCE_BEGIN_RECV_FILE;
+        g_FileType = SecurityFile;
+        RETAILMSG(1, (_T("UTP command:Get security data \r\n") ));        
+    }    
     else if (strncmp(pbCmd,"filename:",9) == 0) {
 
         if(!Cmd_filename(pbCmd,CmdLength))
@@ -792,7 +846,14 @@ void UceTransData(
         case UCE_GET_DEVICE_INFO: 
             UceCmdInfoPage(pbData);
             g_UtpCmdState = UCE_IDLE;
-            break;           
+            
+			break;           
+
+		case UCE_GET_DEVICE_MAC: 
+			UceCmdSecuritySataus( pbData );
+            g_UtpCmdState = UCE_IDLE;
+            
+			break;           
             
         case UCE_RECV_FILE_DATA:{
             switch (g_FileType){
@@ -862,7 +923,18 @@ void UceTransData(
                     RETAILMSG(TRUE, (L"Writing File : %2d%% is finished.\r", 100- (dwRestDataLength*100/g_Payloadsize)));
                     break;
                     }
-                
+				/* CS&ZHL MAY10-2012: add command for processing the file security.nb0 
+				                      in the case, only receiveing data */
+				case SecurityFile:{
+					DWORD dwRestDataLength = g_Payloadsize - g_PayloadFinished;
+					if( DataLength > dwRestDataLength )
+						break;
+					char *p = (char*)&g_SecurityInfo;
+					memcpy( &p[g_PayloadFinished], pbData, DataLength );
+                    g_PayloadFinished += DataLength;
+                    RETAILMSG(TRUE, (L"Recv Security data length: %d .\r\n", DataLength));
+					break;          
+					}
                 default:
                     break;
                 }

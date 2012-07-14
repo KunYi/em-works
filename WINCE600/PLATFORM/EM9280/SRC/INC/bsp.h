@@ -55,7 +55,7 @@ extern "C" {
 #include "image_cfg.h"
 
 // Board Level Definitions
-#include "em9280.h"
+#include "bsp_drivers.h"			// CS&ZHL APR-06-2012: support EM9280 based stream drivers
 
 //------------------------------------------------------------------------------
 

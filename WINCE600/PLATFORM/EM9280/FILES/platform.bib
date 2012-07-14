@@ -76,13 +76,20 @@ ENDIF ;BSP_SSP2_SPI
 ; SERIAL Driver
 ;
 ; @CESYSGEN IF CE_MODULES_SERIAL
-#if (defined BSP_SERIAL_UART2 || defined BSP_SERIAL_UART5)
+#if (defined BSP_SERIAL_UART0 || defined BSP_SERIAL_UART1 || defined BSP_SERIAL_UART2 || defined BSP_SERIAL_UART3 || defined BSP_SERIAL_UART4)
     csp_serial.dll        $(_FLATRELEASEDIR)\csp_serial.dll         NK  SHK
 #endif
 
-IF BSP_SERIAL_DUART1
+IF BSP_SERIAL_DUART
     debug_serial.dll      $(_FLATRELEASEDIR)\debug_serial.dll       NK  SHK
-ENDIF ; BSP_SERIAL_DUART1
+ENDIF ; BSP_SERIAL_DUART
+
+IF BSP_EM9280
+IF BSP_UUT !
+    spi_serial.dll		$(_FLATRELEASEDIR)\spi_serial.dll		NK  SHK
+ENDIF ; BSP_UUT !
+ENDIF ; BSP_EM9280
+
 ; @CESYSGEN ENDIF CE_MODULES_SERIAL
 ;------------------------------------------------------------------------------
 
@@ -113,13 +120,11 @@ ENDIF	;BSP_NONAND_FMD !
 ; Keypad Driver
 ;
 ; @CESYSGEN IF CE_MODULES_KEYBD
-IF BSP_NOKEYPAD !
-IF BSP_EM9280 !
 IF BSP_LRADC
+IF BSP_MX28EVK_KEYPAD
     keypad.dll       $(_FLATRELEASEDIR)\keypad.dll    NK  SHK
+ENDIF ; BSP_MX28EVK_KEYPAD
 ENDIF ; BSP_LRADC
-ENDIF ; BSP_EM9280 !
-ENDIF ; BSP_NOKEYPAD !
 ; @CESYSGEN ENDIF CE_MODULES_KEYBD
 ; -----------------------------------------------------------------------------
 
@@ -129,7 +134,9 @@ ENDIF ; BSP_NOKEYPAD !
 ; @CESYSGEN IF CE_MODULES_BATTDRVR
 IF BSP_NOBATTERY !
 IF BSP_LRADC
+IF BSP_MOUNT_BATT_DRIVER
     battdrvr.dll    $(_FLATRELEASEDIR)\battdrvr.dll	$(XIPKERNEL)  SHK
+ENDIF ; BSP_MOUNT_BATT_DRIVER
 ENDIF ; BSP_LRADC    
 ENDIF ; BSP_NOBATTERY
 ; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
@@ -212,16 +219,15 @@ ENDIF ; BSP_USB_HSH1
 ; @CESYSGEN ENDIF CE_MODULES_USBHOST
 ; -----------------------------------------------------------------------------
 
-ENDIF ; BSP_NOUSB !
+ENDIF ; BSP_NOUSB!
 
 ; -----------------------------------------------------------------------------
 ; USB Keyboard Driver
 ;
 IF BSP_KEYBD_NOP
     kbdmouse.dll $(_FLATRELEASEDIR)\KbdNopUS.dll         $(XIPKERNEL) SHK
-ENDIF BSP_KEYBD_NOP
+ENDIF ; BSP_KEYBD_NOP
 ; -----------------------------------------------------------------------------
-
 
 ; -----------------------------------------------------------------------------
 ; Notification LED Driver
@@ -253,17 +259,16 @@ ENDIF ; BSP_NOTOUCH !
 ;
 ; @CESYSGEN IF CE_MODULES_DISPLAY
 IF BSP_NODISPLAY !
-IF BSP_DOTLCD
-	Dot_lcd.dll			$(_FLATRELEASEDIR)\Dot_lcd.dll               $(XIPKERNEL)  SHK    
+IF BSP_DISPLAY_UC1698
+    dot_lcd.dll		$(_FLATRELEASEDIR)\dot_lcd.dll        $(XIPKERNEL)  SHK
 ELSE
     ddraw_mx28.dll		$(_FLATRELEASEDIR)\ddraw_mx28.dll        $(XIPKERNEL)  SHK
     pxp.dll             $(_FLATRELEASEDIR)\pxp.dll               $(XIPKERNEL)  SHK    
-ENDIF BSP_DOTLCD
-;	
+ENDIF
 ENDIF
 ; @CESYSGEN ENDIF CE_MODULES_DISPLAY
 ; -----------------------------------------------------------------------------
-	mkeypad.dll			          $(_FLATRELEASEDIR)\mkeypad.dll              NK  SHK    
+
 ; -----------------------------------------------------------------------------
 ; Backlight Driver
 ;
@@ -369,6 +374,31 @@ IF BSP_WATERMARK
 ENDIF ; BSP_WATERMARK
 ;------------------------------------------------------------------------------
 
+;------------------------------------------------------------------------------
+; CS&ZHL MAY-21-2012: EM9280 specified driver
+;
+IF BSP_EM9280
+IF BSP_UUT !
+    em9280_gpio.dll		$(_FLATRELEASEDIR)\em9280_gpio.dll	NK  SHK
+    isa_irq.dll			$(_FLATRELEASEDIR)\isa_irq.dll		NK  SHK
+    wdt.dll				$(_FLATRELEASEDIR)\wdt.dll			NK  SHK
+    pwm.dll				$(_FLATRELEASEDIR)\pwm.dll			NK  SHK
+ENDIF ; BSP_UUT !
+ENDIF ; BSP_EM9280
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; CS&ZHL JUL-06-2012: EM9283 specified driver
+;
+IF BSP_EM9283
+IF BSP_UUT !
+    em9280_gpio.dll		$(_FLATRELEASEDIR)\em9280_gpio.dll	NK  SHK
+    wdt.dll				$(_FLATRELEASEDIR)\wdt.dll			NK  SHK
+    pwm.dll				$(_FLATRELEASEDIR)\pwm.dll			NK  SHK
+ENDIF ; BSP_UUT !
+ENDIF ; BSP_EM9283
+;------------------------------------------------------------------------------
+
 ; @XIPREGION ENDIF PACKAGE_OEMDRIVERS
 ; @CESYSGEN ENDIF CE_MODULES_DEVICE
 ;******************************************************************************
@@ -384,7 +414,6 @@ FILES
     tcal.exe              $(_FLATRELEASEDIR)\tcal.exe             NK      U
     rotate.exe            $(_FLATRELEASEDIR)\rotate.exe           NK      U
     audiorouting.exe      $(_FLATRELEASEDIR)\audiorouting.exe     NK      U
-    ShutDownImage160160.bmp $(_FLATRELEASEDIR)\ShutDownImage160160.bmp    NK      U
 
 IF BSP_USB_HSOTG_CLIENT
     USBSet.exe              $(_FLATRELEASEDIR)\USBSet.exe               NK
@@ -406,6 +435,6 @@ ENDIF ; BSP_NOUPDATETOOL!
 #if (defined BSP_SSP1_SDHC || defined BSP_SSP2_SDHC)
 IF BSP_AR6102_SDIO
     #include "$(_FLATRELEASEDIR)\AR6102.bib"
-ENDIF BSP_AR6102_SDIO
+ENDIF ; BSP_AR6102_SDIO
 #endif
 ; @CESYSGEN ENDIF CE_MODULES_SDBUS

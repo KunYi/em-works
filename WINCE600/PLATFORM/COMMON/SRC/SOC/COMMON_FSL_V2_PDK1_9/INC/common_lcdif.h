@@ -328,15 +328,17 @@ VOID LCDIFClearIrq(UINT32 irq_mask);
 VOID LCDIFPowerDown(BOOL bPowerOff);
 VOID LCDIFResetController(LCDIF_RESET reset);
 
-BOOL LCDIFDisplayFrameBuffer(const void* pData );
-BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect );
+BOOL LCDIFDisplayFrameBuffer(const void* pData);
 VOID LCDIFFlush(VOID);
 VOID LCDIFSetInterlace(BOOL bEnable);
 
 VOID LCDIFSetupLCDIFClock(UINT32 PixFreq);
-VOID LCDIFStop( );
-
-
+// ZXW JUN11-2012
+//VOID LCDIFSetupLCDIFClock(UINT32 PixFreq , BOOL bMode );
+//
+// LQK JUL05-2012: add function to support dot_lcd
+//
+BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect );
 #ifdef __cplusplus
 }
 #endif

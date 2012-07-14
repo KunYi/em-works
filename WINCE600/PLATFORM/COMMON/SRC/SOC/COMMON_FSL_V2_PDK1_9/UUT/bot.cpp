@@ -867,7 +867,7 @@ BOT_HandleCBW(
                     else if (dwDirection == DATA_OUT) {
                         ChangeMscState(MSC_STATE_DATA_OUT_TRANSPORT);
                         DEBUGMSG(ZONE_COMMENT, (_T("%s request length = %u\r\n"),
-                            pszFname, g_tdData.RequestLength));   
+                            pszFname, g_tdData.RequestLength)); 
                         BOT_SetupRx(&g_rgPipeTransfers[OUT_TRANSFER], (PBYTE) g_tdData.DataBlock, 
                             g_tdData.RequestLength);
                         fResult = TRUE;

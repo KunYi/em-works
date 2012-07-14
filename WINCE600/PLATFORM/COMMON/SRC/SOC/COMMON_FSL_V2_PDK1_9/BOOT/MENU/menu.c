@@ -74,30 +74,38 @@ BOOL BLMenuShow(BLMENU_ITEM *pMenu)
     for(;;) 
     {
         OALLog(L"\r\n-----------------------------------------------------------------------------\r\n");
-        OALLog(L"Freescale iMX SOC Menu Item   %s",(bCFGChanged ? L"(UNSAVED CHANGES)" : L""));
+        OALLog(L"Freescale iMX SOC Menu Item   %s\r\n",(bCFGChanged ? L"(UNSAVED CHANGES)" : L""));
+		OALLog(L"\r\nManufacture Time: %04d-%02d-%02d %02d:%02d:%02d", g_BootCFG.ExtConfig[10], g_BootCFG.ExtConfig[11], g_BootCFG.ExtConfig[12], 
+			                                                           g_BootCFG.ExtConfig[13], g_BootCFG.ExtConfig[14], g_BootCFG.ExtConfig[15] );
         OALLog(L"\r\n-----------------------------------------------------------------------------\r\n");
 
         // Print menu items
         for (pItemMenu = aMenu; pItemMenu->key != 0; pItemMenu++) 
         {
-            if(pItemMenu->pParam2 == NULL)
-                OALLog(L" [%c] %s \r\n", pItemMenu->key, pItemMenu->text);
-            else 
-            {
-                OALLog(L" [%c] %s", pItemMenu->key, pItemMenu->text);
-                BLMenuPrintData(pItemMenu->key,pItemMenu->pParam2,pItemMenu->pParam3);
-            }
+			if( pItemMenu->key != L'A' )
+			{
+				if(pItemMenu->pParam2 == NULL)
+					OALLog(L" [%c] %s \r\n", pItemMenu->key, pItemMenu->text);
+				else 
+				{
+					OALLog(L" [%c] %s", pItemMenu->key, pItemMenu->text);
+					BLMenuPrintData(pItemMenu->key,pItemMenu->pParam2,pItemMenu->pParam3);
+				}
+			}
         }
         aSoc = pItemMenu+1;
         for (pItemMenu = aSoc; pItemMenu->key != 0; pItemMenu++) 
         {
-            if(pItemMenu->pParam2 == NULL)
-                OALLog(L" [%c] %s \r\n", pItemMenu->key, pItemMenu->text);
-            else 
-            {
-                OALLog(L" [%c] %s", pItemMenu->key, pItemMenu->text);
-                (*PrintSoc)(pItemMenu->key,pItemMenu->pParam2,pItemMenu->pParam3);
-            }
+			if( pItemMenu->key != L'F' )
+			{
+				if(pItemMenu->pParam2 == NULL)
+					OALLog(L" [%c] %s \r\n", pItemMenu->key, pItemMenu->text);
+				else 
+				{
+					OALLog(L" [%c] %s", pItemMenu->key, pItemMenu->text);
+					(*PrintSoc)(pItemMenu->key,pItemMenu->pParam2,pItemMenu->pParam3);
+				}
+			}
         }
 
         OALLog(L"\r\n Selection: ");
@@ -708,6 +716,44 @@ BOOL BLMenuFormatAllNand(BLMENU_ITEM *pMenu)
     return FALSE;
     
 }
+
+//------------------------------------------------------------------------------
+//
+// CS&ZHL MAY28-2012: format Nand Block0-Block15 regions.
+//
+//  Function:  BLMenuFormatBootNand
+//
+//  Provides Formating the Boot regions Nand.
+//
+//  Parameters:
+//      pMenu
+//
+//  Returns:
+//      TRUE indicates exiting menu. FALSE indicates go back to menu.
+//
+//------------------------------------------------------------------------------
+BOOL BLMenuFormatBootNand(BLMENU_ITEM *pMenu)
+{
+    UINT32 Selection;
+    UNREFERENCED_PARAMETER(pMenu);
+
+    KITLOutputDebugString("\r\nWARNING:  Format of NAND boot regions requested.\r\n");
+    KITLOutputDebugString("Boot loader and boot configuration regions will be erased!!!\r\n");
+    KITLOutputDebugString("Do you want to continue (y/n)? ");
+    do {
+        Selection = tolower(OEMReadDebugByte());
+    } while ((Selection != 'y') && (Selection != 'n'));
+    KITLOutputDebugString("\r\n");
+    
+    if (Selection == 'y') 
+    {
+        //NANDFormatAll();
+        NANDFormatBoot();
+    }
+    return FALSE;
+    
+}
+
 
 //------------------------------------------------------------------------------
 //

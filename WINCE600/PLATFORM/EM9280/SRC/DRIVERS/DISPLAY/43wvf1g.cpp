@@ -16,9 +16,85 @@
 #pragma warning(push)
 #pragma warning(disable: 4115 4201 4204 4214)
 #include <windows.h>
+#include <ceddk.h>
 #pragma warning(pop)
 #include "csp.h"
 #include "43wvf1g.h"
+#include "display_panel.h"			// CS&ZHL MAY-8-2012: support different types of LCD
+
+//------------------------------------------------------------------------------
+// CS&ZHL MAR-7-2012:Description of all supported mode for all supported panel
+//------------------------------------------------------------------------------
+DISPLAY_PANEL_MODE PanelModeArray[] =
+{
+    // 320*240 -> 3.5", PCLK = 6.4MHz -> LQ035 
+    {
+		320, 240, 60, 16,		//Width, Height, FrameFreq, BPP
+		// LCD panel specific settings
+		320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		16,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+		32,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		32,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 320 + 16 + 32 + 32 = 400
+		240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		4,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		15,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 240 + 3 + 4 + 15 = 262
+    },
+    // 480*272 -> 4.3", PCLK = 9MHz -> LR430LC9001
+    {
+		480, 272, 60, 16,		//Width, Height, FrameFreq, BPP
+		// LCD panel specific settings -> ZXW modified JUN04-2012
+		480,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		4,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+		4,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		37,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 480 + 37 + 4 + 4 = 525
+		272,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		2,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		10,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 272 + 10 + 2 + 2 = 286
+    },
+    // 640*480 -> 5.6" -> AT050TN22, 
+    {
+		640, 480, 60, 16,		//Width, Height, FrameFreq, BPP
+		// LCD panel specific settings
+		640,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; (other config: 64, 40, 56)
+		16,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		134,					//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 640 + 10 + 16 + 134 = 800
+		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		32,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		11,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 2 + 32 + 11 = 525
+    },
+    // 800*480 -> 7.0", PCLK = 33.3MHz -> AT070TN83 V1
+    {
+		800, 480, 68, 16,		//Width, Height, FrameFreq, BPP
+		// LCD panel specific settings
+#ifdef	EM9280
+		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		48,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
+		40,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		40,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 800 + 48 + 40 + 40 = 928
+		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		13,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		29,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 3 + 13 + 29 = 525
+#else	// -> iMX28EVK->Seiko 4.3" 43WVF1G-0
+		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
+		164,					//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		89,						//dwHBackPorch      -> DOTCLK_HB_PORCH;
+		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		10,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		23,						//dwVBackPorch      -> DOTCLK_VB_PORCH;
+#endif	//EM9280
+    }
+};
+
+// CS&ZHL MAY-8-2012: handler of LCD controller
+static PVOID	pv_HWregLCDIF;
+
 
 #define MSG_DUMP_REG 0
 
@@ -36,7 +112,7 @@
 #define DOTCLK_V_WAIT_CNT			(DOTCLK_V_PULSE_WIDTH + DOTCLK_VB_PORCH)
 #define DOTCLK_V_PERIOD				(DOTCLK_VF_PORCH + DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_V_PULSE_WIDTH)
 
-#define PIX_CLK    33500
+#define PIX_CLK						33500
 
 extern DWORD BSPLoadPixelDepthFromRegistry();
 DisplayController43WVF1G* DisplayController43WVF1G::SingletonController = NULL;
@@ -126,8 +202,9 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
     if(bPoweroff)
     {
-
-
+#ifdef	EM9280
+		// nothing to do in EM9280
+#else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_GPIO);
@@ -140,21 +217,31 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0, DDK_IOMUX_MODE_GPIO);
+#endif	//EM9280
     }
     else
     {
-
+#ifdef	EM9280
+		// LCD_D0 & LCD_D1 are used for other purposes in EM9280
+#else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
+#endif	//EM9280
+
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D5,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
 
+#ifdef	EM9280
+		// LCD_D8 & LCD_D9 are used for other purposes in EM9280
+#else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D8,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D9,DDK_IOMUX_MODE_00);
+#endif	//EM9280
+
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
@@ -162,8 +249,12 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
 
+#ifdef	EM9280
+		// LCD_D16 & LCD_D17 are used for other purposes in EM9280
+#else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_00);
+#endif	//EM9280
 
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
@@ -174,10 +265,15 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
         // setup the pin for LCDIF block
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,  DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0,   DDK_IOMUX_MODE_01);
+        DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0, DDK_IOMUX_MODE_01);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_01);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,  DDK_IOMUX_MODE_01);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET,  DDK_IOMUX_MODE_00);
+
+#ifdef	EM9280
+		// LCD_RESET is used as GPIO26(IRQ3) in EM9280
+#else	// -> iMX28EVK
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET,  DDK_IOMUX_MODE_00);
+#endif	//EM9280
 
         // Set pin drive to 8mA,enable pull up,3.3V
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D0, 
@@ -320,14 +416,78 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 //-----------------------------------------------------------------------------
 void DisplayController43WVF1G::BSPInitLCDIF(BOOL bReset)
 {
+    LCDIF_INIT			LcdifInit;
+    LCDIFVSYNC			LCDIfVsync;
+    LCDIFDOTCLK			sLcdifDotclk;
+	PDISPLAY_PANEL_MODE pPanel = NULL;				// CS&ZHL MAR-7-2012: supporting multiple LCD panels
+	PHYSICAL_ADDRESS	phyAddr;
+	DWORD				dwTranferCountReg;
 
 
-    LCDIF_INIT LcdifInit;
-    LCDIFVSYNC LCDIfVsync;
-    LCDIFDOTCLK sLcdifDotclk;
+	//
+	// CS&ZHL MAY-8-2012: get LCD type according to the resolution of splash screen
+	//
+	if (pv_HWregLCDIF == NULL)
+	{
+		//Mem maps the LCDIF module space for access
+		phyAddr.QuadPart = CSP_BASE_REG_PA_LCDIF;
+		pv_HWregLCDIF = (PVOID)MmMapIoSpace(phyAddr, 0x1000, FALSE);
+		if(pv_HWregLCDIF == NULL)
+		{
+			ERRORMSG(1, (TEXT("BSPInitLCDIF:: pv_HWregLCDIF map failed!\r\n")));
+			return;
+		}
+	}
 
-    // Start the PIX clock and set frequency
-    LCDIFSetupLCDIFClock(PIX_CLK);
+	// get current state of LCDC Size Register
+	dwTranferCountReg = HW_LCDIF_TRANSFER_COUNT_RD();
+	m_dwWidth  = dwTranferCountReg & 0xFFFF;
+	m_dwHeight = (dwTranferCountReg >> 16) & 0xFFFF;
+
+	// CS&ZHL MAR-7-2012: get panel format index -> 
+	//					  return = 0: no bmp 
+	//					  return = 1: 320x240 
+	//					  return = 2: 480x272 (4.3" LCD)
+	//				      return = 3: 640x480 (default)
+	//					  return = 4: 800x480 (7" LCD)
+	//
+	if((m_dwWidth == 320) && (m_dwHeight == 240))
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 320*240\r\n")));
+		pPanel = &PanelModeArray[0];
+		LCDIFSetupLCDIFClock(6400); // zxw : 3.5" 6.4MHz => 6400KHz
+	}
+	else if((m_dwWidth == 480) && (m_dwHeight == 272))
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 480*272\r\n")));
+		pPanel = &PanelModeArray[1];
+		LCDIFSetupLCDIFClock(9000); // zxw : 4.3" 9MHz => 9000KHz
+	}
+	else if((m_dwWidth == 640) && (m_dwHeight == 480))
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 640*480\r\n")));
+		pPanel = &PanelModeArray[2];
+		LCDIFSetupLCDIFClock(25000); // zxw : 5.6" 25MHz => 25000KHz
+	}
+	else if((m_dwWidth == 800) && (m_dwHeight == 480))
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 800*480\r\n")));
+		pPanel = &PanelModeArray[3];
+		LCDIFSetupLCDIFClock(33300); // zxw : 7", 68.3Hz FrameFreq => 33.3MHz => 33300KHz
+	}
+	else
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: unkown dispaly format!\r\n")));
+		pPanel = NULL;
+		// use default display format 800*480
+		m_dwWidth  = DOTCLK_H_ACTIVE;
+		m_dwHeight = DOTCLK_V_ACTIVE;
+		// Start the PIX clock and set frequency
+		LCDIFSetupLCDIFClock(PIX_CLK);
+	}
+
+    //// Start the PIX clock and set frequency
+    //LCDIFSetupLCDIFClock(PIX_CLK);
        
     LcdifInit.bBusyEnable = FALSE;
     LcdifInit.eBusMode = BUSMODE_8080;
@@ -361,7 +521,7 @@ void DisplayController43WVF1G::BSPInitLCDIF(BOOL bReset)
     LcdifInit.Timing.BYTE.u8CmdHold   = 1; 
 
     DDKIomuxSetupLCDIFPins(FALSE);    
-    LCDIFInit(&LcdifInit, bReset,FALSE);
+    LCDIFInit(&LcdifInit, bReset, FALSE);
     
     LCDIFSetBusMasterMode(TRUE);
     LCDIFSetIrqEnable(LCDIF_IRQ_FRAME_DONE);    
@@ -372,28 +532,61 @@ void DisplayController43WVF1G::BSPInitLCDIF(BOOL bReset)
     else
         LCDIFSetBytePacking(0x0F);    
 
-    LCDIfVsync.bOEB = FALSE;
-    LCDIfVsync.ePolarity = POLARITY_LOW;
-    LCDIfVsync.eVSyncPeriodUnit =VSYNC_UNIT_HORZONTAL_LINE;
+    LCDIfVsync.bOEB                 = FALSE;
+    LCDIfVsync.ePolarity            = POLARITY_LOW;
+    LCDIfVsync.eVSyncPeriodUnit     = VSYNC_UNIT_HORZONTAL_LINE;
     LCDIfVsync.eVSyncPulseWidthUnit = VSYNC_UNIT_HORZONTAL_LINE;
-    LCDIfVsync.u32PulseWidth = DOTCLK_V_PULSE_WIDTH;
-    LCDIfVsync.u32Period    =DOTCLK_V_PERIOD;
-    LCDIfVsync.WaitCount    =DOTCLK_V_WAIT_CNT;
-
+	//
+	// CS&ZHL MAR-7-2012: supporting multiple LCD panels
+	//
+	if(pPanel != NULL)
+	{
+		LCDIfVsync.u32PulseWidth    = pPanel->dwVSyncPulseWidth;											//DOTCLK_V_PULSE_WIDTH;
+		LCDIfVsync.u32Period        = pPanel->dwVFrontPorch + pPanel->dwVBackPorch + pPanel->dwVHeight;		//DOTCLK_V_PERIOD;
+		LCDIfVsync.WaitCount        = pPanel->dwVBackPorch;													//DOTCLK_V_WAIT_CNT;
+	}
+	else
+	{
+		LCDIfVsync.u32PulseWidth    = DOTCLK_V_PULSE_WIDTH;
+		LCDIfVsync.u32Period        = DOTCLK_V_PERIOD;
+		LCDIfVsync.WaitCount        = DOTCLK_V_WAIT_CNT;
+	}
     LCDIFSetupVsync(&LCDIfVsync);
 
-    sLcdifDotclk.bEnablePresent = TRUE;
-    sLcdifDotclk.eHSyncPolarity             = POLARITY_LOW;
-    sLcdifDotclk.eEnablePolarity    = POLARITY_HIGH;
-    sLcdifDotclk.eDotClkPolarity    = POLARITY_HIGH;
-    sLcdifDotclk.u32HsyncPulseWidth = DOTCLK_H_PULSE_WIDTH;
-    sLcdifDotclk.u32HsyncPeriod             = DOTCLK_H_PERIOD;
-    sLcdifDotclk.u32HsyncWaitCount  = DOTCLK_H_WAIT_CNT;
-    sLcdifDotclk.u32DotclkWaitCount = DOTCLK_H_ACTIVE;
-
+    sLcdifDotclk.bEnablePresent  = TRUE;
+    sLcdifDotclk.eHSyncPolarity  = POLARITY_LOW;
+    sLcdifDotclk.eEnablePolarity = POLARITY_HIGH;
+    sLcdifDotclk.eDotClkPolarity = POLARITY_HIGH;
+	//
+	// CS&ZHL MAR-7-2012: supporting multiple LCD panels
+	//
+	if(pPanel != NULL)
+	{
+		sLcdifDotclk.u32HsyncPulseWidth = pPanel->dwHSyncPulseWidth;											//DOTCLK_H_PULSE_WIDTH;
+		sLcdifDotclk.u32HsyncPeriod     = pPanel->dwHBackPorch + pPanel->dwHFrontPorch + pPanel->dwHWidth;		//DOTCLK_H_PERIOD;
+		sLcdifDotclk.u32HsyncWaitCount  = pPanel->dwHBackPorch;													//DOTCLK_H_WAIT_CNT;
+		sLcdifDotclk.u32DotclkWaitCount = pPanel->dwHWidth;														//DOTCLK_H_ACTIVE;
+	}
+	else
+	{
+		sLcdifDotclk.u32HsyncPulseWidth = DOTCLK_H_PULSE_WIDTH;
+		sLcdifDotclk.u32HsyncPeriod     = DOTCLK_H_PERIOD;
+		sLcdifDotclk.u32HsyncWaitCount  = DOTCLK_H_WAIT_CNT;
+		sLcdifDotclk.u32DotclkWaitCount = DOTCLK_H_ACTIVE;
+	}
     LCDIFSetupDotclk(&sLcdifDotclk);
 
-    LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
+	//
+	// CS&ZHL MAR-7-2012: supporting multiple LCD panels
+	//
+	if(pPanel != NULL)
+	{
+		LCDIFSetTransferCount(pPanel->dwHWidth, pPanel->dwVHeight);												//(800,480); 
+	}
+	else
+	{
+		LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
+	}
 
     LCDIFSetSyncSignals(TRUE);
     LCDIFSetDotclkMode(TRUE);
@@ -480,6 +673,9 @@ void DisplayController43WVF1G::DispDrvrPowerHandler(BOOL bOn, BOOL bInit, BOOL b
 //------------------------------------------------------------------------------
 DisplayController43WVF1G::DisplayController43WVF1G()
 {
+	// use default display format 800*480
+	m_dwWidth  = DOTCLK_H_ACTIVE;
+	m_dwHeight = DOTCLK_V_ACTIVE;
 }
 
 //------------------------------------------------------------------------------
@@ -497,7 +693,8 @@ DisplayController43WVF1G::DisplayController43WVF1G()
 //------------------------------------------------------------------------------
 DWORD DisplayController43WVF1G::GetWidth()
 {
-    return  DOTCLK_H_ACTIVE;
+    //return  DOTCLK_H_ACTIVE;
+	return	m_dwWidth;
 }
 
 //------------------------------------------------------------------------------
@@ -515,7 +712,8 @@ DWORD DisplayController43WVF1G::GetWidth()
 //------------------------------------------------------------------------------
 DWORD DisplayController43WVF1G::GetHeight()
 {
-    return  DOTCLK_V_ACTIVE;
+	//return  DOTCLK_V_ACTIVE;
+    return  m_dwHeight;
 }
 
 //------------------------------------------------------------------------------
@@ -535,6 +733,19 @@ DWORD DisplayController43WVF1G::GetHeight()
 //------------------------------------------------------------------------------
 void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
 {
+#ifdef	EM9280
+	// use GPIO1_0 as output for LCD_PWR
+    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
+	DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
+    if(Enable)
+    {
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0);	// turn on LCD power, active low
+    }
+    else
+    {
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 1);	// turn off LCD power, active low
+    }
+#else	// ->iMX28EVK
     if(Enable)
     {
         Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
@@ -548,6 +759,7 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
         DDKGpioEnableDataPin(DDK_IOMUX_PWM2,1);   //Enable as output
         DDKGpioWriteDataPin(DDK_IOMUX_PWM2,0);  //Pull low to display PWM output    
     }
+#endif	//EM9280
 }
 
 //------------------------------------------------------------------------------

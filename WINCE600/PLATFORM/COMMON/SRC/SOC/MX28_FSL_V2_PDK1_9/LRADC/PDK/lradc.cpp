@@ -23,6 +23,7 @@
 #include "lradc_class.h"
 //-----------------------------------------------------------------------------
 // External Functions
+extern DWORD BSPGetBoardType();
 
 //-----------------------------------------------------------------------------
 // External Variables
@@ -148,7 +149,7 @@ BOOL LRADCDealloc(void)
 //-----------------------------------------------------------------------------
 DWORD LDC_Init()
 {
-    BOOL rc = FALSE;
+    BOOL	rc = FALSE;
 
     STLRADCCONFIGURE stLradconfig;
 
@@ -241,14 +242,13 @@ BOOL LDC_Deinit(DWORD hDeviceContext)
 //-----------------------------------------------------------------------------
 DWORD LDC_Open(DWORD hDeviceContext, DWORD AccessCode, DWORD ShareMode)
 {
-
     // Remove-W4: Warning C4100 workaround
     UNREFERENCED_PARAMETER(AccessCode);
     UNREFERENCED_PARAMETER(ShareMode);
-    UNREFERENCED_PARAMETER(hDeviceContext);
+    //UNREFERENCED_PARAMETER(hDeviceContext);
 
-    // Open is meaningless!
-    return 1;
+    // Open is just pass handle
+    return hDeviceContext;
 }
 
 //-----------------------------------------------------------------------------
@@ -338,14 +338,177 @@ void LDC_PowerUp(void)
 //-----------------------------------------------------------------------------
 DWORD LDC_Read(DWORD hOpenContext, LPVOID pBuffer, DWORD Count)
 {
-    // Remove-W4: Warning C4100 workaround
-    UNREFERENCED_PARAMETER(hOpenContext);
-    UNREFERENCED_PARAMETER(pBuffer);
-    UNREFERENCED_PARAMETER(Count);
+    //// Remove-W4: Warning C4100 workaround
+    //UNREFERENCED_PARAMETER(hOpenContext);
+    //UNREFERENCED_PARAMETER(pBuffer);
+    //UNREFERENCED_PARAMETER(Count);
 
-    // Nothing to read
-    return 0;
+    //// Nothing to read
+    //return 0;
+
+    // hOpenContext is a pointer to LRADCClass instance!
+    LRADCClass*	pLRADC = (LRADCClass*)hOpenContext;
+	PDAQ_INFO	pDaqInfo;
+	DWORD		dwReadBytes = 0;
+	DWORD		dwBoardType = BSPGetBoardType();
+
+	if(!pBuffer || (Count != sizeof(DAQ_INFO)))
+	{
+		RETAILMSG (1, (TEXT("LDC_Read: invalid parameters 1\r\n")));
+		return (DWORD)-1;
+	}
+
+	pDaqInfo = (PDAQ_INFO)pBuffer;
+
+	switch(pDaqInfo->dwCmd)
+	{
+	case EM9280_DAQ_VOLTAGE_CH0:
+		//RETAILMSG (1, (TEXT("LDC_Read: EM9280_DAQ_VOLTAGE_CH0\r\n")));
+		if(dwBoardType == BOARD_TYPE_EM9280)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureNormalChannel(LRADC_CH0);
+		}
+		else if(dwBoardType == BOARD_TYPE_EM9283)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureNormalChannel(LRADC_CH1);
+		}
+		else
+		{
+			RETAILMSG (1, (TEXT("LDC_Read: unknown board type\r\n")));
+			return (DWORD)-1;
+		}
+		strcpy(pDaqInfo->UnitName, "0.9mV");
+		dwReadBytes = sizeof(DWORD);
+		break;
+
+	case EM9280_DAQ_VOLTAGE_CH1:
+		//RETAILMSG (1, (TEXT("LDC_Read: EM9280_DAQ_VOLTAGE_CH1\r\n")));
+		if(dwBoardType == BOARD_TYPE_EM9280)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureNormalChannel(LRADC_CH1);
+		}
+		else if(dwBoardType == BOARD_TYPE_EM9283)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureNormalChannel(LRADC_CH6);
+		}
+		else
+		{
+			RETAILMSG (1, (TEXT("LDC_Read: unknown board type\r\n")));
+			return (DWORD)-1;
+		}
+		strcpy(pDaqInfo->UnitName, "0.9mV");
+		dwReadBytes = sizeof(DWORD);
+		break;
+
+	case EM9280_DAQ_VDD_5V:
+		//RETAILMSG (1, (TEXT("LDC_Read: EM9280_DAQ_VDD_5V\r\n")));
+		pDaqInfo->dwData = pLRADC->MeasureVDD5V();
+		strcpy(pDaqInfo->UnitName, "mV");
+		dwReadBytes = sizeof(DWORD);
+		break;
+
+	case EM9280_DAQ_CPU_TEMPERATURE:
+		//RETAILMSG (1, (TEXT("LDC_Read: EM9280_DAQ_CPU_TEMPERATURE\r\n")));
+		pDaqInfo->dwData = pLRADC->MeasureDieTemperature();
+		strcpy(pDaqInfo->UnitName, "Kalvin");
+		dwReadBytes = sizeof(DWORD);
+		break;
+
+	case EM9280_DAQ_BOARD_TEMPERATURE:
+		//RETAILMSG (1, (TEXT("LDC_Read: EM9280_DAQ_BOARD_TEMPERATURE\r\n")));
+		if(dwBoardType == BOARD_TYPE_EM9280)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureBatteryTemperature(LRADC_CH6);
+		}
+		else if(dwBoardType == BOARD_TYPE_EM9283)
+		{
+			pDaqInfo->dwData = pLRADC->MeasureBatteryTemperature(LRADC_CH0);
+		}
+		else
+		{
+			RETAILMSG (1, (TEXT("LDC_Read: unknown board type\r\n")));
+			return (DWORD)-1;
+		}
+		strcpy(pDaqInfo->UnitName, "Kalvin");
+		dwReadBytes = sizeof(DWORD);
+		break;
+
+	default:
+		RETAILMSG (1, (TEXT("LDC_Read: CMD%d not supported\r\n")));
+		return (DWORD)-1;
+	}
+
+	return dwReadBytes;
 }
+
+/*
+	PDWORD				pU32Buf;
+	DWORD				i;
+	DWORD				dwTimeout;
+		// set input range = 2:1 => 3.6 Full Range
+		LradcConfig.bEnableDivideByTwo = TRUE;
+
+		// set number of samples for each acquisition
+		LradcConfig.u8NumSamples = (UINT8)pDaqInfo->dwNumOfSample;
+
+		// enable accumulation
+		LradcConfig.bEnableAccum = TRUE;
+		if(!pLRADC->ConfigureChannel(&LradcConfig))
+		{
+			RETAILMSG (1, (TEXT("LDC_Read: channel config failed\r\n")));
+			return (DWORD)-1;
+		}
+
+		// enable interrupt
+		pLRADC->EnableInterrupt(LradcConfig.eChannel, TRUE);
+
+		// wait for a while
+		Sleep(10);
+
+		// setup output data buffer
+		pU32Buf = pDaqInfo->pDataBuf;
+
+		// clear accum in register
+        //pLRADC->ClearAccum( LradcConfig.eChannel );
+
+		for(i = 0; i < pDaqInfo->dwNumOfData; i++)
+		{
+			dwTimeout = GetTickCount() + 10;
+			// Schedule the measurement and wait for it to complete.
+			pLRADC->ScheduleChannel(LradcConfig.eChannel);
+			//while(pLRADC->GetInterruptFlag(LradcConfig.eChannel) == 0);
+			//pLRADC->ClearInterruptFlag( LradcConfig.eChannel );
+			while(GetTickCount() < dwTimeout)
+			{
+				//if(pLRADC->GetInterruptFlag(LradcConfig.eChannel))
+				if(!pLRADC->ScheduleState(LradcConfig.eChannel))
+				{
+					pLRADC->ClearInterruptFlag( LradcConfig.eChannel );
+					break;
+				}
+			}
+
+			if(GetTickCount() >= dwTimeout)
+			{
+				RETAILMSG (1, (TEXT("LDC_Read: LRADC_CH%d timeout\r\n"), LradcConfig.eChannel));
+				dwReadBytes = 0;
+				break;
+			}
+
+			// Read the measurement and then clear the accumulator to prepare
+			// for the next reading.
+			dwData = pLRADC->GetAccumValue(LradcConfig.eChannel);
+			pLRADC->ClearAccum( LradcConfig.eChannel );
+
+			// fill data to output buffer
+			*pU32Buf = dwData / pDaqInfo->dwNumOfSample;
+			pU32Buf++;
+			dwReadBytes += sizeof(DWORD);
+		}
+		// disable interrupt
+		pLRADC->EnableInterrupt(LradcConfig.eChannel, FALSE);
+*/
+
 //-----------------------------------------------------------------------------
 //
 // Function: LDC_Write

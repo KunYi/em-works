@@ -71,6 +71,38 @@ VOID OALStall(UINT32 microSec)
     }
     while (HW_DIGCTL_MICROSECONDS_RD() <= expireTime) ;
 }
+/*
+VOID OALStall(UINT32 dwMicroSecond)
+{
+	UINT32	dwStartUS;
+	UINT32	dwCurrentUS;
+	UINT32	dwElapsedUS = 0;
+
+    if(pv_HWregDIGCTL == NULL)
+    {
+        pv_HWregDIGCTL = (PVOID)OALPAtoVA(CSP_BASE_REG_PA_DIGCTL, FALSE);
+
+        //enable the digital Control Microseconds counter
+        HW_DIGCTL_CTRL.B.XTAL24M_GATE = 0;
+    }
+
+	dwStartUS = HW_DIGCTL_MICROSECONDS_RD();
+	while(dwElapsedUS < dwMicroSecond)
+	{
+		dwCurrentUS = HW_DIGCTL_MICROSECONDS_RD();
+		if(dwCurrentUS >= dwStartUS)
+		{
+			// normal counting
+			dwElapsedUS = dwCurrentUS - dwStartUS;
+		}
+		else
+		{
+			// count wrap happened
+			dwElapsedUS = ~dwStartUS + dwCurrentUS + 1;
+		}
+	}
+}
+*/
 
 //-----------------------------------------------------------------------------
 //

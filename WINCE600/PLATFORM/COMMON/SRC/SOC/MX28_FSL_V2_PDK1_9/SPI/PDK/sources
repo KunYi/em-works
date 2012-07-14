@@ -28,4 +28,10 @@ SOURCES=\
     spiclass.cpp
 
 FILE_VIEW_INCLUDES_FOLDER= \
-    spiclass.h
+    spiclass.h \
+    ..\..\INC\hw_spi.h \
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    spi.def \
+

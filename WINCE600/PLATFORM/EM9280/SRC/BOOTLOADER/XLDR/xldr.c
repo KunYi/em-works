@@ -28,9 +28,6 @@ static BOOL s_bUsb         = FALSE;
 static BOOL s_bBattery     = FALSE;
 static UINT32 BattVoltage  = 0;
 
-#ifdef EM9283 
-	#define BSP_5V_FROM_VBUS 1
-#endif
 //------------------------------------------------------------------------------
 // Local Functions
 
@@ -464,17 +461,17 @@ void InitDebugSerial()
 
     HW_UARTDBGIMSC_WR(0x0);
 
-
     // Configure the GPIO UART pins.
-    HW_PINCTRL_MUXSEL7_SET(0xF000F);          // Switch both pins to GPIO
-    HW_PINCTRL_MUXSEL7_CLR(1 << 2);       // DBG-TX (bank 3 pin 17) muxmode=10
-    HW_PINCTRL_MUXSEL7_CLR(1 << 0);       // DBG-RX (bank 3 pin 16) muxmode=10
-
-	/*HW_PINCTRL_MUXSEL7_SET(0xF000F);          // Switch both pins to GPIO
-	HW_PINCTRL_MUXSEL6_SET(0x00F0);          // Switch both pins to GPIO
-	HW_PINCTRL_MUXSEL6_CLR(1 << 4);       // DBG-TX (bank 3 pin 6) muxmode=10
-	HW_PINCTRL_MUXSEL6_CLR(1 << 6);       // DBG-RX (bank 3 pin 7) muxmode=10
-	*/
+//#ifdef	EM9280
+//    HW_PINCTRL_MUXSEL7_SET(0xF000F);        // Switch both (GPIO3_16, GPIO3_17) and ((GPIO3_24, GPIO3_25)) to GPIO
+//    HW_PINCTRL_MUXSEL6_SET(0xF0);			// Switch (GPIO3_2, GPIO3_3) to GPIO
+//    HW_PINCTRL_MUXSEL6_CLR(1 << 6);			// DBG-TX (bank 3 pin 3) muxmode=10
+//    HW_PINCTRL_MUXSEL6_CLR(1 << 4);			// DBG-RX (bank 3 pin 2) muxmode=10
+//#else	// -> iMX28EVK
+    HW_PINCTRL_MUXSEL7_SET(0xF000F);        // Switch both pins to GPIO
+    HW_PINCTRL_MUXSEL7_CLR(1 << 2);			// DBG-TX (bank 3 pin 17) muxmode=10
+    HW_PINCTRL_MUXSEL7_CLR(1 << 0);			// DBG-RX (bank 3 pin 16) muxmode=10
+//#endif	//EM9280
 
     // Set the Baud Rate
     HW_UARTDBGIBRD_WR((HW_UARTDBGIBRD_RD() & BM_UARTDBGIBRD_UNAVAILABLE) | GET_UARTDBG_BAUD_DIVINT(DEBUG_BAUD));
@@ -534,9 +531,23 @@ void InitPower()
     s_b5V = 0;
 
     // LCD power turn off.
+#ifdef	EM9280
+	// use GPIO1_0 as output for LCD_PWR
+	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN00);
+    HW_PINCTRL_DOE1_SET(1 << 0);
+    HW_PINCTRL_DOUT1_SET(1 << 0);		//active low
+#else	// -> iMX28EVK
     HW_PINCTRL_MUXSEL7_SET(BM_PINCTRL_MUXSEL7_BANK3_PIN30);
     HW_PINCTRL_DOE3_SET(1 << 30);
-    HW_PINCTRL_DOUT3_CLR(1 << 30);
+    HW_PINCTRL_DOUT3_CLR(1 << 30);		//active high
+#endif	//EM9280
+
+#ifdef	EM9280
+	// GPIO1_1 is used as USB0_PWR, turn off USB0 VBUS
+	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN01);
+    HW_PINCTRL_DOE1_SET(1 << 1);
+    HW_PINCTRL_DOUT1_CLR(1 << 1);		//active high
+#endif	//EM9280
 
 #ifdef BSP_5V_FROM_VBUS
     CPUClock2XTAL();
@@ -561,7 +572,9 @@ void InitPower()
 
     // Restore the VDDIO 3.3V
     HW_POWER_VDDIOCTRL_WR(HW_POWER_VDDIOCTRL_RD() | BM_POWER_VDDIOCTRL_BO_OFFSET);    
-    HW_POWER_VDDIOCTRL_WR((HW_POWER_VDDIOCTRL_RD() & ~BM_POWER_VDDIOCTRL_TRG) | VDDIOVolt2Reg(3300));
+    //HW_POWER_VDDIOCTRL_WR((HW_POWER_VDDIOCTRL_RD() & ~BM_POWER_VDDIOCTRL_TRG) | VDDIOVolt2Reg(3300));
+	// CS&ZHL JUN-15-2012: 3.3V setting -> 3.415V, so change to 3.2V setting -> 3.311V
+    HW_POWER_VDDIOCTRL_WR((HW_POWER_VDDIOCTRL_RD() & ~BM_POWER_VDDIOCTRL_TRG) | VDDIOVolt2Reg(3200));
 
     // need to wait more than 10 microsecond before the DC_OK is valid
     XLDRStall(30);
@@ -582,8 +595,11 @@ void InitPower()
     HW_POWER_VDDDCTRL_CLR(BM_POWER_VDDDCTRL_DISABLE_STEPPING);
     HW_POWER_VDDACTRL_CLR(BM_POWER_VDDACTRL_DISABLE_STEPPING);
 
+    // JLY05-2012:LQK
+#ifndef EM9283
 	// Enable auto restart.
-	//HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
+	HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
+#endif // EM9283 
 
     HW_POWER_5VCTRL.B.HEADROOM_ADJ = 4;
 
@@ -601,7 +617,14 @@ void InitPower()
     XLDRWriteDebugByte('\r');
     XLDRWriteDebugByte('\n');
 
-#ifdef EM9283 //lqk 2012-5-30
+#ifdef	EM9280
+	// no battery for power supply in EM9280
+    s_bBattery = FALSE;
+    PowerStopCharger();		//stop charger unconditionally
+#else	// -> EM9283 or iMX28EVK
+
+#ifdef	EM9283  //lqk 2012-5-30
+#ifdef  LOWER_POWER_AUTO_SHUTDOWN
 	// Clear auto restart for automatic battery brownout shutdown. 
 	HW_RTC_PERSISTENT0_CLR(BM_RTC_PERSISTENT0_AUTO_RESTART);
 	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=0;
@@ -622,11 +645,8 @@ void InitPower()
 
 	// Set battery Brownout threshold to 3000mv
 	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=15;
-
-#else 
-	// Enable auto restart.
-	HW_RTC_PERSISTENT0_SET(BM_RTC_PERSISTENT0_AUTO_RESTART);
-
+#endif
+#else
     //Detect whether there is a good battery
     if(IsBatteryGood())
     {
@@ -635,8 +655,8 @@ void InitPower()
         XLDRWriteDebugByte('\n');
         s_bBattery = TRUE;
     }
-
-#endif //lqk 2012-5-30
+#endif   // EM9283
+#endif	//EM9280
 
     //Detect whether 5V is present
     if(Is5VPresent())
@@ -653,13 +673,13 @@ void InitPower()
         XLDRWriteDebugByte('U');
         XLDRWriteDebugByte('\r');
         XLDRWriteDebugByte('\n');
-
 #ifdef BSP_5V_FROM_VBUS
         BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20);
 #endif    
         s_bUsb = TRUE;
     }
 
+// JLY05-2012: LQK
 #ifdef EM9283	// lqk 2012-5-30
 	if( s_b5V == TRUE )
 	{
@@ -672,7 +692,6 @@ void InitPower()
 		CPUClock2PLL();
 	}
 #else
-
     //If battery is good
     if(s_bBattery == TRUE)
     {
@@ -690,7 +709,7 @@ void InitPower()
     //Direct boot from USB,current limited to 100mA
     else if(s_b5V == TRUE)
         BootFrom4P2();
-#endif
+#endif     //EM9283
 }
 
 //-----------------------------------------------------------------------------
@@ -787,6 +806,9 @@ BOOL IsBatteryGood()
     BatteryVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
     if((BatteryVoltage > BATTERY_LOW) && (BatteryVoltage < BATTERY_HIGH))
 	{
+        //return TRUE;
+		// JLY05-2012:LQK
+#ifdef EM9283		
 		HW_POWER_REFCTRL.B.FASTSETTLING =1;
 		if( HW_POWER_STS.B.BATT_BO == 0 )
 		{
@@ -809,6 +831,9 @@ BOOL IsBatteryGood()
 		}
 		HW_POWER_REFCTRL.B.FASTSETTLING =0;
 		return FALSE;
+#else
+		return TRUE;
+#endif
 	}
     else
     {
@@ -936,7 +961,7 @@ void BootFromBattery()
 }
 //-----------------------------------------------------------------------------
 //
-//  Function:  BootFromUSB
+//  Function:  BootFrom4P2
 //
 //  This function is used to set the PMU to boot from USB 5V.
 //
@@ -1044,9 +1069,13 @@ void ChargeBattery2Boot()
     XLDRWriteDebugByte('(');
     XLDRWriteDebugByte('3');
     XLDRWriteDebugByte('.');
+#ifdef EM9283                   //JLY05-2012: LQK
     XLDRWriteDebugByte('2');
 	XLDRWriteDebugByte('5');
-	XLDRWriteDebugByte('V');
+#else
+	XLDRWriteDebugByte('6');
+#endif
+    XLDRWriteDebugByte('V');
     XLDRWriteDebugByte(')');
     XLDRWriteDebugByte('\r');
     XLDRWriteDebugByte('\n');
@@ -1308,7 +1337,7 @@ void CPUClock2PLL()
     HW_CLKCTRL_FRAC0_CLR(BM_CLKCTRL_FRAC0_CLKGATECPU);
 
     HW_CLKCTRL_FRAC0_WR((HW_CLKCTRL_FRAC0_RD() & ~BM_CLKCTRL_FRAC0_CPUFRAC) | \
-                        BF_CLKCTRL_FRAC0_CPUFRAC(18));
+                        BF_CLKCTRL_FRAC0_CPUFRAC(18));		//18? Is it right?!
 
     dwRegFrac = HW_CLKCTRL_FRAC0_RD() & BM_CLKCTRL_FRAC0_CPU_STABLE;
     for(; (HW_CLKCTRL_FRAC0_RD() ^ dwRegFrac) == 0; ) ;
