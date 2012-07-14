@@ -1,0 +1,3 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [01:0000000026:WARNN ] d:\wince600\platform\common\src\soc\common_fsl_v2_pdk1_9\boot\fmd\nand\nandboot.c(734) : warning C4701: potentially uninitialized local variable 'dwValidImageBlock' used
+BUILD: [01:0000000027:WARNN ] d:\wince600\platform\common\src\soc\common_fsl_v2_pdk1_9\boot\fmd\nand\nandboot.c(744) : warning C4701: potentially uninitialized local variable 'EndLogBlkAddr' used
