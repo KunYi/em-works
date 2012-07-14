@@ -1,0 +1,13 @@
+; CS&ZHL MAY-15-2012: test SPP0
+;IF BSP_EM9280
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SPI1]
+   ;"Prefix"="SPI"
+   ;"Dll"="spi.dll"
+   ;"Index"=dword:0		; -> SSP0
+   ;"CSIndex"=dword:0	; = 0, 1, 2
+;ENDIF	;BSP_EM9280
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SPI2]
+   "Prefix"="SPI"
+   "Dll"="spi.dll"
+   "Index"=dword:2		;->SSP2
