@@ -1,8 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><WorkspaceUserOptions><Favorites /><ActiveSourcesFiles>
   <FileGuidMapper>
     <Pair>
-      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\InstallNandFlash2\sources</Path>
-      <Guid>61973415-e77b-4f75-9fce-23779ea42f70</Guid>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\BTS\sources</Path>
+      <Guid>e5318d14-8cf3-4c92-a8f8-e3134145bfcd</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\netip_api\sources</Path>
+      <Guid>105f352b-9d80-4749-b669-e65b69df2761</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\RASEntry\sources</Path>
+      <Guid>0c569194-4725-463c-8ecd-989743429019</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\sysinfo\sources</Path>
+      <Guid>e1ce301d-8da2-451f-acef-1f8918b9e8ff</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\wstartup\sources</Path>
+      <Guid>90afb811-dc18-452e-b609-b5528316b635</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\update\sources</Path>
+      <Guid>b723eac8-9240-41db-98d7-d8dc96a3148d</Guid>
     </Pair>
   </FileGuidMapper>
 </ActiveSourcesFiles></WorkspaceUserOptions>
