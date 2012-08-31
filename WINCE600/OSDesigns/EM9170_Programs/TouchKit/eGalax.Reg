@@ -1,0 +1,56 @@
+[HKEY_LOCAL_MACHINE\Drivers\TouchKit]
+"RBSIZE"=dword:800
+"RBTIME"=dword:FFFFFF
+"FLAGS"=dword:1
+"ZFilterThreshold"=dword:800
+"ZFilterBound"=dword:00100001
+"SoundType"=dword:0
+"NoPostRange"=dword:80
+"DRAWTEST"="画画看"
+"Cal4Pts"="4 点校正"
+"Cal25Pts"="25 点校正"
+"Quit"="离开"
+"UpdateEEPROM"="Update EEPROM from File"
+"Sound"="声音"
+"NoSound"="无声"
+"SoundDown"="接触时发声"
+"SoundUp"="离开时发声"
+"Clear"="清除"
+"Message"="Message"
+"EEPROMFail"="存取 EEPROM 错误!"
+"CalHint"="请按下闪烁的符号直到停止闪烁."
+	
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll" 
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\Default\3\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\Default\3\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\Default\3\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\Default\3\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\Default\3\USB_TOUCH_Driver]
+"DLL"="\SysFlash\Touch\USBTouch.dll"
+
+[HKEY_LOCAL_MACHINE\DRIVERS\BuiltIn\TouchKit1]
+"Dll"="\SysFlash\Touch\TouchKit.dll"
+"Order"=dword:1
+"Prefix"="TKT"
+"Index"=dword:1
+"Context"=dword:3
+	
+[HKEY_LOCAL_MACHINE\Drivers\Display\VIA]
+"RotationDegree"=dword:0
+
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+"CalibrationData"="1960,2032 1112,1144 1080,2928 2880,2992 2944,1020"

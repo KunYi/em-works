@@ -1,0 +1,18 @@
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\1250_5140\Default\Default\XRUSBSER]
+   "Prefix"="COM"
+   "Dll"="xrusbser.DLL"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\1250_5138\Default\Default\XRUSBSER]
+   "Prefix"="COM"
+   "Dll"="xrusbser.DLL"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\1250_5136\Default\Default\XRUSBSER]
+   "Prefix"="COM"
+   "Dll"="xrusbser.DLL"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\ClientDrivers\XRUSBSER]
+   "Prefix"="COM"
+   "Dll"="xrusbser.DLL"
+   "DeviceArrayIndex"=dword:0
+   "RxBufferSize"=dword:4000
+   "IClass"="{CC5195AC-BA49-48a0-BE17-DF6D1B0173DD}"

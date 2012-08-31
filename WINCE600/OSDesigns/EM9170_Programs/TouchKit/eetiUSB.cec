@@ -1,0 +1,49 @@
+CECInfo
+(
+	Name ( ".Dll EETI" )
+	CECVersion ( 5.00 )
+	Description ( "EETI USB Touch Screen Driver" )
+	GUID ( {07167CF4-D8EA-4B2C-BB09-313FABEB7166} )
+	Vendor ( "EETI Inc." )
+)
+ComponentType
+(
+	Name ( "Touch" )
+	GUID ( {C9BDFD27-6B38-498C-8DD9-C7C96AFB6860} )
+	Description ( "Import Device Drivers" )
+	Group ( "\Device Drivers\Touch" )
+	Vendor ( "Microsoft" )
+	HelpID ( 481 )
+	MaxResolvedImpsAllowed( 1 )
+	Implementations
+	(
+		Implementation
+		(
+			Name ( "eeti USB" )
+			GUID ( {69571FC1-B316-4C66-AEFB-CFCD08E58F93} )
+			Description ( "EETI USB Driver" )
+			Version ( "2.0.14.6019" )
+			Locale ( 0409 )
+			Date ( "2007/10/8" )
+			Variable( "MODULE_NAME", "UsbTouch.dll" )
+			SizeIsCPUDependent( 1 )
+			BuildMethods
+			(
+				BuildMethod
+				(
+					GUID ( {B4CECA4F-76B9-4937-AF50-41461F7931FE} )
+					Step ( CESYSGEN )
+					CPU ( "ARMV4I" )
+					CPU ( "Emulator" )
+					CPU ( "MIPSII" )
+					CPU ( "MIPSII_FP" )
+					CPU ( "MIPSIV" )
+					CPU ( "MIPSIV_FP" )
+					CPU ( "SH4" )
+					CPU ( "x86" )
+					Action ( '#SRCCODE( USER_PROJECT, "C:\EETICEDB\wince500\eetiUSB.pbpxml" )' )
+				)
+			)
+		)
+	)
+)

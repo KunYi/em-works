@@ -1,0 +1,50 @@
+_COMMONPUBROOT=$(_PROJECTROOT)\cesysgen
+__PROJROOT=$(_PROJECTROOT)
+RELEASETYPE=LOCAL
+_ISVINCPATH=$(_WINCEROOT)\public\common\sdk\inc;
+_OEMINCPATH=$(_WINCEROOT)\public\common\oak\inc;$(_WINCEROOT)\public\common\sdk\inc;
+TARGETNAME=xrusbser
+FILE_VIEW_ROOT_FOLDER= \
+    ReadMe.txt \
+    prelink.bat \
+    postlink.bat \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    usbclientfunc.h \
+    usbinstl.h \
+    usbser.h \
+    usbserv.h \
+    userdev.h \
+
+SOURCES= \
+    usbinstl.cpp \
+    usbser.cpp \
+    usbserv.cpp \
+    userdev.cpp \
+    mdd.c \
+    cserpdd.cpp \
+
+CDEFINES=$(CDEFINES) -Dxrusbser_EXPORTS, -DUSE_NEW_SERIAL_MODEL
+    
+TARGETTYPE=DYNLINK
+POSTLINK_PASS_CMD=postlink.bat
+PRELINK_PASS_CMD=prelink.bat
+FILE_VIEW_PARAMETER_FOLDER= \
+    xrusbser.bib \
+    xrusbser.reg \
+    xrusbser.dat \
+    xrusbser.db \
+    xrusbser.def \
+    ProjSysgen.bat \
+
+INCLUDES= \
+    $(_WINCEROOT)\public\common\ddk\inc; \
+    $(_WINCEROOT)\public\common\oak\inc; \
+
+SOURCELIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+    
+DLLENTRY=DllEntry
