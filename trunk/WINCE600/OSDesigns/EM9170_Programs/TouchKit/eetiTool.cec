@@ -1,0 +1,41 @@
+CECInfo
+(
+	Name ( "eetiTool" )
+	CECVersion ( 5.00 )
+	Description ( "EETI Touch Toolkit" )
+	GUID ( {4BA96E24-B945-48E8-B710-1AA8FEC2CCB6} )
+	Vendor ( "EETI Inc." )
+)
+ComponentType
+(
+	Name ( "Touch" )
+	GUID ( {90954C5F-63B2-4FD4-852C-A6DC0F9183B7} )
+	Description ( "eeti Touch Tool" )
+	Group ( "\Device Drivers\Touch" )
+	Vendor ( "eeti" )
+	MaxResolvedImpsAllowed( 1 )
+	Implementations
+	(
+		Implementation
+		(
+			Name ( "eeti TouchKit" )
+			GUID ( {ABF95069-C06D-495B-B5FF-F57C257BBB6E} )
+			Description ( "eeti Touch Toolkit" )
+			Version ( "2.0.14.6019" )
+			Locale ( 0409 )
+			Vendor ( "eeti" )
+			Date ( "2007/10/9" )
+			SizeIsCPUDependent( 1 )
+			BuildMethods
+			(
+				BuildMethod
+				(
+					GUID ( {A6A14BFD-519E-4853-BA49-964CA597A4E5} )
+					Step ( CESYSGEN )
+					CPU ( "DEFAULT" )
+					Action ( '#SRCCODE( USER_PROJECT, "C:\EETICEDB\wince500\eetiTool.pbpxml" )' )
+				)
+			)
+		)
+	)
+)

@@ -1,0 +1,7 @@
+   	[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\TouchKit1]
+   		"Dll"="TouchKit.dll"
+   		"Order"=dword:00000100
+   		"Prefix"="TKT"
+   		"Index"=dword:00000001
+   		"Context"=dword:1;
+     

@@ -1,0 +1,12 @@
+   	[HKEY_LOCAL_MACHINE\Drivers\TouchKit]
+   		"RBSIZE"=dword:800
+   		"RBTIME"=dword:FFFFFF
+   		"FLAGS"=dword:1
+   		"BeepFrequence"=dword:1F4
+   		"BeepTime"=dword:64
+   		"ZFilterThreshold"=dword:800
+   		"ZFilterBound"=dword:00100001
+   		"SoundType"=dword:0			
+   		"NoPostRange"=dword:80	
+ 
+;  		#include "C:\EETICEDB\wince500\language_e.reg"

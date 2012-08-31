@@ -1,0 +1,21 @@
+WINCEREL=1
+RELEASETYPE=LOCAL
+TARGETNAME=eetiDrivers
+FILE_VIEW_ROOT_FOLDER= \
+  postlink.bat \
+
+TARGETTYPE=NOTARGET
+SOURCES= \
+
+CDEFINES=
+FILE_VIEW_PARAMETER_FOLDER= \
+    eeti232.bib \
+    eeti232.reg \
+    eetiUSB.bib \
+    eetiUSB.reg \
+    eetiTool.bib \
+    eetiTool.reg \
+    Language_e.Reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+
