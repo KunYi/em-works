@@ -1,2 +1,4 @@
 BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [00:0000000009:WARNS ] Directory: D:\WINCE600\platform\common\src\soc\COMMON_FSL_V2\INC\ does not exist.
+BUILD: [00:0000000008:WARNN ] File: D:\WINCE600\OSDesigns\EM9170_Programs\CANApp\PlatformBuilderTempProject.vcproj.ZHL-LINUX.Owner.user does not exist (2).
+BUILD: [00:0000000010:WARNS ] Directory: D:\WINCE600\platform\common\src\soc\COMMON_FSL_V2\INC\ does not exist.
+BUILD: [00:0000000026:WARNN ] D:\WINCE600\OSDesigns\EM9170_Programs\CANApp\: Missing source file: D:\WINCE600\platform\EM9170\lib\ARMV4I\debug\cansdk.lib.

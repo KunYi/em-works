@@ -23,7 +23,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
     ULARGE_INTEGER  uCaller, uTotalSize, uFreeSize;
 	MEMORYSTATUS    mMemory;
 
-	printf("EM91670 System Info V1.0\n");
+	printf("EM9K System Info V1.0\n");
 	printf("   Emtronix(c) 2011\n");
 
 	_tcscpy( szWorkPathName, _T("NandFlash") );

@@ -27,6 +27,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	else
 	{
 		RETAILMSG(1, (TEXT("ActivateDevice success.\r\n")));
+		//CS&ZHL AUG-11-2011: registry -> "Launch129"="InstallNandFlash2.exe"
+		SignalStarted( 129 );
 	}
 
 	return 0;

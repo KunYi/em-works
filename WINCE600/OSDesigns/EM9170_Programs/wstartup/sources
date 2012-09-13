@@ -18,6 +18,7 @@ FILE_VIEW_INCLUDES_FOLDER= \
 
 SOURCES= \
     wstartup.cpp \
+    rotation.cpp \
 
 INCLUDES= \
     $(_PROJECTROOT)\cesysgen\sdk\INC; \
@@ -46,3 +47,14 @@ FILE_VIEW_PARAMETER_FOLDER= \
     wstartup.db \
     ProjSysgen.bat \
 
+!IF ("$(BSP_EM9170)" == "1")
+CDEFINES=$(CDEFINES) -DEM9170
+!ENDIF
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
