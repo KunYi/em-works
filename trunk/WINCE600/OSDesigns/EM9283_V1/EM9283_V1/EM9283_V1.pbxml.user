@@ -2,27 +2,27 @@
   <FileGuidMapper>
     <Pair>
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\BTS\sources</Path>
-      <Guid>e5318d14-8cf3-4c92-a8f8-e3134145bfcd</Guid>
+      <Guid>593c9408-645d-46b7-8bbc-b37475dbc459</Guid>
     </Pair>
     <Pair>
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\netip_api\sources</Path>
-      <Guid>105f352b-9d80-4749-b669-e65b69df2761</Guid>
+      <Guid>ae6cb567-c900-45f4-bdbc-ab4ac4d2ecb0</Guid>
     </Pair>
     <Pair>
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\RASEntry\sources</Path>
-      <Guid>0c569194-4725-463c-8ecd-989743429019</Guid>
+      <Guid>65716448-e81d-467f-af73-5b0c2172e693</Guid>
     </Pair>
     <Pair>
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\sysinfo\sources</Path>
-      <Guid>e1ce301d-8da2-451f-acef-1f8918b9e8ff</Guid>
-    </Pair>
-    <Pair>
-      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\wstartup\sources</Path>
-      <Guid>90afb811-dc18-452e-b609-b5528316b635</Guid>
+      <Guid>3a3c2268-8ecf-4f2c-ba1b-1d85e7047708</Guid>
     </Pair>
     <Pair>
       <Path>D:\WINCE600\OSDesigns\EM9170_Programs\update\sources</Path>
-      <Guid>b723eac8-9240-41db-98d7-d8dc96a3148d</Guid>
+      <Guid>b9b5bf6c-6a00-4358-b27a-a9b9468b0fc6</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\wstartup\sources</Path>
+      <Guid>5e637fe1-dc72-4760-9922-da98ee7e1213</Guid>
     </Pair>
   </FileGuidMapper>
 </ActiveSourcesFiles></WorkspaceUserOptions>

@@ -89,15 +89,12 @@
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_unimodem" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_services" />
     <Feature Name="Item" CatalogItemId="Item:MS:sysgen_multiui" />
-    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msim" />
   </FeatureCollection>
   <ConfigurationCollection Name="Configurations" EnforceUniqueItems="False">
     <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Retail" FriendlyName="EM9280 ARMV4I Debug">
       <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP2 SPIBUS:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART0:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART1:iMX28-EVK-PDK1_9_EM9280" />
@@ -108,7 +105,12 @@
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Flash:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:CDItem:Emtronix:LCD:iMX28-EVK-PDK1_9_EM9280:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Keypad:EM9283" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:PHDC Support_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:EmtronixWVF1G(WVGA):iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280" />
       </FeatureCollection>
       <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
       <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
@@ -144,10 +146,8 @@
     </Configuration>
     <Configuration Name="Item" TargetBinFilename="chain.lst" BuildType="Retail" FriendlyName="EM9280 ARMV4I Release">
       <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:I2CBUS1:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART2:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP2 SPIBUS:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART0:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:UART1:iMX28-EVK-PDK1_9_EM9280" />
@@ -158,7 +158,12 @@
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Backlight PWM:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Battery:iMX28-EVK-PDK1_9_EM9280" />
         <Feature Name="Item" CatalogItemId="Item:Emtronix:Flash:iMX28-EVK-PDK1_9_EM9280" />
-        <Feature Name="Item" CatalogItemId="Item:Emtronix:CDItem:Emtronix:LCD:iMX28-EVK-PDK1_9_EM9280:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:Keypad:EM9283" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:SSP1 SDHC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:LRADC:iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:PHDC Support_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:EmtronixWVF1G(WVGA):iMX28-EVK-PDK1_9_EM9280" />
+        <Feature Name="Item" CatalogItemId="Item:Emtronix:TOUCH:iMX28-EVK-PDK1_9_EM9280" />
       </FeatureCollection>
       <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
       <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
@@ -193,5 +198,7 @@
       <Cpu Name="Cpu" CpuName="ARMV4I" />
     </Configuration>
   </ConfigurationCollection>
-  <SdkCollection Name="SDKs" />
+  <SdkCollection Name="SDKs">
+    <Sdk Name="Item" Filename="%pbworkspaceroot%\SDKs\SDK1\SDK1.sdkcfg" />
+  </SdkCollection>
 </Workspace>
