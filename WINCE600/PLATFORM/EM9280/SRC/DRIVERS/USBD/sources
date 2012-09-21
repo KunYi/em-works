@@ -33,7 +33,8 @@ SOURCELIBS=\
 TARGETLIBS=\
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
     $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
-    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib	\
+	$(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\pmuSdk.lib  
 
 CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO -DERIC_MX233_USB  -DUSB_WAKEUP_NONE
 #-DUSB_WAKEUP_CNANDDN
@@ -43,3 +44,6 @@ SOURCES=\
     hwinit.c         \
     i_usbclock.c \
     i_usbutils.c
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+    $(INCLUDES)

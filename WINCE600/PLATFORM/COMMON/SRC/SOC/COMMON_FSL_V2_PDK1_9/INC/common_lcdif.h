@@ -339,6 +339,9 @@ VOID LCDIFSetupLCDIFClock(UINT32 PixFreq);
 // LQK JUL05-2012: add function to support dot_lcd
 //
 BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect );
+//LQK:Jul-12-2012
+void LCDIFGetTiming( UINT32 *pTiming );
+
 #ifdef __cplusplus
 }
 #endif

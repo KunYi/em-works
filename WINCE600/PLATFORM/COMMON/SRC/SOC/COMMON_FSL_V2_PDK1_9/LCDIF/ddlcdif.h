@@ -233,6 +233,14 @@ public:
     SCODE   Line(GPELineParms *pLineParms, EGPEPhase phase);
     SCODE   WrappedEmulatedLine(GPELineParms *pLineParms);    
 
+	//
+	//LQK SEP-19-2012
+	//
+	// DDLcdif_shutdown.cpp
+	DDGPESurf	   *m_pSplashSurface; //Surface for shutdown image
+	BOOL DDLcdif::AllocSplashSurfaces(DWORD modeNumber);
+	// END LQK SEP-19-2012
+
 private:
     DDLcdif();
 

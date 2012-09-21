@@ -9,6 +9,7 @@
    "Index"=dword:1			; MUST BE = 1
    
    "PollingTimeout"=dword:0a	;10ms
+   "MKeyPadFormat"=dword:3		;0:3x3(in out) 1:4x3 2:4x4 3:5x4 4:5x5
    ;KEYINOUT
    "KEY00"=dword:0D
    "KEY01"=dword:6A
@@ -29,10 +30,10 @@
    "KEY31"=dword:33
    "KEY32"=dword:32
    "KEY33"=dword:31
-   "KEY34"=dword:5C
+   "KEY34"=dword:6A
    "KEY40"=dword:08
    "KEY41"=dword:27
    "KEY42"=dword:28
    "KEY43"=dword:25
-   "KEY44"=dword:14  
+   "KEY44"=dword:6F  
 

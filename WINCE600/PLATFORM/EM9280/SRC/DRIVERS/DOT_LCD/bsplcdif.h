@@ -29,7 +29,8 @@ Notes:
 #define		GET_MAX_CONTRAST_LEVEL		 0
 #define		GET_DEFAULT_CONTRAST_LEVEL	 1
 #define     SZREGKEY					(TEXT("System\\GDI\\Drivers"))
-#define		SZCONTRASTLEVEL  				(TEXT("ContrastLevel"))
+#define		SZCONTRASTLEVEL  			(TEXT("ContrastLevel"))
+#define		SZSHUTDOWNIMAGE				(TEXT("ShutDownImage"))
 
 
 #endif //__BSPLCDIF__

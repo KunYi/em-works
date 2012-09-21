@@ -256,7 +256,7 @@ void OEMPowerOff()
         OALMSG(1, (_T("INFO: OEMPowerOff wakeUp...\r\n")));
         // Increase ARM/AHB rate 
         SOCPowerOnCPURate();
-
+		
         // Get interrupt source
         irq = HW_ICOLL_STAT_RD() & BM_ICOLL_STAT_VECTOR_NUMBER;
 
@@ -1035,9 +1035,11 @@ static VOID SOCPowerOffCPURate(VOID)
 static VOID SOCPowerOnCPURate(VOID)
 {
     //OALMSG(1, (L"SOCPowerOnCPURate++ \r\n"));
-
+	
     //Ungating CPU_REF clock
     HW_CLKCTRL_FRAC0_CLR(BM_CLKCTRL_FRAC0_CLKGATECPU);
+
+	//OALMSG(1, (_T("INFO: OEMPowerOff wakeUp...\r\n")));
 
     // config CLK_CPU driver for High setpoint
     HW_CLKCTRL_CPU_WR((BF_CLKCTRL_CPU_DIV_CPU(1)            |
@@ -1048,11 +1050,12 @@ static VOID SOCPowerOnCPURate(VOID)
 
 
     // restore HBus XBus Setting
+	
     HW_CLKCTRL_HBUS_WR(SocBackupReg.CLKCTRL_HBUS);
 
     HW_CLKCTRL_XBUS_WR(SocBackupReg.CLKCTRL_XBUS);
 
-
+	
     //let CPU sink the CPU_REF clock
     HW_CLKCTRL_CLKSEQ_CLR(BM_CLKCTRL_CLKSEQ_BYPASS_CPU);
 	

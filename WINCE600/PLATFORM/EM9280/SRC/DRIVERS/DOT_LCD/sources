@@ -36,6 +36,11 @@ available after sysgen.  If you want to build and link this target AFTER the sys
 is complete, comment out the following line -- otherwise you will get a LIB
 file.
 !ENDIF
+
+!IF "$(BSP_NODISPLAY)" == "1"
+SKIPBUILD=1
+!ENDIF
+
 DOSYSGEN=1
 
 SYNCHRONIZE_DRAIN=1

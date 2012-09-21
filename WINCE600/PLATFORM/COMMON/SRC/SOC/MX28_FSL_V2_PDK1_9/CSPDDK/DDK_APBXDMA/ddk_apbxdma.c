@@ -100,11 +100,24 @@ BOOL DDKApbxStartDma(UINT8 Channel,PVOID memAddrPA, UINT8 semaphore)
     ApbxDumpCtrlRegs();
     ApbxDumpChanRegs(Channel);
 #endif
-    // Load command chain pointer
-    HW_APBX_CHn_NXTCMDAR_WR(Channel, memAddressPA);
-
-    // Increment dma semaphore
-    BW_APBX_CHn_SEMA_INCREMENT_SEMA(Channel, semaphore);
+    //// Load command chain pointer
+	//HW_APBX_CHn_NXTCMDAR_WR(Channel, memAddressPA);
+    //// Increment dma semaphore
+    //BW_APBX_CHn_SEMA_INCREMENT_SEMA(Channel, semaphore);
+	//
+	// CS&ZHL AUG-23-2012: set next_cmd address only if semaphore != 0
+	//
+	if(semaphore)
+	{
+		HW_APBX_CHn_NXTCMDAR_WR(Channel, memAddressPA);
+		// Increment dma semaphore
+		BW_APBX_CHn_SEMA_INCREMENT_SEMA(Channel, semaphore);
+	}
+	else
+	{
+		// Increment dma semaphore by net one
+		BW_APBX_CHn_SEMA_INCREMENT_SEMA(Channel, 1);
+	}
 
     rc = TRUE;
 

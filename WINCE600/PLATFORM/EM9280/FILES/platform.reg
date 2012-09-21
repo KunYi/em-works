@@ -255,6 +255,11 @@ ENDIF ; BSP_LRADC
 ; Keypad Driver
 ;
 ; @CESYSGEN IF CE_MODULES_KEYBD
+;lqk:jul-14-2012
+IF BSP_MATRIX_KEYPAD
+	#include "$(_TARGETPLATROOT)\SRC\DRIVERS\MKEYPAD\MKEYPAD.reg"
+ENDIF
+
 IF BSP_LRADC
 IF BSP_MX28EVK_KEYPAD
 [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\KEYPADS]
@@ -704,6 +709,16 @@ ENDIF BSP_NODISPLAY !
 ;   "Angle"=dword:B4     ;; 180 degrees rotated clockwise
 ;   "Angle"=dword:10E    ;; 270 degrees rotated clockwise
 
+; LQK:Jul-14-2012
+[HKEY_LOCAL_MACHINE\System\GDI\Drivers]
+	"ContrastLevel"=dword:3c
+	"ShutDownImage"="Windows\\ShutDownImage160160.bmp"
+	
+;lqk:jul-14-2012
+[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Power]
+	"Is5VFromUSB"=dword:1	;;1:power source is from wall charger
+							;;0:power source is from USB
+
 ;
 ; Let GWES save/restore video memory during suspend/resume
 ;
@@ -1059,7 +1074,8 @@ ENDIF
 ;
 ; CS&ZHL DEC-9-2011: EM9280 specified settings
 ;
-IF BSP_EM9280
+;IF BSP_EM9280
+#if (defined BSP_EM9280 || defined BSP_EM9283 )
 [HKEY_LOCAL_MACHINE\Time Zones]
 	"Default"="China Standard Time"
 
@@ -1109,11 +1125,13 @@ IF BSP_EM9280
 	"Threshold"=dword:5265C00			; 1 day
 	"Server"="pool.ntp.org"
 
-ENDIF	;BSP_EM9280
+;ENDIF	;BSP_EM9280
+#endif
 
 ;;------------------------------------------------------------------------------
 
 
 ;; @XIPREGION ENDIF PLATFORM_REGISTRY_DEFAULT
 ;
+
 

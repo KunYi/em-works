@@ -80,14 +80,23 @@ void BSPBacklightInitialize()
     }
 	// JLY05-2012: LQK
 #ifdef EM9283
-    //Setup IOMUX
+    /*//Setup IOMUX
     PWMChSetIOMux(PWM_CHANNEL_7,DDK_IOMUX_MODE_01);
 
     //Setup initial frequency and duty cycle with 1 kHz
     PWMChSetConfig(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,
                    BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
-    //Enable PWM2
-    PWMChOutputEnable(PWM_CHANNEL_7,TRUE);
+    //Enable PWM7
+    PWMChOutputEnable(PWM_CHANNEL_7,TRUE);*/
+	//Setup IOMUX
+	//LQK:Jul-17-2012
+	PWMChSetIOMux(PWM_CHANNEL_4,DDK_IOMUX_MODE_00);
+
+	//Setup initial frequency and duty cycle with 1 kHz
+	PWMChSetConfig(PWM_CHANNEL_4,PWM_STATE_HIGH, PWM_STATE_LOW,
+		BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
+	//Enable PWM4
+	PWMChOutputEnable(PWM_CHANNEL_4,TRUE);
 #else
     //Setup IOMUX
     PWMChSetIOMux(PWM_CHANNEL_2,DDK_IOMUX_MODE_00);
@@ -147,7 +156,7 @@ void BSPBacklightSetIntensity(DWORD level)
     }
 	// JLY05-2012: LQK
 #ifdef EM9283
-    PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
+    /*PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
     //Level = 0,disable PWM
     if (level == 0) 
     {
@@ -157,7 +166,19 @@ void BSPBacklightSetIntensity(DWORD level)
     else 
     {
         PWMChOutputEnable(PWM_CHANNEL_7, TRUE);
-    }
+    }*/
+	//LQK:Jul-17-2012
+	PWMChSetDutyCycle(PWM_CHANNEL_4,PWM_STATE_HIGH, PWM_STATE_LOW,level);
+	//Level = 0,disable PWM
+	if (level == 0) 
+	{
+		PWMChOutputEnable(PWM_CHANNEL_4, FALSE);
+	}
+	//Enable PWM
+	else 
+	{
+		PWMChOutputEnable(PWM_CHANNEL_4, TRUE);
+	}
 #else
     PWMChSetDutyCycle(PWM_CHANNEL_2,PWM_STATE_HIGH, PWM_STATE_LOW,level);
     //Level = 0,disable PWM
@@ -194,15 +215,21 @@ void BSPBacklightEnable(BOOL Enable)
 	if(Enable)
 	{
 		Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_01);//Set to PWM mode to output PWM, 
+		//DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_01);//Set to PWM mode to output PWM, 
+		//LQK:Jul-17-2012
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,DDK_IOMUX_MODE_00);//Set to PWM mode to output PWM, 
 		//frequency has been set in backlight
 		//driver already.
 	}
 	else
 	{
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_GPIO);  //Set PWM pin to GPIO mode
-		DDKGpioEnableDataPin(DDK_IOMUX_PWM7,1);   //Enable as output
-		DDKGpioWriteDataPin(DDK_IOMUX_PWM7,0);  //Pull low to display PWM output    
+		//DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_GPIO);  //Set PWM pin to GPIO mode
+		//DDKGpioEnableDataPin(DDK_IOMUX_PWM7,1);   //Enable as output
+		//DDKGpioWriteDataPin(DDK_IOMUX_PWM7,0);  //Pull low to display PWM output    
+		//LQK:Jul-17-2012
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,DDK_IOMUX_MODE_GPIO);  //Set PWM pin to GPIO mode
+		DDKGpioEnableDataPin(DDK_IOMUX_PWM4_1,1);   //Enable as output
+		DDKGpioWriteDataPin(DDK_IOMUX_PWM4_1,0);  //Pull low to display PWM output    
 	}
 #endif      // EM9283
 }

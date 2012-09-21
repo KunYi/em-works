@@ -69,4 +69,5 @@ SOURCES= \
     ..\ddlcdif_cursor.cpp \
     ..\ddlcdif_line.cpp \
     ..\ddlcdif_blt.cpp \
-    ..\ddlcdif_escape.cpp
+    ..\ddlcdif_escape.cpp \
+    ..\ddlcdif_shutdown.cpp
