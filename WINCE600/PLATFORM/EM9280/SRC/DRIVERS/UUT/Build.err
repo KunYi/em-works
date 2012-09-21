@@ -1,3 +1,0 @@
-BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [01:0000000093:ERRORE] uut_common_fsl_v2_pdk1_9.lib(uce.obj) : error LNK2019: unresolved external symbol sprintf referenced in function "void __cdecl UceCmdInfoPage(unsigned char *)" (?UceCmdInfoPage@@YAXPAE@Z)
-BUILD: [01:0000000094:ERRORE] D:\WINCE600\platform\EM9280\target\ARMV4I\retail\uut.dll : fatal error LNK1120: 1 unresolved externals
