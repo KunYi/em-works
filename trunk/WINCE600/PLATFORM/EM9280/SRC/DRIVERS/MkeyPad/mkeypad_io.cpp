@@ -79,7 +79,7 @@ BOOL MKPDClass::g_bMkeyPadIsOpen = FALSE;
 //-----------------------------------------------------------------------------
 DWORD KPD_Init(LPCTSTR pContext)
 {    
-    UINT32	error,dwPollingTimeOut;
+    UINT32	error,dwPollingTimeOut, dwMkeyPadFromat;
     HKEY	hKey;
     DWORD	dwSize;
 
@@ -126,7 +126,24 @@ DWORD KPD_Init(LPCTSTR pContext)
 		TEXT("PollingTimeout"),						// string containing value to query
 		NULL,										 // reserved, set to NULL
 		NULL,										 // type not required, set to NULL
-		(LPBYTE)(&dwPollingTimeOut),							// pointer to buffer receiving value
+		(LPBYTE)(&dwPollingTimeOut),				// pointer to buffer receiving value
+		&dwSize);									 // pointer to buffer size
+
+	if (error != ERROR_SUCCESS)
+	{ 
+		RegCloseKey(hKey);
+		RETAILMSG(1, (TEXT("MKPD_Init:  RegQueryValueEx failed!!!\r\n")));
+		return 0;
+	}
+
+	// try to load key pad format from registry data
+	dwSize = sizeof(DWORD);
+	error = RegQueryValueEx(
+		hKey,										 // handle to currently open key
+		TEXT("MKeyPadFormat"),						 // string containing value to query
+		NULL,										 // reserved, set to NULL
+		NULL,										 // type not required, set to NULL
+		(LPBYTE)(&dwMkeyPadFromat),					// pointer to buffer receiving value
 		&dwSize);									 // pointer to buffer size
 
 	if (error != ERROR_SUCCESS)
@@ -140,7 +157,7 @@ DWORD KPD_Init(LPCTSTR pContext)
     RegCloseKey(hKey);
 
     // Construct the GPIO Module Class
-    MKPDClass* pMKpd = new MKPDClass( dwPollingTimeOut );
+    MKPDClass* pMKpd = new MKPDClass( dwPollingTimeOut, dwMkeyPadFromat );
     if (pMKpd == NULL)	// Managed to create the class?
     {
 		RETAILMSG (1, (TEXT("MKPD_Init: Allocate GPIOClass failed\r\n")));
@@ -153,7 +170,7 @@ DWORD KPD_Init(LPCTSTR pContext)
  		{
  			delete pMKpd;
  		}
- 		RETAILMSG (1, (TEXT("MKPDClass:jjjjjandle thread failed\r\n")));
+ 		RETAILMSG (1, (TEXT("MKPDClass:Open mtraix keypad failed\r\n")));
  		return NULL;
  	}
 

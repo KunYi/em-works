@@ -80,6 +80,8 @@ extern void BSPGetModeInfoEx(GPEModeEx* pModeEx, int modeNumber);
 extern void BSPSetDisplayBuffer(PVOID PhysBase, PVOID VirtBase);
 extern UINT32 BSPGetOverlayAlign();
 extern void BSPBacklightEnable(BOOL Enable);
+//LQK SEP-19-2012
+extern DWORD WINAPI ShutdownSplash(LPVOID lpParameter);
 
 //------------------------------------------------------------------------------
 // External Variables
@@ -464,6 +466,13 @@ DDLcdif::DDLcdif()
 #endif
     SetVisibleSurface(m_pBackgroundSurface);
     BSPBacklightEnable(TRUE);
+
+	//LQK SEP-19-2012
+	HANDLE ShutdownSplash_thread = CreateThread(NULL, 0, &ShutdownSplash, this, 0, NULL);
+	if (ShutdownSplash_thread == NULL)
+		ERRORMSG(1, (TEXT("DDLcdif Init: failed to create thread for shutdown splash, error(%d)\r\n"), GetLastError()));
+	CloseHandle( ShutdownSplash_thread );
+	//END LQK SEP-19-2012
 
     DEBUGMSG(1, (L"DDLcdif: ctor-\r\n"));
 

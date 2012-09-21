@@ -35,7 +35,6 @@ static VOID ClrScreen(VOID);
 static BOOL LCDIFSetupIOMUXPin();
 VOID TurnOffDisplay();
 
-#ifdef EM9283
 static VOID InitLCD(  );		// LQK JUN-29-2012
 // JLY06-2012: LQK
 #define CTRBYTECOUNT  26
@@ -47,8 +46,11 @@ const unsigned char CTRBYTE[CTRBYTECOUNT]={
 	0x00, 0x10, 0x60, 0x70,
 	0xa7, 60		//contrast
 };
-#endif   //EM9283
 
+//LQK SEP-19-2012
+#ifndef EM9283_GREY_LCD
+	#define EM9280
+#endif //#ifdef EM9283_GREY_LCD
 
 #define  VIDEO_MEMORY_SIZE      800*480*4
 #define  PALETTE_SIZE           256
@@ -60,58 +62,66 @@ PALETTEENTRY StdPalette[PALETTE_SIZE];
 //------------------------------------------------------------------------------
 DISPLAY_PANEL_MODE PanelModeArray[] =
 {
-    // 320*240 -> 3.5", PCLK = 6.4MHz -> LQ035 
+    // 320*240 -> 5.7", PCLK = 6.3MHz -> LQ057 
     {
-		320, 240, 60, 16,		//Width, Height, FrameFreq, BPP
+		320, 240, 6300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 		320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		16,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
 		32,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		32,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 320 + 16 + 32 + 32 = 400
+		48,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 400
 		240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		4,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		15,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 240 + 3 + 4 + 15 = 262
+		18,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 262
     },
     // 480*272 -> 4.3", PCLK = 9MHz -> LR430LC9001  ZXW JUN04-2012 modified
     {
-		480, 272, 60, 16,		//Width, Height, FrameFreq, BPP
+		480, 272, 9000000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 		480,					//dwHWidth          -> DOTCLK_H_ACTIVE;
-		4, 						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;  //37,
-		4,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		37,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 480 + 37 + 4 + 4 = 525 //4,
+		41,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+		2,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		43,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 525
 		272,					//dwVHeight         -> DOTCLK_V_ACTIVE;
-		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;  //10,
+		10,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		2,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		10,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 272 + 10 + 2 + 2 = 286 //2,
+		12,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 286
     },
-    // 640*480 -> 5.6" -> AT050TN22, 
+    // 640*480 -> 5.6", PCLK = 25MHz -> AT056TN52, 
     {
-		640, 480, 60, 16,		//Width, Height, FrameFreq, BPP
+		640, 480, 25000000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 		640,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; (other config: 64, 40, 56)
 		16,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		134,					//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 640 + 10 + 16 + 134 = 800
+		144,					//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 800
 		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		32,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		11,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 2 + 32 + 11 = 525
+		13,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 525
     },
     // 800*480 -> 7.0", PCLK = 33.3MHz -> AT070TN83 V1
     {
-		800, 480, 68, 16,		//Width, Height, FrameFreq, BPP
+		800, 480, 33300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 #ifdef	EM9280
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		48,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
 		40,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		40,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 800 + 48 + 40 + 40 = 928
+		88,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 928
 		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		13,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		29,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 3 + 13 + 29 = 525
+		32,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 525
 #else	// -> iMX28EVK->Seiko 4.3" 43WVF1G-0
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
@@ -122,6 +132,21 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 		10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
 		23,						//dwVBackPorch      -> DOTCLK_VB_PORCH;
 #endif	//EM9280
+    },
+    // 800*600 -> 8.4" & 10.4", PCLK = 39.8MHz -> G084SN03_V1 & G104SN03
+    {
+		800, 600, 39800000, 16,	//Width, Height, PClockFreq, BPP
+		// LCD panel specific settings
+		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		128,					//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
+		64,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		192,					//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 1056
+		600,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		4,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		8,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		20,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 628
     }
 };
 
@@ -129,7 +154,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 //-----------------------------------------------------------------------------
 // Global Variables
 static PVOID	pv_HWregLCDIF;
-#ifdef EM9283                  //JLY06-2012
+#ifdef EM9283_GREY_LCD               //JLY06-2012
 static UINT32*	g_pLCDBuffer = NULL;
 #else
 static WORD*	g_pLCDBuffer = NULL;
@@ -243,7 +268,7 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 
     /* Initalize the globle buffer this settings are defined in XXX.h file */
     //g_pLCDBuffer  = (WORD*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);;
-#ifdef EM9283
+#ifdef EM9283_GREY_LCD
 	g_pLCDBuffer  = (UINT32*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);
 #else
 	g_pLCDBuffer  = (WORD*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);
@@ -252,30 +277,35 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 #ifdef EM9280
 	// zxw JUN04-2012
 	RETAILMSG(1, (TEXT("Eboot.InitQVGA::LCD %dx%d\r\n"), pPanel->width, pPanel->height));
-	if((pPanel->width == 320) && (pPanel->height == 240))
+	//if((pPanel->width == 320) && (pPanel->height == 240))
+	//{
+	//	LCDIFSetupLCDIFClock(6400); // zxw : 3.5" 6.4MHz => 6400KHz
+	//}
+	//else if ((pPanel->width == 480) && (pPanel->height == 272))
+	//{
+	//	LCDIFSetupLCDIFClock(9000); // zxw : 4.3" 9MHz => 9000KHz
+	//}
+	//else if ((pPanel->width == 640) && (pPanel->height == 480))
+	//{
+	//	LCDIFSetupLCDIFClock(25000); // zxw : 5.6" 25MHz => 25000KHz
+	//}
+	//else if ((pPanel->width == 800) && (pPanel->height == 480))
+	//{
+	//	LCDIFSetupLCDIFClock(33300); // zxw : 7" 33.3MHz => 33300KHz
+	//}
+	// CS&ZHL AUG-13-2012: check PCLK
+	if((pPanel->frequency >= 6400000) && (pPanel->frequency <= 39800000))
 	{
-		LCDIFSetupLCDIFClock(6400); // zxw : 3.5" 6.4MHz => 6400KHz
-	}
-	else if ((pPanel->width == 480) && (pPanel->height == 272))
-	{
-		LCDIFSetupLCDIFClock(9000); // zxw : 4.3" 9MHz => 9000KHz
-	}
-	else if ((pPanel->width == 640) && (pPanel->height == 480))
-	{
-		LCDIFSetupLCDIFClock(25000); // zxw : 5.6" 25MHz => 25000KHz
-	}
-	else if ((pPanel->width == 800) && (pPanel->height == 480))
-	{
-		LCDIFSetupLCDIFClock(33300); // zxw : 7" 33.3MHz => 33300KHz
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// input parameter is in KHz
 	}
 	else
 	{
-		RETAILMSG(1, (TEXT("Eboot.InitQVGA::unknown LCD %dx%d!\r\n"), pPanel->width, pPanel->height));
+		RETAILMSG(1, (TEXT("Eboot.InitQVGA::invalid LCD PCLK = %d!\r\n"), pPanel->frequency));
 		return FALSE;
 	}
 
 #else // IMX28EVK or EM9283
-#ifdef EM9283			// JLY06-2012
+#ifdef EM9283_GREY_LCD			// JLY06-2012
 	LCDIFSetupLCDIFClock(10000);
 #else
     // Start the PIX clock and set frequency
@@ -297,7 +327,7 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 	}
 
 // JLY06-2012
-#ifndef EM9283
+#ifndef EM9283_GREY_LCD
     //DMA
     LCDIFDisplayFrameBuffer((const void*)IMAGE_WINCE_DISPLAY_RAM_PA_START);
 #endif
@@ -372,7 +402,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
     //KITLOutputDebugString ( "EBOOT: ConfigureHX8238ASerialPanel++ \n");
     LCDIF_INIT LcdifInit;
 // JLY06-2012: LQK
-#ifdef EM9283
+#ifdef EM9283_GREY_LCD
 	LcdifInit.bBusyEnable = FALSE;
 	LcdifInit.eBusMode = BUSMODE_8080;
 	LcdifInit.eReset = LCDRESET_LOW;
@@ -436,7 +466,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
 	if(pPanel != NULL)
 	{
 		LCDIfVsync.u32PulseWidth    = pPanel->dwVSyncPulseWidth;											//DOTCLK_V_PULSE_WIDTH;
-		LCDIfVsync.u32Period        = pPanel->dwVFrontPorch + pPanel->dwVBackPorch + pPanel->dwVHeight;		//DOTCLK_V_PERIOD;
+		LCDIfVsync.u32Period        = pPanel->dwVBackPorch + pPanel->dwVHeight + pPanel->dwVFrontPorch;		//DOTCLK_V_PERIOD;
 		LCDIfVsync.WaitCount        = pPanel->dwVBackPorch;													//DOTCLK_V_WAIT_CNT;
 	}
 	else
@@ -457,7 +487,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
 	if(pPanel != NULL)
 	{
 		sLcdifDotclk.u32HsyncPulseWidth = pPanel->dwHSyncPulseWidth;											//DOTCLK_H_PULSE_WIDTH;
-		sLcdifDotclk.u32HsyncPeriod     = pPanel->dwHBackPorch + pPanel->dwHFrontPorch + pPanel->dwHWidth;		//DOTCLK_H_PERIOD;
+		sLcdifDotclk.u32HsyncPeriod     = pPanel->dwHBackPorch + pPanel->dwHWidth + pPanel->dwHFrontPorch;		//DOTCLK_H_PERIOD;
 		sLcdifDotclk.u32HsyncWaitCount  = pPanel->dwHBackPorch;													//DOTCLK_H_WAIT_CNT;
 		sLcdifDotclk.u32DotclkWaitCount = pPanel->dwHWidth;														//DOTCLK_H_ACTIVE;
 	}
@@ -496,7 +526,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
 //------------------------------------------------------------------------------
 static void InitBacklight()
 {
-#ifdef	EM9280
+#if (defined EM9280 && (!defined EM9283 ))
     DDK_GPIO_CFG	intrCfg;
 
     intrCfg.DDK_PIN_IO           = DDK_GPIO_INPUT;
@@ -513,6 +543,7 @@ static void InitBacklight()
     DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0); // turn on LCD power, active low
 #else	// -> iMX28EVK  /EM9283
+	DDK_GPIO_CFG	intrCfg;
     if (pv_HWRegPWM == NULL)
     {
         // Map peripheral physical address to virtual address
@@ -535,15 +566,16 @@ static void InitBacklight()
 
     //Make sure that we are completely out of reset before continuing.
     while (HW_PWM_CTRL.B.CLKGATE) ;
-#ifdef EM9283
-	DDKIomuxSetPinMux(DDK_IOMUX_PWM7,DDK_IOMUX_MODE_01);
+#if( defined EM9283 || defined EM9283_GREY_LCD )
+	// LQK SEP-18-2012: Config EM9283EVB V2.0 LCD_back_light Pi 
+	DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,DDK_IOMUX_MODE_00);
 	DDKClockSetGatingMode(DDK_CLOCK_GATE_PWM24M_CLK, FALSE);
 
-	BF_CS2n(PWM_ACTIVEn, 7,
+	BF_CS2n(PWM_ACTIVEn, 4,
 		INACTIVE, 0x3e80,
 		ACTIVE, 0);
 
-	BF_CS5n(PWM_PERIODn, 7,
+	BF_CS5n(PWM_PERIODn, 4,
 		MATT, 0,
 		CDIV, 0x2,
 		INACTIVE_STATE, 0x2,
@@ -551,7 +583,25 @@ static void InitBacklight()
 		PERIOD, 0x9c3f);
 
 	// Enable PWM channel
-	HW_PWM_CTRL_SET(1 << 7 );
+	HW_PWM_CTRL_SET(1 << 4 ); 
+	
+	// turn on LCD
+ 	intrCfg.DDK_PIN_IO           = DDK_GPIO_INPUT;
+ 	intrCfg.DDK_PIN_IRQ_CAPABLE  = DDK_GPIO_IRQ_CAPABLE;
+ 	intrCfg.DDK_PIN_IRQ_ENABLE   = DDK_GPIO_IRQ_DISABLED;
+ 	intrCfg.DDK_PIN_IRQ_LEVEL    = DDK_GPIO_IRQ_EDGE;
+ 	intrCfg.DDK_PIN_IRQ_POLARITY = DDK_GPIO_IRQ_POLARITY_LO;		// interrupt trigger on falling edge
+ 
+ 	//switch to GPIO mode
+ 	DDKGpioConfig(DDK_IOMUX_LCD_RESET, intrCfg);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_GPIO);
+
+	// use GPIO1_0 as output for LCD_PWR
+	DDKGpioEnableDataPin(DDK_IOMUX_LCD_RESET, 1);
+	DDKGpioWriteDataPin(DDK_IOMUX_LCD_RESET, 1); // turn on LCD power, active hight
+
+	//END LQK SEP-18-2012
+	
 #else
     DDKIomuxSetPinMux(DDK_IOMUX_PWM2,DDK_IOMUX_MODE_00);
     DDKClockSetGatingMode(DDK_CLOCK_GATE_PWM24M_CLK, FALSE);
@@ -622,6 +672,7 @@ void DisplayInit(VOID)
 			//					  return = 2: 480x272 (4.3" LCD)
 			//				      return = 3: 640x480 (default)
 			//					  return = 4: 800x480 (7" LCD)
+			//					  return = 5: 800x600 (8.4" LCD or 10.4" LCD)
 			//
 			dwFormatIndex = GetBMP(pBmpFile, dwLen);
 			if(!dwFormatIndex)
@@ -647,7 +698,7 @@ void DisplayInit(VOID)
 	// CS&ZHL supporting multiple LCD panels
     InitQVGA(pPanel);
 
-#ifdef EM9283   	// LQK JUN-28-2012:Init lcd controler
+#ifdef EM9283_GREY_LCD   	// LQK JUN-28-2012:Init lcd controler
 	InitLCD(  );
 #endif
 
@@ -664,15 +715,14 @@ void DisplayInit(VOID)
     //KITLOutputDebugString ( "EBOOT: DisplayInit-- \n");
 }
 
-#ifdef EM9283
 static void InitLCD( )
 {
 	int i, j;
 
 	// UC1698 Soft Reset
-	g_pLCDBuffer[0] = CTRBYTE[0];
-	g_pLCDBuffer[0] <<= 10;
-	g_pLCDBuffer[0] |= CTRBYTE[0];
+	//LQK Aug-17-2012: for EM9283EVB V2.0
+	g_pLCDBuffer[0] = CTRBYTE[0]<<8;
+	g_pLCDBuffer[0] |= (CTRBYTE[0] & 0x03)<<6;
 	
 	LCDIFSetTransferCount(1, 1);
 	LCDIFDisplayFrameBufferEx((const void*)IMAGE_WINCE_DISPLAY_RAM_PA_START, CMD_MODE);
@@ -683,9 +733,9 @@ static void InitLCD( )
 	// Then beginning of initialization
 	for( i=0,j=1; j<CTRBYTECOUNT; i++, j++)
 	{
-		g_pLCDBuffer[i] = CTRBYTE[j];
-		g_pLCDBuffer[i] <<= 10;
-		g_pLCDBuffer[i] |= CTRBYTE[j];
+		//LQK Aug-17-2012
+		g_pLCDBuffer[i] = CTRBYTE[j]<<8;
+		g_pLCDBuffer[i] |= (CTRBYTE[j] & 0x03)<<6;
 	}
 
 	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
@@ -693,7 +743,6 @@ static void InitLCD( )
 	//waits for LCDIF transmit current frame
 	LCDIFFlush( );
 }
-#endif   //EM9283
 
 //------------------------------------------------------------------------------
 //
@@ -713,12 +762,11 @@ static void ShowBmp(PBYTE pBmpFile)
     DWORD				x, y;
     DWORD				index;
     DWORD				RedLsh, BlueLsh;
-#ifdef EM9280
 	COLORREF			dwPoint;
-#endif
-#ifdef EM9283
 	int					nLCDBufferIdx;
-#endif
+
+	dwPoint = 0;
+	nLCDBufferIdx = 0;
 
     RETAILMSG(1, (TEXT("pBmpFile 0x%x \r\n"), pBmpFile));
 
@@ -799,7 +847,7 @@ static void ShowBmp(PBYTE pBmpFile)
 		y--;
 	}
 #else	// -> iMX28EVK or EM9283
-#ifdef EM9283                  //JLY06-2012
+#ifdef EM9283_GREY_LCD                  //JLY06-2012
 	nLCDBufferIdx = 0;
 	//在显示驱动加载后，Explorer启动前，有一段时间显示黑屏（大约2S）
 	//这里将开机画面数据保存，在显示驱动加载后，用这里的数据重绘开机画面。
@@ -810,8 +858,9 @@ static void ShowBmp(PBYTE pBmpFile)
 	{
 		for( x=0; x<80; x++ )
 		{
-			g_pLCDBuffer[y*81+x] = *pBitmap;
-			g_pLCDBuffer[y*81+x] |= *pBitmap<<10;
+			//LQK Aug-17-2012
+			g_pLCDBuffer[y*81+x] = *pBitmap<<8;
+			g_pLCDBuffer[y*81+x] |= (*pBitmap&0x03)<<6;
 			pBitmap++;
 		}
 		// the width of u1698c is 162 pixel
@@ -884,17 +933,36 @@ static VOID ClrScreen(VOID)
 //-----------------------------------------------------------------------------
 static BOOL LCDIFSetupIOMUXPin()
 {
-#ifdef EM9283
+#ifdef EM9283_GREY_LCD
 	    // Setup the PINMUX
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D5,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
+	//LQK Aug-17-2012
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D5, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D8, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D9, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D20, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D21, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D22, DDK_IOMUX_MODE_GPIO);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D23, DDK_IOMUX_MODE_GPIO);
 
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
-    DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
+
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D13,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
+	// END LQK Aug-17-2012
 
 	// setup the pin for LCDIF block
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_CS,   DDK_IOMUX_MODE_00);
@@ -902,57 +970,6 @@ static BOOL LCDIFSetupIOMUXPin()
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_WR_RWN,   DDK_IOMUX_MODE_00);
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_RD_E,   DDK_IOMUX_MODE_00);
 
-    // Set pin drive to 8mA,enable pull up,3.3V
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D2, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D3, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D4, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D5, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D6, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D7, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D10, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-    DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D11, 
-        DDK_IOMUX_PAD_DRIVE_8MA, 
-        DDK_IOMUX_PAD_PULL_ENABLE,
-        DDK_IOMUX_PAD_VOLTAGE_3V3);
-
-	DDKIomuxSetPadConfig(DDK_IOMUX_LCD_CS, 
-		DDK_IOMUX_PAD_DRIVE_8MA, 
-		DDK_IOMUX_PAD_PULL_ENABLE,
-		DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_LCD_RS, 
-		DDK_IOMUX_PAD_DRIVE_8MA, 
-		DDK_IOMUX_PAD_PULL_ENABLE,
-		DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_LCD_WR_RWN, 
-		DDK_IOMUX_PAD_DRIVE_8MA, 
-		DDK_IOMUX_PAD_PULL_ENABLE,
-		DDK_IOMUX_PAD_VOLTAGE_3V3);
-	DDKIomuxSetPadConfig(DDK_IOMUX_LCD_RD_E, 
-		DDK_IOMUX_PAD_DRIVE_8MA, 
-		DDK_IOMUX_PAD_PULL_ENABLE,
-		DDK_IOMUX_PAD_VOLTAGE_3V3); 
 #else
     DDK_GPIO_CFG	intrCfg;
 
@@ -964,8 +981,9 @@ static BOOL LCDIFSetupIOMUXPin()
 
     // Setup the PINMUX
 #ifdef	EM9280
+	//LQK SEP-18-2012 LCD_D0 & LCD_D1 already setting in xldr.c
 	//switch to GPIO mode
-	DDKGpioConfig(DDK_IOMUX_LCD_D0, intrCfg);
+	/*DDKGpioConfig(DDK_IOMUX_LCD_D0, intrCfg);
 	DDKGpioConfig(DDK_IOMUX_LCD_D1, intrCfg);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO);
@@ -977,6 +995,7 @@ static BOOL LCDIFSetupIOMUXPin()
 	// use GPIO1_1 as USB0_PWR_EN
     DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0); // turn off VBUS
+	*/
 #else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1,DDK_IOMUX_MODE_00);
@@ -1038,6 +1057,7 @@ static BOOL LCDIFSetupIOMUXPin()
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_00);
 #endif	//EM9280
 
+#endif   // EM9283
     // Set pin drive to 8mA,enable pull up,3.3V
     DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D0, 
         DDK_IOMUX_PAD_DRIVE_8MA, 
@@ -1156,7 +1176,7 @@ static BOOL LCDIFSetupIOMUXPin()
         DDK_IOMUX_PAD_DRIVE_8MA, 
         DDK_IOMUX_PAD_PULL_ENABLE,
         DDK_IOMUX_PAD_VOLTAGE_3V3);          
-#endif   // EM9283
+
     return TRUE;
 }
 //------------------------------------------------------------------------------
@@ -1242,8 +1262,6 @@ DWORD FindBMP()
 
 	pBmpInfoHead = (BITMAPINFOHEADER*)&pBMPBuffer[sizeof(BITMAPFILEHEADER)];
 	if ((pBmpInfoHead->biWidth > 800) || (pBmpInfoHead->biHeight > 600) )
-//		(pBmpInfoHead->biHeight > 600) || 
-//		(pBmpInfoHead->biBitCount != 8))
 	{
 		RETAILMSG(1, (TEXT("->FindBMP::only 8bpp, Width < 800, Height < 600\r\n")));
 		return 0;
@@ -1260,8 +1278,9 @@ DWORD FindBMP()
 // return = 0: no bmp 
 // return = 1: 320x240 
 // return = 2: 480x272 (4.3" LCD)
-// return = 3: 640x480 (default)
+// return = 3: 640x480 (default, 5.6" LCD normally)
 // return = 4: 800x480 (7" LCD)
+// return = 5: 800x600 (8.4" LCD or 10.4" LCD)
 // return = 10: 160x160 ()
 //
 DWORD GetBMP(PBYTE pBmpFile, DWORD dwLen)
@@ -1293,6 +1312,10 @@ DWORD GetBMP(PBYTE pBmpFile, DWORD dwLen)
 	else if((pBmpInfoHead->biWidth == 800) && (pBmpInfoHead->biHeight == 480))
 	{
 		g_dwDispFormat = 4;
+	}
+	else if((pBmpInfoHead->biWidth == 800) && (pBmpInfoHead->biHeight == 600))
+	{
+		g_dwDispFormat = 5;
 	}
 	else if((pBmpInfoHead->biWidth == 160) && (pBmpInfoHead->biHeight == 160))             //JLY06-2012: add DispFormat 
 	{

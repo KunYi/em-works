@@ -160,14 +160,14 @@ Dot_lcd::Dot_lcd()
 	m_pPrimarySurface = new GPESurf( m_ModeInfo.width, m_ModeInfo.height, m_ModeInfo.format );
 	if (!m_pPrimarySurface)
 	{
-		RETAILMSG(1, (TEXT("Wrap2bpp::Wrap2bpp: Error allocating GPESurf.\r\n")));
+		RETAILMSG(1, (TEXT("Dot_lcd::Dot_lcd: Error allocating GPESurf.\r\n")));
 		return;
 	}
 
 	m_pBackUpSurface = new GPESurf( m_ModeInfo.width, m_ModeInfo.height, m_ModeInfo.format );
 	if (!m_pBackUpSurface)
 	{
-		RETAILMSG(1, (TEXT("Wrap2bpp::Wrap2bpp: Error allocating GPESurf.\r\n")));
+		RETAILMSG(1, (TEXT("Dot_lcd::Dot_lcd: Error allocating GPESurf.\r\n")));
 		return;
 	}
 
@@ -196,16 +196,41 @@ Dot_lcd::Dot_lcd()
 	m_hSysShutDownEvent = CreateEvent(NULL, FALSE, FALSE, 
 		L"PowerManager/SysShutDown_Active");
 
+	// Show Power down image
 	BITMAPFILEHEADER*	pBmpFileHead;
 	BITMAPINFOHEADER*	pBmpInfoHead;
 	PBYTE				pBitmap;
-	DWORD				dwBytes;
-	// Show Power down image
-	HANDLE hFile = CreateFile( _T("Windows\\ShutDownImage160160.bmp"),GENERIC_READ, FILE_SHARE_READ, NULL, 
-		OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
-	if( hFile != NULL )
+	DWORD				dwStatus,dwSize, dwType;
+	TCHAR				szImageName[MAX_PATH] = _T("Windows\\ShutDownImage160160.bmp");
+	HKEY  hKey;
+	HANDLE hFile;
+	
+	dwStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE, SZREGKEY,0,0,&hKey);
+	if (dwStatus == ERROR_SUCCESS)
 	{
-		BOOL bResult = ReadFile( hFile, g_Buffer, 200*1024, &dwBytes, NULL );
+		dwSize = sizeof(szImageName);
+		dwStatus = RegQueryValueEx(hKey, SZSHUTDOWNIMAGE, NULL, 
+			&dwType, (LPBYTE)szImageName, &dwSize);
+		RegCloseKey(hKey);
+		if (dwStatus != ERROR_SUCCESS )
+		{
+			_tcscpy(szImageName, _T("Windows\\ShutDownImage160160.bmp"));
+		}
+
+	}
+
+	hFile = CreateFile( szImageName ,GENERIC_READ, FILE_SHARE_READ, NULL, 
+		OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
+	if( hFile == INVALID_HANDLE_VALUE )
+	{
+		_tcscpy(szImageName, _T("Windows\\ShutDownImage160160.bmp"));
+		hFile = CreateFile( szImageName ,GENERIC_READ, FILE_SHARE_READ, NULL, 
+			OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
+	}
+	
+	if( hFile != INVALID_HANDLE_VALUE )
+	{
+		BOOL bResult = ReadFile( hFile, g_Buffer, 200*1024, &dwSize, NULL );
 		if( bResult )
 		{
 			pBmpFileHead = (BITMAPFILEHEADER*)g_Buffer;
@@ -224,7 +249,12 @@ Dot_lcd::Dot_lcd()
 		}
 		CloseHandle( hFile );
 	}
+	else
+	{
+		RETAILMSG(1, (TEXT("Dot_lcd::Dot_lcd: Error opening image.\r\n")));
+	}
 
+	
 	InitIrq( );
 
 	BSPInitLCD(  );

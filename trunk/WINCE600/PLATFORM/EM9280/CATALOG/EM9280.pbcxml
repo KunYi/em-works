@@ -48,6 +48,7 @@
     <BspItemId>Item:Emtronix:UART3:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:UART4:iMX28-EVK-PDK1_9_EM9280</BspItemId>
     <BspItemId>Item:Emtronix:CDItem:Emtronix:LCD:iMX28-EVK-PDK1_9_EM9280:iMX28-EVK-PDK1_9_EM9280</BspItemId>
+    <BspItemId>Item:Emtronix:Keypad:EM9283</BspItemId>
   </Bsp>
   <Item Id="Item:Emtronix:EthernetBootloader:iMX28-EVK-PDK1_9_EM9280">
     <Title>#FSL:iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Title</Title>
@@ -501,6 +502,17 @@
     <SourceCode>
       <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD</Title>
       <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\DOT_LCD</Path>
+    </SourceCode>
+  </Item>
+  <Item Id="Item:Emtronix:Keypad:EM9283">
+    <Title>MKEYPAD</Title>
+    <Description>Matrix Keypad</Description>
+    <Type>BspSpecific</Type>
+    <SysgenVariable>bsp_matrix_keypad</SysgenVariable>
+    <Location>Device Drivers\KEYPAD</Location>
+    <SourceCode>
+      <Title>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\MKEYPAD</Title>
+      <Path>$(_WINCEROOT)\PLATFORM\EM9280\SRC\DRIVERS\MKEYPAD</Path>
     </SourceCode>
   </Item>
 </CatalogFile>

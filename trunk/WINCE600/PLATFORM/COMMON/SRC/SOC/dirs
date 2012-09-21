@@ -12,5 +12,6 @@ see the LICENSE.RTF on your install media or the root of your tools installation
 THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
 !endif
 
-DIRS=*
-
+DIRS= \
+	COMMON_FSL_V2_PDK1_9 \
+	MX28_FSL_V2_PDK1_9

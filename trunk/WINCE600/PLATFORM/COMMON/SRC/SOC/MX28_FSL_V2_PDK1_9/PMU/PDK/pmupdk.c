@@ -75,7 +75,9 @@ DBGPARAM dpCurSettings = {
 
 #endif  // DEBUG
 
-
+//lqk:Jul-25-2012
+#define BATTERY_LOW                     2400
+#define BATTERY_HIGH                    4300
 //-----------------------------------------------------------------------------
 // Local Variables
 
@@ -160,8 +162,21 @@ static VOID    PowerSetVdddBrownoutValue(UINT32 VdddBoOffsetmV);
 static VOID    PowerSetVdddValue(UINT32 VdddmV);
 static UINT32  PowerGetVdddValue(VOID);
 
+//LQK:Jul-25-2012
+static BOOL    IsBatteryAttach(VOID);
+
 extern BOOL IsUSBDeviceDriverEnable();
-extern BOOL Is5VFromVbus();
+//extern BOOL Is5VFromVbus();
+
+#ifdef EM9283  // LQK:Jul 9,2012
+	BOOL g_bIs5VFromVbus=TRUE;
+	static BOOL Is5VFromVbus()
+	{
+		return g_bIs5VFromVbus;
+	}
+#else
+	extern BOOL Is5VFromVbus();
+#endif
 
 //-----------------------------------------------------------------------------
 //
@@ -461,7 +476,15 @@ static BOOL PowerStart4p2HW(VOID)
         if(Is5VFromVbus())
         {  
             // Set current limit to 480mA.    
-            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+            //BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+            
+#ifdef EM9283
+			// Set current limit to 450mA.    
+            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x24);
+#else
+			// Set current limit to 480mA.    
+			BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+#endif
         }
         else
         {
@@ -1444,6 +1467,45 @@ static BOOL PowerInit()
     BOOL rc = FALSE;
     UINT32 irq = 0;
  
+#ifdef EM9283	// LQK:Jul 9,2012
+	DWORD dwStatus,dwVal,dwSize;
+	HKEY  hKey;
+	TCHAR szName[] = TEXT("Is5VFromUSB");
+
+	dwStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\Power"),
+		0,0,&hKey);
+	if (dwStatus != ERROR_SUCCESS)
+	{
+		RETAILMSG(1, (TEXT("PowerInit: OpenDeviceKey failed \r\n")));
+		g_bIs5VFromVbus = TRUE;
+	}
+	else
+	{
+		dwSize = sizeof(DWORD);
+		dwStatus = RegQueryValueEx(hKey, szName, NULL, 
+			NULL, (LPBYTE)&dwVal, &dwSize);
+		if (dwStatus != ERROR_SUCCESS )
+		{
+			RETAILMSG(1, (TEXT("PowerInit: RegQueryValueEx failed \r\n")));
+			g_bIs5VFromVbus = TRUE;
+		}
+		else
+		{
+			g_bIs5VFromVbus = dwVal;
+		}
+		RegCloseKey(hKey);
+
+	}
+	if( g_bIs5VFromVbus )
+	{
+		RETAILMSG(1, (TEXT("PowerInit: 5V is from USB.\r\n")));
+	}
+	else
+	{
+		RETAILMSG(1, (TEXT("PowerInit: 5V is from Wall charger.\r\n")));
+	}
+#endif
+	
     //Map the peripheral register space of the power module
     if (!PowerAlloc())
     {
@@ -1451,6 +1513,7 @@ static BOOL PowerInit()
         goto cleanUp;
     }      
 
+	RETAILMSG(1, (TEXT("HW_POWER_BATTMONITOR = 0x%X \r\n"),HW_POWER_BATTMONITOR_RD()));
     //DumpPowerRegisters();
     if((HW_POWER_5VCTRL.B.PWD_CHARGE_4P2 == 0) && ((HW_POWER_5VCTRL_RD() & BM_POWER_5VCTRL_CHARGE_4P2_ILIMIT) == 0x20000))
     {
@@ -1528,7 +1591,8 @@ static BOOL PowerInit()
     CeSetThreadPriority(PowerHandler_thread,CE_THREAD_PRIO_256_HIGHEST);
     
 #if 1
-    DEBUGMSG(ZONE_FUNC, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
+    // DEBUGMSG(ZONE_FUNC, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
+	// RETAILMSG(1, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
     // Ask the OAL to enable our interrupt to wake the system from suspend.
     KernelIoControl(IOCTL_HAL_ENABLE_WAKE, &SysIntr5V,sizeof(SysIntr5V), NULL, 0, NULL);
     
@@ -1823,7 +1887,7 @@ BOOL PmuIoctlSetCharger(UINT32 current)
         return FALSE;
     }
     BF_CLRV(POWER_CHARGE, STOP_ILIMIT, 0xF);
-    BF_SETV(POWER_CHARGE, STOP_ILIMIT, 0x3);//stop limit current = 30mA  
+    BF_SETV(POWER_CHARGE, STOP_ILIMIT, 0x5);//stop limit current = 50mA  
     
     BF_CLRV(POWER_CHARGE, BATTCHRG_I, 0x3F);
     BF_SETV(POWER_CHARGE, BATTCHRG_I, current); 
@@ -2598,6 +2662,28 @@ PMI_IOControl(DWORD hOpenContext, DWORD dwCode, PBYTE pBufIn, DWORD dwLenIn,
         }
         break;
 
+	//LQK:Jul-12-1012 
+	case PMU_IOCTL_GET_POWER_SOURCE:
+		if( pBufOut != NULL )
+		{
+			*(UINT32*)pBufOut = Is5VFromVbus();
+			dwLenOut = sizeof(UINT32);
+
+			result = TRUE;
+		}
+		break;
+
+	//LQK:Jul-25-2012
+	case PMU_IOCTL_BATTERY_ATTACH:
+		if( pBufOut != NULL )
+		{
+			*(BOOL*)pBufOut = IsBatteryAttach();
+			dwLenOut = sizeof(BOOL);
+
+			result = TRUE;
+		}
+		break;
+
     case PMU_IOCTL_VDDD_GET_BRNOUT:
         if (pBufOut != NULL)
         {        
@@ -2812,7 +2898,7 @@ static BOOL VDDDBOHandler(void)
            WaitForSingleObject (g_hVDDDBNOTEvent, INFINITE);
 
            //VDDD BROWN
-           //RETAILMSG(1, (TEXT("VDDDBOHandler VDDD BROWN...\r\n")));
+           RETAILMSG(1, (TEXT("VDDDBOHandler VDDD BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDD_BO)
            {
                StallExecution(100);
@@ -2848,7 +2934,7 @@ static BOOL VDDIOBOHandler(void)
            WaitForSingleObject (g_hVDDIOBNOTEvent, INFINITE);
 
            //VDDIO BROWN
-           //RETAILMSG(1, (TEXT("VDDIOBOHandler VDDIO BROWN...\r\n")));
+           RETAILMSG(1, (TEXT("VDDIOBOHandler VDDIO BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDIO_BO)
            {
                StallExecution(100);
@@ -2884,7 +2970,7 @@ static BOOL VDDABOHandler(void)
            WaitForSingleObject (g_hVDDABNOTEvent, INFINITE);
 
            //VDDA BROWN
-           //RETAILMSG(1, (TEXT("VDDABOHandler VDDA BROWN...\r\n")));
+           RETAILMSG(1, (TEXT("VDDABOHandler VDDA BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDA_BO)
            {
                StallExecution(100);
@@ -2961,7 +3047,12 @@ static BOOL PowerIRQHandler(void)
                    InterruptDone(SysIntr5V);
                    
                    // ZZZzzz...
-                   SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+                   //SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+					//LQK:Jul-12-2012
+				   if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
+				   {
+						SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+				   }
                }
                else
                {
@@ -3077,6 +3168,30 @@ static BOOL PowerInitHandle(void)
     PowerClear5VIrq();
 
     return TRUE;
+}
+
+// LQK:Jul-25-2012
+// Returns:
+//      TRUE if the battery is attached; FALSE if battery is not available
+static BOOL IsBatteryAttach( )
+{
+	hw_power_battmonitor_t power_battmonitor_reg;
+	UINT32 BattVoltage ;
+
+	BattVoltage = PmuIoctlGetBatteryVoltage( );
+
+	if((BattVoltage > BATTERY_LOW) && (BattVoltage < BATTERY_HIGH))
+	{
+		// power_battmonitor_reg.B.BRWNOUT_LVL was setted by xldr.c
+		// if BRWNOUT_LVL is i6, battery is not available
+		// if BRWNOUT_LVL is 15, battery is attached 
+		power_battmonitor_reg.U = HW_POWER_BATTMONITOR_RD();
+		if( power_battmonitor_reg.B.BRWNOUT_LVL == 15 )
+			return TRUE;
+	}
+
+	return FALSE;
+
 }
 
 //-----------------------------------------------------------------------------

@@ -23,62 +23,71 @@
 #include "display_panel.h"			// CS&ZHL MAY-8-2012: support different types of LCD
 
 //------------------------------------------------------------------------------
-// CS&ZHL MAR-7-2012:Description of all supported mode for all supported panel
+// CS&ZHL MAR-07-2012:Description of all supported mode for all supported panel
+// CS&ZHL AUG-13-2012:update LCD parameters settings
 //------------------------------------------------------------------------------
 DISPLAY_PANEL_MODE PanelModeArray[] =
 {
-    // 320*240 -> 3.5", PCLK = 6.4MHz -> LQ035 
+    // 320*240 -> 5.7", PCLK = 6.3MHz -> LQ057 
     {
-		320, 240, 60, 16,		//Width, Height, FrameFreq, BPP
+		320, 240, 6300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 		320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		16,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
 		32,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		32,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 320 + 16 + 32 + 32 = 400
+		48,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 400
 		240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		4,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		15,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 240 + 3 + 4 + 15 = 262
+		18,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 262
     },
     // 480*272 -> 4.3", PCLK = 9MHz -> LR430LC9001
     {
-		480, 272, 60, 16,		//Width, Height, FrameFreq, BPP
-		// LCD panel specific settings -> ZXW modified JUN04-2012
+		480, 272, 9000000, 16,	//Width, Height, PClockFreq, BPP
+		// LCD panel specific settings
 		480,					//dwHWidth          -> DOTCLK_H_ACTIVE;
-		4,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
-		4,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		37,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 480 + 37 + 4 + 4 = 525
+		41,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+		2,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		43,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 525
 		272,					//dwVHeight         -> DOTCLK_V_ACTIVE;
-		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		10,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		2,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		10,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 272 + 10 + 2 + 2 = 286
+		12,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 286
     },
-    // 640*480 -> 5.6" -> AT050TN22, 
+    // 640*480 -> 5.6", PCLK = 25MHz -> AT056TN52, 
     {
-		640, 480, 60, 16,		//Width, Height, FrameFreq, BPP
+		640, 480, 25000000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 		640,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; (other config: 64, 40, 56)
 		16,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		134,					//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 640 + 10 + 16 + 134 = 800
+		144,					//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 800
 		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		2,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		32,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		11,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 2 + 32 + 11 = 525
+		13,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 525
     },
     // 800*480 -> 7.0", PCLK = 33.3MHz -> AT070TN83 V1
     {
-		800, 480, 68, 16,		//Width, Height, FrameFreq, BPP
+		800, 480, 33300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
 #ifdef	EM9280
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		48,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
 		40,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		40,						//dwHBackPorch      -> DOTCLK_HB_PORCH; -> HTotal = 800 + 48 + 40 + 40 = 928
+		88,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 928
 		480,					//dwVHeight         -> DOTCLK_V_ACTIVE;
 		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		13,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		29,						//dwVBackPorch      -> DOTCLK_VB_PORCH; -> VTotal = 480 + 3 + 13 + 29 = 525
+		32,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 525
 #else	// -> iMX28EVK->Seiko 4.3" 43WVF1G-0
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		10,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
@@ -89,6 +98,21 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 		10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
 		23,						//dwVBackPorch      -> DOTCLK_VB_PORCH;
 #endif	//EM9280
+    },
+    // 800*600 -> 8.4" & 10.4", PCLK = 39.8MHz -> G084SN03_V1 & G104SN03
+    {
+		800, 600, 39800000, 16,	//Width, Height, PClockFreq, BPP
+		// LCD panel specific settings
+		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+		128,					//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
+		64,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+		192,					//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 1056
+		600,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+		4,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+		8,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+		20,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 628
     }
 };
 
@@ -455,25 +479,35 @@ void DisplayController43WVF1G::BSPInitLCDIF(BOOL bReset)
 	{
 		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 320*240\r\n")));
 		pPanel = &PanelModeArray[0];
-		LCDIFSetupLCDIFClock(6400); // zxw : 3.5" 6.4MHz => 6400KHz
+		//LCDIFSetupLCDIFClock(6400);						// zxw : 3.5" 6.4MHz => 6400KHz
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// CS&ZHL AUG-13-2012: use PCLK in table
 	}
 	else if((m_dwWidth == 480) && (m_dwHeight == 272))
 	{
 		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 480*272\r\n")));
 		pPanel = &PanelModeArray[1];
-		LCDIFSetupLCDIFClock(9000); // zxw : 4.3" 9MHz => 9000KHz
+		//LCDIFSetupLCDIFClock(9000);						// zxw : 4.3" 9MHz => 9000KHz
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// CS&ZHL AUG-13-2012: use PCLK in table
 	}
 	else if((m_dwWidth == 640) && (m_dwHeight == 480))
 	{
 		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 640*480\r\n")));
 		pPanel = &PanelModeArray[2];
-		LCDIFSetupLCDIFClock(25000); // zxw : 5.6" 25MHz => 25000KHz
+		//LCDIFSetupLCDIFClock(25000);						// zxw : 5.6" 25MHz => 25000KHz
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// CS&ZHL AUG-13-2012: use PCLK in table
 	}
 	else if((m_dwWidth == 800) && (m_dwHeight == 480))
 	{
 		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 800*480\r\n")));
 		pPanel = &PanelModeArray[3];
-		LCDIFSetupLCDIFClock(33300); // zxw : 7", 68.3Hz FrameFreq => 33.3MHz => 33300KHz
+		//LCDIFSetupLCDIFClock(33300);						// zxw : 7", 68.3Hz FrameFreq => 33.3MHz => 33300KHz
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// CS&ZHL AUG-13-2012: use PCLK in table
+	}
+	else if((m_dwWidth == 800) && (m_dwHeight == 600))
+	{
+		RETAILMSG(1, (TEXT("BSPInitLCDIF:: -> 800*600\r\n")));
+		pPanel = &PanelModeArray[4];
+		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// CS&ZHL AUG-13-2012: use PCLK in table
 	}
 	else
 	{
@@ -733,7 +767,7 @@ DWORD DisplayController43WVF1G::GetHeight()
 //------------------------------------------------------------------------------
 void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
 {
-#ifdef	EM9280
+#if( defined EM9280 && (!defined EM9283 ))
 	// use GPIO1_0 as output for LCD_PWR
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
 	DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
@@ -745,7 +779,22 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
     {
 		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 1);	// turn off LCD power, active low
     }
-#else	// ->iMX28EVK
+#else  
+#ifdef EM9283
+	// use GPIO1_0 as output for LCD_PWR
+	DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_GPIO);
+	DDKGpioEnableDataPin(DDK_IOMUX_LCD_RESET, 1);
+	if(Enable)
+	{
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_RESET, 1);	// turn on LCD power, active low
+	}
+	else
+	{
+		DDKGpioWriteDataPin(DDK_IOMUX_LCD_RESET, 0);	// turn off LCD power, active low
+	}
+
+#else
+	// ->iMX28EVK
     if(Enable)
     {
         Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
@@ -760,6 +809,7 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
         DDKGpioWriteDataPin(DDK_IOMUX_PWM2,0);  //Pull low to display PWM output    
     }
 #endif	//EM9280
+#endif
 }
 
 //------------------------------------------------------------------------------

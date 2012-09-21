@@ -49,6 +49,10 @@ int start()
     PBYTE pbOCRAM = (PBYTE)IMAGE_WINCE_IRAM_PA_START;
     
     EMI_MemType_t        type = EMI_DEV_DDR2;
+	//SEP-14-2012 LQK: Enable WDT
+	//HW_RTC_WATCHDOG_WR( 10000 );
+	//HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
+	
     InitDebugSerial();
     InitPower(); 
     InitSdram(type);
@@ -536,13 +540,13 @@ void InitPower()
 	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN00);
     HW_PINCTRL_DOE1_SET(1 << 0);
     HW_PINCTRL_DOUT1_SET(1 << 0);		//active low
-#else	// -> iMX28EVK
+#else // -> iMX28EVK
     HW_PINCTRL_MUXSEL7_SET(BM_PINCTRL_MUXSEL7_BANK3_PIN30);
     HW_PINCTRL_DOE3_SET(1 << 30);
     HW_PINCTRL_DOUT3_CLR(1 << 30);		//active high
 #endif	//EM9280
 
-#ifdef	EM9280
+#ifdef	EM9280 
 	// GPIO1_1 is used as USB0_PWR, turn off USB0 VBUS
 	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN01);
     HW_PINCTRL_DOE1_SET(1 << 1);
@@ -624,16 +628,10 @@ void InitPower()
 #else	// -> EM9283 or iMX28EVK
 
 #ifdef	EM9283  //lqk 2012-5-30
-#ifdef  LOWER_POWER_AUTO_SHUTDOWN
-	// Clear auto restart for automatic battery brownout shutdown. 
-	HW_RTC_PERSISTENT0_CLR(BM_RTC_PERSISTENT0_AUTO_RESTART);
-	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=0;
-	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT_5VDETECT_ENABLE=1;
-	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT=1;
+	//lqk:Jul-25-2012
+	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=0;	// Set battery Brownout threshold to 2400mv
+	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT=0;
 	HW_POWER_BATTMONITOR.B.BRWNOUT_PWD=0;
-	BF_WR(POWER_RESET,UNLOCK,BV_POWER_RESET_UNLOCK__KEY);
-	HW_POWER_RESET_WR((BV_POWER_RESET_UNLOCK__KEY << BP_POWER_RESET_UNLOCK) | BM_POWER_RESET_FASTFALLPSWITCH_OFF);
-
 	//Detect whether there is a good battery
 	if(IsBatteryGood())
 	{
@@ -643,9 +641,25 @@ void InitPower()
 		s_bBattery = TRUE;
 	}
 
-	// Set battery Brownout threshold to 3000mv
-	HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=15;
-#endif
+	// Clear auto restart for automatic battery brownout shutdown. 
+	HW_RTC_PERSISTENT0_CLR(BM_RTC_PERSISTENT0_AUTO_RESTART);
+
+	if( s_bBattery )
+	{
+		// Set battery Brownout threshold to 3000mv
+		HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=15;	
+	}
+	else
+	{
+		HW_POWER_BATTMONITOR.B.BRWNOUT_LVL=16;	
+	}
+
+	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT_5VDETECT_ENABLE=1;
+	HW_POWER_BATTMONITOR.B.PWDN_BATTBRNOUT=1;
+	HW_POWER_BATTMONITOR.B.BRWNOUT_PWD=0;
+	BF_WR(POWER_RESET,UNLOCK,BV_POWER_RESET_UNLOCK__KEY);
+	HW_POWER_RESET_WR((BV_POWER_RESET_UNLOCK__KEY << BP_POWER_RESET_UNLOCK) | BM_POWER_RESET_FASTFALLPSWITCH_OFF);
+
 #else
     //Detect whether there is a good battery
     if(IsBatteryGood())
@@ -802,14 +816,36 @@ BOOL EnableBatteryMeasure()
 //-----------------------------------------------------------------------------
 BOOL IsBatteryGood()
 {
-    UINT32 BatteryVoltage = 0;
+    
+#ifdef EM9283
+	int i;
+#endif
+	UINT32 BatteryVoltage = 0;
     BatteryVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
     if((BatteryVoltage > BATTERY_LOW) && (BatteryVoltage < BATTERY_HIGH))
 	{
         //return TRUE;
 		// JLY05-2012:LQK
-#ifdef EM9283		
-		HW_POWER_REFCTRL.B.FASTSETTLING =1;
+#ifdef EM9283
+		//LQK:Jul-23-2012
+		for( i=0; i<10; i++ )
+		{
+			HW_POWER_REFCTRL.B.FASTSETTLING =1;
+			XLDRStall(10000);
+			if( HW_POWER_STS.B.BATT_BO == 1 )
+				break;
+		}
+
+		HW_POWER_REFCTRL.B.FASTSETTLING=0;
+		
+		if( i<10 )
+			return FALSE;
+		else
+		{
+			return TRUE;
+		}
+
+		/*HW_POWER_REFCTRL.B.FASTSETTLING =1;
 		if( HW_POWER_STS.B.BATT_BO == 0 )
 		{
 			HW_POWER_REFCTRL.B.FASTSETTLING =1;
@@ -830,7 +866,7 @@ BOOL IsBatteryGood()
 			}
 		}
 		HW_POWER_REFCTRL.B.FASTSETTLING =0;
-		return FALSE;
+		return FALSE;*/
 #else
 		return TRUE;
 #endif
@@ -1012,6 +1048,11 @@ void BootFrom4P2()
         // possiable.Using 400mA here.
         BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x20);
         //HW_POWER_5VCTRL_SET(BM_POWER_5VCTRL_ILIMIT_EQ_ZERO);
+#endif
+	//Lqk:Jul-16-2012
+#ifdef EM9283
+	// Always set current limit to 480mA at power up.    
+	BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x24);
 #endif
 
     //while(HW_POWER_STS.B.DCDC_4P2_BO)

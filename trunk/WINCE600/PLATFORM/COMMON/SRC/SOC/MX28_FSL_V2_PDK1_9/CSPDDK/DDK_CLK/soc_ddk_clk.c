@@ -1131,8 +1131,35 @@ BOOL DDKClockConfigBaud(DDK_CLOCK_SIGNAL index, DDK_CLOCK_BAUD_SOURCE src,
             break;
 
         case DDK_CLOCK_SIGNAL_HSADC :
-            HW_CLKCTRL_HSADC.B.RESETB = 1;
-            HW_CLKCTRL_HSADC.B.FREQDIV = u32Div;              
+            //HW_CLKCTRL_HSADC.B.RESETB = 1;
+            //HW_CLKCTRL_HSADC.B.FREQDIV = u32Div;              
+			// CS&ZHL JUN-12-2012: setup HSADC clock
+			switch(u32Div)
+			{
+			case 9:
+				HW_CLKCTRL_HSADC.B.RESETB = 1;
+				HW_CLKCTRL_HSADC.B.FREQDIV = 0; 
+				break;
+
+			case 18:
+				HW_CLKCTRL_HSADC.B.RESETB = 1;
+				HW_CLKCTRL_HSADC.B.FREQDIV = 1; 
+				break;
+
+			case 36:
+				HW_CLKCTRL_HSADC.B.RESETB = 1;
+				HW_CLKCTRL_HSADC.B.FREQDIV = 2; 
+				break;
+
+			case 72:
+				HW_CLKCTRL_HSADC.B.RESETB = 1;
+				HW_CLKCTRL_HSADC.B.FREQDIV = 3; 
+				break;
+
+			default:
+				rc = FALSE;
+				ERRORMSG(1, (_T("DDKClockConfigBaud: invalid HSADC divider = %d\r\n"), u32Div));            
+			}
             break;
 
         case DDK_CLOCK_SIGNAL_PLL0 :

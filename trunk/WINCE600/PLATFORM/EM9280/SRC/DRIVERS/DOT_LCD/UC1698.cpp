@@ -29,7 +29,6 @@
 #define  FRAMEBUFFERSZIE        0x10000
 #define  LCD_CMD_DATA_OFFSET			FRAMEBUFFERSZIE - 0x400
 
-
 const int  MAX_CONTRAST_LEVEL	= 255;
 const int  DEFAULT_CONTRAST_LEVEL = 60;
 
@@ -45,7 +44,7 @@ const unsigned char CTRBYTE[CTRBYTECOUNT]={
 	0xaf, 0x70, 0xc4, 0xd5, 0x84, 0xf4, 0x00, 0xf5,
 	0x00, 0xf6, 0x35, 0xf7, 0xa0, 0xf8, 0xd1, 0xd5,
 	0x00, 0x10, 0x60, 0x70,
-	0xa7				//contrast
+	0xa7		//contrast
 	
 };
 
@@ -161,15 +160,24 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
     else
     {
 
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D5,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D4,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D5,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
+// 
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
+//         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
 
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
-        DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D12,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D13,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
+		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
 
 		// setup the pin for LCDIF block
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_CS,   DDK_IOMUX_MODE_00);
@@ -177,23 +185,7 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_WR_RWN,   DDK_IOMUX_MODE_00);
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RD_E,   DDK_IOMUX_MODE_00);
 
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D2, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D3, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D4, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D5, 
-                 DDK_IOMUX_PAD_DRIVE_8MA, 
-                 DDK_IOMUX_PAD_PULL_ENABLE,
-                 DDK_IOMUX_PAD_VOLTAGE_3V3);
-        DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D6, 
+       DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D6, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
@@ -210,6 +202,22 @@ BOOL DisplayControllerUC1698::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
                  DDK_IOMUX_PAD_DRIVE_8MA, 
                  DDK_IOMUX_PAD_PULL_ENABLE,
                  DDK_IOMUX_PAD_VOLTAGE_3V3);
+		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D12, 
+				DDK_IOMUX_PAD_DRIVE_8MA, 
+				DDK_IOMUX_PAD_PULL_ENABLE,
+				DDK_IOMUX_PAD_VOLTAGE_3V3);
+		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D13, 
+				DDK_IOMUX_PAD_DRIVE_8MA, 
+				DDK_IOMUX_PAD_PULL_ENABLE,
+				DDK_IOMUX_PAD_VOLTAGE_3V3);
+		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D14, 
+				DDK_IOMUX_PAD_DRIVE_8MA, 
+				DDK_IOMUX_PAD_PULL_ENABLE,
+				DDK_IOMUX_PAD_VOLTAGE_3V3);
+		DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D15, 
+				DDK_IOMUX_PAD_DRIVE_8MA, 
+				DDK_IOMUX_PAD_PULL_ENABLE,
+				DDK_IOMUX_PAD_VOLTAGE_3V3);
    
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_CS, 
                  DDK_IOMUX_PAD_DRIVE_8MA, 
@@ -397,9 +405,11 @@ void DisplayControllerUC1698::LCDPowerUp( )
 
 	for( i=0; i<CTRBYTECOUNT; i++ )
 	{
-		CtrByte[i] = CTRBYTE[i];
-		CtrByte[i] <<= 10;
-		CtrByte[i] |= CTRBYTE[i];
+		//CtrByte[i] = CTRBYTE[i];
+		//CtrByte[i] <<= 10;
+		//CtrByte[i] |= CTRBYTE[i];
+		CtrByte[i] = CTRBYTE[i]<<8;
+		CtrByte[i] |= (CTRBYTE[i] & 0x03)<<6;
 	}
 
 	//EnterCriticalSection(&cs) ;
@@ -438,9 +448,12 @@ void DisplayControllerUC1698::LCDPower( UINT32 powerVal )
 {
 	UINT32 CtrByte;
 
-	CtrByte = powerVal;
-	CtrByte <<= 10;
-	CtrByte |= powerVal;
+// 	CtrByte = powerVal;
+// 	CtrByte <<= 10;
+// 	CtrByte |= powerVal;
+ 	CtrByte = powerVal<<8;
+ 	CtrByte |= (powerVal&0x03)<<6;
+
 	
 	//EnterCriticalSection(&cs) ;
 	//LCDIFStop( );
@@ -597,35 +610,45 @@ void DisplayControllerUC1698::InitLCD(  )
 	int i;
 
 	UINT32 CtrByte[ CTRBYTECOUNT ];
+	UINT32 unTiming;
 
 	for( i=0; i<CTRBYTECOUNT; i++ )
 	{
-		CtrByte[i] = CTRBYTE[i];
-		CtrByte[i] <<= 10;
-		CtrByte[i] |= CTRBYTE[i];
+// 		CtrByte[i] = CTRBYTE[i];
+// 		CtrByte[i] <<= 10;
+// 		CtrByte[i] |= CTRBYTE[i];
+		CtrByte[i] = CTRBYTE[i]<<8;
+		CtrByte[i] |= (CTRBYTE[i] & 0x03)<<6;
 	}
 
 	//EnterCriticalSection(&cs) ;
 
 	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)CtrByte, sizeof(CtrByte));
 
-#ifdef INITLCDTRUE
-	LCDIFSetTransferCount(1, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
-	//waits for LCDIF transmit current frame
-	LCDIFFlush();
-	Sleep( 100 );
-#endif
+	
+	LCDIFGetTiming( &unTiming );
+	
+	// LQK:Jul-12-2012 
+	// The 0xA0A0C03 is the timing setting of UC1698 gray LCD.
+	if( 0xA0A0C03 != unTiming )
+	{
+		LCDIFSetTransferCount(1, 1);
+		LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET), CMD_MODE );
+		//waits for LCDIF transmit current frame
+		LCDIFFlush();
+		Sleep( 100 );
+	}
 
 	memcpy( (unsigned char *)m_pVirtBase+LCD_CMD_DATA_OFFSET,  (const BYTE*)(CtrByte+1), sizeof(CtrByte));
 
-#ifdef INITLCDTRUE
-	// Then beginning of initialization 
-	LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
-	LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET ), CMD_MODE );
-	//waits for LCDIF transmit current frame
-	LCDIFFlush( );
-#endif
+	if( 0xA0A0C03 != unTiming )
+	{
+		// Then beginning of initialization 
+		LCDIFSetTransferCount(CTRBYTECOUNT-1, 1);
+		LCDIFDisplayFrameBufferEx( (const void *)(m_PhysBase+LCD_CMD_DATA_OFFSET ), CMD_MODE );
+		//waits for LCDIF transmit current frame
+		LCDIFFlush( );
+	}
 
 	
 	// Init contrast level
@@ -695,15 +718,17 @@ void DisplayControllerUC1698::Update( PVOID pSurface )
 			//var = var&0x0c;
 			pFrameBuffer[FrameBufferIdx] |= var <<10;
 			FrameBufferIdx++;*/
-			pFrameBuffer[FrameBufferIdx] = pSurfaceBuffer[SurfaceBufIdx];
-			pFrameBuffer[FrameBufferIdx] |= pSurfaceBuffer[SurfaceBufIdx]<<10;
+			//pFrameBuffer[FrameBufferIdx] = pSurfaceBuffer[SurfaceBufIdx];
+			//pFrameBuffer[FrameBufferIdx] |= pSurfaceBuffer[SurfaceBufIdx]<<10;
+			pFrameBuffer[FrameBufferIdx] = pSurfaceBuffer[SurfaceBufIdx]<<8;
+			pFrameBuffer[FrameBufferIdx] |= (pSurfaceBuffer[SurfaceBufIdx]&0x03) << 6;
 			SurfaceBufIdx++;
 			FrameBufferIdx++;
 		}
 		pFrameBuffer[FrameBufferIdx] = pFrameBuffer[FrameBufferIdx-1];	
 		FrameBufferIdx++;
 	}
-
+	
 	if( m_bSetContrast )
 	{
 		BYTE ContrastLvele[2];
@@ -713,9 +738,11 @@ void DisplayControllerUC1698::Update( PVOID pSurface )
 		ContrastLvele[1] = m_uContrastLevel;
 		for( int i=0; i<2; i++ )
 		{
-			ContrastLveleByte[i] = ContrastLvele[i];
-			ContrastLveleByte[i] <<= 10;
-			ContrastLveleByte[i] |= ContrastLvele[i];
+			//ContrastLveleByte[i] = ContrastLvele[i];
+			//ContrastLveleByte[i] <<= 10;
+			//ContrastLveleByte[i] |= ContrastLvele[i];
+			ContrastLveleByte[i] = ContrastLvele[i]<<8;
+			ContrastLveleByte[i] = (ContrastLvele[i]&0x03)<<6;
 		}
 		
 		memcpy( (unsigned char *)m_pVirtBase+DISPLAY_LOCATION_DATA_OFFSET+16, (const BYTE*)(ContrastLveleByte), sizeof(ContrastLveleByte));

@@ -43,6 +43,7 @@ TARGETLIBS=\
     $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
     $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  \
+	$(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\pmuSdk.lib  
 
 
 SOURCELIBS=\
@@ -52,6 +53,7 @@ SOURCELIBS=\
 
 INCLUDES = \
     $(_TARGETPLATROOT)\SRC\DRIVERS\MCU\MC9S08DZ60\INC; \
+	$(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
     $(INCLUDES)
 
 SOURCES=    \

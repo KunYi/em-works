@@ -30,10 +30,51 @@
 
 PVOID pv_HWregPINCTRL = NULL;
 
+//LQK:Jul-18-2012
+static DWORD g_dwDetection;
+
+// LQK Jul-19-2012: add EM9283 GPIO Pin Table
+DDK_IOMUX_PIN g_EM9283_iMXGpioPin[32] =
+{
+	DDK_IOMUX_GPIO3_20,			// EM9283_GPIO0
+	DDK_IOMUX_GPIO3_21,			// EM9283_GPIO1
+	DDK_IOMUX_GPIO1_8,			// EM9283_GPIO2
+	DDK_IOMUX_GPIO1_9,			// EM9283_GPIO3
+	DDK_IOMUX_GPIO1_16,			// EM9283_GPIO4
+	DDK_IOMUX_GPIO1_17,			// EM9283_GPIO5
+	DDK_IOMUX_GPIO2_16,			// EM9283_GPIO6
+	DDK_IOMUX_GPIO2_17,			// EM9283_GPIO7
+	DDK_IOMUX_GPIO2_18,			// EM9283_GPIO8
+	DDK_IOMUX_GPIO2_19,			// EM9283_GPIO9
+	DDK_IOMUX_GPIO3_24,			// EM9283_GPIO10
+	DDK_IOMUX_GPIO3_25,			// EM9283_GPIO11
+	DDK_IOMUX_GPIO2_4,          // EM9283_GPIO12
+	DDK_IOMUX_GPIO2_6,			// EM9283_GPIO13
+	DDK_IOMUX_GPIO2_7,			// EM9283_GPIO14
+	DDK_IOMUX_GPIO2_5,			// EM9283_GPIO15
+	DDK_IOMUX_GPIO4_7,			// EM9283_GPIO16
+	DDK_IOMUX_GPIO4_3,			// EM9283_GPIO17
+	DDK_IOMUX_GPIO4_8,			// EM9283_GPIO18
+	DDK_IOMUX_GPIO4_4,			// EM9283_GPIO19
+	DDK_IOMUX_GPIO2_9,			// EM9283_GPIO20
+	DDK_IOMUX_GPIO4_16,			// EM9283_GPIO21
+	DDK_IOMUX_GPIO2_8,			// EM9283_GPIO22
+	DDK_IOMUX_GPIO2_10,			// EM9283_GPIO23
+	DDK_IOMUX_GPIO2_0,          // EM9283_GPIO24
+	DDK_IOMUX_GPIO2_1,			// EM9283_GPIO25
+	DDK_IOMUX_GPIO2_2,			// EM9283_GPIO26
+	DDK_IOMUX_GPIO2_3,			// EM9283_GPIO27
+	DDK_IOMUX_GPIO3_23,         // EM9283_GPIO28
+	DDK_IOMUX_GPIO3_22,			// EM9283_GPIO29
+	DDK_IOMUX_GPIO3_28,			// EM9283_GPIO30
+	DDK_IOMUX_GPIO3_26,			// EM9283_GPIO31
+};
+
+static DDK_IOMUX_PIN DDK_SDPowerPin;
+
 // External functions
 extern void ProcessCardInsertion(void *pContext);
 extern void ProcessCardRemoval(void *pContext);
-
 
 
 VOID BSPConfigPinsToSDHCFunc(DWORD dwIndex)
@@ -82,6 +123,7 @@ VOID BSPConfigPinsToSDHCFunc(DWORD dwIndex)
                              DDK_IOMUX_PAD_PULL_ENABLE,
                              DDK_IOMUX_PAD_VOLTAGE_3V3);
 
+#ifndef EM9283	//LQK:Jul-18-2012 data4 to sata7 as SPI interface in EM9283 
         // DATA4
         DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D4, DDK_IOMUX_MODE_00);
         DDKIomuxSetPadConfig(DDK_IOMUX_SSP0_D4, 
@@ -109,6 +151,7 @@ VOID BSPConfigPinsToSDHCFunc(DWORD dwIndex)
                              DDK_IOMUX_PAD_DRIVE_8MA, 
                              DDK_IOMUX_PAD_PULL_ENABLE,
                              DDK_IOMUX_PAD_VOLTAGE_3V3);     
+#endif	//#ifndef EM9283
                                                                                                     
     }
     
@@ -220,7 +263,7 @@ VOID BSPConfigPinsToGPIOLowOutput(DWORD dwIndex)
         DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D3, DDK_IOMUX_MODE_GPIO);
         DDKGpioEnableDataPin(DDK_IOMUX_SSP0_D3, 1);
         DDKGpioWriteDataPin(DDK_IOMUX_SSP0_D3, 0);
-        
+#ifndef EM9283	//LQK:Jul-18-2012 data4 to sata7 as SPI interface in EM9283        
         //DATA4
         DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D4, DDK_IOMUX_MODE_GPIO);
         DDKGpioEnableDataPin(DDK_IOMUX_SSP0_D4, 1);
@@ -240,6 +283,7 @@ VOID BSPConfigPinsToGPIOLowOutput(DWORD dwIndex)
         DDKIomuxSetPinMux(DDK_IOMUX_SSP0_D7, DDK_IOMUX_MODE_GPIO);
         DDKGpioEnableDataPin(DDK_IOMUX_SSP0_D7, 1);
         DDKGpioWriteDataPin(DDK_IOMUX_SSP0_D7, 0);
+#endif	//#ifndef EM9283
     }
     if (dwIndex == 1)
     {
@@ -306,7 +350,29 @@ BOOL BSPSDHCIsCardPresent(DWORD dwIndex)
 {
     if (dwIndex == 0)
     {
-        // SSP1_DET (bank2 pin9)
+
+#ifdef EM9283
+		BOOL bResult;
+		if(HW_PINCTRL_DIN2_RD() & BIT_CARD0_DETECT)
+		{
+			DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("NO SD card0.\r\n")));
+			bResult =  FALSE;
+		}
+		else
+		{
+			DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("The SD card0 is present.\r\n")));
+			bResult =  TRUE;
+		}
+
+		if( g_dwDetection )
+		{
+			bResult = !bResult;
+		}
+
+		return bResult;
+
+#else
+		// SSP1_DET (bank2 pin9)
         if(HW_PINCTRL_DIN2_RD() & BIT_CARD0_DETECT)
         {
             DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("NO SD card0.\r\n")));
@@ -317,6 +383,8 @@ BOOL BSPSDHCIsCardPresent(DWORD dwIndex)
             DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("The SD card0 is present.\r\n")));
             return TRUE;
         }
+#endif // #ifdef EM9283
+
     }
     else if(dwIndex == 1)
     {
@@ -350,7 +418,11 @@ BOOL BSPSDHCIsWriteProtected(DWORD dwIndex)
 
     if (dwIndex == 0)
     {
-        DDKGpioReadDataPin(DDK_IOMUX_SSP1_SCK_1, (PUINT32) &retVal);
+#ifdef EM9283		//lqk:Jul-18-2012 EM9283 not support write protection 
+		retVal = FALSE;
+#else
+		DDKGpioReadDataPin(DDK_IOMUX_SSP1_SCK_1, (PUINT32) &retVal);
+#endif
     }
     else if (dwIndex == 1)
     {
@@ -404,21 +476,49 @@ static BOOL BSPSDHCSetIOMUX(DWORD dwIndex)
             // Detect
             DDKIomuxSetPinMux(DDK_IOMUX_SSP0_CARD_DETECT, DDK_IOMUX_MODE_GPIO);
             DDKGpioEnableDataPin(DDK_IOMUX_SSP0_CARD_DETECT, 0);
-            HW_PINCTRL_IRQLEVEL2_CLR(BIT_CARD0_DETECT);
-            HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);
-            HW_PINCTRL_IRQSTAT2_CLR(BIT_CARD0_DETECT);
+
+#ifdef EM9283		//LQK:Jul-18-2012
+			HW_PINCTRL_IRQLEVEL2_CLR(BIT_CARD0_DETECT);	// Eage detection
+			if( g_dwDetection )
+			{
+				HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);	// High or rising edge
+				RETAILMSG(1, (TEXT("Rising edge detection\r\n")));
+			}
+			else
+			{
+				HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);	// low or falling edge
+				RETAILMSG(1, (TEXT("Falling edge detection\r\n")));
+			}
+			
+			HW_PINCTRL_IRQSTAT2_CLR(BIT_CARD0_DETECT);	
+			HW_PINCTRL_PIN2IRQ2_SET(BIT_CARD0_DETECT);
+			
+#else
+            HW_PINCTRL_IRQLEVEL2_CLR(BIT_CARD0_DETECT);	// Eage detection
+            HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);	// low or falling edge
+            HW_PINCTRL_IRQSTAT2_CLR(BIT_CARD0_DETECT);	
             HW_PINCTRL_PIN2IRQ2_SET(BIT_CARD0_DETECT);
+#endif	
 
             BSPConfigPinsToGPIOLowOutput(dwIndex);
 
-            // WP on SSP1_SCK as GPIO input on EVK
-            DDKIomuxSetPinMux(DDK_IOMUX_SSP1_SCK_1, DDK_IOMUX_MODE_GPIO);
-            DDKGpioEnableDataPin(DDK_IOMUX_SSP1_SCK_1, 0);        // make it an input
+#ifdef EM9283	//Lqk:Jul-18-2012 for SD card power management
+			if( DDK_SDPowerPin >= 0 || DDK_SDPowerPin <= 31 )
+			{
+				DDKIomuxSetPinMux(DDK_SDPowerPin, DDK_IOMUX_MODE_GPIO);
+				DDKGpioEnableDataPin(DDK_SDPowerPin, 1);
+				DDKGpioWriteDataPin(DDK_SDPowerPin, 1);
+			}
+#else
+			// WP on SSP1_SCK as GPIO input on EVK
+			DDKIomuxSetPinMux(DDK_IOMUX_SSP1_SCK_1, DDK_IOMUX_MODE_GPIO);
+			DDKGpioEnableDataPin(DDK_IOMUX_SSP1_SCK_1, 0);        // make it an input
 
-            // PWM3
+			// PWM3
             DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_GPIO);
             DDKGpioEnableDataPin(DDK_IOMUX_PWM3_1, 1);
             DDKGpioWriteDataPin(DDK_IOMUX_PWM3_1, 1);
+#endif	//ifdef EM9283
 
             // Delay 1 ms (=1000 us) for reset as well as power supply ramp up (controlled by PWM3 gpio line)
             Sleep(1);
@@ -486,10 +586,18 @@ BOOL BSPSDHCCardDetectThread(void *pHardwareContext)
         // Check card present or not
         if(BSPSDHCIsCardPresent(dwIndex))
         {
-            DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("ProcessCardInsertion\r\n")));
+            //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("ProcessCardInsertion\r\n")));
+			RETAILMSG(1, (TEXT("-->SD Card Insertion\r\n")));
             
             //1. enable power
+#ifdef EM9283 //	LQK:Jul-18-2012
+			if( DDK_SDPowerPin >= 0 || DDK_SDPowerPin <= 31 )
+			{
+				DDKGpioWriteDataPin(DDK_SDPowerPin, 0);
+			}
+#else
             DDKGpioWriteDataPin(DDK_IOMUX_PWM3_1, 0);
+#endif	//#ifdef EM9283
             
             Sleep(100);
             
@@ -498,23 +606,50 @@ BOOL BSPSDHCCardDetectThread(void *pHardwareContext)
             
             ProcessCardInsertion(pContext);
 
-            // Select rising edge to detect the removal
-            HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);
+            
+#ifdef EM9283	//LQK:Jul-19-2012
+			if( g_dwDetection )
+				// Select falling edge to detect the insertion
+				HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);
+			else
+				// Select rising edge to detect the removal			
+				HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);
+
+#else		
+			// Select rising edge to detect the removal
+			HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);
+#endif	//ifdef EM9283
         }
         else
         {
-            DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("ProcessCardRemoval\r\n")));
-
+            //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("ProcessCardRemoval\r\n")));
+			RETAILMSG(1, (TEXT("<--SD Card Removal\r\n")));
             ProcessCardRemoval(pContext);
 
+#ifdef EM9283	//LQK:Jul-19-2012
+			if( g_dwDetection )
+				// Select rising edge to detect the removal			
+				HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);
+			else
+				// Select falling edge to detect the insertion
+				HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);
+#else	
             // Select falling edge to detect the insertion
             HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);
+#endif		// ifdef EM9283
             
             // 1. Config sdhc pins to gpio low output
             BSPConfigPinsToGPIOLowOutput(dwIndex);
             
             // 2. shutdown power
+#ifdef EM9283 //	LQK:Jul-18-2012
+			if( DDK_SDPowerPin >= 0 || DDK_SDPowerPin <= 31 )
+			{
+				DDKGpioWriteDataPin(DDK_SDPowerPin, 1);
+			}
+#else
             DDKGpioWriteDataPin(DDK_IOMUX_PWM3_1, 1);
+#endif	//#ifdef EM9283
         }
 
         // Clear the interrupt
@@ -585,6 +720,10 @@ BOOL BSPSDHCInit(void *pContext)
 {
     BOOL rc = FALSE;
     DWORD dwIndex = ((PSDHC_HARDWARE_CONTEXT)pContext)->runContext.dwSSPIndex;
+	//LQK:Jul-18-2012
+	g_dwDetection = ((PSDHC_HARDWARE_CONTEXT)pContext)->runContext.dwDetection;
+	DDK_SDPowerPin = g_EM9283_iMXGpioPin[((PSDHC_HARDWARE_CONTEXT)pContext)->runContext.dwPowerPin];
+
     PHYSICAL_ADDRESS PhysAddr;
     PhysAddr.QuadPart = CSP_BASE_REG_PA_PINCTRL;
     pv_HWregPINCTRL = (PVOID)MmMapIoSpace(PhysAddr, 0x2000, FALSE);
@@ -603,7 +742,7 @@ BOOL BSPSDHCInit(void *pContext)
         goto Exit;
     }
     
-    rc = TRUE;
+	rc = TRUE;
     
 Exit:
     return rc;    

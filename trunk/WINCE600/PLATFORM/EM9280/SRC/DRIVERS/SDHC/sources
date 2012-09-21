@@ -17,6 +17,7 @@ INCLUDES= \
     $(INCLUDES); \
     $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_SOCDIR)\SDHC; \
 
+
 TARGETLIBS= \
     $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
     $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
@@ -29,9 +30,17 @@ SOURCELIBS= \
     $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\sdbus.lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\sdhc_$(_SOCDIR).lib     
 
-SOURCES = bspsdhc.cpp
+SOURCES= \
+    bspsdhc.cpp \
+
 
 FILE_VIEW_RESOURCE_FOLDER= \
     sdhc.def \
     sdhc.reg \
+
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
+FILE_VIEW_INCLUDES_FOLDER= \
 

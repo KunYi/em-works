@@ -609,6 +609,16 @@ void LCDIFSetTransferCount(UINT32 WidthInBytes, UINT32 Height)
 {
     BF_CS2(LCDIF_TRANSFER_COUNT, V_COUNT, Height, H_COUNT, WidthInBytes);
 }
+
+//LQK:Jul-12-2012
+void LCDIFGetTiming( UINT32 *pTiming )
+{
+	hw_lcdif_timing_t timing_reg;
+
+	timing_reg.U = HW_LCDIF_TIMING_RD();
+	*pTiming = (UINT32)timing_reg.U;
+	
+}
 //-----------------------------------------------------------------------------
 //  Function:LCDIFSetBusMasterMode()
 //

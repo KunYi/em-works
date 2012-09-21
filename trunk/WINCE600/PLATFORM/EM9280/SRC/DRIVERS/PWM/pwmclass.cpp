@@ -34,6 +34,7 @@ PWMClass::PWMClass(DWORD dwIndex)
 
 		switch(m_dwIndex)
 		{
+#ifdef EM9280		//Lqk:Jul-17-2012
 		case 1:			// PWM_5
 			m_dwPwmIndex = 5;							
 			m_dwPwmEnable = BM_PWM_CTRL_PWM5_ENABLE;
@@ -53,6 +54,28 @@ PWMClass::PWMClass(DWORD dwIndex)
 			m_dwPwmIndex = 4;	
 			m_dwPwmEnable = BM_PWM_CTRL_PWM4_ENABLE;
 			break;
+#else	// ->EM9283
+		case 1:			// PWM_6
+			m_dwPwmIndex = 6;							
+			m_dwPwmEnable = BM_PWM_CTRL_PWM6_ENABLE;
+			break;
+
+		case 2:			// PWM_5
+			m_dwPwmIndex = 5;							
+			m_dwPwmEnable = BM_PWM_CTRL_PWM5_ENABLE;
+			break;
+
+		case 3:			// PWM_3
+			m_dwPwmIndex = 3;							
+			m_dwPwmEnable = BM_PWM_CTRL_PWM3_ENABLE;
+			break;
+
+		case 4:			// PWM_7
+			m_dwPwmIndex = 7;	
+			m_dwPwmEnable = BM_PWM_CTRL_PWM7_ENABLE;
+			break;
+#endif	//#ifdef EM9280		//Lqk:Jul-17-2012
+
 		}
 	}
 	else
@@ -117,6 +140,7 @@ BOOL PWMClass::PinConfig()
 
 	switch(m_dwIndex)
 	{
+#ifdef EM9280	//LQK:Jul-17-2012
 	case 1:	// -> iMX283.PWM_5 - GPIO3_22
 		DDKIomuxSetPinMux(DDK_IOMUX_PWM5, DDK_IOMUX_MODE_01);
 		DDKIomuxSetPadConfig(DDK_IOMUX_PWM5, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
@@ -136,6 +160,27 @@ BOOL PWMClass::PinConfig()
 		DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1, DDK_IOMUX_MODE_00);
 		DDKIomuxSetPadConfig(DDK_IOMUX_PWM4_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
 		break;
+#else	// ->EM9283
+	case 1:	// -> iMX283.PWM_6 - GPIO3_23
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM6, DDK_IOMUX_MODE_01);
+		DDKIomuxSetPadConfig(DDK_IOMUX_PWM6, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+		break;
+
+	case 2:	// -> iMX283.PWM_5 - GPIO3_22
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM5, DDK_IOMUX_MODE_01);
+		DDKIomuxSetPadConfig(DDK_IOMUX_PWM5, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+		break;
+
+	case 3:	// -> iMX283.PWM_3 - GPIO3_28
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00);
+		DDKIomuxSetPadConfig(DDK_IOMUX_PWM3_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+		break;
+
+	case 4:	// -> iMX283.PWM_7 - GPIO3_26
+		DDKIomuxSetPinMux(DDK_IOMUX_PWM7, DDK_IOMUX_MODE_01);
+		DDKIomuxSetPadConfig(DDK_IOMUX_PWM7, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+		break;
+#endif //#ifdef EM9280	//LQK:Jul-17-2012
 
 	default:
 		bRet = FALSE;

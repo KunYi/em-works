@@ -125,6 +125,50 @@ static VOID SetupRXDescDESC(PVOID pContext,
     dma->RegCTRL0.U = HW_UARTAPPCTRL0_RD(pHWHead->dwIndex);
     dma->RegCTRL0.B.XFER_COUNT = (UINT16)size;
 }
+
+//
+// CS&ZHL AUG-23-2012: a new setup for Rx DMA descriptor
+//
+static VOID SetupRXDescEx(PVOID pContext,
+                          UARTAPP_RXDMA_DESCRIPTOR* dma,
+                          UARTAPP_RXDMA_DESCRIPTOR* next_dma,
+                          const UINT32 pBuf,
+                          UINT32 size)
+{
+
+    PUART_INFO pHWHead = (PUART_INFO)pContext;
+    PSER_INFO pSerHead = (PSER_INFO)pContext;
+
+    // First clear all the bits
+    dma->CMD.CommandBits = 0;
+
+    // Next, set desired bits.
+    dma->CMD.B.Command    = DDK_DMA_COMMAND_DMA_WRITE;
+    dma->CMD.B.IRQ        = 1;
+    dma->CMD.B.Semaphore  = 1;
+    dma->CMD.B.WaitForEnd = 1;
+
+    dma->CMD.B.HALTONTERMINATE = 0;
+    dma->CMD.B.TERMINATEFLUSH  = 1;
+
+    // Setup PIO words.
+    dma->CMD.B.PIOWords   = 1;
+    dma->RegCTRL0.U = 0;
+
+    dma->CMD.B.DMABytes = (UINT16) size;
+
+	// processing chain
+    dma->NextCmdDesc = 0;
+    if (next_dma != NULL)
+    {
+        dma->NextCmdDesc = (UINT32) GetRXDescvirt2phys(next_dma);
+        dma->CMD.B.Chain = 1;
+    }
+    dma->BufAddr = pBuf;
+    dma->RegCTRL0.U = HW_UARTAPPCTRL0_RD(pHWHead->dwIndex);
+    dma->RegCTRL0.B.XFER_COUNT = (UINT16)size;
+}
+
 static VOID SetupTXDescDESC(PVOID pContext,
                             UARTAPP_TXDMA_DESCRIPTOR* dma,
                             UARTAPP_TXDMA_DESCRIPTOR* prev_dma,
@@ -850,11 +894,17 @@ VOID SL_Open(PVOID pContext)
             // Init the RX DMA chain
             for (i = 0; i < SERIAL_MAX_DESC_COUNT_RX; i++)
             {
-                SetupRXDescDESC(pHWHead,
-                                &pSerHead->pSerialVirtRxDMADescAddr[i],
-                                (i == 0) ? NULL : &pSerHead->pSerialVirtRxDMADescAddr[i - 1],
-                                pSerHead->SerialPhysRxDMABufferAddr.LowPart + (i * pSerHead->rxDMABufSize),
-                                pSerHead->rxDMABufSize);
+                //SetupRXDescDESC(pHWHead,
+                //                &pSerHead->pSerialVirtRxDMADescAddr[i],
+                //                (i == 0) ? NULL : &pSerHead->pSerialVirtRxDMADescAddr[i - 1],
+                //                pSerHead->SerialPhysRxDMABufferAddr.LowPart + (i * pSerHead->rxDMABufSize),
+                //                pSerHead->rxDMABufSize);
+				// CS&ZHL AUG-23-2012: use new setup
+                SetupRXDescEx(pHWHead,
+                              &pSerHead->pSerialVirtRxDMADescAddr[i],
+                              &pSerHead->pSerialVirtRxDMADescAddr[(i + 1) % SERIAL_MAX_DESC_COUNT_RX],
+                              pSerHead->SerialPhysRxDMABufferAddr.LowPart + (i * pSerHead->rxDMABufSize),
+                              pSerHead->rxDMABufSize);
             }
 
             pSerHead->currRxDmaBufId = 0;
@@ -864,7 +914,7 @@ VOID SL_Open(PVOID pContext)
             // Enable the RXDMA interrupt
             DDKApbxDmaEnableCommandCmpltIrq(pSerHead->SerialDmaChanRx,TRUE);
 
-            // Start DMA RX Chain
+            // Start DMA RX Chain with semaphore count = i => SERIAL_MAX_DESC_COUNT_RX
             DDKApbxStartDma(pSerHead->SerialDmaChanRx,(PVOID) GetRXDescvirt2phys(&pSerHead->pSerialVirtRxDMADescAddr[0]), i);
         }
         // Enable the UART
@@ -1081,6 +1131,14 @@ INTERRUPT_TYPE SL_GetIntrType(
             interrupts |= INTR_RX;
         }
 
+		//
+		// CS&ZHL AUG23-2012: set INTR_RX if data aiavlable in Rx DMA buffer
+		//
+		if( pSerHead->availRxByteCount )
+		{
+            interrupts |= INTR_RX;
+		}
+
         // Clear all signalled events.
         HW_UARTAPPINTR_CLR(pHWHead->dwIndex, ALL_INT_STATUS_MASK);
     }
@@ -1278,75 +1336,54 @@ ULONG SL_RxIntrHandler(PVOID pContext,PUCHAR pTargetBuffer,ULONG *pByteNumber)
                     break;
                 }
 
-                // No Errors
-                if (pSerHead->currRxDmaBufId == 0)
+                // First RX Desc has finished
+				//LQK:Aug 23,2012
+				if( pSerHead->availRxByteCount == 0 )
+				{
+					pSerHead->availRxByteCount = HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & 0xFFFF;
+					pSerHead->dmaRxStartIdx = pSerHead->currRxDmaBufId * pSerHead->rxDMABufSize;		//0;
+				}
+                copyCount = MIN_VAL(pSerHead->availRxByteCount, TargetRoom);
+
+                if (copyCount)
                 {
-                    // First RX Desc has finished
-                    pSerHead->availRxByteCount = HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & 0xFFFF;
-                    copyCount = MIN_VAL(pSerHead->availRxByteCount, TargetRoom);
+                    pBuffer = (LPBYTE)(pTargetBuffer + *pByteNumber);
 
-                    if (copyCount)
-                    {
-                        pBuffer = (LPBYTE)(pTargetBuffer + *pByteNumber);
+                    memcpy(pBuffer,
+                           pSerHead->pSerialVirtRxDMABufferAddr + pSerHead->dmaRxStartIdx,
+                           copyCount);
 
-                        memcpy(pBuffer,
-                               pSerHead->pSerialVirtRxDMABufferAddr +
-                               pSerHead->currRxDmaBufId * pSerHead->rxDMABufSize,
-                               copyCount);
-
-                        *pByteNumber += copyCount;
-                        TargetRoom -= copyCount;
-                    }
-                    DDKApbxDmaClearCommandCmpltIrq(pSerHead->SerialDmaChanRx);
-                    pSerHead->currRxDmaBufId = 1;
-
-                    break;
+                    *pByteNumber += copyCount;
+                    TargetRoom -= copyCount;
+					pSerHead->availRxByteCount -= copyCount;
+					pSerHead->dmaRxStartIdx += copyCount;
                 }
-                else if (pSerHead->currRxDmaBufId == 1)
-                {
 
-                    // Check for errors in the data and set return value.
-                    SL_ReadLineStatus(pHWHead);
+				if( pSerHead->availRxByteCount == 0 )
+				{
+					// re-init current RxDMA descriptor
+					i = pSerHead->currRxDmaBufId;
+					SetupRXDescEx(pHWHead,
+								  &pSerHead->pSerialVirtRxDMADescAddr[i],
+								  &pSerHead->pSerialVirtRxDMADescAddr[(i + 1) % SERIAL_MAX_DESC_COUNT_RX],
+								  pSerHead->SerialPhysRxDMABufferAddr.LowPart + (i * pSerHead->rxDMABufSize),
+								  pSerHead->rxDMABufSize);
 
-                    // Second RX Desc has finished
-                    pSerHead->availRxByteCount = HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & 0xFFFF;
-                    copyCount = MIN_VAL(pSerHead->availRxByteCount, TargetRoom);
+					// Enable the RXDMA interrupt
+					DDKApbxDmaEnableCommandCmpltIrq(pSerHead->SerialDmaChanRx,TRUE);
 
-                    if (copyCount)
-                    {
-                        pBuffer = (LPBYTE)(pTargetBuffer + *pByteNumber);
+					// increase semaphore count by 1
+					DDKApbxStartDma(pSerHead->SerialDmaChanRx, (PVOID)GetRXDescvirt2phys(&pSerHead->pSerialVirtRxDMADescAddr[i]), 0);
 
-                        memcpy(pBuffer,
-                               pSerHead->pSerialVirtRxDMABufferAddr +
-                               pSerHead->currRxDmaBufId * pSerHead->rxDMABufSize,
-                               copyCount);
+					// clear Interrupt flag
+					DDKApbxDmaClearCommandCmpltIrq(pSerHead->SerialDmaChanRx);
 
-                        *pByteNumber += copyCount;
-                        TargetRoom -= copyCount;
-                    }
+					// points to next RxDMA buffer
+                    pSerHead->currRxDmaBufId = (pSerHead->currRxDmaBufId + 1 ) % SERIAL_MAX_DESC_COUNT_RX;
 
-                    // Reinit the RX DMA Chain
-                    for (i = 0; i < SERIAL_MAX_DESC_COUNT_RX; i++)
-                    {
-                        SetupRXDescDESC(pHWHead,
-                                        &pSerHead->pSerialVirtRxDMADescAddr[i],
-                                        (i == 0) ? NULL : &pSerHead->pSerialVirtRxDMADescAddr[i - 1],
-                                        pSerHead->SerialPhysRxDMABufferAddr.LowPart + (i * pSerHead->rxDMABufSize),
-                                        pSerHead->rxDMABufSize);
-                    }
-                    pSerHead->currRxDmaBufId = 0;
-
-                    // Enable the RXDMA interrupt
-                    DDKApbxDmaEnableCommandCmpltIrq(pSerHead->SerialDmaChanRx,TRUE);
-
-                    // Start DMA RX Chain
-                    DDKApbxStartDma(pSerHead->SerialDmaChanRx,(PVOID) GetRXDescvirt2phys(&pSerHead->pSerialVirtRxDMADescAddr[0]), i);
-
-                    // clear the interrupt
-                    DDKApbxDmaClearCommandCmpltIrq(pSerHead->SerialDmaChanRx);
-
-                    break;
-                }
+					// current Rx DMA buffer is no more data, so break
+					break;
+				}
             }
             pHWHead->DroppedBytes = RetVal;
         }

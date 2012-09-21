@@ -121,6 +121,20 @@ extern "C" {
                                         METHOD_BUFFERED,     \
                                         FILE_ANY_ACCESS      \
                                         )
+//lqk:jul-14-2012    add ioctrol code                              
+#define PMU_IOCTL_GET_POWER_SOURCE     CTL_CODE(           \
+                                        FILE_DEVICE_UNKNOWN, \
+                                        0x200e,              \
+                                        METHOD_BUFFERED,     \
+                                        FILE_ANY_ACCESS      \
+                                        )
+//LQK:Jul-25-2012                                                                                
+#define PMU_IOCTL_BATTERY_ATTACH		 CTL_CODE(           \
+										FILE_DEVICE_UNKNOWN, \
+										0x200f,              \
+										METHOD_BUFFERED,     \
+										FILE_ANY_ACCESS      \
+										)                                        
                                         
 #ifdef __cplusplus
 }
