@@ -1,0 +1,7 @@
+[HKEY_LOCAL_MACHINE\System\GDI\Drivers]
+   "Display"="dot_lcd.dll"
+  "GUID"="{83A0FF68-78BB-4DF5-8DEB-077961EE75BC}"
+  "Bpp"=dword:10					; RGB565
+  "VideoMemSize"=dword:800000		; 8MB
+  "Alignment"=dword:8	
+  "ContrastLevel"=dword:3c			;60

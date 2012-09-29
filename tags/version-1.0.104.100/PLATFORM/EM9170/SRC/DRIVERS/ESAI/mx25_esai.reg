@@ -1,0 +1,18 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ESAI]
+    "Prefix"="WAV"
+    "Dll"="esai_wm8580.dll"
+    "Index"=dword:3
+    "Order"=dword:22
+    "Priority256"=dword:95
+    "AudioProtocol"=dword:2
+    "IClass"=multi_sz:"{E92BC203-8354-4043-A06F-2A170BF6F227}",
+                      "{37168569-61C4-45fd-BD54-9442C7DBA46F}"

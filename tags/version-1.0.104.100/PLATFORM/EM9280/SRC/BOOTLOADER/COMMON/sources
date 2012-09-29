@@ -1,0 +1,69 @@
+# 
+# Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+# THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+# AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+# 
+
+TARGETNAME=bootcmn
+TARGETTYPE=LIBRARY
+RELEASETYPE=PLATFORM
+NOMIPS16CODE=1
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_TARGETPLATROOT)\src\inc; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\nand; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\sdmmc; \
+
+CDEFINES=$(CDEFINES) -DIN_BOOTLOADER
+CDEFINES=$(CDEFINES) -DBOOTLOADER
+
+!IF "$(BSP_DISPLAY_LMS350GF10)" != ""
+CDEFINES= $(CDEFINES) -DBSP_DISPLAY_LMS350GF10
+!ENDIF
+
+!IF "$(BSP_DISPLAY_LMS430HF02)" != ""
+CDEFINES= $(CDEFINES) -DBSP_DISPLAY_LMS430HF02
+!ENDIF
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
+!IF ("$(BSP_DISPLAY_UC1698)" == "1")
+CDEFINES=$(CDEFINES) -DDISPLAY_UC1698
+!ENDIF
+
+LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
+
+SOURCES= \
+    main.c \
+    flash.c \
+    utils.c \
+    nand.c \
+    nor.c \
+    ether.c \
+    esdhc.c \
+    display.c \
+    sdmmc.c
+
+ARM_SOURCES= \
+    startup.s \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    bcb.h \
+    loader.h \
+    sdmmc.h \
+    ..\..\INC\image_cfg.inc \
+    ..\..\INC\bsp_cfg.h \
+    ..\..\INC\image_cfg.h \
+    bitmap.h \
+    ..\..\INC\bsp.h \
+    ..\..\INC\display_panel.h \
+

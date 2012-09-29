@@ -1,0 +1,39 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_DVFC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=dvfc
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+PREPROCESSDEFFILE=1
+SYNCHRONIZE_DRAIN=1
+
+
+TARGETLIBS= \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\pmuSdk.lib
+
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\dvfc_$(_COMMONSOCDIR).lib \
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\dvfc_$(_COMMONSOCDIR).def
+
+INCLUDES=\
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\OAL\inc;  \
+    $(INCLUDES)
+
+SOURCES= \
+    voltctrl.c \
+    dvfc.c
+
+ARM_SOURCES= \
+    irq.s     

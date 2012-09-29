@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=pwm_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETDEFNAME=$(TARGETNAME)
+DEFFILE=pwm.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETDEFNAME).def
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+
+INCLUDE_FILE_VIEWER= \
+    pwm.h \
+
+INCLUDES= $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_SOCDIR)\INC; \
+          $(INCLUDES)
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+SOURCES= pwmpdd.c \
+         pwmmdd.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    pwm.def \
+
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    pwm.h \
+    ..\INC\pwmdefs.h \
+    ..\INC\mx25_pwm.h \
+

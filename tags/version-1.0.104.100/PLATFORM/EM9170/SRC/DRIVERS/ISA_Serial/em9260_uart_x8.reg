@@ -1,0 +1,59 @@
+;
+; Registries of 8 UART ports on EM9260 ISA bus
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial6]
+   "DeviceArrayIndex"=dword:7			; COM port number, -> COM7
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:20					; ETA508_UART0 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C000		; virtual uncached base address of UART0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial7]
+   "DeviceArrayIndex"=dword:8			; COM port number, -> COM8
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:21					; ETA508_UART1 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C020		; virtual uncached base address of UART1
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial8]
+   "DeviceArrayIndex"=dword:9			; COM port number, -> COM9
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:22					; ETA508_UART2 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C040		; virtual uncached base address of UART2
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial9]
+   "DeviceArrayIndex"=dword:a			; COM port number, -> COM10
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:23					; ETA508_UART3 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C060		; virtual uncached base address of UART3
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial10]
+   "DeviceArrayIndex"=dword:b			; COM port number, -> COM11
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:24					; ETA508_UART4 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C080		; virtual uncached base address of UART4
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial11]
+   "DeviceArrayIndex"=dword:c			; COM port number, -> COM12
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:25					; ETA508_UART5 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C0A0		; virtual uncached base address of UART5
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial12]
+   "DeviceArrayIndex"=dword:d			; COM port number, -> COM13
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:26					; ETA508_UART6 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C0C0		; virtual uncached base address of UART6
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial13]
+   "DeviceArrayIndex"=dword:e			; COM port number, -> COM14
+   "Prefix"="COM"						; COM
+   "Dll"="em9x60_serial.dll"		    ; 
+   "DeviceID"=dword:27					; ETA508_UART7 => Device_ID_IRQ1 = 0x1e
+   "IOBaseAddress"=dword:BF80C0E0		; virtual uncached base address of UART7
+

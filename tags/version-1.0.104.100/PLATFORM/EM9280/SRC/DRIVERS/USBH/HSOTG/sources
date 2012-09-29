@@ -1,0 +1,62 @@
+!if 0
+Copyright (C) 2005-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+Module Name:
+    sources.
+
+Abstract:
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+!endif
+
+!IF "$(BSP_USB_HSOTG_HOST)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=hcd_hsotg
+TARGETTYPE=DYNLINK
+
+DEFFILE=$(_COMMONOAKROOT)\inc\ehcd.def
+
+DLLENTRY=_DllMainCRTStartup
+
+CDEFINES=$(CDEFINES) -DUSB_WAKEUP_NONE -DGENERAL_OTG
+#-DUSB_WAKEUP_CNANDDN
+#-DUSB_WAKEUP_CN
+# GENERAL_OTG : used in MSFT OTG implementation 
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\pmuSdk.lib 
+
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_usb2com_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_ehcdmdd_$(_COMMONSOCDIR).lib  \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_ehcdpdd_$(_COMMONSOCDIR).lib  \
+   
+
+INCLUDES = \
+    $(_TARGETPLATROOT)\SRC\DRIVERS\MCU\MC9S08DZ60\INC; \
+    $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+    $(INCLUDES)
+
+SOURCES=    \
+    i_hwinit.c  \
+    i_usbclock.c \
+    i_usbutils.c

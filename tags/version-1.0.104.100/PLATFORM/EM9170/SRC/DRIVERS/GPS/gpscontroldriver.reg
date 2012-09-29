@@ -1,0 +1,12 @@
+;  Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+;  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+; 
+
+; This file is to be included in platform.reg if required.
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\GPSControl]
+   "Prefix"="GPS"
+   "Dll"="GpsControlDriver.dll"
+   "Index"=dword:2
+   "Order"=dword:4

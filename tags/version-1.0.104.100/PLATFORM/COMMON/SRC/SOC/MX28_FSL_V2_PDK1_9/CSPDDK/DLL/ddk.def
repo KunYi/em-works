@@ -1,0 +1,66 @@
+;------------------------------------------------------------------------------
+;
+;   Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;   THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;   AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+LIBRARY CSPDDK
+ 
+EXPORTS
+    Init
+    Deinit
+
+    DDKApbhDmaInitChan
+    DDKApbhStartDma
+    DDKApbhStopDma
+    DDKApbhDmaInitChan
+    DDKApbhDmaChanCLKGATE
+    DDKApbhDmaClearCommandCmpltIrq
+    DDKApbhDmaEnableCommandCmpltIrq
+    DDKApbhDmaResetChan
+    DDKApbhDmaFreezeChan
+    DDKApbhDmaGetPhore
+    DDKApbhDmaClearErrorIrq
+    DDKApbhDmaSetBurstSize    
+    
+    DDKApbxStartDma
+    DDKApbxStopDma
+    DDKApbxDmaInitChan
+    DDKApbxDmaClearCommandCmpltIrq
+    DDKApbxDmaClearErrorIrq
+    DDKApbxDmaEnableCommandCmpltIrq
+    DDKApbxDmaGetErrorStatus    
+
+    DDKApbxDmaResetChan
+    DDKApbxDmaFreezeChan
+    DDKApbxGetNextCMDAR
+    DDKApbxDmaGetActiveIrq
+    DDKApbxDmaClearInterrupts    
+    
+    DDKGpioConfig
+    DDKGpioWriteDataPin
+    DDKGpioReadDataPin
+    DDKGpioReadIntrPin
+    DDKGpioEnableDataPin
+    DDKGpioClearIntrPin
+	DDKGpioIntrruptEnable
+	DDKGpioIntrruptDisable
+
+    DDKIomuxSetPinMux
+    DDKIomuxGetPinMux
+    DDKIomuxSetPadConfig
+    DDKIomuxGetPadConfig
+   
+    DDKClockSetGatingMode
+    DDKClockGetGatingMode
+    DDKClockGetFreq
+    DDKClockConfigBaud
+    DDKClockSetpointRequest
+    DDKClockSetpointRelease
+    DDKClockGetSharedConfig
+    DDKClockLock
+    DDKClockUnlock
+    DDKClockReadENetConfig
+    DDKClockWriteENetConfig

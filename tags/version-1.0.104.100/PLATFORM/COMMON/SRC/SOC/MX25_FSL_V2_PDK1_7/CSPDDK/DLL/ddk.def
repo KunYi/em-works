@@ -1,0 +1,53 @@
+;------------------------------------------------------------------------------
+;
+;   Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;   THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;   AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+LIBRARY CSPDDK
+
+EXPORTS
+    Init
+    Deinit
+
+    DDKSdmaOpenChan
+    DDKSdmaUpdateSharedChan
+    DDKSdmaCloseChan
+    DDKSdmaAllocChain
+    DDKSdmaFreeChain
+    DDKSdmaSetBufDesc
+    DDKSdmaGetBufDescStatus
+    DDKSdmaGetChainStatus
+    DDKSdmaClearBufDescStatus
+    DDKSdmaClearChainStatus
+    DDKSdmaInitChain
+    DDKSdmaStartChan
+    DDKSdmaStopChan
+
+    DDKGpioSetConfig
+    DDKGpioWriteData
+    DDKGpioWriteDataPin
+    DDKGpioReadData
+    DDKGpioReadDataPin
+    DDKGpioReadIntr
+    DDKGpioReadIntrPin
+    DDKGpioClearIntrPin
+
+    DDKIomuxSetPinMux
+    DDKIomuxGetPinMux
+    DDKIomuxSetPadConfig
+    DDKIomuxGetPadConfig
+    DDKIomuxSelectInput
+
+    DDKClockSetGatingMode
+    DDKClockGetGatingMode
+    DDKClockGetFreq
+    DDKClockConfigBaud
+    DDKClockSetCKO
+    DDKClockSetpointRequest
+    DDKClockSetpointRelease
+    DDKClockGetSharedConfig
+    DDKClockLock
+    DDKClockUnlock

@@ -1,0 +1,37 @@
+!if 0
+Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_GPT1)" == "" && "$(BSP_GPT2)" == "" && "$(BSP_GPT3)" == "" && "$(BSP_GPT4)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=gpt
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllEntryCRTStartup
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\gpt_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\gpt_$(_COMMONSOCDIR).lib
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\gpt_$(_COMMONSOCDIR).def
+
+INCLUDES=\
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\gpt\pdk
+
+SOURCES=\
+    bspgpt.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_gpt.reg \
+

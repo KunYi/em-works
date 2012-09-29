@@ -1,0 +1,24 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=pp_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+DEFFILE=pp.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+INCLUDES=\
+    ..\..\INC; \
+    ..\..\..\INC; \
+
+SOURCES=\
+    Pp_io.cpp   \
+    PpClass.cpp

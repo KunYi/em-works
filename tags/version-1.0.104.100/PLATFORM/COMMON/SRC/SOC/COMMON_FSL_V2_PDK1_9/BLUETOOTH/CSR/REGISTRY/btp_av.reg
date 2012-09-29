@@ -1,0 +1,52 @@
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WaveDev]
+    "Dll"="btp_avdrv.dll"
+    "Prefix"="WAV"
+    "streamOn"=dword:0
+    "autoMute"=dword:1
+        
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\AVM]
+    "Filename"="btp_modules.dll"    
+    "bluetoothAddress"=""
+    "bitrate"=dword:140
+    "key1"="9c8712fe7eb381ab"
+    "key2"="6378ed01814c7e54"
+    "key3"="86bc4e83e01c434f"
+    "notificationTimeout"=dword:0
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\AVM\Remote]
+    "Target"="WMP"
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\AVM\Remote\WMP]
+    "FriendlyName"="Windows Media Player"
+    "Method"="Broadcast"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\AVM]
+    "State"="Idle"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Bluetooth\l2cap]
+    "ConnectPacketType"=dword:CC18
+    "ScanModeControl"=dword:1
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Bluetooth\avdtp]
+    "Enabled"=dword:0
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Bluetooth\avctp]
+    "Enabled"=dword:0
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Bluetooth\services\0000110B-0000-1000-8000-00805F9B34FB]
+    @="Audio/Video"
+    "btp_ui_ext.dll"=dword:0
+
+[HKEY_CLASSES_ROOT\CLSID\{B1706E0D-9045-4ECF-A57B-B8226F93871B}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MediaPlayer\UIPlugins\{B1706E0D-9045-4ECF-A57B-B8226F93871B}]
+    "Capabilities"=dword:02000001
+    "Description"="Bluetooth Remote Control UI"
+    "FriendlyName"="Bluetooth Remote Control"
+
+[HKEY_LOCAL_MACHINE\software\microsoft\shell\extensions\controls folder\bluetooth\shellex\propertysheethandlers\{16C8A58D-F37F-4B62-BA8C-7A04B61E43E3}]
+    @=""
+
+[HKEY_CLASSES_ROOT\CLSID\{16C8A58D-F37F-4B62-BA8C-7A04B61E43E3}]
+    @="audio_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{16C8A58D-F37F-4B62-BA8C-7A04B61E43E3}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"

@@ -1,0 +1,57 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+
+!if 0
+#  Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+#  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+#  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF 0
+
+Module Name:
+    sources.
+
+Abstract:
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+!ENDIF
+
+!INCLUDE "..\sources.inc"
+
+!IF "$(SYSGEN_USBFN_STORAGE)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME = UUT_$(_COMMONSOCDIR)
+TARGETTYPE = LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+DEFFILE=UUT.DEF
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+CDEFINES=$(CDEFINES) -DMSCDSK -DQFE_MERGE
+
+INCLUDES=\
+    ..\inc; \
+    ..\MS\USBFN\CLASS\STORAGE\EMULATION\SCSI2\inc; \
+    ..\MS\USBFN\CLASS\STORAGE\inc; 
+
+SOURCES=\
+    block.cpp \
+    bot.cpp \
+    utp.cpp \
+    uce.cpp \
+    uce_media.cpp \
+    sdboot.cpp

@@ -1,0 +1,26 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+IF BSP_SMARTCARD_SIM1
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SIM1]
+    "Prefix"="SCR"
+    "Dll"="sim.dll"
+    "Index"=dword:1
+    "Order"=dword:11    
+    "DeviceArrayIndex"=dword:1
+    "Port"=dword:0
+ENDIF   ;BSP_SMARTCARD_SIM1
+
+IF BSP_SMARTCARD_SIM2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\SIM2]
+    "Prefix"="SCR"
+    "Dll"="sim.dll"
+    "Index"=dword:2
+    "Order"=dword:11    
+    "DeviceArrayIndex"=dword:2
+    "Port"=dword:0
+ENDIF   ;BSP_SMARTCARD_SIM2

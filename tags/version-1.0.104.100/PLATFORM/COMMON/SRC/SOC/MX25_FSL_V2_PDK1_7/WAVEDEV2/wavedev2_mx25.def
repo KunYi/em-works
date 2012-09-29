@@ -1,0 +1,8 @@
+LIBRARY         wavedev2_mx25
+
+EXPORTS
+    WAV_Init
+    WAV_Deinit
+    WAV_Open
+    WAV_Close
+    WAV_IOControl

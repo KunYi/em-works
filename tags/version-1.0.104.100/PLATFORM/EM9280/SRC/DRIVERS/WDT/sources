@@ -1,0 +1,43 @@
+!IF ("$(BSP_EM9280)" == "") && ("$(BSP_EM9283)" == "")
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_EM9280)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+TARGETNAME=WDT
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=WDT_DllEntry
+
+DEFFILE=WDT.def
+
+TARGETLIBS= \
+	$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+	$(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    WDT.reg \
+    WDT.def \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\..\INC\bsp_drivers.h \
+    ..\..\INC\em9280_oal.h \
+    ..\..\INC\bsp.h \
+
+SOURCES= \
+    wdt_io.cpp \
+

@@ -1,0 +1,13 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+;//  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+;//  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;//
+;//------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ADC]
+"Dll" = "adc.dll"
+"Prefix" = "ADC"
+"Index" =dword:1
+"Order" = dword:0
+"IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}" 

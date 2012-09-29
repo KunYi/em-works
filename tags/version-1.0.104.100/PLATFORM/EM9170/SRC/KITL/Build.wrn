@@ -1,0 +1,2 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000011:WARNN ] D:\WINCE600\PLATFORM\EM9170\SRC\KITL\sources(57) : Build.exe does not evaluate IF conditional statements. Conditional statements that affect macro definitions might cause Build.exe to not rebuild modified source code. Refer to the Platform Builder documentation.

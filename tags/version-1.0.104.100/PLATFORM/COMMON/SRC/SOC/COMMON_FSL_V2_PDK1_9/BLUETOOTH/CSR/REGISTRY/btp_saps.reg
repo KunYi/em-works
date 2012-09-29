@@ -1,0 +1,15 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\SAPSM]
+    "SapsActiveState"=dword:0
+    "Protocol"=dword:0
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\SAPSM]
+    "State"="Idle"
+
+[HKEY_CLASSES_ROOT\CLSID\{04A011B4-1DEA-4F20-8405-C3173D51089E}]
+    @="saps_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{04A011B4-1DEA-4F20-8405-C3173D51089E}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+   
+

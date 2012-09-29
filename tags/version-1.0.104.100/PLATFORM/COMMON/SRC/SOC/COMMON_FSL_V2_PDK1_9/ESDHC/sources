@@ -1,0 +1,26 @@
+!if 0
+Copyright (C) 2007-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+!IF "$(BSP_HIVE_SDHC)" == "1"
+CDEFINES=$(CDEFINES) -DBSP_HIVE_SDHC
+!ENDIF
+
+TARGETNAME=esdhcbase_$(_COMMONSOCDIR)
+CDEFINES=$(CDEFINES) -DMSCDSK
+TARGETTYPE=LIBRARY
+        
+INCLUDES=..\SDBUS;\
+    $(INCLUDES)
+
+SOURCES=esdhc.cpp \
+              esdhcdma.cpp \
+              sdmain.cpp
+
+        
+
+

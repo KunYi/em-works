@@ -1,0 +1,11 @@
+;//------------------------------------------------------------------------------
+;//  Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;//------------------------------------------------------------------------------
+IF BSP_EM9170
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\WDT1]
+   "Prefix"="WDT"
+   "Dll"="wdt.dll"
+   "Index"=dword:1
+   "Order"=dword:11
+ENDIF ; BSP_EM9170
+-

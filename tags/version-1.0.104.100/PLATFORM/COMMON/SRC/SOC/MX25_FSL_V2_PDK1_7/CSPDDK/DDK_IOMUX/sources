@@ -1,0 +1,18 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=ddk_iomux_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_BLOCK=1
+
+SOURCES=\
+    soc_ddk_iomux.c
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\..\INC\mx25_iomux.h \
+

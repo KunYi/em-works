@@ -1,0 +1,131 @@
+eGalax TouchKit USB for Windows CE 6.0 installation Guide
+
+Revision	: 3.0.1.6105
+OS		: Windows CE 6.0
+Release Date	: 1-4-2007
+	
+File list:
+TouchKit.DLL			- RS232 Touch Screen Driver
+USBTouch.dll			- USB Touch Screen Driver
+TouchKit.exe			- The TouchKit Utility
+DrawTest.exe			- The DrawTest Utility
+Calbration.exe			- The Calibration Utility
+UpdateEEPROM.exe                - The Update EEPROM Utility
+language_e.reg			- The English Language Registry Setting
+language_tch.reg		- The Traditional Chinese Language Registry Setting
+language_sch.reg		- The Simplified Chinese Language Registry Setting
+language_jap.reg		- The Japanese Language Registry Setting
+language_kor.reg		- The Korean Language Registry Setting
+language_spa.reg		- The Spanish Language Registry Setting
+language_ita.reg		- The Italian Language Registry Setting
+language_ger.reg		- The German Language Registry Setting
+language_fre.reg		- The French Language Registry Setting
+language_dut.reg		- The Dutchh Language Registry Setting
+
+
+Notes:
+     Select the UHCI or OHCI USB Host Controller driver into your platform 
+     which supported by the target device. And check the USB mouse can go 
+     well at the same port.
+     Select the "Mouse" into your platform. This can find in:
+     "Catalog\Core OS\Display based devices\Shell and User Interface\Mouse"	
+
+1.  Create an directory under c:\ Ex:"c:\CEDB"
+    And Copy All files to this directory.
+    
+2.  Launch platform builder and open your platform workspace
+
+3. Edit the PROJECT.BIB in the Parameter View of Platform Builder.
+   Add these lines in MODULES:
+      
+   a)The TouchKit utility:
+   	TouchKit.exe		c:\CEDB\TouchKit.exe         NK  S
+   	DrawTest.exe      	c:\CEDB\drawtest.exe         NK  S
+   	Calbration.exe      	c:\CEDB\calbration.exe       NK  S   
+   	UpdateEEPROM.exe	c:\CEDB\UpdateEEPROM.exe     NK  S  
+   
+   b)If you want to used USB module:
+	USBTouch.dll      c:\CEDB\UsbTouch.dll         NK  SHK
+   
+   c)If you want to used RS232 module:
+	TouchKit.dll      c:\CEDB\touchkit.dll         NK  SHK
+	
+4. Edit the PROJECT.REG in the Parameter View of Platform Builder.
+   Add these lines for registry.
+   		
+   a)Add the registry setting for all module
+   	[HKEY_LOCAL_MACHINE\Drivers\TouchKit]
+   		"RBSIZE"=dword:800
+   		"RBTIME"=dword:FFFFFF
+   		"FLAGS"=dword:1-------------------------------->set 0x1 sofware filter enable
+   								set 0x3000 update eeprom funtion enable	
+   								set 0x100 to enable the check rotation function
+   		"BeepFrequence"=dword:1F4---------------------->Beep Frequence(x86 only)
+   		"BeepTime"=dword:64---------------------------->Beep Times(ms)(x86 only)
+   		
+   		"ZFilterThreshold"=dword:800
+   		"ZFilterBound"=dword:00100001
+   		"SoundType"=dword:0---------------------------->This is the default sound type.
+   								SoundType = 0 is no sound
+   								SoundType = 1 is Beep in touch down.
+   								SoundType = 2 is Beep in lift off.						
+   		"NoPostRange"=dword:80						
+   		
+   		
+   b)If you want to used USB module:
+   	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	;for Hid class	
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\Default\3\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\Default\3\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\Default\3\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\Default\3\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"
+	[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\Default\3\USB_TOUCH_Driver]
+		"DLL"="USBTouch.dll"	
+   c)If you want to used RS232 module 1:
+   	[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\TouchKit1]
+   		"Dll"="TouchKit.dll"
+   		"Order"=dword:00000001
+   		"Prefix"="TKT"
+   		"Index"=dword:00000001
+   		"Context"=dword:1;-------------------------------->This is the COM Port index which you used. 
+     If you want to used RS232 module 2:
+   	[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\TouchKit2]
+   		"Dll"="TouchKit.dll"
+   		"Order"=dword:00000001
+   		"Prefix"="TKT"
+   		"Index"=dword:00000002
+   		"Context"=dword:2;-------------------------------->This is the COM Port index which you used.
+   d)If you want to used other language for your utility:
+	#include "C:\CEDB\language_tch.reg"---------------------->Chose one language you want to use.		 
+
+   e)You can use the sample registry setting:
+   	#include "C:\CEDB\eGalaax.reg"	
+   	
+5. Build Platform. 
+
+6. You can used the TouchKit.exe to do the calibration and draw test.
+   Befor you do the calibration or drawtest, you must select the module.
+   TUBX: is the USB module. 
+   TKTX: is the RS232 module.
+   
+
+7. If you want to emulate the mouse right button. You can touch the panel and don't move for two or three seconds,
+   the last time touch will be emulated the mouse right button.
+   You can change the waitting time and the stop size in registry value "RBTIME" and "RBVALUE"
+
+    
+
+

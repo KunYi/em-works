@@ -1,0 +1,20 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+; Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+[HKEY_LOCAL_MACHINE\Drivers\Display\LCDC]
+    "PanelType"=dword:0    ; LCD Panel identifier, 0 for CHUNGHWA CLAA057VA01CT 16 BPP
+    "VideoMemSize"=dword:900000  ; 9MB
+
+[HKEY_LOCAL_MACHINE\System\GDI\Drivers]
+    "Display"="lcdc.dll"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\GDI\ROTATION]
+   "Angle"=dword:0       ;;no rotation
+;    "Angle"=dword:5A    ;; 90 degrees rotated clockwise
+;    "Angle"=dword:B4    ;; 180 degrees rotated clockwise
+;    "Angle"=dword:10E   ;; 270 degrees rotated clockwise
+

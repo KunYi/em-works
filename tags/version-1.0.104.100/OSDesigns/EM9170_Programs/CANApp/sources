@@ -1,0 +1,37 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+
+
+!INCLUDE "$(_TARGETPLATROOT)\sources.cmn"
+_COMMONPUBROOT=$(_PROJECTROOT)\cesysgen
+__PROJROOT=$(_PROJECTROOT)
+_ISVINCPATH=$(_WINCEROOT)\public\common\sdk\inc;
+_OEMINCPATH=$(_WINCEROOT)\public\common\oak\inc;$(_WINCEROOT)\public\common\sdk\inc;
+
+TARGETNAME=CANApp
+TARGETTYPE=PROGRAM
+EXEENTRY=mainWCRTStartup
+RELEASETYPE=PLATFORM
+
+SOURCES= \
+    CANApp.cpp \
+
+INCLUDES= \
+    $(_PUBLICROOT)\COMMON\OAK\INC; \
+    $(_PUBLICROOT)\COMMON\SDK\INC; \
+    $(_TARGETPLATROOT)\src\inc; \
+    $(_PLATFORMROOT)\common\src\inc; \
+    $(_PLATFORMROOT)\common\src\soc\COMMON_FSL_V2\INC; \
+    $(_PB_INSTALL_ROOT)\CEPB\WCETK\TUX\INC;$(INCLUDES) \
+    
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cansdk_$(_COMMONSOCDIR).lib    
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cansdk.lib 

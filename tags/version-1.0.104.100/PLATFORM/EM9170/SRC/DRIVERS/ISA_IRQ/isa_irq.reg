@@ -1,0 +1,14 @@
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IRQ1]
+   "DeviceArrayIndex"=dword:1				; EXT_INT5 -> EM9170_GPIO10
+   "Prefix"="IRQ"									 
+   "Dll"="isa_irq.dll"								 
+;
+; CS&ZHL JLY-01-2009: install option -> = 0: quit install, = 1: true install 
+;
+   "TrueInstall"=dword:1
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IRQ2]
+   "DeviceArrayIndex"=dword:2				;
+   "Prefix"="IRQ"									; 
+   "Dll"="isa_irq.dll"								; 
+	"TrueInstall"=dword:1

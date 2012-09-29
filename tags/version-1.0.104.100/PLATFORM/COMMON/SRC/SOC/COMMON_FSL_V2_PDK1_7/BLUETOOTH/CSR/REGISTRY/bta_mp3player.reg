@@ -1,0 +1,5 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Applications\Mp3]
+        "DirPlayLists"="\\My Documents\\"
+        "DirBackground"="\\My Documents\\My Pictures\\" 
+        "FileBmp"="Default Background"
+

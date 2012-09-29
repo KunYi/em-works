@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2005-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=usbh_usb2com_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+!IF "$(SYSGEN_REDIR)" != ""
+!IF "$(SYSGEN_STANDARDSHELL)" != ""
+CDEFINES=$(CDEFINES) -DNOTIFY_MESSAGE
+!ENDIF
+!ENDIF
+
+CDEFINES=$(CDEFINES) -DQFE_MERGE
+
+INCLUDES=\
+    $(INCLUDES); \
+    $(_COMMONDDKROOT)\inc; \
+    $(_COMMONOAKROOT)\inc; \
+    $(_COMMONSDKROOT)\inc
+
+CONDITIONAL_INCLUDES=macwin32.h
+
+SOURCES=\
+    cphysmem.cpp \
+    sync.cpp     \
+    cdevice.cpp  \
+    hcd.cpp      \
+    hcddrv.cpp

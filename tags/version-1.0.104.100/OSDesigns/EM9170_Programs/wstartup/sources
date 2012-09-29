@@ -1,0 +1,60 @@
+_COMMONPUBROOT=$(_PROJECTROOT)\cesysgen
+__PROJROOT=$(_PROJECTROOT)
+RELEASETYPE=LOCAL
+_ISVINCPATH=$(_WINCEROOT)\public\common\sdk\inc;
+_OEMINCPATH=$(_WINCEROOT)\public\common\oak\inc;$(_WINCEROOT)\public\common\sdk\inc;
+TARGETNAME=wstartup
+FILE_VIEW_ROOT_FOLDER= \
+    ReadMe.txt \
+    StdAfx.cpp \
+    prelink.bat \
+    postlink.bat \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    StdAfx.h \
+    ..\..\..\PLATFORM\EM9170\SRC\INC\bsp_drivers.h \
+
+SOURCES= \
+    wstartup.cpp \
+    rotation.cpp \
+
+INCLUDES= \
+    $(_PROJECTROOT)\cesysgen\sdk\INC; \
+    $(_PROJECTROOT)\cesysgen\oak\INC; \
+    $(_PROJECTROOT)\cesysgen\ddk\INC; \
+    $(_TARGETPLATROOT)\src\inc; \
+    $(INCLUDES) \
+
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\Iphlpapi.lib \
+    $(_PROJECTROOT)\sdk\lib\$(_CPUINDPATH)\netip_api.lib \
+
+PRECOMPILED_PCH=StdAfx.pch
+PRECOMPILED_CXX=1
+PRECOMPILED_OBJ=StdAfx.obj
+PRECOMPILED_INCLUDE=StdAfx.h
+TARGETTYPE=PROGRAM
+POSTLINK_PASS_CMD=postlink.bat
+PRELINK_PASS_CMD=prelink.bat
+FILE_VIEW_PARAMETER_FOLDER= \
+    wstartup.bib \
+    wstartup.reg \
+    wstartup.dat \
+    wstartup.db \
+    ProjSysgen.bat \
+
+!IF ("$(BSP_EM9170)" == "1")
+CDEFINES=$(CDEFINES) -DEM9170
+!ENDIF
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF

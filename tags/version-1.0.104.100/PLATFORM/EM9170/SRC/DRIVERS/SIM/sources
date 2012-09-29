@@ -1,0 +1,43 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+
+!IF "$(BSP_NOSIM)" == "1"
+SKIPBUILD=1
+!ENDIF
+
+
+TARGETNAME=sim
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=DllEntry
+
+
+TARGETLIBS= \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\smclib.lib
+
+SOURCELIBS=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\sim_$(_SOCDIR).lib \
+           $(_PLATCOMMONLIB)\$(_CPUINDPATH)\sim_$(_COMMONSOCDIR).lib
+
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\sim_$(_COMMONSOCDIR).def
+
+SOURCES= \
+    bspsim.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_sim.reg \
+
+
+
+

@@ -1,0 +1,51 @@
+CECInfo
+(
+	Name ( ".Dll EETI" )
+	CECVersion ( 4.20 )
+	Description ( "EETI RS232 Touch Screen Driver" )
+	GUID ( {B4513333-5027-4FF9-9A9F-0B3BB2DA5CD4} )
+	Vendor ( "EETI Inc." )
+)
+ComponentType
+(
+	Name ( "Touch" )
+	GUID ( {94D33DF5-5A3D-46FA-A704-1C1E6793E0CB} )
+	Description ( "eeti RS232 Touch Driver" )
+	Group ( "\Device Drivers\Touch" )
+	Vendor ( "EETI" )
+	MaxResolvedImpsAllowed( 1 )
+	Implementations
+	(
+		Implementation
+		(
+			Name ( "eeti RS232" )
+			GUID ( {6AD2088F-BE44-463D-A39C-B82A8852CB52} )
+			Description ( "eeti RS232 Touch Driver" )
+			Version ( "2.0.14.6019" )
+			Locale ( 0409 )
+			Vendor ( "eeti" )
+			Date ( "2007/10/9" )
+			Variable( "MODULE_NAME", "touchkit.dll" )
+			SizeIsCPUDependent( 1 )
+			BuildMethods
+			(
+				BuildMethod
+				(
+					GUID ( {0C08EA9B-67E1-45EF-A1A7-2FFF1CD0CFE3} )
+					Step ( CESYSGEN )
+					CPU ( "ARMV4" )
+					CPU ( "ARMV4I" )
+					CPU ( "emulator" )
+					CPU ( "MIPSII" )
+					CPU ( "MIPSII_FP" )
+					CPU ( "MIPSIV" )
+					CPU ( "MIPSIV_FP" )
+					CPU ( "SH3" )
+					CPU ( "SH4" )
+					CPU ( "x86" )
+					Action ( '#SRCCODE( USER_PROJECT, "C:\EETICEDB\wince500\eeti232.pbpxml" )' )
+				)
+			)
+		)
+	)
+)

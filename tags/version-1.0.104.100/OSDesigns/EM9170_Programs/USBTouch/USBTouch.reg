@@ -1,0 +1,64 @@
+[HKEY_LOCAL_MACHINE\Drivers\TouchKit]
+	"RBSIZE"=dword:0
+	"RBTIME"=dword:FFFFFF
+	"FLAGS"=dword:1
+	"ZFilterThreshold"=dword:800
+	"ZFilterBound"=dword:00100001
+	"SoundType"=dword:0
+	"NoPostRange"=dword:80
+
+[HKEY_LOCAL_MACHINE\DRIVERS\BuiltIn\TouchKit1]
+	"Dll"="TouchKit.dll"
+	"Order"=dword:1
+	"Prefix"="TKT"
+	"Index"=dword:1
+	"Context"=dword:1
+
+[HKEY_LOCAL_MACHINE\Drivers\USBTouch]
+	"DLL"="USBTouch.dll"
+	"Prefix"="TUB"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\0_0_0\255_255_255\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\0_0_0\255_255_255\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll" 
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_1\Default\3\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\14371_2\Default\3\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\4660_1\Default\3\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_1\Default\3\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\3823_2\Default\3\USB_TOUCH_Driver]
+	"DLL"="USBTouch.dll"
+
+	
+	
+[HKEY_LOCAL_MACHINE\Drivers\Display\VIA]
+    "RotationDegree"=dword:0
+		
+[HKEY_LOCAL_MACHINE\Drivers\TouchKit]
+	"DRAWTEST"="Draw Test"
+	"Cal4Pts"="4 pts Cal"
+	"Cal25Pts"="25 pts Cal"
+	"Quit"="Exit"
+	"UpdateEEPROM"="Update EEPROM from File"
+	"Sound"="Sound"
+	"NoSound"="No Sound"
+	"SoundDown"="Touch Down"
+	"SoundUp"="Lift Up"
+	"Clear"="Clear"
+	"Message"="Message"
+	"EEPROMFail"="Access EEPROM fail!"
+	"CalHint"="Please touch the blinking symbol until stop blinking."
+	
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+  "CalibrationData"="1960,2032 1112,1144 1080,2928 2880,2992 2944,1020"

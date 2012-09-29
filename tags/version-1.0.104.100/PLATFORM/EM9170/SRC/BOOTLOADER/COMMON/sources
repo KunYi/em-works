@@ -1,0 +1,54 @@
+!if 0
+Copyright (C) 2006-2008 Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+TARGETNAME=bootcmn
+TARGETTYPE=LIBRARY
+RELEASETYPE=PLATFORM
+NOMIPS16CODE=1
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\sdmmc; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\nand; \
+  $(_TARGETPLATROOT)\src\common\cspifmd; \
+
+CDEFINES=$(CDEFINES) -DBOOTLOADER
+
+LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
+
+SOURCES= \
+    main.c \
+    flash.c \
+    utils.c \
+    nand.c \
+    nfc_boot.cpp \
+    ether.c \
+    esdhc.c \
+    i2c_eeprom.c \
+    cspi_flash.c \
+    splashscreen.c \
+    em9170.c \
+
+
+ARM_SOURCES=\
+    startup.s
+
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    loader.h \
+    ..\..\INC\bsp_base_reg_cfg.h \
+    ..\..\INC\bsp_cfg.h \
+    ..\..\INC\image_cfg.h \
+    ..\..\INC\bsp.h \
+    SplashScreen.h \
+    bitmap.h \
+    screenconfig.h \
+    ..\..\INC\em9170_cpld.h \
+
+
+!IF ("$(BSP_EM9170)" == "1")
+CDEFINES=$(CDEFINES) -DEM9170
+!ENDIF

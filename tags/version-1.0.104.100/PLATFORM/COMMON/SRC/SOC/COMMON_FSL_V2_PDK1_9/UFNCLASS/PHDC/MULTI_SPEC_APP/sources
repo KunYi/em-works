@@ -1,0 +1,59 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+
+!if 0
+#  Copyright (C) 2010, Freescale Semiconductor, Inc. All Rights Reserved.
+#  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+#  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF 0
+
+Module Name:
+    sources.
+
+Abstract:
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+!ENDIF
+
+!IF "$(SYSGEN_USBFN)" == ""
+SKIPBUILD=1
+!ENDIF
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME = USBPHDFN
+TARGETTYPE = DYNLINK
+
+DEFFILE=USBPHDFN.DEF
+
+CDEFINES=$(CDEFINES) -DQFE_MERGE
+
+INCLUDES=\
+    ..\inc; \
+    ..\..\inc; \
+
+SOURCELIBS=\
+    $(TARGETPATH)\phdlib.lib     \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ufnclientlib.lib     \
+    $(_PUBLICROOT)\common\oak\lib\$(_CPUINDPATH)\storeapi.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib          \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\corelibc.lib
+
+SOURCES=\
+    app_interface.cpp \
+    phd_com_model.cpp \
+    descriptor.cpp \
+    phd_device_spec.c

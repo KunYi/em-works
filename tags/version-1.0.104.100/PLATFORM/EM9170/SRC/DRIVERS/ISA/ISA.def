@@ -1,0 +1,17 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;------------------------------------------------------------------------------
+
+LIBRARY ISA
+
+EXPORTS
+   ISA_Init
+   ISA_Deinit
+   ISA_Open
+   ISA_Close
+   ISA_Read
+   ISA_Write
+   ISA_Seek
+   ISA_PowerDown
+   ISA_PowerUp
+   ISA_IOControl

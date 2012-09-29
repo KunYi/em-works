@@ -1,0 +1,36 @@
+IF 0
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Obex\Services\{f9ec7bc4-953c-11d2-984e-525400dc9e09}]
+    "BluetoothSdpRecord"=hex:00
+    "Server"=""
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\FTSM]
+    "obexPassword"=""
+    "obexAuthentication"=dword:0
+    "defaultDestDir"="\\My Documents"
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\FTSM]
+    "State"="Idle"
+
+[HKEY_CLASSES_ROOT\CLSID\{499EC7C3-8681-489D-8E75-6A263D8E42CA}]
+    @="ftp_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{499EC7C3-8681-489D-8E75-6A263D8E42CA}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+
+[HKEY_LOCAL_MACHINE\software\microsoft\shell\extensions\controls folder\bluetooth\shellex\propertysheethandlers\{499EC7C3-8681-489D-8E75-6A263D8E42CA}]
+    @=""
+ENDIF    
+
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\FTSM]
+    "Disabled"=dword:1
+
+; Microsoft FTP server
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Obex\Services\{f9ec7bc4-953c-11d2-984e-525400dc9e09}]
+    "BaseDir"="\\My Documents"
+    "Server"="obexfile.dll"
+    "CanWrite"=dword:1
+    "Authenticate"=dword:0
+    "TransportAuthenticate"=dword:0
+    "TransportEncrypt"=dword:0

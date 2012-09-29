@@ -1,0 +1,28 @@
+!if 0
+Copyright (C) 2005-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif 
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=usbh_ehcdmdd_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETDEFNAME=$(TARGETNAME)
+DEFFILE=$(_COMMONOAKROOT)\inc\ehcd.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETDEFNAME).def
+
+CDEFINES=$(CDEFINES) -DUSBCV_FIX -DQFE_MERGE
+
+INCLUDES=\
+    $(INCLUDES); \
+    $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\ms\usbh\usb2com
+
+SOURCES=\
+    chw.cpp     \
+    cpipe.cpp   \
+    ctd.cpp     \
+    trans.cpp   \
+    cehcd.cpp   \
+    usb2lib.cpp

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?><WorkspaceUserOptions><Favorites /><ActiveSourcesFiles>
+  <FileGuidMapper>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\BTS\sources</Path>
+      <Guid>593c9408-645d-46b7-8bbc-b37475dbc459</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\netip_api\sources</Path>
+      <Guid>ae6cb567-c900-45f4-bdbc-ab4ac4d2ecb0</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\RASEntry\sources</Path>
+      <Guid>65716448-e81d-467f-af73-5b0c2172e693</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\sysinfo\sources</Path>
+      <Guid>3a3c2268-8ecf-4f2c-ba1b-1d85e7047708</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\update\sources</Path>
+      <Guid>b9b5bf6c-6a00-4358-b27a-a9b9468b0fc6</Guid>
+    </Pair>
+    <Pair>
+      <Path>D:\WINCE600\OSDesigns\EM9170_Programs\wstartup\sources</Path>
+      <Guid>5e637fe1-dc72-4760-9922-da98ee7e1213</Guid>
+    </Pair>
+  </FileGuidMapper>
+</ActiveSourcesFiles></WorkspaceUserOptions>

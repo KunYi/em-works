@@ -1,0 +1,34 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this sample source code is subject to the terms of the Microsoft
+license agreement under which you licensed this sample source code. If
+you did not accept the terms of the license agreement, you are not
+authorized to use this sample source code. For the terms of the license,
+please see the license agreement between you and Microsoft or, if applicable,
+see the LICENSE.RTF on your install media or the root of your tools installation.
+THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+!endif
+
+!INCLUDE "..\..\..\sources.inc"  
+
+SYNCHRONIZE_DRAIN=1
+TARGETNAME=fmdwrapperpdd_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+WINCEOEM=1
+
+INCLUDES=$(_PUBLICROOT)\common\ddk\inc; \
+    $(_PUBLICROOT)\common\oak\inc; \
+    $(_PUBLICROOT)\common\sdk\inc; \
+    $(INCLUDES); \ 
+    
+SOURCES= FmdWrapperPdd.cpp \
+         ../FmdWrapperMain.cpp
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\fmdwrappermain.h \
+    ..\fmdwrapperpdd.h \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ..\flashpdd.def \
+

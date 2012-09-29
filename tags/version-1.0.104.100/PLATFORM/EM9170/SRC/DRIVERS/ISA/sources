@@ -1,0 +1,37 @@
+!IF "$(BSP_EM9170)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=ISA
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=ISA_DllEntry
+
+DEFFILE=isa.def
+
+TARGETLIBS= \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+	$(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib  
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    ISA.reg \
+    ISA.def \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    isaclass.h \
+    ..\..\INC\bsp_drivers.h \
+    ..\..\INC\bsp.h \
+    ..\..\..\..\COMMON\SRC\SOC\MX25_FSL_V2_PDK1_7\INC\mx25_ddk.h \
+    ..\..\INC\em9170_cpld.h \
+
+SOURCES= \
+    isa_io.cpp \
+    isaclass.cpp \
+

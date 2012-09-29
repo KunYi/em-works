@@ -1,0 +1,19 @@
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\KEYBD]
+    "CalVKey"=dword:0
+    "ContLessVKey"=dword:0
+    "ContMoreVKey"=dword:0
+    "TaskManVKey"=dword:2E
+    "Keyboard Type"=dword:4
+    "Keyboard SubType"=dword:0
+    "Keyboard Function Keys"=dword:0
+    "Keyboard Layout"="00000409"
+    "DriverName"="KbdUs.dll"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Layouts\00000409]
+    "Layout File"="KbdUs.dll"
+    "Layout Text"="US-Keypad"
+    "KPPLayout"="KbdUs.dll"
+
+[HKEY_CURRENT_USER\Keyboard Layout\Preload\4]
+    @="00000409"
+

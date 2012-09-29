@@ -1,0 +1,102 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(WINCEDEBUG)" == "debug"
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=eboot
+TARGETTYPE=PROGRAM
+RELEASETYPE=PLATFORM
+WINCECPU=1
+SYNCHRONIZE_DRAIN=1
+WINCEREL=1
+WINCETARGETFILES=BootImage
+NOMIPS16CODE=1
+WINCEOEM=1
+
+NOLIBC=1
+
+EXEENTRY=StartUp
+
+INCLUDES=\
+    $(INCLUDES); \
+    ..\COMMON; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA\NAND\DMA; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA\NAND\GPMI; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA\NAND\CORE; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA;            \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\include; \
+    $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+    $(_TARGETPLATROOT)\SRC\COMMON\NANDFMD; \
+    $(_PUBLICROOT)\common\oak\drivers\block\msflashfmd\inc; \
+
+CDEFINES= $(CDEFINES) -DIN_BOOTLOADER
+CDEFINES= $(CDEFINES) -DBOOTLOADER
+
+LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
+
+TARGETLIBS=\
+    $(_COMMONOAKROOT)\LIB\$(_CPUDEPPATH)\BootPart.lib                         \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_cache_arm926.lib                     \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_blnk.lib                             \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_blcommon.lib                         \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_log.lib                              \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_kitl.lib                             \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_blmemory_arm.lib                     \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\hal_nand_$(_SOCDIR).lib                  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\nandfmd_lib.lib                     \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_boot_$(_COMMONSOCDIR).lib           \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_$(_COMMONSOCDIR).lib                \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_apbhdma_$(_SOCDIR).lib        \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_iomux_$(_SOCDIR).lib          \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\i_ddk_clk_$(_SOCDIR).lib            \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bl_lcdif_$(_SOCDIR).lib             \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bspcmn.lib						  \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\args.lib							  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\bootcmn.lib                         \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\eboot.lib                            \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\gsnull.lib                           \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\fulllibc.lib                         \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\fsl_usbfn_rndiskitl_$(_SOCDIR).lib  \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_rne_mdd_$(_COMMONSOCDIR).lib         \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_rne_pdd_$(_COMMONSOCDIR).lib         \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\blmenu_$(_COMMONSOCDIR).lib              \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\bootshell_$(_COMMONSOCDIR).lib           \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\oal_ethdrv_enet_$(_COMMONSOCDIR).lib     \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bsp_bootshell.lib                   \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_$(_SOCDIR).lib                 \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_usbfn_eboot_$(_SOCDIR).lib           \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\oal_blserial.lib                         \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\bspenet.lib                         \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\fsl_serial_pdd_$(_COMMONSOCDIR).lib      \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\sdmmc_boot_$(_COMMONSOCDIR).lib         
+
+
+
+SOURCES=\
+    eboot.c \
+    menu.c  \
+    nandboot.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    eboot.bib \
+    PostBuild.bat \
+
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF ("$(BSP_EM9283)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+
+#
+#    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bl_ddk_apbhdma_$(_SOCDIR).lib       \
+#    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bl_ddk_iomux_$(_SOCDIR).lib         \
+#    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\bl_ddk_clk_$(_SOCDIR).lib           \
+#

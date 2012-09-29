@@ -1,0 +1,44 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+
+!IF ("$(BSP_NOAUDIO)" == "1" || "$(BSP_SPDIF)" == "")
+SKIPBUILD=1
+!ENDIF
+
+
+TARGETNAME=spdifdev
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+PREPROCESSDEFFILE=1
+
+DEFFILE=$(_COMMONOAKROOT)\inc\wavedev.def
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+    
+SOURCELIBS=\
+   $(_PLATCOMMONLIB)\$(_CPUINDPATH)\spdifvs_$(_COMMONSOCDIR).lib
+
+
+
+INCLUDES=\
+   $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\SPDIFDEVVS; \
+   $(INCLUDES)
+
+
+
+SOURCES= \
+     hwctxt.cpp

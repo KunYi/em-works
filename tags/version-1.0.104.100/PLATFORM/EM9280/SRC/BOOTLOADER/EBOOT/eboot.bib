@@ -1,0 +1,84 @@
+;------------------------------------------------------------------------------
+;
+; Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+;******************************************************************************
+; TITLE:        EBOOT.BIB
+;
+; Ethernet Boot Loader Source Module
+;
+; Memory Map
+; ----------
+;
+; 8000.0000 -+
+;            | Bootloader Stack (64KB)
+; 8001.0000 -+
+;            | Bootloader RAM (256KB)
+; 8005.0000 -+
+;            | Bootloader Code (256KB)
+; 8009.0000 -+
+;            | GAP (reserved for future)
+; 800F.7000 -+
+;            | ARGS (4KB)
+; 800F.8000 -+
+;            | USB KITL transfers (32 KB)
+;           -+
+; 8010.0000  | ENC28J60 DMA Buffer (16KB)
+;           -+
+; 8010.0010  | Display Frame Buffer (734KB)
+;           -+
+;            |
+; 8020.0000  |
+;            |
+;            | OS (NK) Code (15MB)
+;            |
+; 8110.0000 -+   **auto-size**
+;            |
+;            | OS (NK) RAM  (47MB)
+;            |
+; 8400.0000 -+
+;
+;******************************************************************************
+
+MEMORY
+; Driver globals area (used to pass config info to kernel, don't change unless 
+; you update config.bib) NOTE: We're using physical addresses here.
+;       Name             Start				  Size              Type
+;       -------          --------				--------			---------
+        STACK			80000000      00010000      RESERVED
+        RAM				80010000      00040000      RAM
+        EBOOT			80050000      00040000      RAMIMAGE        
+        RSVD			80090000      00067000      RESERVED
+        ARGS			800F7000      00001000      RESERVED
+        USB				800F8000      00008000      RESERVED
+        ENC28J60		80100000      00004000      RESERVED
+
+CONFIG
+    AUTOSIZE=OFF
+    COMPRESSION=OFF
+    PROFILE=OFF
+    KERNELFIXUPS=ON
+
+; Eboot is build to run out of RAM, so ROMSTART and ROMSIZE correspond to the
+; RAM address range specified above.
+;
+    ROMSIZE =00040000
+    ROMSTART=80050000
+    ROMWIDTH=32
+;
+; ROMOFFSET applies to the BIN file sections and is used to "move" the image
+; into NAND flash.  The bootloader image already on the system will be able to tell
+; that the BIN file is destined for flash (versus RAM) based on the address
+; formed by RAMIMAGE Start plus ROMOFFSET.
+;
+;   ROMOFFSET=0x17430000
+
+
+MODULES
+;   Name            Path                                            Memory Type
+;   --------------  ----------------------------------------------  -----------
+    nk.exe          $(_TARGETPLATROOT)\target\$(_TGTCPU)\$(WINCEDEBUG)\eboot.exe        EBOOT

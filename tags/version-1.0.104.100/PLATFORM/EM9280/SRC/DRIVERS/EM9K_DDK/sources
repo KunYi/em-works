@@ -1,0 +1,38 @@
+!if 0
+Copyright (C) 2007-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_EM9280)" == ""
+SKIPBUILD=1
+!ENDIF
+
+WINCEOEM=1
+SYNCHRONIZE_DRAIN=1
+
+TARGETNAME=EM9K_DDK
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+#DLLENTRY=_DllEntryCRTStartup 
+
+TARGETLIBS=\
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib   \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib             
+
+
+SOURCES= \
+    em9k_ddk_class.cpp \
+    em9k_ddk.cpp \
+
+
+DEFFILE=em9k_ddk.def
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    em9k_ddk.def \
+

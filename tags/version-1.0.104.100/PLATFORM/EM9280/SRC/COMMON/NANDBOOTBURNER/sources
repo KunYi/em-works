@@ -1,0 +1,53 @@
+# 
+# Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+# THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+# AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+# 
+
+SYNCHRONIZE_DRAIN=1
+TARGETNAME=NandBootBurner
+TARGETTYPE=LIBRARY
+WINCEOEM=1
+
+!IF "$(BSP_EM9280)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF "$(BSP_NAND_PDD)" == "1"
+CDEFINES=$(CDEFINES) -DNAND_PDD
+!ENDIF
+
+!IF ("$(IMGUUT)" == "1")
+!IF ("$(BSP_EM9280_SYNC_VENDOR_INFO)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280_SYNC_VENDOR_INFO
+!ENDIF
+!ENDIF
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_TARGETPLATROOT)\src\inc; \
+  $(_TARGETPLATROOT)\src\BOOTLOADER\COMMON; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\MEDIA; \
+  $(_PLATFORMROOT)\common\src\SOC\$(_SOCDIR)\media\nand\include; \
+  $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\nand; \
+  $(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\boot\fmd\sdmmc; \
+
+SOURCES= \
+    NandBootBurner.c \
+    OTP.c
+
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    OTP.h \
+    security.h \
+
+
+#
+#    ..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_9\INC\common_nandfmd.h \
+#    ..\..\..\..\COMMON\SRC\SOC\COMMON_FSL_V2_PDK1_9\INC\menu.h \
+#

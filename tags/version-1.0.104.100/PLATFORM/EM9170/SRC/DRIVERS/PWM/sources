@@ -1,0 +1,47 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+
+Copyright (C) 2004-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+!endif
+
+!IF "$(BSP_PWM1)" == "" && "$(BSP_PWM2)" == "" && "$(BSP_PWM3)" == "" && "$(BSP_PWM4)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=pwm
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DLLENTRY=PWM_DllEntry
+
+TARGETLIBS= \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_PLATCOMMONLIB)\$(_CPUINDPATH)\pwm_$(_SOCDIR).lib \
+   $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\pwm_$(_SOCDIR).lib \
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\pwm_$(_SOCDIR).def
+
+INCLUDES= \
+    $(_PLATFORMROOT)\COMMON\SRC\SOC\$(_SOCDIR)\PWM; \
+    $(INCLUDES) \
+
+SOURCES= bsppwm.c
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_pwm.reg \
+
+
+
+

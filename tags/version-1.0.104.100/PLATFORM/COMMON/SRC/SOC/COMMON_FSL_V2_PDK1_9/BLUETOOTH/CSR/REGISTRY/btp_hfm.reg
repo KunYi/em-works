@@ -1,0 +1,4 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\HFM]
+    "SupportedFeatures"=dword:17
+    "BluetoothAddress"=""
+

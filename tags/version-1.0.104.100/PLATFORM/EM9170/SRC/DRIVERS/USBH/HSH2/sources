@@ -1,0 +1,59 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+Module Name:
+    sources.
+
+Abstract:
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+!endif
+
+!IF "$(BSP_USB_HSH2)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=hcd_hsh2
+TARGETTYPE=DYNLINK
+
+DEFFILE=$(_COMMONOAKROOT)\inc\ehcd.def
+
+DLLENTRY=_DllMainCRTStartup
+
+CDEFINES=$(CDEFINES) -DUSB_WAKEUP_NONE
+#-DUSB_WAKEUP_CNANDDN
+#-DUSB_WAKEUP_CN
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_usb2com_$(_COMMONSOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_ehcdmdd_$(_COMMONSOCDIR).lib  \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbh_ehcdpdd_$(_COMMONSOCDIR).lib
+
+SOURCES= \
+    i_hwinit.c \
+    i_usbclock.c \
+    i_usbutils.c \
+
+#xref VIGUID {8329841C_D9A8_4008_BF9A_BB21B91309D4}
+#xref VSGUID {F3A8DAC2_6D1C_46F9_8ED1_09058884AAF8}
+
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\COMMON\hwinit.c \
+    ..\..\USBCOMMON\usbutils.c \
+    ..\..\USBCOMMON\usbclock.c \
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_hsh2.reg \
+

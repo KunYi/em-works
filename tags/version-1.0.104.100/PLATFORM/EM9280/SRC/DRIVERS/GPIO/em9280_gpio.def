@@ -1,0 +1,17 @@
+;------------------------------------------------------------------------------
+; Copyright (C) 2011, Emtronix, Inc. All Rights Reserved.
+;------------------------------------------------------------------------------
+
+LIBRARY EM9280_GPIO
+
+EXPORTS
+   PIO_Init
+   PIO_Deinit
+   PIO_Open
+   PIO_Close
+   PIO_Read
+   PIO_Write
+   PIO_Seek
+   PIO_PowerDown
+   PIO_PowerUp
+   PIO_IOControl

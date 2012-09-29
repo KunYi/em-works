@@ -1,0 +1,48 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+
+Module Name:
+    sources.
+
+Abstract:
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+!endif
+
+!IF "$(BSP_USB_HSOTG_XVC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=imx_xvc
+TARGETTYPE=DYNLINK
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_xvc_$(_SOCDIR).def
+
+DLLENTRY=_DllEntryCRTStartup
+
+CDEFINES=$(CDEFINES) -DUSB_WAKEUP_NONE
+#-DUSB_WAKEUP_CNANDDN
+#-DUSB_WAKEUP_CN
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usb_xvc_$(_SOCDIR).lib
+
+SOURCES= \
+    hwinit.c \
+    i_usbclock.c \
+    i_usbutils.c
+
+!IF ("$(BSP_EM9170)" == "1")
+CDEFINES=$(CDEFINES) -DEM9170
+!ENDIF
+

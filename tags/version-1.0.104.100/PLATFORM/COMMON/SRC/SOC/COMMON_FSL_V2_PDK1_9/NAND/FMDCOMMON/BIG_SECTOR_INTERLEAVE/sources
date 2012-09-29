@@ -1,0 +1,22 @@
+!if 0
+Copyright (C) 2008-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=nand_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+INCLUDES=..\..\INC;\
+    $(INCLUDES); \ 
+    
+SOURCES=\
+    fmd.cpp \
+    ../bbt.cpp
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\..\INC\NANDTYPES.h \
+    ..\..\..\INC\common_nandfmd.h \
+

@@ -1,0 +1,47 @@
+# Copyright (c) Microsoft Corporation.  All rights reserved.
+# Use of this source code is subject to the terms of the Microsoft end-user
+# license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+# If you did not accept the terms of the EULA, you are not authorized to use
+# this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+# install media.
+# ------------------------------------------------------------------------------
+# IDE display files
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# SDK files
+# ------------------------------------------------------------------------------
+# Use this to automaticaly add new files to generated SDKs
+# For libraries, use $(TARGETNAME).lib in SDK_LIB_FILES list to add the
+# genrated lib to the SDK
+# Enable copy to the SDK directory
+# Hearder files
+# Lib files
+
+!IF "$(BSP_EM9280)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=isa_irq
+TARGETTYPE=DYNLINK
+RELEASETYPE=PLATFORM
+DLLENTRY=DllEntry
+
+
+TARGETLIBS= \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+
+SOURCES= \
+  isa_irq.c \
+
+DEFFILE=isa_irq.def
+FILE_VIEW_RESOURCE_FOLDER= \
+  isa_irq.def \
+  isa_irq.reg \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    isa_irq.h \
+    ..\..\INC\bsp_drivers.h \
+

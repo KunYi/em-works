@@ -1,0 +1,40 @@
+!if 0
+Copyright (C) 2008 Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+
+TARGETNAME=can_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+
+SYNCHRONIZE_DRAIN=1
+PREPROCESSDEFFILE=1
+
+DLLENTRY=DllEntry
+
+DEFFILE=common_can.def
+
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+INCLUDES=\
+      $(_PLATFORMROOT)\common\src\inc;\
+      $(INCLUDES)               ;\
+      $(_PLATFORMROOT)\common\src\soc\COMMON_FSL_V2\INC ;\
+         
+SOURCES= \
+    can_io.cpp \
+       canclass.cpp
+    
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    canclass.h \
+    ..\..\INC\common_can.h \
+    ..\..\INC\canbus.h \
+    ..\..\INC\common_macros.h \
+
+FILE_VIEW_ROOT_FOLDER= \
+    common_can.def \
+

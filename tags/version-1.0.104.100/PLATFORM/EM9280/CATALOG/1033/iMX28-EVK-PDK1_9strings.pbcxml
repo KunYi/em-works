@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) Microsoft Corporation.  All rights reserved.
+-->
+<!--
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+-->
+<!--
+Copyright (C) 2007-2010, Freescale Semiconductor, Inc.  All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+-->
+<!--
+NOTE: The string table &lt;Key&gt;...&lt;/Key&gt; values are case sensitive and must
+      exactly match what is present in the .pbcxml catalog file.
+-->
+<CatalogFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RequiredVersion="6.00" xsi:schemaLocation="urn:Microsoft.PlatformBuilder/Catalog PbcXml600.xsd" xmlns="urn:Microsoft.PlatformBuilder/Catalog">
+  <FileInformation Id="FileInformation:FSL:iMX28-EVK-PDK1_9:1033">
+    <Title>Freescale iMX28-EVK-PDK1_9 StringTable 1033</Title>
+    <Vendor>Freescale</Vendor>
+    <OSVersion>6.00</OSVersion>
+    <FileVersion>6.00</FileVersion>
+  </FileInformation>
+  <StringTable Id="StringTable:FSL:iMX28-EVK-PDK1_9:1033" Namespace="FSL" Culture="1033">
+    <Title>Freescale iMX28-EVK-PDK1_9 StringTable 1033</Title>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Freescalei.MX28EVKARMV4I:Title</Key>
+      <Type>Title</Type>
+      <Value>Freescale i.MX28 EVK PDK1_9: ARMV4I</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Freescalei.MX28EVKARMV4I:Description</Key>
+      <Type>Description</Type>
+      <Value>The BSP for Freescale i.MX28 Processor EVK Board</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Title</Key>
+      <Type>Title</Type>
+      <Value>Ethernet Bootloader (eboot)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:EthernetBootloader(eboot):Description</Key>
+      <Type>Description</Type>
+      <Value>Ethernet Bootloader (eboot)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:AUDIO:Title</Key>
+      <Type>Title</Type>
+      <Value>SGTL5000 Audio driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:AUDIO:Description</Key>
+      <Type>Description</Type>
+      <Value>WAVEDEV2 driver for the STGL5000 audio codec</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:DUART1:Title</Key>
+      <Type>Title</Type>
+      <Value>DUART1</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:DUART1:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip Debug UART (COM0:)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:DUART1DETAIL:Title</Key>
+      <Type>Title</Type>
+      <Value>On-Board Debug UART Device Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART2:Title</Key>
+      <Type>Title</Type>
+      <Value>UART2</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART2:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip Application UART0</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART2DETAIL:Title</Key>
+      <Type>Title</Type>
+      <Value>On-Board Application UART0 Device Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART5:Title</Key>
+      <Type>Title</Type>
+      <Value>UART5</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART5:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip Application UART3</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:UART5DETAIL:Title</Key>
+      <Type>Title</Type>
+      <Value>On-Board Application UART3 Device Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SSP2 SPIBUS:Title</Key>
+      <Type>Title</Type>
+      <Value>SPI Bus 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SSP2 SPIBUS:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 2 of SPI bus controller</Value>
+    </Item>    
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:I2CBUS1:Title</Key>
+      <Type>Title</Type>
+      <Value>I2C Bus1</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:I2CBUS1:Description</Key>
+      <Type>Description</Type>
+      <Value>I2C bus1 controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:I2CBUS2:Title</Key>
+      <Type>Title</Type>
+      <Value>I2C Bus2</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:I2CBUS2:Description</Key>
+      <Type>Description</Type>
+      <Value>I2C bus2 controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:TOUCH:Title</Key>
+      <Type>Title</Type>
+      <Value>Touchscreen</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:TOUCH:Description</Key>
+      <Type>Description</Type>
+      <Value>Touchscreen LRADC Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-3DS:CANBUS1:Title</Key>
+      <Type>Title</Type>
+      <Value>CAN Bus 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-3DS:CANBUS1:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 1 of CAN bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-3DS:CANBUS2:Title</Key>
+      <Type>Title</Type>
+      <Value>CAN Bus 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-3DS:CANBUS2:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 2 of CAN bus controller</Value>
+    </Item>
+   <Item>
+      <Key>iMX28-EVK-PDK1_9:43WVF1G:Title</Key>
+      <Type>Title</Type>
+      <Value>43WVF1G(WVGA)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:43WVF1G:Description</Key>
+      <Type>Description</Type>
+      <Value>Display driver 43WVF1G(WVGA)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Backlight PWM:Title</Key>
+      <Type>Title</Type>
+      <Value>Backlight PWM</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Backlight PWM:Description</Key>
+      <Type>Description</Type>
+      <Value>Backlight PWM</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Battery:Title</Key>
+      <Type>Title</Type>
+      <Value>Battery</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:Battery:Description</Key>
+      <Type>Description</Type>
+      <Value>Battery</Value>
+    </Item>    
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:NLED Driver:Title</Key>
+      <Type>Title</Type>
+      <Value>Notification LED</Value>
+    </Item>  
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:LRADC:Title</Key>
+      <Type>Title</Type>
+      <Value>LRADC</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:LRADC:Description</Key>
+      <Type>Description</Type>
+      <Value>LRADC</Value>
+    </Item>      
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:KEYPAD:Title</Key>
+      <Type>Title</Type>
+      <Value>KEYPAD</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:KEYPAD:Description</Key>
+      <Type>Description</Type>
+      <Value>LRADC based KEYPAD</Value>
+    </Item> 
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ROTARY:Title</Key>
+      <Type>Title</Type>
+      <Value>ROTARY</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ROTARY:Description</Key>
+      <Type>Description</Type>
+      <Value>On-Board ROTARY Device Driver </Value>
+    </Item>             
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:NLED Driver:Description</Key>
+      <Type>Description</Type>
+      <Value>Notification LED Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SPDIF:Title</Key>
+      <Type>Title</Type>
+      <Value>SPDIF Output Support</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SPDIF:Description</Key>
+      <Type>Description</Type>
+      <Value>SPDIF Output Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SPDIF:Location</Key>
+      <Type>Location</Type>
+      <Value>Device Drivers\SPDIF</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:SPDIFDETAIL:Title</Key>
+      <Type>Title</Type>
+      <Value>On-Board SPDIF Output Device Driver</Value>
+    </Item>  
+ <Item>
+      <Key>iMX28-EVK-PDK1_9:DVFC:Title</Key>
+      <Type>Title</Type>
+      <Value>DVFC Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:DVFC:Description</Key>
+      <Type>Description</Type>
+      <Value>Dynamic Voltage and Frequency Control (DVFC)</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:DVFCDetail:Title</Key>
+      <Type>Title</Type>
+      <Value>DVFC Driver </Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENET1:Title</Key>
+      <Type>Title</Type>
+      <Value>ENET1 Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENET1:Description</Key>
+      <Type>Description</Type>
+      <Value>ENET1 controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENET2:Title</Key>
+      <Type>Title</Type>
+      <Value>ENET2 Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENET2:Description</Key>
+      <Type>Description</Type>
+      <Value>ENET2 controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENETSWI:Title</Key>
+      <Type>Title</Type>
+      <Value>ENET Switch Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX28-EVK-PDK1_9:ENETSWI:Description</Key>
+      <Type>Description</Type>
+      <Value>ENET Switch controller</Value>
+    </Item>    
+  </StringTable>
+</CatalogFile>

@@ -1,0 +1,38 @@
+!IF "$(BSP_EM9283)" == "" 
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=mkeypad
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=DllEntry
+
+DEFFILE=mkeypad.def
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib             
+
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+SOURCES= \
+    mkeypad_io.cpp \
+    mkeypadclass.cpp \
+
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+   mkeypad.reg \
+    mkeypad.def \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+   mkeypadclass.h \
+    ..\..\..\..\COMMON\SRC\SOC\MX28_FSL_V2_PDK1_9\INC\mx28_ddk.h \
+
+
+

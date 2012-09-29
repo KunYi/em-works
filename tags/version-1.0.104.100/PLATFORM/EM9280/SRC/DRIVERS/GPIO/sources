@@ -1,0 +1,47 @@
+!IF ("$(BSP_EM9280)" == "") && ("$(BSP_EM9283)" == "") 
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_EM9280)" == "1"
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
+!IF "$(BSP_EM9283)" == "1"
+CDEFINES=$(CDEFINES) -DEM9283
+!ENDIF
+
+TARGETNAME=em9280_gpio
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+
+DLLENTRY=DllEntry
+
+DEFFILE=em9280_gpio.def
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib             
+
+
+INCLUDES = ..\..\inc; \
+           $(INCLUDES)
+
+SOURCES= \
+    gpio_io.cpp \
+    gpioclass.cpp \
+
+
+FILE_VIEW_ROOT_FOLDER= \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    em9280_gpio.reg \
+    em9280_gpio.def \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+    gpioclass.h \
+    ..\..\..\..\COMMON\SRC\SOC\MX28_FSL_V2_PDK1_9\INC\mx28_ddk.h \
+    ..\..\INC\bsp_drivers.h \
+    tca6424a_i2c.h \
+    ..\..\INC\em9280_oal.h \
+

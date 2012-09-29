@@ -1,0 +1,18 @@
+;
+; The registry for two ISA based 16C550 with independent irq 
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_5]
+   "DeviceArrayIndex"=dword:5
+   "Prefix"="COM"
+   "Dll"="isa_serial.dll"
+   "DeviceID"=dword:26					; 1st ETA502: SYSINTR_ISA_P40
+   "IOBaseAddress"=dword:AC00E000		; virtual uncached base address of ETA203 PA
+   "Order"=dword:2
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial_6]
+   "DeviceArrayIndex"=dword:6
+   "Prefix"="COM"
+   "Dll"="isa_serial.dll"
+   "DeviceID"=dword:29					; 2nd ETA502: SYSINTR_CAN
+   "IOBaseAddress"=dword:AC00E040		; virtual uncached base address of ETA203 PB
+   "Order"=dword:2

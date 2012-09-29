@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) Microsoft Corporation.  All rights reserved.
+-->
+<!--
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+-->
+<!--
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc.  All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+-->
+<!--
+NOTE: The string table &lt;Key&gt;...&lt;/Key&gt; values are case sensitive and must
+      exactly match what is present in the .pbcxml catalog file.
+-->
+<CatalogFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RequiredVersion="6.00" xsi:schemaLocation="urn:Microsoft.PlatformBuilder/Catalog PbcXml600.xsd" xmlns="urn:Microsoft.PlatformBuilder/Catalog">
+  <FileInformation Id="FileInformation:FSL:iMX25-3DS-PDK1_7:1033">
+    <Title>Freescale iMX25-3DS-PDK1_7 StringTable 1033</Title>
+    <Vendor>Freescale</Vendor>
+    <OSVersion>6.00</OSVersion>
+    <FileVersion>6.00</FileVersion>
+  </FileInformation>
+  <StringTable Id="StringTable:FSL:iMX25-3DS-PDK1_7:1033" Namespace="FSL" Culture="1033">
+    <Title>Freescale iMX25-3DS-PDK1_7 StringTable 1033</Title>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:Freescalei.MX253DSARMV4I:Title</Key>
+      <Type>Title</Type>
+      <Value>Freescale i.MX25 3DS PDK1_7: ARMV4I</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:Freescalei.MX253DSARMV4I:Description</Key>
+      <Type>Description</Type>
+      <Value>The BSP for Freescale i.MX25 Processor 3DS Board</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:EthernetBootloader:Title</Key>
+      <Type>Title</Type>
+      <Value>Ethernet Bootloader (eboot)</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:EthernetBootloader:Description</Key>
+      <Type>Description</Type>
+      <Value>Ethernet Bootloader (eboot)</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART1:Title</Key>
+      <Type>Title</Type>
+      <Value>UART1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART1:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip UART1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART2:Title</Key>
+      <Type>Title</Type>
+      <Value>UART2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART2:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip UART2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART3:Title</Key>
+      <Type>Title</Type>
+      <Value>UART3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART3:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip UART3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART4:Title</Key>
+      <Type>Title</Type>
+      <Value>UART4</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART4:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip UART4</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART5:Title</Key>
+      <Type>Title</Type>
+      <Value>UART5</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:UART5:Description</Key>
+      <Type>Description</Type>
+      <Value>Serial Driver Support for On-chip UART5</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS1:Title</Key>
+      <Type>Title</Type>
+      <Value>I2C Bus 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS1:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 1 of I2C bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS2:Title</Key>
+      <Type>Title</Type>
+      <Value>I2C Bus 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS2:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 2 of I2C bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS3:Title</Key>
+      <Type>Title</Type>
+      <Value>I2C Bus 3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:I2CBUS3:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 3 of I2C bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CLAA057VA01CT:Title</Key>
+      <Type>Title</Type>
+      <Value>CHUNGHWA CLAA057VA01CT(VGA)</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CLAA057VA01CT:Description</Key>
+      <Type>Description</Type>
+      <Value>LCDC display driver CHUNGHWA CLAA057VA01CT</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:BACKLIGHT LCDC:Title</Key>
+      <Type>Title</Type>
+      <Value>Backlight LCDC</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:BACKLIGHT LCDC:Description</Key>
+      <Type>Description</Type>
+      <Value>Backlight LCDC</Value>
+    </Item>  
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESDHC1:Title</Key>
+      <Type>Title</Type>
+      <Value>Enhanced SD Host Controller 1</Value>
+    </Item>    
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESDHC1:Description</Key>
+      <Type>Description</Type>
+      <Value>Enhanced SD Host Controller 1</Value>
+    </Item>  
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESDHC2:Title</Key>
+      <Type>Title</Type>
+      <Value>Enhanced SD Host Controller 2</Value>
+    </Item>    
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESDHC2:Description</Key>
+      <Type>Description</Type>
+      <Value>Enhanced SD Host Controller 2</Value>
+    </Item>     
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS1:Title</Key>
+      <Type>Title</Type>
+      <Value>CSPI Bus 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS1:Description</Key>
+      <Type>Description</Type>
+      <Value>WARNING Can not be included with KITL. Instance 1 of CSPI bus controller. </Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS2:Title</Key>
+      <Type>Title</Type>
+      <Value>CSPI Bus 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS2:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 2 of CSPI bus controller. </Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS3:Title</Key>
+      <Type>Title</Type>
+      <Value>CSPI Bus 3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CSPIBUS3:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 3 of CSPI bus controller. </Value>
+    </Item>
+    <Item>
+        <Key>iMX25-3DS-PDK1_7:DVFC:Title</Key>
+        <Type>Title</Type>
+        <Value>DVFC</Value>
+    </Item>
+    <Item>
+        <Key>iMX25-3DS-PDK1_7:DVFC:Description</Key>
+        <Type>Description</Type>
+        <Value>DVFC using MC34704 PMIC</Value>
+    </Item>
+    <Item>
+        <Key>iMX25-3DS-PDK1_7:AUDIO:Title</Key>
+      <Type>Title</Type>
+      <Value>SGTL5000 Stereo Audio</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:AUDIO:Description</Key>
+      <Type>Description</Type>
+      <Value>SGTL5000 Stereo Audio Driver</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:ADC:Title</Key>
+      <Type>Title</Type>
+      <Value>Analog Digital Convertor</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ADC:Description</Key>
+      <Type>Description</Type>
+      <Value>Analog Digital Convertor Driver</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:BATTERY:Title</Key>
+      <Type>Title</Type>
+      <Value>Fake Battery</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:BATTERY:Description</Key>
+      <Type>Description</Type>
+      <Value>Fake Battery Driver</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:Camera:Title</Key>
+      <Type>Title</Type>
+      <Value>OV2640 Camera Sensor</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:Camera:Description</Key>
+      <Type>Description</Type>
+      <Value>Camera Driver</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT1:Title</Key>
+      <Type>Title</Type>
+      <Value>GPT1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT1:Description</Key>
+      <Type>Description</Type>
+      <Value>General Purpose Timer 1</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT2:Title</Key>
+      <Type>Title</Type>
+      <Value>GPT2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT2:Description</Key>
+      <Type>Description</Type>
+      <Value>General Purpose Timer 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT3:Title</Key>
+      <Type>Title</Type>
+      <Value>GPT3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT3:Description</Key>
+      <Type>Description</Type>
+      <Value>General Purpose Timer 3</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT4:Title</Key>
+      <Type>Title</Type>
+      <Value>GPT4</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:GPT4:Description</Key>
+      <Type>Description</Type>
+      <Value>General Purpose Timer 4</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:TOUCH:Title</Key>
+      <Type>Title</Type>
+      <Value>Touchscreen</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:TOUCH:Description</Key>
+      <Type>Description</Type>
+      <Value>Touchscreen ADC Driver</Value>
+    </Item>
+      <Item>
+      <Key>iMX25-3DS-PDK1_7:KBDMOUSE_EVBKPD:Title</Key>
+      <Type>Title</Type>
+      <Value>Keyboard US/Keypad</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:KBDMOUSE_EVBKPD:Description</Key>
+      <Type>Description</Type>
+      <Value>Keyboard US/Keypad Driver</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:FEC:Title</Key>
+      <Type>Title</Type>
+      <Value>FEC</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:FEC:Description</Key>
+      <Type>Description</Type>
+      <Value>Freescale Fast Ethernet Controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:PWRBTN:Title</Key>
+      <Type>Title</Type>
+      <Value>Power Button</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:PWRBTN:Description</Key>
+      <Type>Description</Type>
+      <Value>Power Button on GPIO2_11 (switch S14)</Value>
+    </Item>    
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM1:Title</Key>
+          <Type>Title</Type>
+          <Value>PWM1</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM1:Description</Key>
+          <Type>Description</Type>
+          <Value>Pulse Width Modulator 1</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM2:Title</Key>
+          <Type>Title</Type>
+          <Value>PWM2</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM2:Description</Key>
+          <Type>Description</Type>
+          <Value>Pulse Width Modulator 2</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM3:Title</Key>
+          <Type>Title</Type>
+          <Value>PWM3</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM3:Description</Key>
+          <Type>Description</Type>
+          <Value>Pulse Width Modulator 3</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM4:Title</Key>
+          <Type>Title</Type>
+          <Value>PWM4</Value>
+      </Item>
+      <Item>
+          <Key>iMX25-3DS-PDK1_7:PWM4:Description</Key>
+          <Type>Description</Type>
+          <Value>Pulse Width Modulator 4</Value>
+      </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LAG08U0M:Title</Key>
+      <Type>Title</Type>
+      <Value>Samsung K9LAG08U0M NAND Flash</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LAG08U0M:Description</Key>
+      <Type>Description</Type>
+      <Value>The Driver of Samsung K9LAG08U0M NAND Flash : 2G MLC, 2K Page Size, 256K Block Size, 64B Spare Size</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LBG08U0M:Title</Key>
+      <Type>Title</Type>
+      <Value>Samsung K9LBG08U0M NAND Flash</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LBG08U0M:Description</Key>
+      <Type>Description</Type>
+      <Value>The Driver of Samsung K9LBG08U0M NAND Flash : 4G MLC, 4K Page Size, 512K Block Size, 128B Spare Size</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LBG08U0D:Title</Key>
+      <Type>Title</Type>
+      <Value>Samsung K9LBG08U0D NAND Flash</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:K9LBG08U0D:Description</Key>
+      <Type>Description</Type>
+      <Value>The Driver of Samsung K9LBG08U0D NAND Flash : 4G MLC, 4K Page Size, 512K Block Size, 218B Spare Size</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CANBUS1:Title</Key>
+      <Type>Title</Type>
+      <Value>CAN Bus 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CANBUS1:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 1 of CAN bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CANBUS2:Title</Key>
+      <Type>Title</Type>
+      <Value>CAN Bus 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:CANBUS2:Description</Key>
+      <Type>Description</Type>
+      <Value>Instance 2 of CAN bus controller</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESAI:Title</Key>
+      <Type>Title</Type>
+      <Value>ESAI Multi Channel Audio</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:ESAI:Description</Key>
+      <Type>Description</Type>
+      <Value>ESAI Multi Channel Audio</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:SIM1:Title</Key>
+      <Type>Title</Type>
+      <Value>Smart Card Controller 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:SIM1:Description</Key>
+      <Type>Description</Type>
+      <Value>Smart Card Driver for On-board SIM Controller 1</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:SIM2:Title</Key>
+      <Type>Title</Type>
+      <Value>Smart Card Controller 2</Value>
+    </Item>
+    <Item>
+      <Key>iMX25-3DS-PDK1_7:SIM2:Description</Key>
+      <Type>Description</Type>
+      <Value>Smart Card Driver for On-board SIM Controller 2</Value>
+    </Item>
+  </StringTable>
+</CatalogFile>

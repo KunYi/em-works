@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2004-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+SYNCHRONIZE_DRAIN=1
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=camera_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETDEFNAME=$(TARGETNAME)
+DEFFILE=camera.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\cammdd_$(_SOCDIR).lib \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\campdd_$(_SOCDIR).lib
+        
+INCLUDES=$(INCLUDES); \
+    ..\INC; \
+    ..\..\INC; \
+    ..\..\..\INC; \
+
+SOURCES=\
+    main.cpp
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    camera_$(_SOCDIR).def   \
+    
+    

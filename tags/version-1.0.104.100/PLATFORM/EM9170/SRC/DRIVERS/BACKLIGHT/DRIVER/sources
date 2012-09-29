@@ -1,0 +1,33 @@
+!if 0
+Copyright (C) 2007-2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!IF "$(BSP_BACKLIGHT)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=lcdcbacklight
+RELEASETYPE=PLATFORM
+TARGETTYPE=DYNLINK
+DLLENTRY=_DllEntryCRTStartup
+
+TARGETLIBS=\
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\ceosutil.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib    \
+    $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib
+
+SOURCELIBS=\
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\backlight_$(_COMMONSOCDIR).lib
+
+DEFFILE=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\backlight_$(_COMMONSOCDIR).def
+
+SOURCES=\
+    bspbacklight.cpp
+
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    mx25_backlight.reg \
+

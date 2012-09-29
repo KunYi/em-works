@@ -1,0 +1,71 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+;------------------------------------------------------------------------------
+;
+; Copyright (C) 2007-2010, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+;------------------------------------------------------------------------------
+
+[HKEY_LOCAL_MACHINE\Comm\AR6K_SD]
+    "DisplayName"="AR6000 WLAN Adapter SD"
+    "Group"="NDIS"
+    "ImagePath"="ar6k_ndis_sdio.dll"
+    "Wireless"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\AR6K_SD\Linkage]
+    "Route"=multi_sz:"AR6K_SD1"
+
+[HKEY_LOCAL_MACHINE\Comm\AR6K_SD1]
+    "DisplayName"="AR6000 WLAN Adapter SD"
+    "Group"="NDIS"
+    "ImagePath"="ar6k_ndis_sdio.dll"
+    "Wireless"=dword:1
+
+[HKEY_LOCAL_MACHINE\Comm\AR6K_SD1\Parms]
+    "BtCoexAntConfig"=dword:0
+    "eepromFile"="calData_15dBm.bin"
+
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-0108-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-0109-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-010a-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-010b-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+    
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-0201-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+    
+[HKEY_LOCAL_MACHINE\Drivers\SDCARD\ClientDrivers\Custom\MANF-0271-CARDID-0200-FUNC-1]
+    "Dll"="ar6k_ndis_sdio.dll"
+    "Prefix"="DRG"
+    
+[HKEY_LOCAL_MACHINE\Services\ATHSRVC]
+   "FriendlyName"="AthSrvc"
+   "Dll"="ATHSRVC.Dll"
+   "Order"=dword:10
+   "Keep"=dword:1
+   "Prefix"="ATH"
+   "Index"=dword:0    
+   "appId"=dword:1
+   
+

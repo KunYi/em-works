@@ -1,0 +1,12 @@
+
+
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ADS1]
+[HKEY_LOCAL_MACHINE\Drivers\ETA108]
+   "Prefix"="ADS"									 
+   ;"Dll"="ETA108.dll"								 
+   "Dll"="\\Nandflash\\ETA108V2.dll"								 
+   "Index"		 = dword:1		;"ADS1:"
+   "Order"=dword:1 
+   
+
+

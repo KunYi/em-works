@@ -1,0 +1,21 @@
+!if 0
+Copyright (C) 2009, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=sdhc_$(_SOCDIR)
+TARGETTYPE=LIBRARY
+
+TARGETDEFNAME=$(TARGETNAME)
+
+CDEFINES=$(CDEFINES) -DMSCDSK
+
+INCLUDES=$(_PLATFORMROOT)\common\src\soc\$(_COMMONSOCDIR)\SDBUS;\
+    $(INCLUDES)
+    
+SOURCES = sdhcmain.cpp \
+          sdhccontrol.cpp \
+

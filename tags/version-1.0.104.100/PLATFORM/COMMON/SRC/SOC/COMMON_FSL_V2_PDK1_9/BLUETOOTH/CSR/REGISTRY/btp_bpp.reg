@@ -1,0 +1,88 @@
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BPPM]
+    "AutoFlushTimeout"=dword:55D4A80
+    "ReconnectTimeout"=dword:1388
+    "ReconnectTimes"=dword:0A
+
+[HKEY_LOCAL_MACHINE\Software\CSR\Modules\BPPM\BPP\CurrentSettings]
+    "BluetoothAddress"=""
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Bluetooth\Services\00001118-0000-1000-8000-00805F9B34FB]
+    @="Basic Printing"
+    "btp_ui_ext.dll"=dword:0
+
+[HKEY_LOCAL_MACHINE\Software\State\Bluetooth\BPPM]
+    "State"="Idle"
+
+[HKEY_CLASSES_ROOT\CLSID\{5C300FFB-CBA3-4683-A3C0-6D1434C3F2F0}]
+    @="printers_tab"
+
+[HKEY_CLASSES_ROOT\CLSID\{5C300FFB-CBA3-4683-A3C0-6D1434C3F2F0}\inprocserver32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="free"
+
+[HKEY_LOCAL_MACHINE\software\microsoft\shell\extensions\controls folder\bluetooth\shellex\propertysheethandlers\{5C300FFB-CBA3-4683-A3C0-6D1434C3F2F0}]
+    @=""
+
+[HKEY_CLASSES_ROOT\CLSID\{8B77C05D-8C21-4257-9029-DE5F45F52AF3}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_CLASSES_ROOT\CLSID\{DDBF8815-7C94-4239-8894-316153AA28C8}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_CLASSES_ROOT\CLSID\{CA2F9342-DACF-43AA-815B-7F75162FA576}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_CLASSES_ROOT\CLSID\{74762928-DA1B-4067-9BA8-353957176827}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_CLASSES_ROOT\CLSID\{C683873D-4B05-4FA9-9624-CB9E9BEF530B}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_CLASSES_ROOT\CLSID\{079E9BA2-3C08-4700-99FE-24BA9A0EBCC1}\InProcServer32]
+    @="btp_ui_ext.dll"
+    "ThreadingModel"="Free"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Contacts\Card_Menu\{DDBF8815-7C94-4239-8894-316153AA28C8}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Contacts\Chooser_Menu\{DDBF8815-7C94-4239-8894-316153AA28C8}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Contacts\Edit_Menu\{DDBF8815-7C94-4239-8894-316153AA28C8}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Contacts\Main_Menu\{DDBF8815-7C94-4239-8894-316153AA28C8}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Calendar\Card_Menu\{CA2F9342-DACF-43AA-815B-7F75162FA576}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Calendar\Main_Menu\{CA2F9342-DACF-43AA-815B-7F75162FA576}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Tasks\Card_Menu\{74762928-DA1B-4067-9BA8-353957176827}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Tasks\Main_Menu\{74762928-DA1B-4067-9BA8-353957176827}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Pictures\imagefile\{C683873D-4B05-4FA9-9624-CB9E9BEF530B}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Pictures\imageview\{C683873D-4B05-4FA9-9624-CB9E9BEF530B}]
+    @="ui_ext"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\Camera\imagefile\{C683873D-4B05-4FA9-9624-CB9E9BEF530B}]
+    @="ui_ext"
+    
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Shell\Extensions\ContextMenus\PicturePicker\imagefile\{C683873D-4B05-4FA9-9624-CB9E9BEF530B}]
+    @="ui_ext"  
+    
+[HKEY_CLASSES_ROOT\*\ShellEx\ContextMenuHandlers\{8B77C05D-8C21-4257-9029-DE5F45F52AF3}]
+    @="ui_ext"
+

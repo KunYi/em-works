@@ -1,0 +1,27 @@
+!if 0
+Copyright (C) 2006-2008, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT 
+!endif
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME=pmicPdk_mc13892_$(_COMMONSOCDIR)
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+DEFFILE=pmicPdk_mc13892.def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETDEFNAME).def
+
+INCLUDES=\
+    ..\..\inc; \
+    ..\inc; \
+    $(_PLATFORMROOT)\common\src\inc;\
+    $(INCLUDES)
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+SOURCES=\
+    pmicpdk.cpp \
+    pmicrtc.cpp  \
+
