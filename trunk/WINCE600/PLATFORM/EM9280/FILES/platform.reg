@@ -709,16 +709,6 @@ ENDIF BSP_NODISPLAY !
 ;   "Angle"=dword:B4     ;; 180 degrees rotated clockwise
 ;   "Angle"=dword:10E    ;; 270 degrees rotated clockwise
 
-; LQK:Jul-14-2012
-[HKEY_LOCAL_MACHINE\System\GDI\Drivers]
-	"ContrastLevel"=dword:3c
-	"ShutDownImage"="Windows\\ShutDownImage160160.bmp"
-	
-;lqk:jul-14-2012
-[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Power]
-	"Is5VFromUSB"=dword:1	;;1:power source is from wall charger
-							;;0:power source is from USB
-
 ;
 ; Let GWES save/restore video memory during suspend/resume
 ;
@@ -1073,9 +1063,9 @@ ENDIF
 
 ;
 ; CS&ZHL DEC-9-2011: EM9280 specified settings
+; CS&ZHL SEP-24-2012: EM9283 specified settings
 ;
-;IF BSP_EM9280
-#if (defined BSP_EM9280 || defined BSP_EM9283 )
+#if (defined BSP_EM9280 ) || (defined BSP_EM9283)
 [HKEY_LOCAL_MACHINE\Time Zones]
 	"Default"="China Standard Time"
 
@@ -1125,13 +1115,11 @@ ENDIF
 	"Threshold"=dword:5265C00			; 1 day
 	"Server"="pool.ntp.org"
 
-;ENDIF	;BSP_EM9280
-#endif
+#endif ; BSP_EM9280 BSP_EM9283
 
 ;;------------------------------------------------------------------------------
 
 
 ;; @XIPREGION ENDIF PLATFORM_REGISTRY_DEFAULT
 ;
-
 

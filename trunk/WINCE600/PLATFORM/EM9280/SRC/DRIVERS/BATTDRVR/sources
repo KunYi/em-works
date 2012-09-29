@@ -46,5 +46,3 @@ INCLUDES=\
     
 SOURCES= \
     battery.c \
-
-

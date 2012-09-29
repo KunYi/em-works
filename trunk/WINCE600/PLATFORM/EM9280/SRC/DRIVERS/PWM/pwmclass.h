@@ -64,12 +64,25 @@ extern "C" {
 #endif // DEBUG
 
 //------------------------------------------------------------------------------
+// CS&ZHL JLY17-2012: Defines
+//------------------------------------------------------------------------------
+typedef struct _PWM_PIN_INFO
+{
+	DDK_IOMUX_PIN					iomux_pin;
+	DDK_IOMUX_PIN_MUXMODE			muxmode;
+	DWORD							pwmIndex;
+	DWORD							pwmEnble;
+}PWM_PIN, *PPWM_PIN;
+
+
+//------------------------------------------------------------------------------
 // Defines
 //------------------------------------------------------------------------------
 class PWMClass
 {
 private:
 
+	PPWM_PIN	pPwmPinTab;
 	PVOID	pv_HWRegPWM;
 	DWORD	m_dwIndex;
 	DWORD	m_dwFreq;

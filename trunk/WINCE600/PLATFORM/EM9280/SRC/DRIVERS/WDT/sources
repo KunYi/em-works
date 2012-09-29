@@ -36,6 +36,7 @@ FILE_VIEW_RESOURCE_FOLDER= \
 FILE_VIEW_INCLUDES_FOLDER= \
     ..\..\INC\bsp_drivers.h \
     ..\..\INC\em9280_oal.h \
+    ..\..\INC\bsp.h \
 
 SOURCES= \
     wdt_io.cpp \

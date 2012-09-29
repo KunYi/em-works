@@ -70,3 +70,6 @@ SOURCES= \
     ..\ddlcdif_line.cpp \
     ..\ddlcdif_blt.cpp \
     ..\ddlcdif_escape.cpp
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\ddlcdif.h \
+

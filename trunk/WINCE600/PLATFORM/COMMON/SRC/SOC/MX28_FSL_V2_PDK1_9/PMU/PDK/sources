@@ -24,7 +24,7 @@ SOURCES=\
 FILE_VIEW_RESOURCE_FOLDER= \
     pmupdk.def \
 
+FILE_VIEW_INCLUDES_FOLDER= \
+    ..\INC\pmu_ioctl.h \
+    ..\INC\pmu.h \
 
-!IF ("$(BSP_EM9283)" == "1")
-CDEFINES=$(CDEFINES) -DEM9283
-!ENDIF

@@ -233,11 +233,11 @@ BOOL PmuGetVddd(UINT32 *VdddmV );
 BOOL PmuGetVdddBrownont(UINT32 *VdddBo );
 BOOL PmuSetFets(PMU_POWER_FETSSET bFetsMode);
 BOOL PmuPowerGetSupplyMode(PMU_POWER_SUPPLY_MODE *PowerMode);
+/*JLY17-2012: LQK*/
 BOOL PmuGetPowerSource(UINT32 *powerSource);
 
 //LQK:Jul-25-2012
 BOOL PmuIsBatteryAttach(BOOL *bIsBatteryAttach );
-
 #ifdef __cplusplus
 }
 #endif

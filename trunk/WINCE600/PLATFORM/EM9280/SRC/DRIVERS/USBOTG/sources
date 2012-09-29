@@ -22,13 +22,14 @@ AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
 SKIPBUILD=1
 !ENDIF
 
+!IF ("$(BSP_EM9280)" == "1")
+CDEFINES=$(CDEFINES) -DEM9280
+!ENDIF
+
 !IF "$(BSP_EM9283)" == "1"
 CDEFINES=$(CDEFINES) -DEM9283
 !ENDIF
 
-!IF ("$(BSP_EM9280)" == "1")
-CDEFINES=$(CDEFINES) -DEM9280
-!ENDIF
 
 TARGETNAME=fsl_usbotg
 TARGETTYPE=DYNLINK
@@ -48,13 +49,14 @@ SOURCELIBS= \
     $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\defbuslib.lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\usbotgcm_$(_COMMONSOCDIR).lib \
     $(_TARGETPLATROOT)\lib\$(_CPUDEPPATH)\cspddk.lib \
+	
 
 SOURCES= \
     ist.cpp \
     fsl_usbotg.cpp \
     i_usbutils.c \
     i_usbclock.c
-    
-INCLUDES = \
+
+INCLUDES=\
     $(_PLATFORMROOT)\common\src\soc\$(_SOCDIR)\PMU\INC; \
     $(INCLUDES)

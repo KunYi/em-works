@@ -338,6 +338,9 @@ BOOL BLMenu()
     UINT32 Selection, ImageSelection;
 	UINT32 nDBGSL = 1;
 
+	// Lqk SEP-14-2012: supporting WDT
+    PVOID  pv_HWregRTC = (PVOID)OALPAtoUA(CSP_BASE_REG_PA_RTC);
+
 	PrintSoc = (BLMenuPrintDataSoc)PrintData;
     
     EdbgOutputDebugString("INFO:  Initial Eboot Screen Display... \r\n");
@@ -361,6 +364,10 @@ BOOL BLMenu()
 #endif	//EM9280
 		if( nDBGSL )    // for debug mode
 		{
+			EdbgOutputDebugString("Debug Mode -> disable WDT\r\n");
+			//LQK SEP 14-2012: Disable WDT in debug mode
+			HW_RTC_CTRL_CLR(BM_RTC_CTRL_WATCHDOGEN);
+
 			AutoBootDelay = g_BootCFG.delay;
 			switch(g_BootCFG.autoDownloadImage)
 			{
@@ -425,6 +432,10 @@ BOOL BLMenu()
 		}
 		else                   // for run mode
 		{
+			EdbgOutputDebugString("Running Mode -> refresh WDT\r\n");
+			// LQK SEP 14-2012: Reload WDT
+			HW_RTC_WATCHDOG_WR( 10000 );
+
 			switch(g_BootCFG.autoDownloadImage)
 			{
 			case BOOT_CFG_AUTODOWNLOAD_NK_NAND:

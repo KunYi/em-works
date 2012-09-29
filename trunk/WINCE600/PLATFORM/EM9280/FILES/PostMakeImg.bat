@@ -79,8 +79,9 @@ del nkinfo.txt
 @REM Go back to saved dir
 cd %_CURRENTDIR%
 
-if "%BSP_EM9280%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9280
-if "%BSP_EM9283%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9283
+if "%BSP_EM9280%" == "1"          set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9280
+if "%BSP_EM9283%" == "1"          set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9283_TFT
+if "%BSP_DISPLAY_UC1698%" == "1"  set _MFGTOOL=%_WINCEROOT%\%_SUPPORT%\TOOL\MfgTools\Profiles\MX28 WinCE Update\OS firmware\EM9283
 
 cd %_MFGTOOL%
 

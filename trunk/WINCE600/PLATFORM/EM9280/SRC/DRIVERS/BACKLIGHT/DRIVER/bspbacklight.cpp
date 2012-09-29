@@ -80,15 +80,14 @@ void BSPBacklightInitialize()
     }
 	// JLY05-2012: LQK
 #ifdef EM9283
-    /*//Setup IOMUX
-    PWMChSetIOMux(PWM_CHANNEL_7,DDK_IOMUX_MODE_01);
+    ////Setup IOMUX
+    //PWMChSetIOMux(PWM_CHANNEL_7,DDK_IOMUX_MODE_01);
 
-    //Setup initial frequency and duty cycle with 1 kHz
-    PWMChSetConfig(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,
-                   BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
-    //Enable PWM7
-    PWMChOutputEnable(PWM_CHANNEL_7,TRUE);*/
-	//Setup IOMUX
+    ////Setup initial frequency and duty cycle with 1 kHz
+    //PWMChSetConfig(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,
+    //               BACKLIGHT_PWM_INPUT_FREQUENCY, BACKLIGHT_PWM_INIT_PERCENT);
+    ////Enable PWM2
+    //PWMChOutputEnable(PWM_CHANNEL_7,TRUE);
 	//LQK:Jul-17-2012
 	PWMChSetIOMux(PWM_CHANNEL_4,DDK_IOMUX_MODE_00);
 
@@ -156,17 +155,18 @@ void BSPBacklightSetIntensity(DWORD level)
     }
 	// JLY05-2012: LQK
 #ifdef EM9283
-    /*PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
-    //Level = 0,disable PWM
-    if (level == 0) 
-    {
-        PWMChOutputEnable(PWM_CHANNEL_7, FALSE);
-    }
-    //Enable PWM
-    else 
-    {
-        PWMChOutputEnable(PWM_CHANNEL_7, TRUE);
-    }*/
+    //PWMChSetDutyCycle(PWM_CHANNEL_7,PWM_STATE_HIGH, PWM_STATE_LOW,level);
+    ////Level = 0,disable PWM
+    //if (level == 0) 
+    //{
+    //    PWMChOutputEnable(PWM_CHANNEL_7, FALSE);
+    //}
+    ////Enable PWM
+    //else 
+    //{
+    //    PWMChOutputEnable(PWM_CHANNEL_7, TRUE);
+    //}
+
 	//LQK:Jul-17-2012
 	PWMChSetDutyCycle(PWM_CHANNEL_4,PWM_STATE_HIGH, PWM_STATE_LOW,level);
 	//Level = 0,disable PWM

@@ -128,6 +128,7 @@ extern "C" {
                                         METHOD_BUFFERED,     \
                                         FILE_ANY_ACCESS      \
                                         )
+                                        
 //LQK:Jul-25-2012                                                                                
 #define PMU_IOCTL_BATTERY_ATTACH		 CTL_CODE(           \
 										FILE_DEVICE_UNKNOWN, \
@@ -135,7 +136,6 @@ extern "C" {
 										METHOD_BUFFERED,     \
 										FILE_ANY_ACCESS      \
 										)                                        
-                                        
 #ifdef __cplusplus
 }
 #endif

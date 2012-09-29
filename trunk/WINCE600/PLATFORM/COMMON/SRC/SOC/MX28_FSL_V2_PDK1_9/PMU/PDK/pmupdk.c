@@ -34,6 +34,10 @@
 // Defines
 #define POWER_OFF_HOLD_TIME             2000000
 
+/* CS&ZHL SEP24-2012: defined board type */
+#define	BOARD_TYPE_EM9280				9280
+#define	BOARD_TYPE_EM9283				9283
+
 //-----------------------------------------------------------------------------
 // Types
 
@@ -78,6 +82,7 @@ DBGPARAM dpCurSettings = {
 //lqk:Jul-25-2012
 #define BATTERY_LOW                     2400
 #define BATTERY_HIGH                    4300
+
 //-----------------------------------------------------------------------------
 // Local Variables
 
@@ -162,21 +167,18 @@ static VOID    PowerSetVdddBrownoutValue(UINT32 VdddBoOffsetmV);
 static VOID    PowerSetVdddValue(UINT32 VdddmV);
 static UINT32  PowerGetVdddValue(VOID);
 
-//LQK:Jul-25-2012
-static BOOL    IsBatteryAttach(VOID);
-
 extern BOOL IsUSBDeviceDriverEnable();
 //extern BOOL Is5VFromVbus();
 
-#ifdef EM9283  // LQK:Jul 9,2012
-	BOOL g_bIs5VFromVbus=TRUE;
-	static BOOL Is5VFromVbus()
-	{
-		return g_bIs5VFromVbus;
-	}
-#else
-	extern BOOL Is5VFromVbus();
-#endif
+//LQK:Jul-25-2012
+static BOOL    IsBatteryAttach(VOID);
+
+BOOL g_bIs5VFromVbus=TRUE;
+
+extern BOOL Is5VFromVbus();
+
+extern DWORD BSPGetBoardType();
+extern void  BSPSetVFromVbusValue( BOOL bVal );
 
 //-----------------------------------------------------------------------------
 //
@@ -399,11 +401,13 @@ static UINT32 PowerStart4p2(VOID)
 //-----------------------------------------------------------------------------
 static BOOL PowerStart4p2HW(VOID)
 {
-    UINT32 i = 0;
-    UINT32 u32Chargetime = 0;
-    UINT32 u32Vbusvalid_trsh = 0;
-    BOOL bLoop = TRUE;   
+    UINT32		i = 0;
+    UINT32		u32Chargetime = 0;
+    UINT32		u32Vbusvalid_trsh = 0;
+    BOOL		bLoop = TRUE;   
+	DWORD		dwBoardType = BSPGetBoardType();     /* CS&ZHL SEP24-2012 */
     
+
     //Must do these things to avoid the the glitchs ,due to chip bug
     //record the value 
     bOrinVbusvalid_5Vdetect = HW_POWER_5VCTRL.B.VBUSVALID_5VDETECT;
@@ -475,16 +479,14 @@ static BOOL PowerStart4p2HW(VOID)
 
         if(Is5VFromVbus())
         {  
-            // Set current limit to 480mA.    
-            //BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
-            
-#ifdef EM9283
+//#ifdef EM9283					//SEP-24-2012: lqk
+		 if( dwBoardType == BOARD_TYPE_EM9283 )
 			// Set current limit to 450mA.    
             BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x24);
-#else
-			// Set current limit to 480mA.    
-			BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
-#endif
+		 else
+            // Set current limit to 480mA.    
+            BF_WR(POWER_5VCTRL, CHARGE_4P2_ILIMIT, 0x27);
+//#endif	
         }
         else
         {
@@ -1466,8 +1468,8 @@ static BOOL PowerInit()
 {
     BOOL rc = FALSE;
     UINT32 irq = 0;
- 
-#ifdef EM9283	// LQK:Jul 9,2012
+
+//#ifdef EM9283	// LQK:Jul 9,2012
 	DWORD dwStatus,dwVal,dwSize;
 	HKEY  hKey;
 	TCHAR szName[] = TEXT("Is5VFromUSB");
@@ -1504,8 +1506,11 @@ static BOOL PowerInit()
 	{
 		RETAILMSG(1, (TEXT("PowerInit: 5V is from Wall charger.\r\n")));
 	}
-#endif
 	
+	BSPSetVFromVbusValue( g_bIs5VFromVbus );   /* CS&ZHL SEP24-2012: */
+
+//#endif  //EM9283
+ 
     //Map the peripheral register space of the power module
     if (!PowerAlloc())
     {
@@ -1513,7 +1518,6 @@ static BOOL PowerInit()
         goto cleanUp;
     }      
 
-	RETAILMSG(1, (TEXT("HW_POWER_BATTMONITOR = 0x%X \r\n"),HW_POWER_BATTMONITOR_RD()));
     //DumpPowerRegisters();
     if((HW_POWER_5VCTRL.B.PWD_CHARGE_4P2 == 0) && ((HW_POWER_5VCTRL_RD() & BM_POWER_5VCTRL_CHARGE_4P2_ILIMIT) == 0x20000))
     {
@@ -1591,8 +1595,7 @@ static BOOL PowerInit()
     CeSetThreadPriority(PowerHandler_thread,CE_THREAD_PRIO_256_HIGHEST);
     
 #if 1
-    // DEBUGMSG(ZONE_FUNC, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
-	// RETAILMSG(1, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
+    DEBUGMSG(ZONE_FUNC, (_T("%s: About to enable the wake source %d %d\r\n"),__WFUNCTION__, SysIntr5V, irq));
     // Ask the OAL to enable our interrupt to wake the system from suspend.
     KernelIoControl(IOCTL_HAL_ENABLE_WAKE, &SysIntr5V,sizeof(SysIntr5V), NULL, 0, NULL);
     
@@ -1793,6 +1796,7 @@ static BOOL PowerDeInit(VOID)
 //
 //  This routine initializes the Battery monitor for battery module.
 //
+
 //  Parameters:
 //          eTrigger
 //              [in]  Specifies the Lradc trigger used
@@ -1887,7 +1891,7 @@ BOOL PmuIoctlSetCharger(UINT32 current)
         return FALSE;
     }
     BF_CLRV(POWER_CHARGE, STOP_ILIMIT, 0xF);
-    BF_SETV(POWER_CHARGE, STOP_ILIMIT, 0x5);//stop limit current = 50mA  
+    BF_SETV(POWER_CHARGE, STOP_ILIMIT, 0x3);//stop limit current = 30mA  
     
     BF_CLRV(POWER_CHARGE, BATTCHRG_I, 0x3F);
     BF_SETV(POWER_CHARGE, BATTCHRG_I, current); 
@@ -2684,7 +2688,7 @@ PMI_IOControl(DWORD hOpenContext, DWORD dwCode, PBYTE pBufIn, DWORD dwLenIn,
 		}
 		break;
 
-    case PMU_IOCTL_VDDD_GET_BRNOUT:
+	case PMU_IOCTL_VDDD_GET_BRNOUT:
         if (pBufOut != NULL)
         {        
             *(UINT32*)pBufOut = PmuIoctlGetVdddBrownont();
@@ -2898,7 +2902,7 @@ static BOOL VDDDBOHandler(void)
            WaitForSingleObject (g_hVDDDBNOTEvent, INFINITE);
 
            //VDDD BROWN
-           RETAILMSG(1, (TEXT("VDDDBOHandler VDDD BROWN...\r\n")));
+           //RETAILMSG(1, (TEXT("VDDDBOHandler VDDD BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDD_BO)
            {
                StallExecution(100);
@@ -2934,7 +2938,7 @@ static BOOL VDDIOBOHandler(void)
            WaitForSingleObject (g_hVDDIOBNOTEvent, INFINITE);
 
            //VDDIO BROWN
-           RETAILMSG(1, (TEXT("VDDIOBOHandler VDDIO BROWN...\r\n")));
+           //RETAILMSG(1, (TEXT("VDDIOBOHandler VDDIO BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDIO_BO)
            {
                StallExecution(100);
@@ -2970,7 +2974,7 @@ static BOOL VDDABOHandler(void)
            WaitForSingleObject (g_hVDDABNOTEvent, INFINITE);
 
            //VDDA BROWN
-           RETAILMSG(1, (TEXT("VDDABOHandler VDDA BROWN...\r\n")));
+           //RETAILMSG(1, (TEXT("VDDABOHandler VDDA BROWN...\r\n")));
            if(HW_POWER_STS.B.VDDA_BO)
            {
                StallExecution(100);
