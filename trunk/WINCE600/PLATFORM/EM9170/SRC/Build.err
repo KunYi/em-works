@@ -1,3 +1,0 @@
-BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [01:0000001333:ERRORE] NMAKE :  U1073: don't know how to make 'D:\WINCE600\platform\common\lib\ARMV4I\retail\i2c_common_fsl_v2_pdk1_7.def'
-BUILD: [01:0000001335:ERRORE] NMAKE.EXE TargetLibFiles  -i -c BUILDMSG=Stop.  BUILDROOT=D:\WINCE600\PLATFORM\EM9170 CLEANBUILD=1 LINKONLY=1 NOPASS0=1 failed - rc = 2
