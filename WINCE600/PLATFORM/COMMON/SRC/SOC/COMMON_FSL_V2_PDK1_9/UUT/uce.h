@@ -32,7 +32,6 @@
 //CS&ZHL JUN01-2012: add for check device mac
 #define UCE_GET_DEVICE_MAC                 10
 
-
 typedef enum {
     Firmware = 0,
     UserFile,

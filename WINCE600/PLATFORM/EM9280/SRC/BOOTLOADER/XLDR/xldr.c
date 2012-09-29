@@ -49,15 +49,14 @@ int start()
     PBYTE pbOCRAM = (PBYTE)IMAGE_WINCE_IRAM_PA_START;
     
     EMI_MemType_t        type = EMI_DEV_DDR2;
-	//SEP-14-2012 LQK: Enable WDT
-	//HW_RTC_WATCHDOG_WR( 10000 );
-	//HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
-	
     InitDebugSerial();
     InitPower(); 
     InitSdram(type);
     
-    HW_RTC_PERSISTENT3_WR(0);
+	// CS&ZHL SEP-18-2012: start WDT as soon as possible
+	StartWDT();
+
+	HW_RTC_PERSISTENT3_WR(0);
     
     // check for SDBoot
     if ( ((*(PBYTE)((DWORD)pbOCRAM + OCRAM_BOOT_MODE_OFFSET)) & BOOT_MODE_MASK) == BOOT_MODE_SDMMC)
@@ -540,13 +539,13 @@ void InitPower()
 	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN00);
     HW_PINCTRL_DOE1_SET(1 << 0);
     HW_PINCTRL_DOUT1_SET(1 << 0);		//active low
-#else // -> iMX28EVK
+#else	// -> iMX28EVK
     HW_PINCTRL_MUXSEL7_SET(BM_PINCTRL_MUXSEL7_BANK3_PIN30);
     HW_PINCTRL_DOE3_SET(1 << 30);
     HW_PINCTRL_DOUT3_CLR(1 << 30);		//active high
 #endif	//EM9280
 
-#ifdef	EM9280 
+#ifdef	EM9280
 	// GPIO1_1 is used as USB0_PWR, turn off USB0 VBUS
 	HW_PINCTRL_MUXSEL2_SET(BM_PINCTRL_MUXSEL2_BANK1_PIN01);
     HW_PINCTRL_DOE1_SET(1 << 1);
@@ -816,17 +815,18 @@ BOOL EnableBatteryMeasure()
 //-----------------------------------------------------------------------------
 BOOL IsBatteryGood()
 {
-    
-#ifdef EM9283
+    UINT32 BatteryVoltage = 0;
+
+#ifdef EM9283		
 	int i;
 #endif
-	UINT32 BatteryVoltage = 0;
+
     BatteryVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
     if((BatteryVoltage > BATTERY_LOW) && (BatteryVoltage < BATTERY_HIGH))
 	{
         //return TRUE;
 		// JLY05-2012:LQK
-#ifdef EM9283
+#ifdef EM9283		
 		//LQK:Jul-23-2012
 		for( i=0; i<10; i++ )
 		{
@@ -845,28 +845,6 @@ BOOL IsBatteryGood()
 			return TRUE;
 		}
 
-		/*HW_POWER_REFCTRL.B.FASTSETTLING =1;
-		if( HW_POWER_STS.B.BATT_BO == 0 )
-		{
-			HW_POWER_REFCTRL.B.FASTSETTLING =1;
-			XLDRStall(10000);
-			BattVoltage = HW_POWER_BATTMONITOR.B.BATT_VAL * 8;
-			XLDRWriteDebugByte('B');
-			XLDRWriteDebugByte('A');
-			XLDRWriteDebugByte('T');
-			XLDRWriteDebugByte('T');
-			XLDRWriteDebugByte(':');
-			PrintBatteryVoltage(BattVoltage);
-			XLDRWriteDebugByte('\r');
-			XLDRWriteDebugByte('\n');
-			if( HW_POWER_STS.B.BATT_BO == 0 )
-			{
-				HW_POWER_REFCTRL.B.FASTSETTLING =0;
-				return TRUE;
-			}
-		}
-		HW_POWER_REFCTRL.B.FASTSETTLING =0;
-		return FALSE;*/
 #else
 		return TRUE;
 #endif
@@ -1409,3 +1387,16 @@ void CPUClock2PLL()
         HW_CLKCTRL_CLKSEQ_CLR(BM_CLKCTRL_CLKSEQ_BYPASS_CPU);// let CPU sink the xtal clock
 }
 
+// CS&ZHL SEP-18-2012: start WDT as soon as possible
+VOID StartWDT()
+{
+	//SEP-14-2012 LQK: Enable WDT
+	HW_RTC_WATCHDOG_WR( 10000 );
+	HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
+
+    XLDRWriteDebugByte('W');
+    XLDRWriteDebugByte('D');
+    XLDRWriteDebugByte('T');
+    XLDRWriteDebugByte('\r');
+    XLDRWriteDebugByte('\n');
+}

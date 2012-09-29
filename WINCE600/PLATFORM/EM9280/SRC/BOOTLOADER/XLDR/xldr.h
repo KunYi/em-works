@@ -108,5 +108,7 @@ VOID IsWall5V();
 VOID BootFromBattery();
 VOID BootFrom4P2();
 VOID ChargeBattery2Boot();
+// CS&ZHL SEP-18-2012: start WDT as soon as possible
+VOID StartWDT();
 
 #endif //__XLDR_H

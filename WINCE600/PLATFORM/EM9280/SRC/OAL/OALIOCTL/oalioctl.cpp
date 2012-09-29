@@ -126,6 +126,7 @@ IOControl(
 		case IOCTL_HAL_VENDOR_ID_READ:
 		case IOCTL_HAL_CUSTOMER_ID_READ:
 		case IOCTL_HAL_BOARD_STATE_READ:
+		case IOCTL_HAL_WSTARTUP_END:			// CS&ZHL SEP-20-2012: inform OS that wstartup is ended
 //#endif	//EM9280
         // request is to service the ioctl - forward the call to OAL code
         // OAL code will set the last error if there is a failure

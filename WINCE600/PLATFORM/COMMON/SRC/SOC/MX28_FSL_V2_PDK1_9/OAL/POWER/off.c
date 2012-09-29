@@ -245,18 +245,21 @@ void OEMPowerOff()
     {
         
         // Place the system in suspend state and wait for an interrupt.
-        OALMSG(1, (_T("INFO: OEMPowerOff entering suspend.\r\n")));
+        //OALMSG(1, (_T("INFO: OEMPowerOff entering suspend.\r\n")));
 
         // Decrease ARM/AHB rate 
         SOCPowerOffCPURate();
-
-		//OALMSG(1, (_T("INFO: entering suspend-->\r\n")));
+  
+  
+		OALMSG(1, (_T("INFO: OEMPowerOff -- SuspendMe( ).-->\r\n")));
         //Suspend 
         SuspendMe();
-        OALMSG(1, (_T("INFO: OEMPowerOff wakeUp...\r\n")));
+		OALMSG(1, (_T("INFO: <--OEMPowerOff -- SuspendMe( ).\r\n")));
+        
         // Increase ARM/AHB rate 
         SOCPowerOnCPURate();
-		
+		//OALMSG(1, (_T("INFO: OEMPowerOff -- SOCPowerOnCPURate( ).\r\n")));
+
         // Get interrupt source
         irq = HW_ICOLL_STAT_RD() & BM_ICOLL_STAT_VECTOR_NUMBER;
 
@@ -353,7 +356,7 @@ void OEMPowerOff()
         // Chance of board-level subordinate interrupt controller
         irq = BSPIntrActiveIrq(irq);
         
-        OALMSG(1, (_T("INFO: OEMPowerOff leaving suspend.  IRQ = %d\r\n"), irq));
+        //OALMSG(1, (_T("INFO: OEMPowerOff leaving suspend.  IRQ = %d\r\n"), irq));
 
         if(irq == IRQ_VDD5V)
         {
@@ -433,7 +436,7 @@ VOID SuspendTheSystem(VOID)
     // need to wait more than 15 microsecond before the DC_OK is valid  
     Reg_Data=HW_DIGCTL_MICROSECONDS_RD();
     for(; (HW_DIGCTL_MICROSECONDS_RD()-Reg_Data) <= 15;); 
-    
+
     // wait for DC_OK
     while (!(HW_POWER_STS_RD() & BM_POWER_STS_DC_OK));
 
@@ -1022,8 +1025,7 @@ static VOID SOCPowerOffCPURate(VOID)
     HW_CLKCTRL_HBUS_WR(BF_CLKCTRL_XBUS_AUTO_CLEAR_DIV_ENABLE(1)| 
                        BF_CLKCTRL_XBUS_DIV_FRAC_EN(0) | 
                        BF_CLKCTRL_XBUS_DIV(1023));
-	OALStall(100); 
-
+    OALStall(100); 
 }
 
 //------------------------------------------------------------------------------
@@ -1035,11 +1037,9 @@ static VOID SOCPowerOffCPURate(VOID)
 static VOID SOCPowerOnCPURate(VOID)
 {
     //OALMSG(1, (L"SOCPowerOnCPURate++ \r\n"));
-	
+
     //Ungating CPU_REF clock
     HW_CLKCTRL_FRAC0_CLR(BM_CLKCTRL_FRAC0_CLKGATECPU);
-
-	//OALMSG(1, (_T("INFO: OEMPowerOff wakeUp...\r\n")));
 
     // config CLK_CPU driver for High setpoint
     HW_CLKCTRL_CPU_WR((BF_CLKCTRL_CPU_DIV_CPU(1)            |
@@ -1050,17 +1050,16 @@ static VOID SOCPowerOnCPURate(VOID)
 
 
     // restore HBus XBus Setting
-	
     HW_CLKCTRL_HBUS_WR(SocBackupReg.CLKCTRL_HBUS);
 
     HW_CLKCTRL_XBUS_WR(SocBackupReg.CLKCTRL_XBUS);
 
-	
+
     //let CPU sink the CPU_REF clock
     HW_CLKCTRL_CLKSEQ_CLR(BM_CLKCTRL_CLKSEQ_BYPASS_CPU);
-	
-	OALStall(100);
-	//OALMSG(0, (L"SOCPowerOnCPURate-- \r\n"));
+    OALStall(100);
+
+    //OALMSG(0, (L"SOCPowerOnCPURate-- \r\n"));
     
 }
 

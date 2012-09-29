@@ -36,9 +36,13 @@ extern PVOID pv_HWregRTC;
 #define WD_REFRESH_PERIOD        3000						// tell the OS to refresh watchdog every 3 second.
 #define WD_RESET_PERIOD          4500						// tell the wdog to reset the system after 4.5 seconds.
 #endif	//EM9280 | EM9283
+// CS&ZHL SEP-19-2012: actual boot time < 20s
+#define	MAX_BOOTING_TIME		60000						// max booting time means from nk booting to wstartup end
 
 //------------------------------------------------------------------------------
 // Local Variables
+// CS&ZHL SEP-18-2012: flag for app is startup
+BOOL bWstartupIsEnd = FALSE;	
 
 
 //-----------------------------------------------------------------------------
@@ -283,12 +287,20 @@ void RefreshWatchdogTimer (void)
         //OALMSG(1, (L"+RefreshWatchdogTimer: First call, init the Wdog to timeout reset in 4.5 secs\r\n"));
         WdogInit(WD_RESET_PERIOD);
         bFirstTime = FALSE;
+		bWstartupIsEnd = FALSE;
     }
     else
     {
         OALMSG(OAL_FUNC, (L"+RefreshWatchdogTimer: Subsequence calls, refresh the Wdog timeout to 4.5 secs again\r\n"));
         //OALMSG(1, (L"+RefreshWatchdogTimer: Subsequence calls, refresh the Wdog timeout to 4.5 secs again\r\n"));
-        HW_RTC_WATCHDOG_WR(WD_RESET_PERIOD);
+		//
+		// CS&ZHL SEP-18-2012: smart refresh WDT 
+		//					   CurMSec: global variable indicates the number of milliseconds since boot.
+		//
+		if((CurMSec < MAX_BOOTING_TIME) || bWstartupIsEnd)			
+		{
+			HW_RTC_WATCHDOG_WR(WD_RESET_PERIOD);
+		}
     }
 
     OALMSG(OAL_FUNC, (L"-RefreshWatchdogTimer\r\n"));

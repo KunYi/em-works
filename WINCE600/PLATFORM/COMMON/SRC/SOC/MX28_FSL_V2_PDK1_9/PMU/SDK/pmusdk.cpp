@@ -155,45 +155,6 @@ BOOL PmuSetCharger(DWORD current)
     return TRUE;
 }
 
-//LQK:Jul-12-2012
-BOOL PmuGetPowerSource(UINT32 *powerSource)
-{
-	if (!DeviceIoControl(hPMI,      // file handle to the driver
-		PMU_IOCTL_GET_POWER_SOURCE,   // I/O control code
-		NULL,                       // in buffer
-		NULL,                          // in buffer size
-		powerSource,                       // out buffer
-		sizeof(UINT32),                          // out buffer size
-		NULL,                       // pointer to number of bytes returned
-		NULL))                      // ignored (=NULL)
-	{
-		DEBUGMSG(ZONE_ERROR,
-			(TEXT("%s: PMU_IOCTL_GET_POWER_SOURCE failed!\r\n"), __WFUNCTION__));
-		return FALSE;
-	} 
-
-	return TRUE;
-}
-
-//LQK:Jul-25-2012
-BOOL PmuIsBatteryAttach(BOOL *bIsBatteryAttach )
-{
-	if (!DeviceIoControl(hPMI,      // file handle to the driver
-		PMU_IOCTL_BATTERY_ATTACH,   // I/O control code
-		NULL,                       // in buffer
-		0,                          // in buffer size
-		bIsBatteryAttach,           // out buffer
-		sizeof(BOOL),               // out buffer size
-		NULL,                       // pointer to number of bytes returned
-		NULL))                      // ignored (=NULL)
-	{
-		DEBUGMSG(ZONE_ERROR,
-			(TEXT("%s: PMU_IOCTL_BATTERY_ATTACH failed!\r\n"), __WFUNCTION__));
-		return FALSE;
-	}
-	return TRUE;
-
-}
 //-----------------------------------------------------------------------------
 //
 //  Function:  PmuStopCharger
@@ -558,6 +519,46 @@ BOOL PmuPowerThermalResetDisable(void)
     return TRUE;
 }
 
+//LQK:Jul-12-2012
+BOOL PmuGetPowerSource(UINT32 *powerSource)
+{
+	if (!DeviceIoControl(hPMI,      // file handle to the driver
+		PMU_IOCTL_GET_POWER_SOURCE,   // I/O control code
+		NULL,                       // in buffer
+		NULL,                          // in buffer size
+		powerSource,                       // out buffer
+		sizeof(UINT32),                          // out buffer size
+		NULL,                       // pointer to number of bytes returned
+		NULL))                      // ignored (=NULL)
+	{
+		DEBUGMSG(ZONE_ERROR,
+			(TEXT("%s: PMU_IOCTL_GET_POWER_SOURCE failed!\r\n"), __WFUNCTION__));
+		return FALSE;
+	} 
+
+	return TRUE;
+}
+
+//LQK:Jul-25-2012
+BOOL PmuIsBatteryAttach(BOOL *bIsBatteryAttach )
+{
+	if (!DeviceIoControl(hPMI,      // file handle to the driver
+		PMU_IOCTL_BATTERY_ATTACH,   // I/O control code
+		NULL,                       // in buffer
+		0,                          // in buffer size
+		bIsBatteryAttach,           // out buffer
+		sizeof(BOOL),               // out buffer size
+		NULL,                       // pointer to number of bytes returned
+		NULL))                      // ignored (=NULL)
+	{
+		DEBUGMSG(ZONE_ERROR,
+			(TEXT("%s: PMU_IOCTL_BATTERY_ATTACH failed!\r\n"), __WFUNCTION__));
+		return FALSE;
+	}
+	return TRUE;
+
+}
+
 //-----------------------------------------------------------------------------
 //
 // Function: DllEntry
@@ -625,3 +626,4 @@ DllEntry(HANDLE hInstDll, DWORD dwReason, LPVOID lpvReserved)
     // return TRUE for success
     return TRUE;
 }
+

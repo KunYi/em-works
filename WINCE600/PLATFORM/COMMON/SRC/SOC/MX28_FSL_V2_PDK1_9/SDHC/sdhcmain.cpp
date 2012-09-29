@@ -30,6 +30,7 @@ SD_DEBUG_INSTANTIATE_ZONES(
 
 #define SDHC_SLOT               1
 #define REG_DEVINDEX_VAL_NAME           TEXT("Index")
+
 //LQK:JUL-19-2012 
 #define REG_DETCTION_POLARITY_NAME      TEXT("Detection")
 #define REG_POWER_PIN_NAME				TEXT("PowerPin")
@@ -138,7 +139,7 @@ DWORD SHC_Init(LPCTSTR pContext)
     DWORD   dwDevIndex;
 
     //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: +SHC_Init\n")));
-    RETAILMSG(1, (TEXT("SDHC: +SHC_Init\r\n")));
+    RETAILMSG(1, (TEXT("SDHC: +SHC_Init\n")));
 
     // try to open active device registry key for this context
     hKey = OpenDeviceKey(pContext);
@@ -157,7 +158,8 @@ DWORD SHC_Init(LPCTSTR pContext)
         NULL,                       // type not required, set to NULL
         (LPBYTE)(&dwDevIndex),      // pointer to buffer receiving value
         &dwDataSize);               // pointer to buffer size
-	
+
+
 	//LQK:Jul-18-2012
 	// try to load sd-card detection polarity from registry data
 	DWORD dwDetection;
@@ -181,8 +183,8 @@ DWORD SHC_Init(LPCTSTR pContext)
 		(LPBYTE)(&dwPowerPin),      // pointer to buffer receiving value
 		&dwDataSize);               // pointer to buffer size
 	// END //LQK:Jul-18-2012
-
-    // close handle to open key
+	
+	// close handle to open key
     RegCloseKey(hKey);
 
     // check for errors during RegQueryValueEx
@@ -212,7 +214,7 @@ DWORD SHC_Init(LPCTSTR pContext)
         return 0;
     }
     memset(pController, 0, sizeof(SDHC_HARDWARE_CONTEXT));
-	
+
 	//LQK:Jul-18-2012
 	pController->runContext.dwDetection = dwDetection;
 	pController->runContext.dwPowerPin = dwPowerPin;
@@ -260,7 +262,7 @@ DWORD SHC_Init(LPCTSTR pContext)
     }
 
     //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: -SHC_Init\n")));
-    RETAILMSG(1, (TEXT("SDHC: -SHC_Init\r\n")));
+    RETAILMSG(1, (TEXT("SDHC: -SHC_Init\n")));
 
     // return the Host Controller context
     return (DWORD)pHostContext;

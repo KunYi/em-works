@@ -411,6 +411,11 @@ BOOL UcePreWriteRawData(TCHAR * pDiskName, DWORD startAddr, DWORD dwValidDataLen
 			g_NANDWrtImgInfo.dwImgType = IMAGE_MBR; 
 			RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_MBR startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
 		}
+		else if( startAddr == IMAGE_UID )
+		{
+			g_NANDWrtImgInfo.dwImgType = IMAGE_UID; 
+			RETAILMSG(1, (L"UcePreWriteRawData::IMAGE_UID startaddr = 0x%x, length = 0x%x.\r\n", startAddr, dwValidDataLength));
+		}
 	}
         
     return TRUE;
@@ -439,6 +444,27 @@ BOOL NANDWriteRawData(LPBYTE pImage, DWORD dwLength)
     return ret;
 }
 
+//
+// CS&ZHL AUG-13-2012: code for EM9280 uce to format NandFlash
+//
+BOOL UceNandLowLevelFormat( )
+{
+    BOOL ret;
+
+    ret = DeviceIoControl(
+        ghStore,
+        IOCTL_DISK_FORMAT,
+        NULL,
+        0,
+        NULL,
+        0,					
+        NULL,
+        NULL);        
+    
+    g_NANDWrtImgInfo.dwIndex++;
+
+    return ret;
+}
 
 BOOL UceWriteRawData(PBYTE pbData, DWORD dwValidDataLength)
 {      

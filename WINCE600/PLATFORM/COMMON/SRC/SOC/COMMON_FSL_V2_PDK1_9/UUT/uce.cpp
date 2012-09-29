@@ -744,7 +744,7 @@ void UceCommandDeal(
         g_UtpCmdState = UCE_GET_DEVICE_INFO;
         SetUTPMsgReply(UTP_MSG_REPLAY_SIZE, 0x7F);    
     }
-    if (strncmp(pbCmd, "s?", 2) == 0) {
+    else if (strncmp(pbCmd, "s?", 2) == 0) {
         RETAILMSG(1, (_T("UTP command:Get device mac info.\r\n")));
         g_UtpCmdState = UCE_GET_DEVICE_MAC;
         SetUTPMsgReply(UTP_MSG_REPLAY_SIZE, 0x7F);    
@@ -821,6 +821,10 @@ void UceCommandDeal(
     else if (strncmp(pbCmd,"save",4) == 0) {
         Cmd_save();
     }
+    else if (strncmp(pbCmd, "Nand Format", 11) == 0) {
+        RETAILMSG(1, (_T("UTP command:Nand LowLevel Format.\r\n")));
+		UceNandLowLevelFormat( );
+    }
     else if (strncmp(pbCmd,"Done",4) == 0) {
         RETAILMSG(1, (L"Whole update work is finished successfully. Please power off the board.\r\n"));
         g_UtpCmdState = UCE_IDLE;                    
@@ -852,9 +856,8 @@ void UceTransData(
 		case UCE_GET_DEVICE_MAC: 
 			UceCmdSecuritySataus( pbData );
             g_UtpCmdState = UCE_IDLE;
-            
-			break;           
-            
+     		break;           
+          
         case UCE_RECV_FILE_DATA:{
             switch (g_FileType){
                 case Firmware:

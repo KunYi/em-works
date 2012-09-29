@@ -188,7 +188,7 @@ ENDIF ; BSP_UUT
 ; @CESYSGEN IF CE_MODULES_USBFN
 IF BSP_USB_HSOTG_CLIENT
 IF BSP_USBFN_PHD_SUPPORT
-    USBPHDFN.dll   $(_FLATRELEASEDIR)\USBPHDFN.dll    NK  SHK
+    USBPHDFN.dll   $(_FLATRELEASEDIR)\USBPHDFN.dll    $(XIPKERNEL)  SHK
 ENDIF ; BSP_USBFN_PHD_SUPPORT
 ENDIF ; BSP_USB_HSOTG_CLIENT
 ; @CESYSGEN ENDIF CE_MODULES_USBFN
@@ -199,7 +199,7 @@ ENDIF ; BSP_USB_HSOTG_CLIENT
 ;
 ; @CESYSGEN IF CE_MODULES_USBHOST && CE_MODULES_USBFN
 IF BSP_USBOTG
-    fsl_usbotg.dll $(_FLATRELEASEDIR)\fsl_usbotg.dll                NK SHK
+    fsl_usbotg.dll $(_FLATRELEASEDIR)\fsl_usbotg.dll                $(XIPKERNEL) SHK
 ENDIF ; BSP_USBOTG
 ; @CESYSGEN ENDIF CE_MODULES_USBHOST && CE_MODULES_USBFN
 ; -----------------------------------------------------------------------------
@@ -209,7 +209,7 @@ ENDIF ; BSP_USBOTG
 ;
 ; @CESYSGEN IF CE_MODULES_USBHOST
 IF BSP_USB_HSOTG_HOST
-    hcd_hsotg.dll $(_FLATRELEASEDIR)\hcd_hsotg.dll       NK SHK
+    hcd_hsotg.dll $(_FLATRELEASEDIR)\hcd_hsotg.dll       $(XIPKERNEL) SHK
 ENDIF ; BSP_USB_HSOTG_HOST
 ; @CESYSGEN ENDIF CE_MODULES_USBHOST
 ; -----------------------------------------------------------------------------
@@ -219,7 +219,7 @@ ENDIF ; BSP_USB_HSOTG_HOST
 ;
 ; @CESYSGEN IF CE_MODULES_USBHOST
 IF BSP_USB_HSH1
-    hcd_hsh1.dll $(_FLATRELEASEDIR)\hcd_hsh1.dll         NK SHK
+    hcd_hsh1.dll $(_FLATRELEASEDIR)\hcd_hsh1.dll         $(XIPKERNEL) SHK
 ENDIF ; BSP_USB_HSH1
 ; @CESYSGEN ENDIF CE_MODULES_USBHOST
 ; -----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ ENDIF
 ;
 ; @CESYSGEN IF CE_MODULES_BATTDRVR  
 IF BSP_BACKLIGHT
-    backlight.dll        $(_FLATRELEASEDIR)\backlight.dll        NK  SHK
+    backlight.dll        $(_FLATRELEASEDIR)\backlight.dll        $(XIPKERNEL)  SHK
 ; Backlight advanced Control Panel Applet
 ; @CESYSGEN IF CE_MODULES_COMMCTRL
     AdvBacklight.dll    $(_FLATRELEASEDIR)\AdvBacklight.dll      NK  S
@@ -419,15 +419,6 @@ FILES
     tcal.exe              $(_FLATRELEASEDIR)\tcal.exe             NK      U
     rotate.exe            $(_FLATRELEASEDIR)\rotate.exe           NK      U
     audiorouting.exe      $(_FLATRELEASEDIR)\audiorouting.exe     NK      U
-
-;LQK:SEP-19-2012 add 480272 shutdwon image    
-    ShutDownSplash480272.bmp $(_FLATRELEASEDIR)\ShutDownSplash480272.bmp    NK      U
-    
-;LQK:Jul-14-2012 add shutdwon image
-IF BSP_DISPLAY_UC1698
-	ShutDownImage160160.bmp	$(_FLATRELEASEDIR)\ShutDownImage160160.bmp    NK      U
-ENDIF
-	
 
 IF BSP_USB_HSOTG_CLIENT
     USBSet.exe              $(_FLATRELEASEDIR)\USBSet.exe               NK

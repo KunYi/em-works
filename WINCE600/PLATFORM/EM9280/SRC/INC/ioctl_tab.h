@@ -52,6 +52,9 @@
 { IOCTL_HAL_BOARD_STATE_READ,			0,  OALIoCtlHalBoardStateRead },
 { IOCTL_HAL_WATCHDOG_GET,				0,  OALIoCtlHalWatchdogGet },
 
+// CS&ZHL SEP-18-2012: set the flag to inform WDT that app is fine
+{ IOCTL_HAL_WSTARTUP_END,				0,  OALIoCtlHalSetWstartupEndFlag },
+
 // CS&ZHL APR-9-2012: read FSL copyright info and chip ID
 { IOCTL_HAL_CPU_INFO_READ,               0,  OALIoCtlHalGetCPUInfo       },
 // end of CS&ZHL APR-9-2012: read FSL copyright info and chip ID

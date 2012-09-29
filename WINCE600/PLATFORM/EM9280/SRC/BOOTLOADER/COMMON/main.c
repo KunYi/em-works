@@ -722,7 +722,9 @@ DWORD OEMPreDownload(void)
 void OEMLaunch (DWORD dwImageStart, DWORD dwImageLength, DWORD dwLaunchAddr, const ROMHDR *pRomHdr)
 {
     UINT32 PhysAddress;
-    // Remove-W4: Warning C4100 workaround
+    PVOID  pv_HWregRTC = (PVOID)OALPAtoUA(CSP_BASE_REG_PA_RTC);		// Lqk SEP-14-2012: supporting WDT
+
+	// Remove-W4: Warning C4100 workaround
     UNREFERENCED_PARAMETER(pRomHdr);
 
     switch(g_BootCFG.autoDownloadImage)
@@ -797,9 +799,15 @@ void OEMLaunch (DWORD dwImageStart, DWORD dwImageLength, DWORD dwLaunchAddr, con
 
     // Jump to the image we just downloaded.
     //
-    KITLOutputDebugString("\r\n\r\n\r\n");
+    //KITLOutputDebugString("\r\n\r\n\r\n");
     //OEMWriteDebugLED(0, 0x00FF);
-    Launch(PhysAddress);
+	
+	// CS&ZHL SEP-14-2012: always enable WDT to prevent launch fail
+	KITLOutputDebugString("\r\nAlways Enable WDT before Launch...\r\n\r\n");
+	HW_RTC_WATCHDOG_WR( 10000 );
+	HW_RTC_CTRL_SET(BM_RTC_CTRL_WATCHDOGEN);
+
+	Launch(PhysAddress);
 
     // Should never get here...
     //

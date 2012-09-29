@@ -35,6 +35,7 @@ static VOID ClrScreen(VOID);
 static BOOL LCDIFSetupIOMUXPin();
 VOID TurnOffDisplay();
 
+#ifdef DISPLAY_UC1698           // SEP20-2012: using BSP_DISPLAY_UC1698 
 static VOID InitLCD(  );		// LQK JUN-29-2012
 // JLY06-2012: LQK
 #define CTRBYTECOUNT  26
@@ -46,11 +47,8 @@ const unsigned char CTRBYTE[CTRBYTECOUNT]={
 	0x00, 0x10, 0x60, 0x70,
 	0xa7, 60		//contrast
 };
+#endif   //DISPLAY_UC1698
 
-//LQK SEP-19-2012
-#ifndef EM9283_GREY_LCD
-	#define EM9280
-#endif //#ifdef EM9283_GREY_LCD
 
 #define  VIDEO_MEMORY_SIZE      800*480*4
 #define  PALETTE_SIZE           256
@@ -111,7 +109,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
     {
 		800, 480, 33300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
-#ifdef	EM9280
+#if (defined EM9280 ) || (defined EM9283)
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		48,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
 		40,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
@@ -131,7 +129,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 		10,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
 		23,						//dwVBackPorch      -> DOTCLK_VB_PORCH;
-#endif	//EM9280
+#endif	//EM9280 EM9283
     },
     // 800*600 -> 8.4" & 10.4", PCLK = 39.8MHz -> G084SN03_V1 & G104SN03
     {
@@ -154,7 +152,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 //-----------------------------------------------------------------------------
 // Global Variables
 static PVOID	pv_HWregLCDIF;
-#ifdef EM9283_GREY_LCD               //JLY06-2012
+#ifdef DISPLAY_UC1698                  //JLY06-2012  use BSP_DISPLAY_UC1698 - SEP20-2012
 static UINT32*	g_pLCDBuffer = NULL;
 #else
 static WORD*	g_pLCDBuffer = NULL;
@@ -268,13 +266,16 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 
     /* Initalize the globle buffer this settings are defined in XXX.h file */
     //g_pLCDBuffer  = (WORD*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);;
-#ifdef EM9283_GREY_LCD
+#ifdef DISPLAY_UC1698                          // SEP20-2012: use BSP_DISPLAY_UC1698 (EM9283)
 	g_pLCDBuffer  = (UINT32*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);
 #else
 	g_pLCDBuffer  = (WORD*)OALPAtoUA(IMAGE_WINCE_DISPLAY_RAM_PA_START);
-#endif   //EM9283
+#endif   //DISPLAY_UC1698
 
-#ifdef EM9280
+#ifdef DISPLAY_UC1698                       //SEP20-2012: EM9283			// JLY06-2012
+	LCDIFSetupLCDIFClock(10000);
+#else
+#if (defined EM9280 )||(defined EM9283)
 	// zxw JUN04-2012
 	RETAILMSG(1, (TEXT("Eboot.InitQVGA::LCD %dx%d\r\n"), pPanel->width, pPanel->height));
 	//if((pPanel->width == 320) && (pPanel->height == 240))
@@ -304,14 +305,11 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 		return FALSE;
 	}
 
-#else // IMX28EVK or EM9283
-#ifdef EM9283_GREY_LCD			// JLY06-2012
-	LCDIFSetupLCDIFClock(10000);
-#else
+#else // IMX28EVK 
     // Start the PIX clock and set frequency
     EBOOT_SetupPIXClock();
-#endif   //EM9283
-#endif   //EM9280
+#endif   //EM9280 EM9283
+#endif   // DISPLAY_UC1698
 
     /* LCD PIN setup for Serial Panel*/
     LCDIFSetupIOMUXPin();
@@ -327,7 +325,7 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 	}
 
 // JLY06-2012
-#ifndef EM9283_GREY_LCD
+#ifndef DISPLAY_UC1698                   //SEP20-2012:EM9283
     //DMA
     LCDIFDisplayFrameBuffer((const void*)IMAGE_WINCE_DISPLAY_RAM_PA_START);
 #endif
@@ -402,7 +400,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
     //KITLOutputDebugString ( "EBOOT: ConfigureHX8238ASerialPanel++ \n");
     LCDIF_INIT LcdifInit;
 // JLY06-2012: LQK
-#ifdef EM9283_GREY_LCD
+#ifdef DISPLAY_UC1698                // SEP20-2012:EM9283
 	LcdifInit.bBusyEnable = FALSE;
 	LcdifInit.eBusMode = BUSMODE_8080;
 	LcdifInit.eReset = LCDRESET_LOW;
@@ -433,7 +431,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
 
 	//LCDIFSetTransferCount(DOTCLK_H_ACTIVE, DOTCLK_V_ACTIVE);
 	UNREFERENCED_PARAMETER(pPanel);
-#else      // for EM9280
+#else      // for EM9280 or EM9283_TFT
     LCDIFVSYNC LCDIfVsync;
     LCDIFDOTCLK sLcdifDotclk;
 
@@ -526,7 +524,7 @@ static void ConfigurePanel(PDISPLAY_PANEL_MODE pPanel)
 //------------------------------------------------------------------------------
 static void InitBacklight()
 {
-#if (defined EM9280 && (!defined EM9283 ))
+#ifdef	EM9280
     DDK_GPIO_CFG	intrCfg;
 
     intrCfg.DDK_PIN_IO           = DDK_GPIO_INPUT;
@@ -544,7 +542,8 @@ static void InitBacklight()
     DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 0); // turn on LCD power, active low
 #else	// -> iMX28EVK  /EM9283
 	DDK_GPIO_CFG	intrCfg;
-    if (pv_HWRegPWM == NULL)
+
+	if (pv_HWRegPWM == NULL)
     {
         // Map peripheral physical address to virtual address
         pv_HWRegPWM = (PVOID) OALPAtoUA(CSP_BASE_REG_PA_PWM);
@@ -566,7 +565,7 @@ static void InitBacklight()
 
     //Make sure that we are completely out of reset before continuing.
     while (HW_PWM_CTRL.B.CLKGATE) ;
-#if( defined EM9283 || defined EM9283_GREY_LCD )
+#ifdef EM9283
 	// LQK SEP-18-2012: Config EM9283EVB V2.0 LCD_back_light Pi 
 	DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,DDK_IOMUX_MODE_00);
 	DDKClockSetGatingMode(DDK_CLOCK_GATE_PWM24M_CLK, FALSE);
@@ -601,9 +600,9 @@ static void InitBacklight()
 	DDKGpioWriteDataPin(DDK_IOMUX_LCD_RESET, 1); // turn on LCD power, active hight
 
 	//END LQK SEP-18-2012
-	
 #else
-    DDKIomuxSetPinMux(DDK_IOMUX_PWM2,DDK_IOMUX_MODE_00);
+
+	DDKIomuxSetPinMux(DDK_IOMUX_PWM2,DDK_IOMUX_MODE_00);
     DDKClockSetGatingMode(DDK_CLOCK_GATE_PWM24M_CLK, FALSE);
 
     BF_CS2n(PWM_ACTIVEn, 2,
@@ -698,7 +697,7 @@ void DisplayInit(VOID)
 	// CS&ZHL supporting multiple LCD panels
     InitQVGA(pPanel);
 
-#ifdef EM9283_GREY_LCD   	// LQK JUN-28-2012:Init lcd controler
+#ifdef DISPLAY_UC1698         //SEP20-2012: EM9283   	// LQK JUN-28-2012:Init lcd controler
 	InitLCD(  );
 #endif
 
@@ -715,6 +714,7 @@ void DisplayInit(VOID)
     //KITLOutputDebugString ( "EBOOT: DisplayInit-- \n");
 }
 
+#ifdef DISPLAY_UC1698                      //SEP20-2012:EM9283
 static void InitLCD( )
 {
 	int i, j;
@@ -743,6 +743,7 @@ static void InitLCD( )
 	//waits for LCDIF transmit current frame
 	LCDIFFlush( );
 }
+#endif   //DISPLAY_UC1698
 
 //------------------------------------------------------------------------------
 //
@@ -762,11 +763,11 @@ static void ShowBmp(PBYTE pBmpFile)
     DWORD				x, y;
     DWORD				index;
     DWORD				RedLsh, BlueLsh;
-	COLORREF			dwPoint;
+#ifdef DISPLAY_UC1698
 	int					nLCDBufferIdx;
-
-	dwPoint = 0;
-	nLCDBufferIdx = 0;
+#else
+	COLORREF			dwPoint;
+#endif  //DISPLAY_UC1698
 
     RETAILMSG(1, (TEXT("pBmpFile 0x%x \r\n"), pBmpFile));
 
@@ -810,7 +811,30 @@ static void ShowBmp(PBYTE pBmpFile)
     RedLsh = COLOR_R;
     BlueLsh = COLOR_B;
 
-#ifdef	EM9280
+#ifdef DISPLAY_UC1698                      //SEP20-2012: EM9283                  //JLY06-2012
+	nLCDBufferIdx = 0;
+	//在显示驱动加载后，Explorer启动前，有一段时间显示黑屏（大约2S）
+	//这里将开机画面数据保存，在显示驱动加载后，用这里的数据重绘开机画面。
+	memcpy( (PBYTE)g_pLCDBuffer+0x10000, pBitmap, 80*160);
+
+	y = (DWORD)(pBmIH->biHeight);
+	while( y-- )
+	{
+		for( x=0; x<80; x++ )
+		{
+			g_pLCDBuffer[y*81+x] = *pBitmap;
+			g_pLCDBuffer[y*81+x] |= *pBitmap<<10;
+			pBitmap++;
+		}
+		// the width of u1698c is 162 pixel
+		g_pLCDBuffer[y*81+x] = *(pBitmap-1);
+		nLCDBufferIdx++;
+	}
+	LCDIFSetTransferCount( 81, pBmIH->biHeight );
+	LCDIFDisplayFrameBufferEx((const void*)IMAGE_WINCE_DISPLAY_RAM_PA_START, DATA_MODE);
+	LCDIFFlush( );
+#else
+#if (defined EM9280)||(defined EM9283)
 	y = pBmIH->biHeight;
 	while(y)
 	{
@@ -846,31 +870,7 @@ static void ShowBmp(PBYTE pBmpFile)
 
 		y--;
 	}
-#else	// -> iMX28EVK or EM9283
-#ifdef EM9283_GREY_LCD                  //JLY06-2012
-	nLCDBufferIdx = 0;
-	//在显示驱动加载后，Explorer启动前，有一段时间显示黑屏（大约2S）
-	//这里将开机画面数据保存，在显示驱动加载后，用这里的数据重绘开机画面。
-	memcpy( (PBYTE)g_pLCDBuffer+0x10000, pBitmap, 80*160);
-
-	y = (DWORD)(pBmIH->biHeight);
-	while( y-- )
-	{
-		for( x=0; x<80; x++ )
-		{
-			//LQK Aug-17-2012
-			g_pLCDBuffer[y*81+x] = *pBitmap<<8;
-			g_pLCDBuffer[y*81+x] |= (*pBitmap&0x03)<<6;
-			pBitmap++;
-		}
-		// the width of u1698c is 162 pixel
-		g_pLCDBuffer[y*81+x] = *(pBitmap-1);
-		nLCDBufferIdx++;
-	}
-	LCDIFSetTransferCount( 81, pBmIH->biHeight );
-	LCDIFDisplayFrameBufferEx((const void*)IMAGE_WINCE_DISPLAY_RAM_PA_START, DATA_MODE);
-	LCDIFFlush( );
-#else
+#else	// -> iMX28EVK 
     // Loop here for Height x Width to put each pixel on display
     for (y = (DWORD)(pBmIH->biHeight) + ((DOTCLK_V_ACTIVE - pBmIH->biHeight)/2); 
         ((int)(y)) > ((DOTCLK_V_ACTIVE - pBmIH->biHeight)/2); y--) 
@@ -895,8 +895,8 @@ static void ShowBmp(PBYTE pBmpFile)
             PutPixelBuf(x, y, dwPoint, g_pLCDBuffer);
         }
     }
-#endif   //EM9283
-#endif	//EM9280
+#endif   //EM9280 EM9283
+#endif	//DISPLAY_UC1698        
 }
 //------------------------------------------------------------------------------
 //
@@ -933,8 +933,7 @@ static VOID ClrScreen(VOID)
 //-----------------------------------------------------------------------------
 static BOOL LCDIFSetupIOMUXPin()
 {
-#ifdef EM9283_GREY_LCD
-	    // Setup the PINMUX
+#ifdef DISPLAY_UC1698                      //SEP20-2012: EM9283
 	//LQK Aug-17-2012
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO);
@@ -980,10 +979,9 @@ static BOOL LCDIFSetupIOMUXPin()
     intrCfg.DDK_PIN_IRQ_POLARITY = DDK_GPIO_IRQ_POLARITY_LO;		// interrupt trigger on falling edge
 
     // Setup the PINMUX
-#ifdef	EM9280
-	//LQK SEP-18-2012 LCD_D0 & LCD_D1 already setting in xldr.c
+#ifdef  EM9280                //||(defined EM9283)
 	//switch to GPIO mode
-	/*DDKGpioConfig(DDK_IOMUX_LCD_D0, intrCfg);
+	DDKGpioConfig(DDK_IOMUX_LCD_D0, intrCfg);
 	DDKGpioConfig(DDK_IOMUX_LCD_D1, intrCfg);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1, DDK_IOMUX_MODE_GPIO);
@@ -995,11 +993,10 @@ static BOOL LCDIFSetupIOMUXPin()
 	// use GPIO1_1 as USB0_PWR_EN
     DDKGpioEnableDataPin(DDK_IOMUX_LCD_D1, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_LCD_D1, 0); // turn off VBUS
-	*/
 #else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
@@ -1008,7 +1005,7 @@ static BOOL LCDIFSetupIOMUXPin()
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
 
-#ifdef	EM9280
+#if (defined EM9280)||(defined EM9283)
 	//switch to GPIO mode
 	DDKGpioConfig(DDK_IOMUX_LCD_D8, intrCfg);
 	DDKGpioConfig(DDK_IOMUX_LCD_D9, intrCfg);
@@ -1017,7 +1014,7 @@ static BOOL LCDIFSetupIOMUXPin()
 #else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D8,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D9,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
@@ -1026,7 +1023,7 @@ static BOOL LCDIFSetupIOMUXPin()
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
 
-#ifdef	EM9280
+#if (defined EM9280)||(defined EM9283)
 	//switch to GPIO mode
 	DDKGpioConfig(DDK_IOMUX_LCD_D16, intrCfg);
 	DDKGpioConfig(DDK_IOMUX_LCD_D17, intrCfg);
@@ -1035,7 +1032,7 @@ static BOOL LCDIFSetupIOMUXPin()
 #else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
@@ -1049,15 +1046,15 @@ static BOOL LCDIFSetupIOMUXPin()
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0,   DDK_IOMUX_MODE_01);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_01);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,  DDK_IOMUX_MODE_01);
-#ifdef	EM9280
+#if (defined EM9280)||(defined EM9283)
 	//switch to GPIO mode, GPIO3_30 is used as GPIO26/IRQ3
 	DDKGpioConfig(DDK_IOMUX_LCD_RESET, intrCfg);
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_GPIO);
 #else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
-#endif   // EM9283
+#endif	//DISPLAY_UC1698
     // Set pin drive to 8mA,enable pull up,3.3V
     DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D0, 
         DDK_IOMUX_PAD_DRIVE_8MA, 
@@ -1176,7 +1173,6 @@ static BOOL LCDIFSetupIOMUXPin()
         DDK_IOMUX_PAD_DRIVE_8MA, 
         DDK_IOMUX_PAD_PULL_ENABLE,
         DDK_IOMUX_PAD_VOLTAGE_3V3);          
-
     return TRUE;
 }
 //------------------------------------------------------------------------------
@@ -1190,7 +1186,7 @@ static BOOL LCDIFSetupIOMUXPin()
 //------------------------------------------------------------------------------
 VOID TurnOffDisplay()
 {
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 	// use GPIO1_0 as output for LCD_PWR
     DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
     DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 1); // turn off LCD power, active low
@@ -1223,7 +1219,7 @@ VOID TurnOffDisplay()
 
     // Enable PWM channel
     HW_PWM_CTRL_CLR(1 << 2);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
     if (g_pLCDBuffer != NULL)
       ClrScreen();

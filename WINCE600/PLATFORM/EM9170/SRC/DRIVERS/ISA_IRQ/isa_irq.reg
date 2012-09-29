@@ -7,8 +7,8 @@
 ;
    "TrueInstall"=dword:1
 
-;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IRQ2]
-;   "DeviceArrayIndex"=dword:2				;
-;   "Prefix"="IRQ"									; 
-;   "Dll"="isa_irq.dll"								; 
-
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IRQ2]
+   "DeviceArrayIndex"=dword:2				;
+   "Prefix"="IRQ"									; 
+   "Dll"="isa_irq.dll"								; 
+	"TrueInstall"=dword:1

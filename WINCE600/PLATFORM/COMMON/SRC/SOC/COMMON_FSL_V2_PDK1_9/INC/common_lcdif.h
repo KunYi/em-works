@@ -341,7 +341,6 @@ VOID LCDIFSetupLCDIFClock(UINT32 PixFreq);
 BOOL LCDIFDisplayFrameBufferEx(const void* pData, int nDataSelect );
 //LQK:Jul-12-2012
 void LCDIFGetTiming( UINT32 *pTiming );
-
 #ifdef __cplusplus
 }
 #endif

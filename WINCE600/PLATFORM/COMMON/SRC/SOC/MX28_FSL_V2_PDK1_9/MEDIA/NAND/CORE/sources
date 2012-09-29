@@ -22,3 +22,7 @@ SOURCELIBS= \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_dma_$(_SOCDIR).lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_ecc_$(_SOCDIR).lib \
     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\nand_gpmi_$(_SOCDIR).lib
+FILE_VIEW_INCLUDES_FOLDER= \
+    cspnand.h \
+    ..\INCLUDE\nand_ecc.h \
+

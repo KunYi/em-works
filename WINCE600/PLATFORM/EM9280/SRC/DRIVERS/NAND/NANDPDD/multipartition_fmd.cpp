@@ -409,20 +409,44 @@ VOID OEMFMD_PowerDown(PVOID pContext)
 //-----------------------------------------------------------------------------
 BOOL OEMFMD_OemIoControl(PVOID pContext, DWORD dwIoControlCode, PBYTE pInBuf, DWORD nInBufSize, PBYTE pOutBuf, DWORD nOutBufSize, PDWORD pBytesReturned)
 {
+	// CS&ZHL SEP-18-2012: supporting UserID write and verify
+	FmdAccessInfo	fmdInfo;
+	BOOL			bRet = FALSE;
+
 	UNREFERENCED_PARAMETER(pContext);
-	UNREFERENCED_PARAMETER(dwIoControlCode);
-	UNREFERENCED_PARAMETER(pInBuf);
-	UNREFERENCED_PARAMETER(nInBufSize);
+	//UNREFERENCED_PARAMETER(dwIoControlCode);
+	//UNREFERENCED_PARAMETER(pInBuf);
+	//UNREFERENCED_PARAMETER(nInBufSize);
 	UNREFERENCED_PARAMETER(pOutBuf);
 	UNREFERENCED_PARAMETER(nOutBufSize);
 	UNREFERENCED_PARAMETER(pBytesReturned);
 
-//	RETAILMSG(1, (TEXT("OEMFMD_OemIoControl() start.\r\n")));
-//	RETAILMSG(1, (TEXT("dwIoControlCode =  0x%x.\r\n"), dwIoControlCode));
+	//RETAILMSG(1, (TEXT("OEMFMD_OemIoControl() start.\r\n")));
+	//RETAILMSG(1, (TEXT("dwIoControlCode =  0x%x.\r\n"), dwIoControlCode));
+	switch(dwIoControlCode)
+	{
+	case IOCTL_DISK_VENDOR_WRITE_IMAGE:
+		fmdInfo.dwAccessCode = FMD_ACCESS_CODE_WRITEUID;
+		fmdInfo.pMData = (VOID *)pInBuf;
+		fmdInfo.pSData = (VOID *)&nInBufSize;
 
-//	RETAILMSG(1, (TEXT("OEMFMD_OemIoControl() end.\r\n")));
+		bRet = KernelIoControl(IOCTL_HAL_NANDFMD_ACCESS, (PVOID)(&fmdInfo), sizeof(FmdAccessInfo), NULL, 0, NULL);
+		break;
 
-	return FALSE;
+	case IOCTL_DISK_AUTHENTICATION:
+		fmdInfo.dwAccessCode = FMD_ACCESS_CODE_VERIFYUID;
+		fmdInfo.pMData = (VOID *)pInBuf;
+		fmdInfo.pSData = (VOID *)&nInBufSize;
+
+		bRet = KernelIoControl(IOCTL_HAL_NANDFMD_ACCESS, (PVOID)(&fmdInfo), sizeof(FmdAccessInfo), NULL, 0, NULL);
+		break;
+
+	default:
+		DEBUGMSG(1, (TEXT("OEMFMD_OemIoControl: not supported code 0x%08x\r\n"), dwIoControlCode));
+	}
+
+	//RETAILMSG(1, (TEXT("OEMFMD_OemIoControl() end.\r\n")));
+	return bRet;
 }
 
 

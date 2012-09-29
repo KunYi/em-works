@@ -24,6 +24,7 @@
 
 //-----------------------------------------------------------------------------
 // External Functions
+extern DWORD BSPGetBoardType();
 //-----------------------------------------------------------------------------
 // External Variables
 extern PVOID pv_HWregLRADC;
@@ -1478,6 +1479,8 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     UINT16 i;
     LRADC_TEMPSENSOR TempSensor;
 
+	DWORD		dwBoardType = BSPGetBoardType();
+
 	// RETAILMSG(TRUE,(TEXT("MeasureBatteryTemperature: use LRADC_CH%d\r\n"), BattTempChannel));
     // Check the channel.  Only channel 0 or 1 should be used since the others
     // are reserved or cannot induce current.
@@ -1528,9 +1531,8 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     // Setup the temperature sensor for low current measurement.  Wait while
     // the current ramps up.
     SetTempSensorCurrent(TempSensor,TEMP_SENSOR_CURRENT_LOW_READING);
-	
     //hw_digctl_MicrosecondWait(TEMP_SENSOR_CURRENT_RAMP_DELAY);
-    Sleep(50);
+    Sleep(10);
 
     // Set up a loop to take a specified number of samples.  Then take the
     // average of the samples.
@@ -1560,11 +1562,15 @@ UINT16 LRADCClass::MeasureBatteryTemperature(LRADC_CHANNEL BattTempChannel)
     {
         // This is the conversion if using a 1N4148 diode without compensating
         // for any routing impedance to the diode.
-        {
-            //u16Temp = (UINT16)(((u32HighCurrentReading - u32LowCurrentReading) * TEMP_SENSOR_CONVERSION_CONSTANT) / 1000);
+		if( dwBoardType==BOARD_TYPE_EM9283)
+		{
 			//LQK:Jul-19-2012 for EM9283 9014
 			u16Temp = (UINT16)(((u32HighCurrentReading - u32LowCurrentReading) * 1935 ) / 1000);
-        }
+		}
+		else
+		{
+			u16Temp = (UINT16)(((u32HighCurrentReading - u32LowCurrentReading) * TEMP_SENSOR_CONVERSION_CONSTANT) / 1000);
+		}
     }
 
     return u16Temp;
@@ -1600,6 +1606,7 @@ UINT32 LRADCClass::MeasureDieTemperature()
     BF_WRn(LRADC_CHn, LRADC_CH0, VALUE, 0);
 
     BF_WR(LRADC_CTRL4, LRADC6SELECT, 0x8);
+
 	//LQK:SEP-4-2012 should be clear divide_by_two bit for DieTemperature measures.
 	HW_LRADC_CTRL2_CLR(0x40000000);	// Clear Channel6's DIVEDE_BY_TWO bit.
 
@@ -1649,11 +1656,39 @@ UINT32 LRADCClass::MeasureNormalChannel(LRADC_CHANNEL Channel)
     UINT32			u32Temp = (UINT32)(-1);
     UINT16			i;
 
-// 	if((Channel != LRADC_CH0) && (Channel != LRADC_CH1))
-// 	{
-// 		RETAILMSG(TRUE,(TEXT("MeasureNormalChannel: not support LRADC_CH%d\r\n"), Channel));
-// 		goto exit;
-// 	}
+	/*
+	if((Channel != LRADC_CH0) && (Channel != LRADC_CH1))
+	{
+		RETAILMSG(TRUE,(TEXT("MeasureNormalChannel: not support LRADC_CH%d\r\n"), Channel));
+		goto exit;
+	}
+	*/
+
+	// setup channel
+	/*if(Channel == LRADC_CH0)
+	{
+		BF_WR(LRADC_CTRL4, LRADC0SELECT, LRADC_CH0);					// LRADC_CH0 connect to external physical channel
+		HW_LRADC_CTRL2_SET(0x1000000);									// set Channel0's DIVEDE_BY_TWO bit.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
+		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC0_IRQ_EN) == 0)	// enable Channel0's interrupt
+		{
+			BF_WR(LRADC_CTRL1, LRADC0_IRQ_EN, 0x1);
+		}
+		BF_WRn(LRADC_CHn, LRADC_CH0, VALUE, 0);							// clear accum
+	}
+	else		// -> LRADC_CH1
+	{
+		BF_WR(LRADC_CTRL4, LRADC1SELECT, LRADC_CH1);					// LRADC_CH0 connect to external physical channel
+		HW_LRADC_CTRL2_SET(0x2000000);									// set Channel1's DIVEDE_BY_TWO bit.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
+		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
+		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC1_IRQ_EN) == 0)	// enable Channel0's interrupt
+		{
+			BF_WR(LRADC_CTRL1, LRADC1_IRQ_EN, 0x1);
+		}
+		BF_WRn(LRADC_CHn, LRADC_CH1, VALUE, 0);							// clear accum
+	}*/
 
 	//LQK:Jul-23-2012 add LRADC_CH6
 	// setup channel
@@ -1699,32 +1734,6 @@ UINT32 LRADCClass::MeasureNormalChannel(LRADC_CHANNEL Channel)
 		RETAILMSG(TRUE,(TEXT("MeasureNormalChannel: not support LRADC_CH%d\r\n"), Channel));
 		goto exit;
 	}
-
-	// setup channel
-	/*if(Channel == LRADC_CH0)
-	{
-		BF_WR(LRADC_CTRL4, LRADC0SELECT, LRADC_CH0);					// LRADC_CH0 connect to external physical channel
-		HW_LRADC_CTRL2_SET(0x1000000);									// set Channel0's DIVEDE_BY_TWO bit.
-		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
-		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
-		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC0_IRQ_EN) == 0)	// enable Channel0's interrupt
-		{
-			BF_WR(LRADC_CTRL1, LRADC0_IRQ_EN, 0x1);
-		}
-		BF_WRn(LRADC_CHn, LRADC_CH0, VALUE, 0);							// clear accum
-	}
-	else		// -> LRADC_CH1
-	{
-		BF_WR(LRADC_CTRL4, LRADC1SELECT, LRADC_CH1);					// LRADC_CH0 connect to external physical channel
-		HW_LRADC_CTRL2_SET(0x2000000);									// set Channel1's DIVEDE_BY_TWO bit.
-		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE1);		// Disable Temperature Sensor Current Source.
-		HW_LRADC_CTRL2_CLR(BM_LRADC_CTRL2_TEMP_SENSOR_IENABLE0);		// Disable Temperature Sensor Current Source.
-		if((HW_LRADC_CTRL1_RD() & BM_LRADC_CTRL1_LRADC1_IRQ_EN) == 0)	// enable Channel0's interrupt
-		{
-			BF_WR(LRADC_CTRL1, LRADC1_IRQ_EN, 0x1);
-		}
-		BF_WRn(LRADC_CHn, LRADC_CH1, VALUE, 0);							// clear accum
-	}*/
 
     Sleep(10);
 	u32Temp = 0;

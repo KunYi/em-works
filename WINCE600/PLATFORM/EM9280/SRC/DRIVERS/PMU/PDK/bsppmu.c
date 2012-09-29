@@ -21,6 +21,11 @@
 
 #include "bsp.h"
 
+#define	BOARD_TYPE_EM9280		9280
+#define	BOARD_TYPE_EM9283		9283
+
+BOOL  bIs5VFromVbus=TRUE;
+
 //-----------------------------------------------------------------------------
 // External Functions
 
@@ -68,10 +73,32 @@ BOOL IsUSBDeviceDriverEnable()
 //-----------------------------------------------------------------------------
 BOOL Is5VFromVbus()
 {
-#ifdef BSP_5V_FROM_VBUS
-    return TRUE;
+#ifdef EM9283
+	return bIs5VFromVbus;
 #else
-    return FALSE;
-#endif
+	#ifdef BSP_5V_FROM_VBUS
+		return TRUE;
+	#else
+		return FALSE;
+	#endif
+#endif  //EM9283
 }
 
+void BSPSetVFromVbusValue( BOOL bVal )
+{
+	bIs5VFromVbus = bVal;
+}
+
+
+//------------------------------------------------------------------------------
+// CS&ZHL SEP24-2012: Get Board Type
+//------------------------------------------------------------------------------
+DWORD BSPGetBoardType()
+{
+	DWORD	dwBoardType = BOARD_TYPE_EM9280;
+
+#ifdef	EM9283
+	dwBoardType = BOARD_TYPE_EM9283;
+#endif	//EM9283
+	return dwBoardType;
+}

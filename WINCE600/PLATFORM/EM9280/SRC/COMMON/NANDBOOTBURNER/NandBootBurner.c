@@ -358,7 +358,7 @@ BOOL NANDLowLevelFormat(void)
     startBlockID = 0;
     endBlockID = flashInfo.dwNumBlocks;
 
-    RETAILMSG(TRUE, (_T("INFO: Start erasing whole NAND space!\r\n")));
+    RETAILMSG(TRUE, (_T("INFO: Start erasing whole NAND space! 0 - %d\r\n"), endBlockID ));
 
     lastPercentComplete = 0;
 
@@ -368,7 +368,7 @@ BOOL NANDLowLevelFormat(void)
         //
         if (!FMD_EraseBlock(blockID))
         {
-            //RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block 0x%x.\r\n"), blockID));
+            RETAILMSG(TRUE, (_T("ERROR: Unable to erase NAND flash block 0x%x.\r\n"), blockID));
 			//FMD_SetBlockStatus(blockID, BLOCK_STATUS_BAD);
             continue;
         }
@@ -2127,6 +2127,15 @@ BOOL BSP_OEMIoControl(DWORD dwIoControlCode, PBYTE pInBuf, DWORD nInBufSize,
 		{
 			*pBytesReturned = 2*sizeof(DWORD);
 		}
+		rc = TRUE;
+		break;
+	//
+	// CS&ZHL AUG-13-2012: code for EM9280 uce to format NandFlash
+	//
+	case IOCTL_DISK_FORMAT:
+		BSPNAND_SetClock(TRUE);
+		NANDLowLevelFormat( );
+        BSPNAND_SetClock(FALSE);
 		rc = TRUE;
 		break;
 	default:

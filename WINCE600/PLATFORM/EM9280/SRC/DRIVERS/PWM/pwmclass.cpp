@@ -8,6 +8,28 @@
 // PWMClass member function implementation
 //-----------------------------------------------------
 
+//-----------------------------------------------------
+// EM9280 V1.0 PWM Pin Table
+//-----------------------------------------------------
+PWM_PIN g_EM9280_iMXPWMPin[ ] =
+{
+	{ DDK_IOMUX_PWM5,   DDK_IOMUX_MODE_01, 5, BM_PWM_CTRL_PWM5_ENABLE },		
+	{ DDK_IOMUX_PWM6,   DDK_IOMUX_MODE_01, 6, BM_PWM_CTRL_PWM6_ENABLE },		
+	{ DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00, 3, BM_PWM_CTRL_PWM3_ENABLE },		
+	{ DDK_IOMUX_PWM4_1, DDK_IOMUX_MODE_00, 4, BM_PWM_CTRL_PWM4_ENABLE },		
+};
+
+//-----------------------------------------------------
+// EM9283 V1.0 PWM Pin Table
+//-----------------------------------------------------
+PWM_PIN g_EM9283_iMXPWMPin[ ] =
+{
+	{ DDK_IOMUX_PWM6,   DDK_IOMUX_MODE_01, 6, BM_PWM_CTRL_PWM6_ENABLE },		
+	{ DDK_IOMUX_PWM5,   DDK_IOMUX_MODE_01, 5, BM_PWM_CTRL_PWM5_ENABLE },		
+	{ DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00, 3, BM_PWM_CTRL_PWM3_ENABLE },		
+	{ DDK_IOMUX_PWM7,   DDK_IOMUX_MODE_01, 7, BM_PWM_CTRL_PWM4_ENABLE },		
+};
+
 
 //-----------------------------------------------------
 // GPIOClass public member functions
@@ -16,6 +38,12 @@ PWMClass::PWMClass(DWORD dwIndex)
 {
     PHYSICAL_ADDRESS	phyAddr;
 	UINT32				u32Div;
+
+#ifdef	EM9280
+	pPwmPinTab = g_EM9280_iMXPWMPin;
+#else	// -> EM9283
+	pPwmPinTab = g_EM9283_iMXPWMPin;
+#endif	//EM9280
 
 	m_dwIndex = dwIndex;
 	if((m_dwIndex >= 1) && (m_dwIndex <= 4))
@@ -32,51 +60,32 @@ PWMClass::PWMClass(DWORD dwIndex)
             return;
         }
 
-		switch(m_dwIndex)
-		{
-#ifdef EM9280		//Lqk:Jul-17-2012
-		case 1:			// PWM_5
-			m_dwPwmIndex = 5;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM5_ENABLE;
-			break;
+		//switch(m_dwIndex)
+		//{
+		//case 1:			// PWM_5
+		//	m_dwPwmIndex = 5;							
+		//	m_dwPwmEnable = BM_PWM_CTRL_PWM5_ENABLE;
+		//	break;
 
-		case 2:			// PWM_6
-			m_dwPwmIndex = 6;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM6_ENABLE;
-			break;
+		//case 2:			// PWM_6
+		//	m_dwPwmIndex = 6;							
+		//	m_dwPwmEnable = BM_PWM_CTRL_PWM6_ENABLE;
+		//	break;
 
-		case 3:			// PWM_3
-			m_dwPwmIndex = 3;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM3_ENABLE;
-			break;
+		//case 3:			// PWM_3
+		//	m_dwPwmIndex = 3;							
+		//	m_dwPwmEnable = BM_PWM_CTRL_PWM3_ENABLE;
+		//	break;
 
-		case 4:			// PWM_4
-			m_dwPwmIndex = 4;	
-			m_dwPwmEnable = BM_PWM_CTRL_PWM4_ENABLE;
-			break;
-#else	// ->EM9283
-		case 1:			// PWM_6
-			m_dwPwmIndex = 6;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM6_ENABLE;
-			break;
+		//case 4:			// PWM_4
+		//	m_dwPwmIndex = 4;	
+		//	m_dwPwmEnable = BM_PWM_CTRL_PWM4_ENABLE;
+		//	break;
+		//}
 
-		case 2:			// PWM_5
-			m_dwPwmIndex = 5;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM5_ENABLE;
-			break;
-
-		case 3:			// PWM_3
-			m_dwPwmIndex = 3;							
-			m_dwPwmEnable = BM_PWM_CTRL_PWM3_ENABLE;
-			break;
-
-		case 4:			// PWM_7
-			m_dwPwmIndex = 7;	
-			m_dwPwmEnable = BM_PWM_CTRL_PWM7_ENABLE;
-			break;
-#endif	//#ifdef EM9280		//Lqk:Jul-17-2012
-
-		}
+		/* CS&ZHL JLY17-2012: use pin table*/
+		m_dwPwmIndex = pPwmPinTab[m_dwIndex-1].pwmIndex;	
+		m_dwPwmEnable = pPwmPinTab[m_dwIndex-1].pwmEnble;
 	}
 	else
 	{
@@ -138,51 +147,40 @@ BOOL PWMClass::PinConfig()
 {
 	BOOL bRet = TRUE;
 
-	switch(m_dwIndex)
+	//switch(m_dwIndex)
+	//{
+	//case 1:	// -> iMX283.PWM_5 - GPIO3_22
+	//	DDKIomuxSetPinMux(DDK_IOMUX_PWM5, DDK_IOMUX_MODE_01);
+	//	DDKIomuxSetPadConfig(DDK_IOMUX_PWM5, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	//	break;
+
+	//case 2:	// -> iMX283.PWM_6 - GPIO3_23
+	//	DDKIomuxSetPinMux(DDK_IOMUX_PWM6, DDK_IOMUX_MODE_01);
+	//	DDKIomuxSetPadConfig(DDK_IOMUX_PWM6, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	//	break;
+
+	//case 3:	// -> iMX283.PWM_3 - GPIO3_28
+	//	DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00);
+	//	DDKIomuxSetPadConfig(DDK_IOMUX_PWM3_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	//	break;
+
+	//case 4:	// -> iMX283.PWM_4 - GPIO3_29
+	//	DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1, DDK_IOMUX_MODE_00);
+	//	DDKIomuxSetPadConfig(DDK_IOMUX_PWM4_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	//	break;
+	//default:
+	//	bRet = FALSE;
+	//	ERRORMSG(1, (TEXT("PWMClass::PinConfig: unsupport PWM%d!\r\n"), m_dwIndex));
+	//}
+
+	/* CS&ZHL JLY17-2012: use pin table*/
+	if((m_dwIndex >= 1) && (m_dwIndex <= 4))
 	{
-#ifdef EM9280	//LQK:Jul-17-2012
-	case 1:	// -> iMX283.PWM_5 - GPIO3_22
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM5, DDK_IOMUX_MODE_01);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM5, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 2:	// -> iMX283.PWM_6 - GPIO3_23
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM6, DDK_IOMUX_MODE_01);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM6, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 3:	// -> iMX283.PWM_3 - GPIO3_28
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM3_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 4:	// -> iMX283.PWM_4 - GPIO3_29
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1, DDK_IOMUX_MODE_00);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM4_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-#else	// ->EM9283
-	case 1:	// -> iMX283.PWM_6 - GPIO3_23
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM6, DDK_IOMUX_MODE_01);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM6, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 2:	// -> iMX283.PWM_5 - GPIO3_22
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM5, DDK_IOMUX_MODE_01);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM5, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 3:	// -> iMX283.PWM_3 - GPIO3_28
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM3_1, DDK_IOMUX_MODE_00);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM3_1, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-
-	case 4:	// -> iMX283.PWM_7 - GPIO3_26
-		DDKIomuxSetPinMux(DDK_IOMUX_PWM7, DDK_IOMUX_MODE_01);
-		DDKIomuxSetPadConfig(DDK_IOMUX_PWM7, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
-		break;
-#endif //#ifdef EM9280	//LQK:Jul-17-2012
-
-	default:
+		DDKIomuxSetPinMux(pPwmPinTab[m_dwIndex-1].iomux_pin, pPwmPinTab[m_dwIndex-1].muxmode );
+		DDKIomuxSetPadConfig(pPwmPinTab[m_dwIndex-1].iomux_pin, DDK_IOMUX_PAD_DRIVE_8MA, DDK_IOMUX_PAD_PULL_ENABLE, DDK_IOMUX_PAD_VOLTAGE_3V3);
+	}
+	else
+	{
 		bRet = FALSE;
 		ERRORMSG(1, (TEXT("PWMClass::PinConfig: unsupport PWM%d!\r\n"), m_dwIndex));
 	}

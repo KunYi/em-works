@@ -83,10 +83,10 @@ typedef struct _SDHC_RUN_CONTEXT
     DWORD                            dwSSPIndex;
 
     UINT8 uChannel;                             // SDMMC DMA Channel, SSP1 or SSP2
+    
 	//LQK:Jul-18-2012 
 	DWORD dwDetection;	//add SD-card detection  polarity
 	DWORD dwPowerPin;	//add SD-card Power control
-    
 } SDHC_RUN_CONTEXT, *PSDHC_RUN_CONTEXT;
 
 // hardware specific context

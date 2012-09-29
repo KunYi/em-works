@@ -172,13 +172,13 @@ BOOL CSTMPOTG::PostInit()
     // Step 2. Enable OTG Interrupt.
 
     // Configure GPIO ID Pin
-#if ( defined EM9280 || defined EM9283 ) //LQK:Jul-12-2012
+#if ( defined EM9280 || defined EM9283 )  
     DDKIomuxSetPinMux(DDK_IOMUX_USB0_ID_2, DDK_IOMUX_MODE_01);		// -> GPIO3_18
     DDKIomuxSetPadConfig(DDK_IOMUX_USB0_ID_2,
                          DDK_IOMUX_PAD_DRIVE_8MA,
                          DDK_IOMUX_PAD_PULL_ENABLE,
                          DDK_IOMUX_PAD_VOLTAGE_3V3);
-#else  // -> iMX28EVK
+#else	// -> iMX28EVK
     DDKIomuxSetPinMux(DDK_IOMUX_USB0_ID_1, DDK_IOMUX_MODE_01);		// -> GPIO3_7
     DDKIomuxSetPadConfig(DDK_IOMUX_USB0_ID_1,
                          DDK_IOMUX_PAD_DRIVE_8MA,

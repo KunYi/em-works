@@ -77,7 +77,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
     {
 		800, 480, 33300000, 16,	//Width, Height, PClockFreq, BPP
 		// LCD panel specific settings
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		800,					//dwHWidth          -> DOTCLK_H_ACTIVE;
 		48,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH;
 		40,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
@@ -97,7 +97,7 @@ DISPLAY_PANEL_MODE PanelModeArray[] =
 		10,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
 		10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
 		23,						//dwVBackPorch      -> DOTCLK_VB_PORCH;
-#endif	//EM9280
+#endif	//EM9280 EM9283
     },
     // 800*600 -> 8.4" & 10.4", PCLK = 39.8MHz -> G084SN03_V1 & G104SN03
     {
@@ -226,7 +226,7 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
 
     if(bPoweroff)
     {
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		// nothing to do in EM9280
 #else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_GPIO);
@@ -241,16 +241,16 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_VSYNC_0,DDK_IOMUX_MODE_GPIO);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_ENABLE_0, DDK_IOMUX_MODE_GPIO);
-#endif	//EM9280
+#endif	//EM9280 EM9283
     }
     else
     {
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		// LCD_D0 & LCD_D1 are used for other purposes in EM9280
 #else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D1,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_D2,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D3,DDK_IOMUX_MODE_00);
@@ -259,12 +259,12 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D6,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D7,DDK_IOMUX_MODE_00);
 
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		// LCD_D8 & LCD_D9 are used for other purposes in EM9280
 #else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D8,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D9,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280  EM9283
 
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D10,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D11,DDK_IOMUX_MODE_00);
@@ -273,12 +273,12 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D14,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D15,DDK_IOMUX_MODE_00);
 
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		// LCD_D16 & LCD_D17 are used for other purposes in EM9280
 #else	// -> iMX28EVK
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D16,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D17,DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D18,DDK_IOMUX_MODE_00);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_D19,DDK_IOMUX_MODE_00);
@@ -293,11 +293,11 @@ BOOL DisplayController43WVF1G::DDKIomuxSetupLCDIFPins(BOOL bPoweroff)
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_DOTCLK_0, DDK_IOMUX_MODE_01);
         DDKIomuxSetPinMux(DDK_IOMUX_LCD_HSYNC_0,  DDK_IOMUX_MODE_01);
 
-#ifdef	EM9280
+#if (defined EM9280) || (defined EM9283)
 		// LCD_RESET is used as GPIO26(IRQ3) in EM9280
 #else	// -> iMX28EVK
 		DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET,  DDK_IOMUX_MODE_00);
-#endif	//EM9280
+#endif	//EM9280 EM9283
 
         // Set pin drive to 8mA,enable pull up,3.3V
         DDKIomuxSetPadConfig(DDK_IOMUX_LCD_D0, 
@@ -767,7 +767,7 @@ DWORD DisplayController43WVF1G::GetHeight()
 //------------------------------------------------------------------------------
 void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
 {
-#if( defined EM9280 && (!defined EM9283 ))
+#ifdef	EM9280
 	// use GPIO1_0 as output for LCD_PWR
     DDKIomuxSetPinMux(DDK_IOMUX_LCD_D0, DDK_IOMUX_MODE_GPIO);
 	DDKGpioEnableDataPin(DDK_IOMUX_LCD_D0, 1);
@@ -779,8 +779,8 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
     {
 		DDKGpioWriteDataPin(DDK_IOMUX_LCD_D0, 1);	// turn off LCD power, active low
     }
-#else  
-#ifdef EM9283
+#else
+#ifdef EM9283                                      /* SEP20-2012: add by lqk*/
 	// use GPIO1_0 as output for LCD_PWR
 	DDKIomuxSetPinMux(DDK_IOMUX_LCD_RESET, DDK_IOMUX_MODE_GPIO);
 	DDKGpioEnableDataPin(DDK_IOMUX_LCD_RESET, 1);
@@ -793,8 +793,7 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
 		DDKGpioWriteDataPin(DDK_IOMUX_LCD_RESET, 0);	// turn off LCD power, active low
 	}
 
-#else
-	// ->iMX28EVK
+#else	// ->iMX28EVK
     if(Enable)
     {
         Sleep(180); //When this panel starts to work, blank data is output for 10 frames first. Hence sleep for a while
@@ -808,8 +807,8 @@ void DisplayController43WVF1G::BacklightEnable(BOOL Enable)
         DDKGpioEnableDataPin(DDK_IOMUX_PWM2,1);   //Enable as output
         DDKGpioWriteDataPin(DDK_IOMUX_PWM2,0);  //Pull low to display PWM output    
     }
+#endif	//EM9283
 #endif	//EM9280
-#endif
 }
 
 //------------------------------------------------------------------------------

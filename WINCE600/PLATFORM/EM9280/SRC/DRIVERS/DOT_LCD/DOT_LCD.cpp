@@ -201,7 +201,7 @@ Dot_lcd::Dot_lcd()
 	BITMAPINFOHEADER*	pBmpInfoHead;
 	PBYTE				pBitmap;
 	DWORD				dwStatus,dwSize, dwType;
-	TCHAR				szImageName[MAX_PATH] = _T("Windows\\ShutDownImage160160.bmp");
+	TCHAR				szImageName[MAX_PATH] = _T("Windows\\ShutDownSplash160160.bmp");
 	HKEY  hKey;
 	HANDLE hFile;
 	
@@ -214,7 +214,7 @@ Dot_lcd::Dot_lcd()
 		RegCloseKey(hKey);
 		if (dwStatus != ERROR_SUCCESS )
 		{
-			_tcscpy(szImageName, _T("Windows\\ShutDownImage160160.bmp"));
+			_tcscpy(szImageName, _T("Windows\\ShutDownSplash160160.bmp"));
 		}
 
 	}
@@ -223,7 +223,7 @@ Dot_lcd::Dot_lcd()
 		OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
 	if( hFile == INVALID_HANDLE_VALUE )
 	{
-		_tcscpy(szImageName, _T("Windows\\ShutDownImage160160.bmp"));
+		_tcscpy(szImageName, _T("Windows\\ShutDownSplash160160.bmp"));
 		hFile = CreateFile( szImageName ,GENERIC_READ, FILE_SHARE_READ, NULL, 
 			OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
 	}

@@ -52,4 +52,9 @@ BOOL GetDeviceHandle(TCHAR *pDiskName);
 
 // CS&ZHL JUN1-2012: Get OTP Info
 BOOL UceGetOTPInfo(DWORD* pdwCUST, DWORD dwLen);
+//
+// CS&ZHL AUG-13-2012: code for EM9280 uce to format NandFlash
+//
+BOOL UceNandLowLevelFormat( );
+
 #endif //_UCE_MEDIA_H__

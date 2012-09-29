@@ -36,10 +36,9 @@ CDEFINES=$(CDEFINES) -DEM9280
 CDEFINES=$(CDEFINES) -DEM9283
 !ENDIF
 
-!IF ("$(BSP_GREY_LCD)" == "1")
-CDEFINES=$(CDEFINES) -DEM9283_GREY_LCD
+!IF ("$(BSP_DISPLAY_UC1698)" == "1")
+CDEFINES=$(CDEFINES) -DDISPLAY_UC1698
 !ENDIF
-
 
 LDEFINES=-subsystem:native /DEBUG /DEBUGTYPE:CV /FIXED:NO
 
@@ -66,4 +65,5 @@ FILE_VIEW_INCLUDES_FOLDER= \
     ..\..\INC\image_cfg.h \
     bitmap.h \
     ..\..\INC\bsp.h \
+    ..\..\INC\display_panel.h \
 

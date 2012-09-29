@@ -77,6 +77,9 @@ UINT32 g_oalIoCtlClockSpeed     = IOCTL_PROCESSOR_CLOCK_SPEED;
 static char		g_BuiltTimeStamp[64];
 static DWORD	g_dwBuiltTimeStampLength = 0;
 
+// CS&ZHL SEP-18-2012: flag for wstartup status
+extern BOOL	bWstartupIsEnd;
+
 //
 // CS&ZHL FEB-28-2012: supporting multiple partitions of NandFlash
 //
@@ -906,6 +909,22 @@ exit:
 	return bResult;
 }
 
+// CS&ZHL SEP-18-2012: set the flag to inform WDT that app is fine
+BOOL OALIoCtlHalSetWstartupEndFlag(UINT32 code, VOID* pInpBuffer, UINT32 inpSize, VOID* pOutBuffer, UINT32 outSize, UINT32 *pOutSize) 
+{
+	BOOL	bResult = TRUE;
+
+	UNREFERENCED_PARAMETER(code);
+	UNREFERENCED_PARAMETER(pInpBuffer);
+	UNREFERENCED_PARAMETER(inpSize);
+	UNREFERENCED_PARAMETER(pOutBuffer);
+	UNREFERENCED_PARAMETER(outSize);
+	UNREFERENCED_PARAMETER(pOutSize);
+
+	OALMSG(1, (L"IOCTL_HAL_WSTARTUP_END: wstartup is ended!\r\n"));
+	bWstartupIsEnd = TRUE;
+	return bResult;
+}
 
 
 BOOL OALIoCtlHalGetCPUInfo(

@@ -84,6 +84,11 @@ extern "C" {
     CTL_CODE(IOCTL_DISK_BASE, IOCTL_VERDOR_FLASH_BASE + 0x15, METHOD_BUFFERED, FILE_ANY_ACCESS)
 // end of CS&ZHL JUN-1-2012: code for EM9280 uce to check OPT mac
 
+// CS&ZHL AUG-13-2012: code for EM9280 uce to format NandFlash
+#define IOCTL_DISK_FORMAT \
+    CTL_CODE(IOCTL_DISK_BASE, IOCTL_VERDOR_FLASH_BASE + 0x16, METHOD_BUFFERED, FILE_ANY_ACCESS)
+// end of CS&ZHL JUN-1-2012: code for EM9280 uce to format NandFlash
+
 #define IOCTL_DISK_VENDOR_READ_SB			IOCTL_DISK_VENDOR_READ_EBOOT
 #define IOCTL_DISK_VENDOR_WRITE_SB			IOCTL_DISK_VENDOR_WRITE_EBOOT
 #define IOCTL_DISK_VENDOR_END_WRITE_SB		IOCTL_DISK_VENDOR_END_WRITE_EBOOT
@@ -275,6 +280,11 @@ VOID    BSPNAND_UnmapRegister(PVOID VirtAddr, DWORD size);
 #define FMD_ACCESS_CODE_GETINFO				(4)		// pMData ->FlashInfo buffer; *pSData = sizeof(FlashInfo)
 #define FMD_ACCESS_CODE_GETSTATUS			(5)		// pMData ->&dwStatus
 #define FMD_ACCESS_CODE_SETSTATUS			(6)		// pMData ->&dwStatus
+//
+// CS&ZHL SEP-18-2012: supporting UserID write and verify
+//
+#define FMD_ACCESS_CODE_WRITEUID			(7)		// pMData ->UserID buffer; *((PDWORD)pSData) = sizeof(UserID buffer)
+#define FMD_ACCESS_CODE_VERIFYUID			(8)		// pMData ->UserID buffer; *((PDWORD)pSData) = sizeof(UserID buffer)
 
 typedef struct _FmdAccessInfo
 {
