@@ -1,0 +1,73 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{A9579C99-2FCB-404B-BD28-4858F56A8BA4}") = "EM9283_V1_TFT", "EM9283_V1_TFT\EM9283_V1_TFT.pbxml", "{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Platform Builder (_TGTCPU) = Debug|Platform Builder (_TGTCPU)
+		EM9280 ARMV4I Debug|Platform Builder (_TGTCPU) = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		EM9280 ARMV4I Release|Platform Builder (_TGTCPU) = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		Release|Platform Builder (_TGTCPU) = Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Debug|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Debug|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Debug|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Release|Platform Builder (_TGTCPU).ActiveCfg = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{C6478F53-551A-4A2A-A6B2-CD72EAA5D256}.Release|Platform Builder (_TGTCPU).Build.0 = EM9280 ARMV4I Release|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{3857CFA2-DBE1-495B-BEBB-C244635C8CD4}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{47E2E584-3271-4AB8-B3A7-AFBA8EF2B5AA}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{6D8BE4FE-D9EF-4C1B-82D1-A7484FC39888}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{2F1CDEE0-4ECF-407B-9209-2C9C4977B2FB}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{12E9E947-541B-4F11-AA50-1BF0FFBD14B5}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).ActiveCfg = Debug|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.EM9280 ARMV4I Debug|Platform Builder (_TGTCPU).Deploy.0 = Debug|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.EM9280 ARMV4I Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.Release|Platform Builder (_TGTCPU).ActiveCfg = Release|Platform Builder (_TGTCPU)
+		{9F659F35-EDED-4214-95EB-3A209FA8E0FC}.Release|Platform Builder (_TGTCPU).Deploy.0 = Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
