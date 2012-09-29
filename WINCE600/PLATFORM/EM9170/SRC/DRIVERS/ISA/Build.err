@@ -1,4 +1,0 @@
-BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [01:0000000026:ERRORE] D:\WINCE600\PLATFORM\EM9170\SRC\DRIVERS\ISA\.\isa_io.cpp(499) : error C2065: 'ISA_ACCESS' : undeclared identifier
-BUILD: [01:0000000027:ERRORE] D:\WINCE600\PLATFORM\EM9170\SRC\DRIVERS\ISA\.\isa_io.cpp(499) : error C2070: ''unknown-type'': illegal sizeof operand
-BUILD: [01:0000000031:ERRORE] D:\WINCE600\PLATFORM\EM9170\SRC\DRIVERS\ISA\.\isaclass.cpp(54) : error C2065: 'CSP_BASE_MEM_PA_CS5' : undeclared identifier

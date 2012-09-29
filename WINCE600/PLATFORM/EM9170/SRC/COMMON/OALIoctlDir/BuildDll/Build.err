@@ -1,3 +1,0 @@
-BUILD: [Thrd:Sequence:Type  ] Message
-BUILD: [01:0000000018:ERRORE] D:\WINCE600\PLATFORM\EM9480\src\MISC\OALIoctlDir\BuildDll\sources(18) :  U1033: syntax error : '$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib' unexpected
-BUILD: [01:0000000020:ERRORE] NMAKE.EXE TargetLibFiles  -i -c BUILDMSG=Stop.  BUILDROOT=D:\WINCE600\PLATFORM\EM9480 LINKONLY=1 NOPASS0=1 failed - rc = 2
