@@ -429,10 +429,12 @@ BOOL OEMPlatformInit (void)
 	// CS&ZHL MAY-18-2012: apply clock to PINCTRL module
 	SetupGPIOClock();
 
-#ifdef	EM9280
+//#ifdef	EM9280
+// LQK NOV-4-2012: Not Initialize SD/MMC at here, It's Initialized by SDHC drivers.
+#if	(defined	EM9280 || defined EM9283 )
 	// No SD interface in EM9280
     g_bSDHCExist = FALSE;
-#else	// -> iMX28EVK or EM9283
+#else	// -> iMX28EVK
     if (!SDMMC_Init())
     {
         KITLOutputDebugString("WARNING: OEMPlatformInit: Failed to initialize SDHC device.\r\n");

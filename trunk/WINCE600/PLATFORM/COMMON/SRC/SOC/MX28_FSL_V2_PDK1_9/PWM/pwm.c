@@ -538,9 +538,10 @@ BOOL   PWMChSetIOMux(UINT32 u32Channel,DDK_IOMUX_PIN_MUXMODE muxmode)
     //case 3:
     //    DDKIomuxSetPinMux(DDK_IOMUX_PWM3_0,muxmode);
     //    break;
-    //case 4:
-    //    DDKIomuxSetPinMux(DDK_IOMUX_PWM4_0,muxmode);
-    //    break;
+	// LQK Oct-25-2012: for EM9283
+    case 4:
+        DDKIomuxSetPinMux(DDK_IOMUX_PWM4_1,muxmode);
+        break;
     default:
         break;
     }

@@ -61,20 +61,35 @@ PALETTEENTRY StdPalette[PALETTE_SIZE];
 DISPLAY_PANEL_MODE PanelModeArray[] =
 {
     // 320*240 -> 5.7", PCLK = 6.3MHz -> LQ057 
-    {
-		320, 240, 6300000, 16,	//Width, Height, PClockFreq, BPP
-		// LCD panel specific settings
-		320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
-		16,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
-		32,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
-		48,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
-								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 400
-		240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
-		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
-		4,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
-		18,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
-								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 262
-    },
+//     {
+// 		320, 240, 6300000, 16,	//Width, Height, PClockFreq, BPP
+// 		// LCD panel specific settings
+// 		320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+// 		16,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+// 		32,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+// 		48,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+// 								//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 400
+// 		240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+// 		3,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+// 		4,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+// 		18,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+// 								//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 262
+//     },
+	// LQK NOV-13-2012: Add PCLK for TM025KDH03( 320*240 -> 3.5")
+	{
+		320, 240, 8047000, 16,	//Width, Height, PClockFreq, BPP
+			// LCD panel specific settings
+			320,					//dwHWidth          -> DOTCLK_H_ACTIVE;
+			1,						//dwHSyncPulseWidth -> DOTCLK_H_PULSE_WIDTH; 
+			18,						//dwHFrontPorch     -> DOTCLK_HF_PORCH;
+			70,						//dwHBackPorch(including dwHSyncPulseWidth) -> DOTCLK_HB_PORCH; 
+			//HTotal = DOTCLK_HB_PORCH + DOTCLK_H_ACTIVE + DOTCLK_HF_PORCH = 408
+			240,					//dwVHeight         -> DOTCLK_V_ACTIVE;
+			1,						//dwVSyncPulseWidth -> DOTCLK_V_PULSE_WIDTH;
+			10,						//dwVFrontPorch     -> DOTCLK_VF_PORCH;
+			13,						//dwVBackPorch(including dwVSyncPulseWidth) -> DOTCLK_VB_PORCH;
+			//VTotal = DOTCLK_VB_PORCH + DOTCLK_V_ACTIVE + DOTCLK_VF_PORCH = 263
+	},
     // 480*272 -> 4.3", PCLK = 9MHz -> LR430LC9001  ZXW JUN04-2012 modified
     {
 		480, 272, 9000000, 16,	//Width, Height, PClockFreq, BPP
@@ -295,7 +310,9 @@ static BOOL InitQVGA(PDISPLAY_PANEL_MODE pPanel)				// CS&ZHL MAR-7-2012: suppor
 	//	LCDIFSetupLCDIFClock(33300); // zxw : 7" 33.3MHz => 33300KHz
 	//}
 	// CS&ZHL AUG-13-2012: check PCLK
-	if((pPanel->frequency >= 6400000) && (pPanel->frequency <= 39800000))
+	//if((pPanel->frequency >= 6400000) && (pPanel->frequency <= 39800000))
+	// LQK NOV-14-2012
+	if((pPanel->frequency >= 8000000) && (pPanel->frequency <= 39800000))
 	{
 		LCDIFSetupLCDIFClock(pPanel->frequency / 1000);		// input parameter is in KHz
 	}

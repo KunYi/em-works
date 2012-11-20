@@ -38,7 +38,46 @@
 
 //-----------------------------------------------------------------------------
 // Local Variables
-
+//-----------------------------------------------------
+// LQK NOV-2-2012: supporting GPIO based RTSn
+//-----------------------------------------------------
+#ifdef EM9283
+static DDK_IOMUX_PIN g_EM9283_iMXGpioPin[32] =
+{
+	DDK_IOMUX_GPIO3_20,			// EM9283_GPIO0
+	DDK_IOMUX_GPIO3_21,			// EM9283_GPIO1
+	DDK_IOMUX_GPIO1_8,			// EM9283_GPIO2
+	DDK_IOMUX_GPIO1_9,			// EM9283_GPIO3
+	DDK_IOMUX_GPIO1_16,			// EM9283_GPIO4
+	DDK_IOMUX_GPIO1_17,			// EM9283_GPIO5
+	DDK_IOMUX_GPIO2_16,			// EM9283_GPIO6
+	DDK_IOMUX_GPIO2_17,			// EM9283_GPIO7
+	DDK_IOMUX_GPIO2_18,			// EM9283_GPIO8
+	DDK_IOMUX_GPIO2_19,			// EM9283_GPIO9
+	DDK_IOMUX_GPIO3_24,			// EM9283_GPIO10
+	DDK_IOMUX_GPIO3_25,			// EM9283_GPIO11
+	DDK_IOMUX_GPIO2_4,          // EM9283_GPIO12
+	DDK_IOMUX_GPIO2_6,			// EM9283_GPIO13
+	DDK_IOMUX_GPIO2_7,			// EM9283_GPIO14
+	DDK_IOMUX_GPIO2_5,			// EM9283_GPIO15
+	DDK_IOMUX_GPIO4_7,			// EM9283_GPIO16
+	DDK_IOMUX_GPIO4_3,			// EM9283_GPIO17
+	DDK_IOMUX_GPIO4_8,			// EM9283_GPIO18
+	DDK_IOMUX_GPIO4_4,			// EM9283_GPIO19
+	DDK_IOMUX_GPIO2_9,			// EM9283_GPIO20
+	DDK_IOMUX_GPIO4_16,			// EM9283_GPIO21
+	DDK_IOMUX_GPIO2_8,			// EM9283_GPIO22
+	DDK_IOMUX_GPIO2_10,			// EM9283_GPIO23
+	DDK_IOMUX_GPIO2_0,          // EM9283_GPIO24
+	DDK_IOMUX_GPIO2_1,			// EM9283_GPIO25
+	DDK_IOMUX_GPIO2_2,			// EM9283_GPIO26
+	DDK_IOMUX_GPIO2_3,			// EM9283_GPIO27
+	DDK_IOMUX_GPIO3_23,         // EM9283_GPIO28 : SEP21-2012:DDK_IOMUX_GPIO3_22
+	DDK_IOMUX_GPIO3_22,			// EM9283_GPIO29 : SEP21-2012:DDK_IOMUX_GPIO3_23
+	DDK_IOMUX_GPIO3_28,			// EM9283_GPIO30
+	DDK_IOMUX_GPIO3_26,			// EM9283_GPIO31 : SEP21-2012:DDK_IOMUX_GPIO3_29
+};
+#endif // #ifdef EM9283
 //-----------------------------------------------------------------------------
 // Local Functions
 //-----------------------------------------------------------------------------
@@ -78,7 +117,7 @@ BOOL BSPUartConfigureGPIO(ULONG HWAddr)
                              DDK_IOMUX_PAD_DRIVE_8MA, 
                              DDK_IOMUX_PAD_PULL_ENABLE,
                              DDK_IOMUX_PAD_VOLTAGE_3V3);
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
 		RETAILMSG(1, (TEXT("BSPUartConfigureGPIO:: setup UART0\r\n")));
 		// NO RTS/CTS in EM9280
 #else	// -> iMX28EVK
@@ -113,7 +152,8 @@ BOOL BSPUartConfigureGPIO(ULONG HWAddr)
                              DDK_IOMUX_PAD_DRIVE_8MA, 
                              DDK_IOMUX_PAD_PULL_ENABLE,
                              DDK_IOMUX_PAD_VOLTAGE_3V3);
-#ifdef	EM9280
+
+#if (defined EM9280 || defined EM9283 )
 		RETAILMSG(1, (TEXT("BSPUartConfigureGPIO:: setup UART1\r\n")));
 		// NO RTS/CTS in EM9280
 #else	// -> iMX28EVK
@@ -134,7 +174,7 @@ BOOL BSPUartConfigureGPIO(ULONG HWAddr)
     // AUART2
     case CSP_BASE_REG_PA_UARTAPP2:
 		// CS&ZHL MAY-7-2012: UART2 as COM5
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
 		RETAILMSG(1, (TEXT("BSPUartConfigureGPIO:: setup UART2\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_AUART2_TX_0, DDK_IOMUX_MODE_01);
         DDKIomuxSetPadConfig(DDK_IOMUX_AUART2_TX_0, 
@@ -180,7 +220,7 @@ BOOL BSPUartConfigureGPIO(ULONG HWAddr)
     // AUART3
     case CSP_BASE_REG_PA_UARTAPP3:
 		// CS&ZHL MAY-7-2012: UART3 as COM6
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
 		RETAILMSG(1, (TEXT("BSPUartConfigureGPIO:: setup UART3\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_AUART3_TX_0, DDK_IOMUX_MODE_01);
         DDKIomuxSetPadConfig(DDK_IOMUX_AUART3_TX_0, 
@@ -225,7 +265,7 @@ BOOL BSPUartConfigureGPIO(ULONG HWAddr)
 
 	case CSP_BASE_REG_PA_UARTAPP4:
 		// CS&ZHL MAY-7-2012: UART4 as COM2
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
 		RETAILMSG(1, (TEXT("BSPUartConfigureGPIO:: setup UART4\r\n")));
         DDKIomuxSetPinMux(DDK_IOMUX_AUART4_TX_1, DDK_IOMUX_MODE_01);
         DDKIomuxSetPadConfig(DDK_IOMUX_AUART4_TX_1, 
@@ -286,7 +326,7 @@ BOOL BSPUart2GPIOInput(ULONG HWAddr)
 {
     BOOL ret = TRUE;
 
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
     switch (HWAddr)
     {
     case CSP_BASE_REG_PA_UARTAPP0:										// AUART0
@@ -415,7 +455,7 @@ BOOL BSPUartConfigureHandshake(ULONG HWAddr)
 {
     BOOL ret = TRUE;
 
-#ifdef	EM9280
+#if (defined EM9280 || defined EM9283 )
     switch (HWAddr)
     {
 	case CSP_BASE_REG_PA_UARTAPP4:
@@ -611,3 +651,125 @@ DWORD BSPUartGetIndex(ULONG HWAddr)
     return dwIndex;
 }
 
+// LQK NOV-2-2012: supporting GPIO based RTSn
+BOOL BSPUartGPIO2RTS( DWORD dwGpio )
+{
+	DWORD dwRtsGpioPin = DDK_IOMUX_INVALID_PIN;
+
+#ifdef EM9280
+	switch(dwGpio)
+	{
+	case GPIO6:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_22;
+		break;
+
+	case GPIO7:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_23;
+		break;
+
+	case GPIO20:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_28;
+		break;
+
+	case GPIO21:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_29;
+		break;
+
+	case GPIO22:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_25;
+		break;
+
+	case GPIO23:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_24;
+		break;
+
+	case GPIO24:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_3;
+		break;
+
+	case GPIO25:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_20;
+		break;
+
+	case GPIO26:
+		dwRtsGpioPin = DDK_IOMUX_GPIO3_30;
+		break;
+
+	case GPIO27:
+		dwRtsGpioPin = DDK_IOMUX_GPIO4_20;
+		break;
+
+	case GPIO28:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_4;
+		break;
+
+	case GPIO29:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_6;
+		break;
+
+	case GPIO30:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_7;
+		break;
+
+	case GPIO31:
+		dwRtsGpioPin = DDK_IOMUX_GPIO2_5;
+		break;
+	default:;
+	}
+
+#else EM9283
+	if( dwGpio >= 10 && dwGpio <= 31 )
+		dwRtsGpioPin = g_EM9283_iMXGpioPin[dwGpio];
+#endif //#ifdef EM9280
+
+	return dwRtsGpioPin;
+}
+
+
+//-----------------------------------------------------------------------------
+// LQK NOV-2-2012: supporting GPIO based RTSn
+// Function: BSPUartConfigureRTS
+//
+// This function is used to configure the GPIO as RTSn.
+//-----------------------------------------------------------------------------
+BOOL BSPUartConfigureRTS( DWORD dwGpioRTS )
+{
+	if( dwGpioRTS == DDK_IOMUX_INVALID_PIN )
+		return FALSE;
+
+	DDKIomuxSetPinMux((DDK_IOMUX_PIN)dwGpioRTS, DDK_IOMUX_MODE_GPIO);	// config as GPIO
+	DDKGpioWriteDataPin((DDK_IOMUX_PIN)dwGpioRTS, 1);					// DOUT -> High
+	DDKGpioEnableDataPin((DDK_IOMUX_PIN)dwGpioRTS, 1);		
+	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// LQK NOV-2-2012: supporting GPIO based RTSn
+// Function: BSPUartSetGPIORTS
+//
+// This function is used to set GPIO based RTSn 
+//
+//-----------------------------------------------------------------------------
+BOOL BSPUartSetGPIORTS(DWORD dwGpioRTS)
+{
+	if( dwGpioRTS == DDK_IOMUX_INVALID_PIN )
+		return FALSE;
+
+	DDKGpioWriteDataPin((DDK_IOMUX_PIN)dwGpioRTS, 0);		// DOUT -> Low, active low
+	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// LQK NOV-2-2012: supporting GPIO based RTSn
+// Function: BSPUartClearGPIORTS
+//
+// This function is used to clear GPIO based RTSn .
+//-----------------------------------------------------------------------------
+BOOL BSPUartClearGPIORTS(DWORD dwGpioRTS )
+{
+	if( dwGpioRTS == DDK_IOMUX_INVALID_PIN )
+		return FALSE;
+
+	DDKGpioWriteDataPin((DDK_IOMUX_PIN)dwGpioRTS, 1);		// DOUT -> High, active low
+	return TRUE;
+}

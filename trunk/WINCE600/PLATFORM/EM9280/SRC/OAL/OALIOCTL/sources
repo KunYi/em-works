@@ -34,4 +34,5 @@ TARGETLIBS= \
 
 FILE_VIEW_RESOURCE_FOLDER= \
     ..\..\INC\oemaddrtab_cfg.inc \
+    ..\..\..\FILES\PostMakeImg.bat \
 

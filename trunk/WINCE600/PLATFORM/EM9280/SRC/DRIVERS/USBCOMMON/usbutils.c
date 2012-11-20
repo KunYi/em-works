@@ -275,10 +275,11 @@ void BSPUsbSetBusConfig(PUCHAR baseMem)
 void BSPUsbSetCurrentLimitation(BOOL bLimitOn)
 { 
     PVOID pv_HWregPOWER = NULL;
-	UINT32 PowerSource = 1;          //Lqk:Jul-9-2012
+	UINT32 PowerSource;          //Lqk:Jul-9-2012
     
     PHYSICAL_ADDRESS phyAddr;
     
+    PowerSource = 1;
     RETAILMSG(UTIL_DETAIL, (L"BSPUsbSetCurrentLimitation %x\r\n", bLimitOn));
     phyAddr.QuadPart = CSP_BASE_REG_PA_POWER;
     

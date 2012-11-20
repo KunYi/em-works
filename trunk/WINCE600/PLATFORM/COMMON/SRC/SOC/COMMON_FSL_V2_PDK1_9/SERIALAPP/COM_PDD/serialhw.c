@@ -51,6 +51,14 @@
 extern DWORD BSPUartGetIndex(ULONG HWAddr);
 extern BOOL  BSPUartConfigureHandshake(ULONG HWAddr);	// CS&ZHL JUN-14-2012: RTS/CTS config
 
+//
+// LQK NOV-2-2012: supporting GPIO based RTSn
+//
+extern DWORD BSPUartGPIO2RTS( DWORD dwGpioRTS );		// select GPIO as RTS pin
+extern BOOL	BSPUartConfigureRTS( DWORD dwGpioRTS );		// enable RTS
+extern BOOL BSPUartSetGPIORTS( DWORD dwGpioRTS );		// set RTS
+extern BOOL BSPUartClearGPIORTS( DWORD dwGpioRTS );		// clear RTS
+
 //------------------------------------------------------------------------------
 // External Variables
 
@@ -70,7 +78,11 @@ extern BOOL  BSPUartConfigureHandshake(ULONG HWAddr);	// CS&ZHL JUN-14-2012: RTS
 
 //------------------------------------------------------------------------------
 // Types
-
+//
+// LQK NOV-2-2012: supporting GPIO based RTSn
+//
+#define DDK_IOMUX_INVALID_PIN			255
+#define IOCTL_SET_UART_RTS_PIN			CTL_CODE(FILE_DEVICE_BUS_EXTENDER, 3924, METHOD_BUFFERED, FILE_ANY_ACCESS)
 //------------------------------------------------------------------------------
 // Global Variables
 
@@ -861,7 +873,10 @@ VOID SL_Open(PVOID pContext)
         SL_SetParity(pContext, pHWHead->dcb.Parity);
         SL_SetBaudRate(pContext, pHWHead->dcb.BaudRate);
 
-        if(pSerHead->useDMA)
+		// LQK NOV-2-2012: 
+		pSerHead->dwRtsGpioPin = DDK_IOMUX_INVALID_PIN;
+
+		if(pSerHead->useDMA)
         {
             // Reset the Tx DMA Channel and Enable DMA Interrupt
             if(!DDKApbxDmaInitChan(pSerHead->SerialDmaChanTx,TRUE))
@@ -1456,6 +1471,49 @@ VOID SL_TxIntrHandler(PVOID pContext,PUCHAR pSourceBuffer,ULONG *pByteNumber)
         {
             // Disable TX DMA interrupt
             DDKApbxDmaEnableCommandCmpltIrq(pSerHead->SerialDmaChanTx,FALSE);
+
+			//
+			// LQK NOV-5-2012: if RTS_CONTROL_TOGGLE, wait all data transfer completed before clearing RTSn
+			// 增加RTS信号的稳定信，所以将清RTS信号放在中断中。
+			if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+			{
+				DWORD	dwDelayMilliSeconds;
+				DWORD	dwStartCount, dwCurrCount;
+				DWORD	dwElipsedMilliSeconds = 0;
+
+				dwDelayMilliSeconds = 9600 / pHWHead->dcb.BaudRate;
+				if(dwDelayMilliSeconds == 0)
+				{
+					dwDelayMilliSeconds = 1;
+				}
+
+				dwStartCount = GetTickCount();
+				while(dwElipsedMilliSeconds < dwDelayMilliSeconds)
+				{
+					// check transmit complete bit
+					//if ( HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & BM_UARTAPPSTAT_TXFE && 
+					//	((HW_UARTAPPLINECTRL_RD( pHWHead->dwIndex) && BM_UARTAPPLINECTRL_FEN) == 0) )
+					if ( HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & BM_UARTAPPSTAT_TXFE )
+					{
+						break;
+					}
+
+					// check timeout
+					dwCurrCount = GetTickCount();
+					if(dwCurrCount >= dwStartCount)
+					{
+						dwElipsedMilliSeconds = dwCurrCount - dwStartCount;
+					}
+					else
+					{
+						dwElipsedMilliSeconds = ~dwStartCount + dwCurrCount + 1;
+					}
+				}
+
+				// clear GPIO based RTSn if required
+				BSPUartClearGPIORTS(pSerHead->dwRtsGpioPin);
+			}
+
         }
         else
         {
@@ -1712,12 +1770,55 @@ VOID SL_ClearRTS(PVOID pContext)
 {
 
     PUART_INFO pHWHead = (PUART_INFO)pContext;
+	//PSER_INFO pSerHead = (PSER_INFO) pContext;
 
     DEBUGMSG(ZONE_FUNCTION, (TEXT("SL_ClearRTS+\r\n")));
 
     EnterCriticalSection(&(pHWHead->RegCritSec));
     try {
-        //Clear RTS to logic "0":high;
+		/*//
+		// LQK NOV-2-2012: if RTS_CONTROL_TOGGLE, wait all data transfer completed before clearing RTSn
+		//
+		if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+		{
+			DWORD	dwDelayMilliSeconds;
+			DWORD	dwStartCount, dwCurrCount;
+			DWORD	dwElipsedMilliSeconds = 0;
+
+			dwDelayMilliSeconds = 9600 / pHWHead->dcb.BaudRate;
+			if(dwDelayMilliSeconds == 0)
+			{
+				dwDelayMilliSeconds = 1;
+			}
+
+			dwStartCount = GetTickCount();
+			while(dwElipsedMilliSeconds < dwDelayMilliSeconds)
+			{
+				// check transmit complete bit
+				//if ( HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & BM_UARTAPPSTAT_TXFE && 
+				//	((HW_UARTAPPLINECTRL_RD( pHWHead->dwIndex) && BM_UARTAPPLINECTRL_FEN) == 0) )
+				if ( HW_UARTAPPSTAT_RD(pHWHead->dwIndex) & BM_UARTAPPSTAT_TXFE )
+				{
+					break;
+				}
+
+				// check timeout
+				dwCurrCount = GetTickCount();
+				if(dwCurrCount >= dwStartCount)
+				{
+					dwElipsedMilliSeconds = dwCurrCount - dwStartCount;
+				}
+				else
+				{
+					dwElipsedMilliSeconds = ~dwStartCount + dwCurrCount + 1;
+				}
+			}
+
+			// clear GPIO based RTSn if required
+			BSPUartClearGPIORTS(pSerHead->dwRtsGpioPin);
+		}*/
+
+		//Clear RTS to logic "0":high;
         HW_UARTAPPCTRL2_CLR(pHWHead->dwIndex, BM_UARTAPPCTRL2_RTS);
 
         // If RTS hardware handshaking is enabled and the MDD is 
@@ -1750,6 +1851,7 @@ VOID SL_ClearRTS(PVOID pContext)
 VOID SL_SetRTS(PVOID pContext)
 {
     PUART_INFO pHWHead = (PUART_INFO)pContext;
+	PSER_INFO pSerHead = (PSER_INFO) pContext;
 
     DEBUGMSG(ZONE_FUNCTION, (TEXT("SL_SetRTS+\r\n")));
 
@@ -1766,6 +1868,12 @@ VOID SL_SetRTS(PVOID pContext)
 
         //Set RTS to logic "1":low;
         HW_UARTAPPCTRL2_SET(pHWHead->dwIndex, BM_UARTAPPCTRL2_RTS);
+
+		// LQK NOV-2-2012: set GPIO based RTSn if required
+		if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+		{
+			BSPUartSetGPIORTS(pSerHead->dwRtsGpioPin );
+		}
 
         pHWHead->MDDFlowOff  = FALSE;
     }
@@ -2089,6 +2197,7 @@ VOID SL_PurgeComm(PVOID pContext,DWORD fdwAction)
 BOOL SL_SetDCB(PVOID pHead,LPDCB lpDCB)
 {
     PUART_INFO pHWHead = (PUART_INFO)pHead;
+	PSER_INFO pSerHead = (PSER_INFO)pHead;	// LQK NOV-2-2012:  supporting RTS_CONTROL_TOGGLE
     BOOL bRet= TRUE;
 
     DEBUGMSG (ZONE_FUNCTION, (TEXT("+SL_SetDCB 0x%X\r\n"), pHead));
@@ -2165,6 +2274,16 @@ BOOL SL_SetDCB(PVOID pHead,LPDCB lpDCB)
     {
         // Now that we have done the right thing, store this DCB
         pHWHead->dcb = *lpDCB;
+
+		//
+		// LQK NOV-2-2012: set GPIO to RTSn if required
+		//
+		if (pHWHead->dcb.fRtsControl == RTS_CONTROL_TOGGLE  )
+		{
+			if( !BSPUartConfigureRTS( pSerHead->dwRtsGpioPin ) )
+				pHWHead->dcb.fRtsControl = RTS_CONTROL_DISABLE;
+		}
+
     }
 
     DEBUGMSG (ZONE_FUNCTION, (TEXT("-Ser_SetDCB 0x%X bRet %d\r\n"), pHead,bRet));
@@ -2250,6 +2369,7 @@ BOOL SL_Ioctl(PVOID pContext,
     BOOL bRc = FALSE;
     DWORD dwErr = ERROR_INVALID_PARAMETER;
     PUART_INFO pHWHead = (PUART_INFO)pContext;
+	PSER_INFO	pSerHead = (PSER_INFO)pContext;
 
     UNREFERENCED_PARAMETER(pInBuf);
     UNREFERENCED_PARAMETER(InBufLen);
@@ -2351,6 +2471,24 @@ BOOL SL_Ioctl(PVOID pContext,
             dwErr = ERROR_SUCCESS;
         }
         break;
+
+		//LQK NOV-2-2012: support GPIO as RTS direction-control if(dcb.fRtsControl == RTS_CONTROL_TOGGLE)
+	case IOCTL_SET_UART_RTS_PIN:
+		if( pInBuf != NULL && InBufLen == sizeof(DWORD))
+		{
+			pSerHead->dwRtsGpioPin = BSPUartGPIO2RTS( *((DWORD*)pInBuf ));
+			if( pSerHead->dwRtsGpioPin != DDK_IOMUX_INVALID_PIN )
+			{
+				dwErr = ERROR_SUCCESS;
+				RETAILMSG(1, (TEXT("SL_Ioctl: GPIO%d is used as RTS of UART%d\r\n"),
+					(31 - _CountLeadingZeros(pSerHead->dwRtsGpioPin)), pHWHead->dwIndex));
+			}
+			else
+				RETAILMSG(1, (TEXT("SL_Ioctl::IOCTL_SET_UART_RTS_PIN: GPIO%d is NOT supported as RTS!\r\n"), 
+				(31 - _CountLeadingZeros(pSerHead->dwRtsGpioPin))));
+		}				
+		else 	RETAILMSG(1, (TEXT("SL_Ioctl::IOCTL_SET_UART_RTS_PIN: inavlid parameters\r\n")));
+		break;
 
     default:
         DEBUGMSG(ZONE_ERROR, (TEXT("Sl_IOControl:Unsupported IOCTL code %u\r\n"), Ioctl));
