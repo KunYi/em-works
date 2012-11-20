@@ -30,9 +30,13 @@
 // Defines
 // Defines
 //! Min allowed brightness percentage
-#define MIN_BRIGHTNESS_PERCENTAGE       0
+// LQK NOV-6-2012
+#define MIN_BRIGHTNESS_PERCENTAGE       5
+//#define MIN_BRIGHTNESS_PERCENTAGE       0
 //! Max allowed brightness percentage
-#define MAX_BRIGHTNESS_PERCENTAGE       90
+// LQK NOV-6-2012
+#define MAX_BRIGHTNESS_PERCENTAGE       100
+//#define MAX_BRIGHTNESS_PERCENTAGE       90
 //! PWM Freq
 #define BACKLIGHT_PWM_INPUT_FREQUENCY   15000
 //! Init input active percent

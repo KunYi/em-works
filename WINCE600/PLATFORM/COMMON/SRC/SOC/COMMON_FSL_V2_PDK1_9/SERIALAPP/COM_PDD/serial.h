@@ -266,6 +266,7 @@ typedef struct __SER_INFO {
     UINT16 rxDMABufSize;
     UINT16 txDMABufSize;
 
+	DWORD	dwRtsGpioPin;		// LQK NOV-2-2012:support GPIO as RTS, dcb.fRtsControl == RTS_CONTROL_TOGGLE
 } SER_INFO, *PSER_INFO;
 
 //------------------------------------------------------------------------------

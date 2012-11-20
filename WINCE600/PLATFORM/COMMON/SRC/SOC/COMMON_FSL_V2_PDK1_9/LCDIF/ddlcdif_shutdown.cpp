@@ -72,7 +72,7 @@ BOOL ShowSplash( int modeNumber, WORD *m_pSplashSurface)
 	PBITMAPINFOHEADER	pBmpInfoHead;
 	PBYTE				pBitmap;
 	DWORD				dwStatus,dwSize, dwType;
-	TCHAR				szImageName[MAX_PATH] = _T("Windows\\ShutDownSplash480272.bmp");
+	TCHAR				szImageName[MAX_PATH], szDefaultImage[MAX_PATH];
 	HKEY				hKey;
 	HANDLE				hFile;
 	RGBQUAD				*pPalette;
@@ -83,6 +83,21 @@ BOOL ShowSplash( int modeNumber, WORD *m_pSplashSurface)
 	BOOL				rc = FALSE;
 	WORD				*pwTmp, wColor;
 
+	switch( BSPGetWidth(modeNumber) )
+	{
+	case 320:
+		_tcscpy(szDefaultImage, _T("Windows\\ShutDownSplash320240.bmp"));
+		break;
+
+	case 480:
+		_tcscpy(szDefaultImage, _T("Windows\\ShutDownSplash480272.bmp"));
+		break;
+
+	default:
+		return FALSE;
+	}
+
+	_tcscpy(szImageName, szDefaultImage);
 	dwStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE, SZREGKEY,0,0,&hKey);
 	if (dwStatus == ERROR_SUCCESS)
 	{
@@ -92,16 +107,15 @@ BOOL ShowSplash( int modeNumber, WORD *m_pSplashSurface)
 		RegCloseKey(hKey);
 		if (dwStatus != ERROR_SUCCESS )
 		{
-			_tcscpy(szImageName, _T("Windows\\ShutDownSplash480272.bmp"));
+			_tcscpy(szImageName, szDefaultImage);
 		}
-
 	}
 
 	hFile = CreateFile( szImageName ,GENERIC_READ, FILE_SHARE_READ, NULL, 
 		OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
 	if( hFile == INVALID_HANDLE_VALUE )
 	{
-		_tcscpy(szImageName, _T("Windows\\ShutDownSplash480272.bmp"));
+		_tcscpy(szImageName, szDefaultImage);
 		hFile = CreateFile( szImageName ,GENERIC_READ, FILE_SHARE_READ, NULL, 
 			OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, 0 );
 	}
@@ -245,7 +259,7 @@ DWORD WINAPI ShutdownSplash(LPVOID lpParameter)
 
 	ddgpe->SetVisibleSurface( ddgpe->m_pSplashSurface );
 	CloseHandle( hSysShutDownEvent );
-	RETAILMSG(1, (TEXT("shotdown splash.3.\r\n")));
+	RETAILMSG(1, (TEXT("Shotdown splash...\r\n")));
 
 	return 0;
 }

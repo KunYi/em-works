@@ -122,6 +122,10 @@ static HANDLE VDDABOHandler_thread = NULL;
 
 static BOOL bPLL = FALSE;
 static BOOL sb_Vbus5v = FALSE;
+
+//LQK NOV-6-2012: Signal the activity timer event
+static HANDLE hUserActivity = NULL;
+
 //-----------------------------------------------------------------------------
 // Local Functions
 static BOOL PowerIRQHandler(void);
@@ -1506,7 +1510,14 @@ static BOOL PowerInit()
 	{
 		RETAILMSG(1, (TEXT("PowerInit: 5V is from Wall charger.\r\n")));
 	}
-	
+
+	// LQK NOV-6-2012: Get handle to User Activity Event
+	hUserActivity = OpenEvent( EVENT_ALL_ACCESS , FALSE, L"PowerManager/ActivityTimer/UserActivity");
+	if( !hUserActivity )
+	{
+		RETAILMSG(1, (TEXT("Get User Activity Event failed!!\r\n")));
+	}
+
 	BSPSetVFromVbusValue( g_bIs5VFromVbus );   /* CS&ZHL SEP24-2012: */
 
 //#endif  //EM9283
@@ -3006,7 +3017,8 @@ static BOOL PowerIRQHandler(void)
 {
 
     BOOL bValue = TRUE; 
-
+	CEDEVICE_POWER_STATE DeviceState;
+	
     UINT32 PSwitchStartTime;
     do {
            //RETAILMSG(1, (TEXT("PowerIRQHandler wait for event\r\n")));
@@ -3032,31 +3044,46 @@ static BOOL PowerIRQHandler(void)
                    while((HW_POWER_STS.B.PSWITCH == ((BM_POWER_STS_PSWITCH >> BP_POWER_STS_PSWITCH) & 0x1)) 
                               && (HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime < POWER_OFF_HOLD_TIME))
                        Sleep(30);
-				   
-				   //Power Off Chip
-				   //if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
-				   //	 PowerOffChip();
-				   //
-				   // JLY05-2012: LQK
-				   //
-				   if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
-				   {
-						//Power Off Chip
-						if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
-							PowerOffChip();
-				   }
+					
+					//LQK NOV-6-2012
+					GetDevicePower( TEXT("BKL1:"), POWER_NAME, &DeviceState );
+					if( DeviceState == D4 && hUserActivity )
+					{
+						// Signal the activity timer when press PSWITCH key.
+						SetEvent( hUserActivity );
+						DevicePowerNotify(TEXT("BKL1:"),D0, POWER_NAME );
 
-                   //Clear PSwitch interrupt
-                   HW_POWER_CTRL_CLR(BM_POWER_CTRL_PSWITCH_IRQ);                   
-                   InterruptDone(SysIntr5V);
-                   
-                   // ZZZzzz...
-                   //SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
-					//LQK:Jul-12-2012
-				   if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
-				   {
-						SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
-				   }
+						//Clear PSwitch interrupt
+						HW_POWER_CTRL_CLR(BM_POWER_CTRL_PSWITCH_IRQ);                   
+						InterruptDone(SysIntr5V);
+					}
+					else
+					{
+						//Power Off Chip
+						//if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
+						//	 PowerOffChip();
+						//
+						// JLY05-2012: LQK
+						//
+						if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
+						{
+							//Power Off Chip
+							if(HW_DIGCTL_MICROSECONDS_RD() - PSwitchStartTime >= POWER_OFF_HOLD_TIME)
+								PowerOffChip();
+						}
+
+						//Clear PSwitch interrupt
+						HW_POWER_CTRL_CLR(BM_POWER_CTRL_PSWITCH_IRQ);                   
+						InterruptDone(SysIntr5V);
+
+						// ZZZzzz...
+						//SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+						//LQK:Jul-12-2012
+						if( PowerGet5vPresentFlag() == PMU_POWER_SUPPLY_BATTERY )
+						{
+							SetSystemPowerState(NULL,POWER_STATE_SUSPEND,0);
+						}
+					}	
                }
                else
                {

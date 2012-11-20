@@ -742,7 +742,7 @@ void DisplayControllerUC1698::Update( PVOID pSurface )
 			//ContrastLveleByte[i] <<= 10;
 			//ContrastLveleByte[i] |= ContrastLvele[i];
 			ContrastLveleByte[i] = ContrastLvele[i]<<8;
-			ContrastLveleByte[i] = (ContrastLvele[i]&0x03)<<6;
+			ContrastLveleByte[i] |= ( ContrastLvele[i] & 0x03 ) << 6;
 		}
 		
 		memcpy( (unsigned char *)m_pVirtBase+DISPLAY_LOCATION_DATA_OFFSET+16, (const BYTE*)(ContrastLveleByte), sizeof(ContrastLveleByte));

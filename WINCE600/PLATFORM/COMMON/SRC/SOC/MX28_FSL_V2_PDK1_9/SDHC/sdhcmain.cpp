@@ -62,7 +62,7 @@ STDAPI_(BOOL)DllEntry(HINSTANCE  hInstance,
         DEBUGREGISTER(hInstance);
         DisableThreadLibraryCalls((HMODULE) hInstance);
         
-        RETAILMSG(1, (TEXT("SDHC: + DllEntry, Enter\r\n")));
+        //RETAILMSG(1, (TEXT("SDHC: + DllEntry, Enter\r\n")));
 
         if (!SDInitializeCardLib()) {
             fRet = FALSE;
@@ -73,7 +73,7 @@ STDAPI_(BOOL)DllEntry(HINSTANCE  hInstance,
         }
     }
     else if (Reason == DLL_PROCESS_DETACH) {
-        RETAILMSG(1, (TEXT("SDHC: + DllEntry, Leave\r\n")));
+        //RETAILMSG(1, (TEXT("SDHC: + DllEntry, Leave\r\n")));
         SDHCDDeinitializeHCLib();
         SDDeinitializeCardLib();
     }
@@ -139,7 +139,7 @@ DWORD SHC_Init(LPCTSTR pContext)
     DWORD   dwDevIndex;
 
     //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: +SHC_Init\n")));
-    RETAILMSG(1, (TEXT("SDHC: +SHC_Init\n")));
+    RETAILMSG(1, (TEXT("SDHC: +SHC_Init\r\n")));
 
     // try to open active device registry key for this context
     hKey = OpenDeviceKey(pContext);
@@ -262,7 +262,7 @@ DWORD SHC_Init(LPCTSTR pContext)
     }
 
     //DEBUGMSG(SDCARD_ZONE_INFO, (TEXT("SDHC: -SHC_Init\n")));
-    RETAILMSG(1, (TEXT("SDHC: -SHC_Init\n")));
+    RETAILMSG(1, (TEXT("SDHC: -SHC_Init\r\n")));
 
     // return the Host Controller context
     return (DWORD)pHostContext;

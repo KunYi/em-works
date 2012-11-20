@@ -9,8 +9,11 @@
    "Index"=dword:1			; MUST BE = 1
    
    "PollingTimeout"=dword:0a	;10ms
+   
+IF BSP_DISPLAY_UC1698	;EM9283EVB
    "MKeyPadFormat"=dword:3		;0:3x3(in out) 1:4x3 2:4x4 3:5x4 4:5x5
-   ;KEYINOUT
+   ;default is 5x4
+   ;KEY_IN_OUT
    "KEY00"=dword:0D
    "KEY01"=dword:6A
    "KEY02"=dword:30
@@ -35,5 +38,36 @@
    "KEY41"=dword:27
    "KEY42"=dword:28
    "KEY43"=dword:25
-   "KEY44"=dword:6F  
+   "KEY44"=dword:6F 
+ELSE							;EM9283 TFT EM9283EVBII
+	"MKeyPadFormat"=dword:4		;0:3x3(in out) 1:4x3 2:4x4 3:5x4 4:5x5
+	;default is 5x5
+	;KEY_IN_OUT
+   "KEY00"=dword:1B		;VK_ESCAPE
+   "KEY01"=dword:6B		;VK_ADD
+   "KEY02"=dword:6D		;VK_SUBTRACT
+   "KEY03"=dword:6A		;VK_MULTIPLY
+   "KEY04"=dword:6F		;VK_DIVIDE
+   "KEY10"=dword:30		;VK_0
+   "KEY11"=dword:31		;VK_1
+   "KEY12"=dword:34		;VK_4
+   "KEY13"=dword:37		;VK_7
+   "KEY14"=dword:20		;VK_SPACE
+   "KEY20"=dword:BC		;VK_OEM_COMMA
+   "KEY21"=dword:32		;VK_2
+   "KEY22"=dword:35		;VK_5
+   "KEY23"=dword:38		;VK_8
+   "KEY24"=dword:6E		;VK_DECIMAL
+   "KEY30"=dword:08		;VK_BACK
+   "KEY31"=dword:33		;VK_3
+   "KEY32"=dword:36		;VK_6
+   "KEY33"=dword:39		;VK_9
+   "KEY34"=dword:0D		;VK_RETURN
+   "KEY40"=dword:30		;VK_0
+   "KEY41"=dword:30		;VK_0
+   "KEY42"=dword:30		;VK_0
+   "KEY43"=dword:30		;VK_0
+   "KEY44"=dword:30		;VK_0
+ENDIF	;BSP_DISPLAY_UC1698
+    
 

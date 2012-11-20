@@ -46,7 +46,9 @@ ENDIF ;BSP_SSP2_SDHC
    "DisableAutoFormat"=dword:0
                
 [HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory]
-    "Name"="SD Memory Card"
+	;"Name"="SD Memory Card"
+	; LQK NOV-16-2012: Rename SD
+	"Name"="SDMemory"
     "Folder"="SDMemory"
 
 [HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\SDMemory\FATFS]

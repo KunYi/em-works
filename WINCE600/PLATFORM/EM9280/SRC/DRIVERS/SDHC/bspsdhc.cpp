@@ -481,12 +481,12 @@ static BOOL BSPSDHCSetIOMUX(DWORD dwIndex)
 			if( g_dwDetection )
 			{
 				HW_PINCTRL_IRQPOL2_SET(BIT_CARD0_DETECT);	// High or rising edge
-				RETAILMSG(1, (TEXT("Rising edge detection\r\n")));
+				RETAILMSG(1, (TEXT("SDHC: Rising edge detection\r\n")));
 			}
 			else
 			{
 				HW_PINCTRL_IRQPOL2_CLR(BIT_CARD0_DETECT);	// low or falling edge
-				RETAILMSG(1, (TEXT("Falling edge detection\r\n")));
+				RETAILMSG(1, (TEXT("SDHC: Falling edge detection\r\n")));
 			}
 			
 			HW_PINCTRL_IRQSTAT2_CLR(BIT_CARD0_DETECT);	

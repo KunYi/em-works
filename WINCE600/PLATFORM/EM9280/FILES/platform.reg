@@ -762,7 +762,8 @@ IF BSP_BACKLIGHT
 
 ; Force backlight into D4 with SystemIdle state
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\State\SystemIdle]
-    "bkl1:"=dword:4           ; D4
+    ;LQK OCT-25-2012: Back lingh is controlled by the user.
+    ;"bkl1:"=dword:4           ; D4
 ENDIF ; BSP_BACKLIGHT
 ; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
 ;;------------------------------------------------------------------------------
