@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{901F95BB-0EF7-4A93-94B5-A8655FA8CA96}") = "AM335X_OS", "AM335X_OS\AM335X_OS.pbxml", "{293C2F54-FA56-46D1-ADF3-C900543C281C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AM33X_BSP_ARMV7 Checked|Platform Builder (_TGTCPU) = AM33X_BSP_ARMV7 Checked|Platform Builder (_TGTCPU)
+		AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU) = AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU)
+		AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU) = AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Checked|Platform Builder (_TGTCPU).ActiveCfg = AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU)
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Checked|Platform Builder (_TGTCPU).Build.0 = AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU)
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU).ActiveCfg = AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU)
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU).Build.0 = AM33X_BSP_ARMV7 Debug|Platform Builder (_TGTCPU)
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU).ActiveCfg = AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU)
+		{293C2F54-FA56-46D1-ADF3-C900543C281C}.AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU).Build.0 = AM33X_BSP_ARMV7 Release|Platform Builder (_TGTCPU)
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
