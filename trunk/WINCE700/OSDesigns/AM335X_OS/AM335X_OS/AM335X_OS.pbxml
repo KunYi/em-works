@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<Workspace Version="7.0" PlatformName="AM335X_OS" CoreOs="CEBASE" PlatformGuid="293c2f54-fa56-46d1-adf3-c900543c281c" xmlns="urn:PBCommon-schema">
+  <PBProjectCollection Name="PBProjects" EnforceUniqueItems="True" />
+  <FeatureCollection Name="AnchoredFeatures" EnforceUniqueItems="True">
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_stdio" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_stdioa" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_corestra" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_shell" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ceddk" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_telnetd" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ftpd" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_display" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_standardshell" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_nledsrv" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_sd_memory" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ethernet" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_dom" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_mini" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_error_strings" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_xql" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_http" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_sax" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_xslt" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_console" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_touch" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_touchgesture" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_physicsengine" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usbfn_storage" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usbfn_ethernet" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usbfn_serial" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usbfn" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usb_hid" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usb_storage" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_eth_usb_host" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_usb_hid_clients" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_largekb" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_backlight" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_cursor" />
+    <Feature Name="Item" CatalogItemId="Item:ImaginationTechnologies:powerVR:CoreRev125" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ddraw" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_xaml_runtime" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_netutils" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_audio" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_dxtmsft" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_modem" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_pptp" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_storemgr" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_nls_en_us" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_auth_kerberos" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_auth_ntlm" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_auth_schannel" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_gestureanimation" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msmq" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msmq_ax" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msmq_srmp" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_nls_en" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_battery" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_cachefilt" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_fsromonly" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_jscript" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_vbscript" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_data_islands" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_msxml_mimeviewer" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_mshtml" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_iesample" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_dxtrans" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_wininet" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_wininet_tweener" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_connmc" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dotnetv35" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dotnetv35_support" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_kbd_us" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_obex_server" />
+    <Feature Name="Item" CatalogItemId="Item:MS:IMG_XRST_THEME_1" />
+    <Feature Name="Item" CatalogItemId="Item:MS:img_screen_medium" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_wav" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_msadpcm" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_wma_voice" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_wma" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_mp3" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_mpega" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_imaadpcm" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_waveout" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_photo_viewer" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_video_player" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_music_player" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_localaudio" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_streamaudio" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_xamlmsgbox" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_dshow_errors" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_storemgr_cpl" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_streamav" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_fsreghive" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_as_base" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_as_file" />
+    <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ethernetcpl" />
+  </FeatureCollection>
+  <ConfigurationCollection Name="Configurations" EnforceUniqueItems="False">
+    <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Debug" FriendlyName="AM33X_BSP_ARMV7 Debug">
+      <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xgpio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xLCDC" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:MUSB" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xtouch" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:backlight" />
+        <Feature Name="Item" CatalogItemId="Item:ImaginationTechnologies:PowerVR:Support" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xaudio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:Ndiscpsw3g" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:BCH8bitELM" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:edma" />
+      </FeatureCollection>
+      <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
+      <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
+        <BuildOption Name="Item" OptionId="BuildOption:MS:IMGEBOOT" OptionValue="1" />
+      </BuildOptionCollection>
+      <StringDictionary Name="EnvironmentVariables">
+        <Entry Name="bsp_xrplugin_opengl">1</Entry>
+        <Entry Name="sysgen_ostest_tux">1</Entry>
+        <Entry Name="sysgen_ramdisk">1</Entry>
+      </StringDictionary>
+      <LocaleInfo Name="LocaleInformation" />
+      <CustomBuildActions Name="CustomBuildActions" />
+      <PBPEntryCollection Name="PBProjectOptions" EnforceUniqueItems="False" />
+      <BoardSupportPackage Name="Bsp" PlatformFolder="AM33X_BSP" FriendlyName="AM33X_BSP:ARMV7" />
+      <Cpu Name="Cpu" CpuName="ARMV7" />
+    </Configuration>
+    <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Retail" FriendlyName="AM33X_BSP_ARMV7 Release">
+      <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xgpio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xLCDC" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:MUSB" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xtouch" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:backlight" />
+        <Feature Name="Item" CatalogItemId="Item:ImaginationTechnologies:PowerVR:Support" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xaudio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:Ndiscpsw3g" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:BCH8bitELM" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:edma" />
+        <Feature Name="Item" CatalogItemId="Item:MS:sysgen_ie7_flash10_1" />
+      </FeatureCollection>
+      <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
+      <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
+        <BuildOption Name="Item" OptionId="BuildOption:MS:IMGEBOOT" OptionValue="1" />
+        <BuildOption Name="Item" OptionId="BuildOption:MS:IMGNODEBUGGER" OptionValue="1" />
+        <BuildOption Name="Item" OptionId="BuildOption:MS:IMGNOKITL" OptionValue="1" />
+      </BuildOptionCollection>
+      <StringDictionary Name="EnvironmentVariables">
+        <Entry Name="bsp_xrplugin_opengl">1</Entry>
+        <Entry Name="sysgen_ostest_tux">1</Entry>
+        <Entry Name="sysgen_ramdisk">1</Entry>
+      </StringDictionary>
+      <LocaleInfo Name="LocaleInformation" />
+      <CustomBuildActions Name="CustomBuildActions" />
+      <PBPEntryCollection Name="PBProjectOptions" EnforceUniqueItems="False" />
+      <BoardSupportPackage Name="Bsp" PlatformFolder="AM33X_BSP" FriendlyName="AM33X_BSP:ARMV7" />
+      <Cpu Name="Cpu" CpuName="ARMV7" />
+    </Configuration>
+    <Configuration Name="Item" TargetBinFilename="nk.bin" BuildType="Checked" FriendlyName="AM33X_BSP_ARMV7 Checked">
+      <FeatureCollection Name="BspFeatures" EnforceUniqueItems="True">
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xgpio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xLCDC" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:MUSB" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xtouch" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:backlight" />
+        <Feature Name="Item" CatalogItemId="Item:ImaginationTechnologies:PowerVR:Support" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:am33xaudio" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:Ndiscpsw3g" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:BCH8bitELM" />
+        <Feature Name="Item" CatalogItemId="AM33x:TI:edma" />
+      </FeatureCollection>
+      <FeatureCollection Name="FeaturesExcludedFromImage" EnforceUniqueItems="True" />
+      <BuildOptionCollection Name="BuildOptions" EnforceUniqueItems="True">
+        <BuildOption Name="Item" OptionId="BuildOption:MS:IMGEBOOT" OptionValue="1" />
+      </BuildOptionCollection>
+      <StringDictionary Name="EnvironmentVariables">
+        <Entry Name="bsp_xrplugin_opengl">1</Entry>
+        <Entry Name="sysgen_ostest_tux">1</Entry>
+        <Entry Name="sysgen_ramdisk">1</Entry>
+      </StringDictionary>
+      <LocaleInfo Name="LocaleInformation" />
+      <CustomBuildActions Name="CustomBuildActions" />
+      <PBPEntryCollection Name="PBProjectOptions" EnforceUniqueItems="False" />
+      <BoardSupportPackage Name="Bsp" PlatformFolder="AM33X_BSP" FriendlyName="AM33X_BSP:ARMV7" />
+      <Cpu Name="Cpu" CpuName="ARMV7" />
+    </Configuration>
+  </ConfigurationCollection>
+  <SdkCollection Name="SDKs" />
+</Workspace>
