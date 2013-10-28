@@ -1,0 +1,60 @@
+# All rights reserved ADENEO EMBEDDED 2010
+!if 0
+;================================================================================
+;             Texas Instruments OMAP(TM) Platform Software
+; (c) Copyright Texas Instruments, Incorporated. All Rights Reserved.
+;
+; Use of this software is controlled by the terms and conditions found
+; in the license agreement under which this software has been supplied.
+;
+;================================================================================
+!endif
+
+!IF "$(BSP_SDHC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=am33x_sdhc
+TARGETTYPE=DYNLINK
+SYNCHRONIZE_DRAIN=1
+
+DLLENTRY=_DllEntryCRTStartup
+
+DEFFILE=am33x_sdhc.def
+PREPROCESSDEFFILE=1
+
+# AM389X hardware can use direct access to memory
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+!IF "$(SD_4BIT_SUPPORT)" == "1"
+CDEFINES=$(CDEFINES) -DSD_4BIT_SUPPORT
+!ENDIF
+
+!IF "$(MMCHS1_LOW_VOLTAGE)" == "1"
+CDEFINES=$(CDEFINES) -DMMCHS1_LOW_VOLTAGE
+!ENDIF
+
+!IF "$(MMCHS2_LOW_VOLTAGE)" == "1"
+CDEFINES=$(CDEFINES) -DMMCHS2_LOW_VOLTAGE
+!ENDIF
+
+TARGETLIBS= \
+    $(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_PLATLIB)\$(_CPUDEPPATH)\ceddk.lib
+
+SOURCELIBS= \
+     $(_COMMONOAKLIB)\$(_CPUINDPATH)\sdcardlib.lib			    \
+     $(_COMMONOAKLIB)\$(_CPUINDPATH)\sdhclib.lib			    \
+     $(_COMMONOAKLIB)\$(_CPUINDPATH)\sdbus.lib                  \
+     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\common_ti_sdhc_base.lib	\
+     $(_PLATLIB)\$(_CPUDEPPATH)\bspcfg.lib                      \
+     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\am33x_soccfg.lib          \
+     $(_PLATCOMMONLIB)\$(_CPUINDPATH)\am3xx_sdhc.lib          \
+     $(_PLATLIB)\$(_CPUINDPATH)\ceddk.lib   \
+    
+SOURCES= \
+    SDController.cpp \
+          
+FILE_VIEW_RESOURCE_FOLDER= \
+    sdhc.reg \
+

@@ -1,0 +1,9 @@
+DIRS=\
+	Emac\
+	OAL\
+	SOCCFG\
+	EMAC_HLP\
+	EMAC_MINIPORT\
+	USB\
+	CEDDK
+

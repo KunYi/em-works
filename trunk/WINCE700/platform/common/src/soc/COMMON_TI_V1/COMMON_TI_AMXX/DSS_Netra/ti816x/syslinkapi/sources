@@ -1,0 +1,51 @@
+
+!INCLUDE "..\..\..\sources.inc"
+
+TARGETNAME= procmgr_usr
+TARGETTYPE=LIBRARY
+SYNCHRONIZE_DRAIN=1
+
+!IF "$(BSP_HDMI_720P_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_HDMI_720P_DISPLAY
+!ENDIF
+
+!IF "$(BSP_HDMI_1080P_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_HDMI_1080P_DISPLAY
+!ENDIF
+
+!IF "$(BSP_SVIDEO_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_SVIDEO_DISPLAY
+!ENDIF
+
+!IF "$(BSP_NTSC_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_NTSC_DISPLAY
+!ENDIF
+
+!IF "$(BSP_PAL_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_PAL_DISPLAY
+!ENDIF
+
+_SYSLINK_INSTALL_DIR=C:\WINCE700\public\syslink
+TI_IPC_INSTALL_DIR=C:\PROGRA~1\TEXASI~1\ipc_1_22_03_23
+
+INCLUDES=$(INCLUDES);\
+    $(_SYSLINK_INSTALL_DIR);                                  \
+    $(_SYSLINK_INSTALL_DIR)\ti\syslink\inc;                   \
+    $(_SYSLINK_INSTALL_DIR)\ti\syslink\inc\usr;               \
+    $(_SYSLINK_INSTALL_DIR)\ti\syslink\inc\usr\WinCE;         \
+    $(_SYSLINK_INSTALL_DIR)\ti\syslink\utils;                 \
+    $(TI_IPC_INSTALL_DIR)\packages;                 \
+    $(_PUBLICROOT)\COMMON\SDK\INC;                  \
+    $(_PUBLICROOT)\COMMON\DDK\INC;                  \
+    $(_PUBLICROOT)\COMMON\ODK\INC;                  \
+    $(_PLATFORMROOT)\common\src\common\bldr\inc;    \
+
+SOURCES= \
+    ProcMgrApp.c   \
+
+!if 0
+    $(_PUBLICROOT)\COMMON\SDK\INC;                  \
+    $(_PUBLICROOT)\COMMON\DDK\INC;                  \
+    $(_PUBLICROOT)\COMMON\ODK\INC;                  \
+    $(_PLATFORMROOT)\common\src\common\bldr\inc;    \
+!endif

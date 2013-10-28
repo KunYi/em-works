@@ -1,0 +1,149 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000021:WARNS ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\LCDC\DEVICE\".
+BUILD: [00:0000000022:WARNS ] Directory: D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\LCDC\INC\ does not exist.
+BUILD: [00:0000000025:WARNS ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\LCDC\BOOT\".
+BUILD: [00:0000000026:WARNS ] Directory: D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\LCDC\INC\ does not exist.
+BUILD: [00:0000000061:WARNS ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\USB\USBFN\".
+BUILD: [00:0000000062:WARNS ] Directory: D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\USBFN\ does not exist.
+BUILD: [00:0000000105:WARNS ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\APP\BSPVERSION\EXE\".
+BUILD: [00:0000000106:WARNS ] Directory: D:\WINCE700\PUBLIC\IE\SDK\INC\ does not exist.
+BUILD: [03:0000000320:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\BSP_PADCFG\".
+BUILD: [03:0000000321:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000000322:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\ARGS\".
+BUILD: [01:0000000323:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\args\args.c(121) : warning C4244: '=' : conversion from 'UINT32' to 'UCHAR', possible loss of data
+BUILD: [01:0000000325:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\args\args.c(122) : warning C4244: '=' : conversion from 'UINT32' to 'UCHAR', possible loss of data
+BUILD: [01:0000000326:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\args\args.c(123) : warning C4244: '=' : conversion from 'UINT32' to 'UCHAR', possible loss of data
+BUILD: [03:0000000324:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(80) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [04:0000000327:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\BSPCFG\".
+BUILD: [04:0000000329:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bspcfg\bspcfg.c(189) : warning C4142: benign redefinition of type
+BUILD: [03:0000000328:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(81) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000330:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(82) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000331:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(83) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000332:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(84) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000333:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(85) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000334:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(86) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000335:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(87) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000336:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(88) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000337:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(89) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000338:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(90) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000339:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(91) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000340:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(92) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000341:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(93) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000342:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(94) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000343:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(95) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000344:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(96) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [03:0000000345:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\bsp_padcfg\bsp_padcfg.c(116) : warning C4090: 'initializing' : different 'const' qualifiers
+BUILD: [02:0000000453:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BSP_COMMON\BOARD_DETECT\".
+BUILD: [02:0000000454:WARNN ] d:\wince700\platform\am33x_bsp\src\bsp_common\board_detect\board_detect.c(156) : warning C4101: 'val' : unreferenced local variable
+BUILD: [03:0000000455:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\OAL\OALLIB\".
+BUILD: [03:0000000456:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [03:0000000458:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(159) : warning C4022: 'OALVAtoPA' : pointer mismatch for actual parameter 1
+BUILD: [03:0000000459:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(220) : warning C4013: 'OALLocalAllocInit' undefined; assuming extern returning int
+BUILD: [03:0000000460:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(267) : warning C4013: 'PrcmInit' undefined; assuming extern returning int
+BUILD: [03:0000000461:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(268) : warning C4013: 'OALI2CInit' undefined; assuming extern returning int
+BUILD: [03:0000000462:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(295) : warning C4013: 'PrcmClockSetParent' undefined; assuming extern returning int
+BUILD: [03:0000000463:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(301) : warning C4013: 'OAL3XX_RTCInit' undefined; assuming extern returning int
+BUILD: [03:0000000464:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(306) : warning C4013: 'OALPadCfgInit' undefined; assuming extern returning int
+BUILD: [03:0000000465:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(198) : warning C4101: 'prcm_r' : unreferenced local variable
+BUILD: [03:0000000466:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\init.c(197) : warning C4101: 'padconf_r' : unreferenced local variable
+BUILD: [03:0000000468:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\debug.c(48) : warning C4101: 'tmp' : unreferenced local variable
+BUILD: [03:0000000469:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\debug.c(100) : warning C4013: 'PrcmDeviceEnableClocks' undefined; assuming extern returning int
+BUILD: [03:0000000493:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\oem_padwakeup.c(46) : warning C4142: benign redefinition of type
+BUILD: [03:0000000494:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\oem_padwakeup.c(46) : warning C4026: function declared with formal parameter list
+BUILD: [03:0000000513:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_opp_map.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+BUILD: [03:0000000514:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\oem_pm.c(166) : warning C4013: 'PrcmClockSetDivisor' undefined; assuming extern returning int
+BUILD: [03:0000000515:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\oem_pm.c(209) : warning C4013: 'PrcmClockSetDpllClkOutState' undefined; assuming extern returning int
+BUILD: [03:0000000516:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\oem_pm.c(258) : warning C4013: 'Opp_init' undefined; assuming extern returning int
+BUILD: [03:0000000518:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_opp_map.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+BUILD: [03:0000000519:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\opp_map.c(65) : warning C4013: 'PrcmClockSetDivisor' undefined; assuming extern returning int
+BUILD: [03:0000000520:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\opp_map.c(175) : warning C4245: 'return' : conversion from 'int' to 'DWORD', signed/unsigned mismatch
+BUILD: [03:0000000522:WARNN ] d:\wince700\platform\am33x_bsp\src\oal\oallib\power.c(175) : warning C4013: 'EnableDeviceClocks' undefined; assuming extern returning int
+BUILD: [01:0000000754:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\WAVEDEV2\".
+BUILD: [01:0000000755:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\wavemain.cpp(215) : warning C4101: 'j' : unreferenced local variable
+BUILD: [03:0000000757:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\APP\PROXYDRIVER\".
+BUILD: [03:0000000758:WARNN ] d:\wince700\platform\am33x_bsp\src\app\proxydriver\proxydriver.cpp(321) : warning C4101: 'dwParam' : unreferenced local variable
+BUILD: [03:0000000759:WARNN ] d:\wince700\platform\am33x_bsp\src\app\proxydriver\proxydriver.cpp(323) : warning C4101: 'pConstraintInfo' : unreferenced local variable
+BUILD: [01:0000000811:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\tlv320aic3106.cpp(35) : warning C4005: 'R102_CLKDIV_IN_MCLK' : macro redefinition
+BUILD: [01:0000000813:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\tlv320aic3106.cpp(288) : warning C4310: cast truncates constant value
+BUILD: [01:0000000814:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\tlv320aic3106.cpp(289) : warning C4310: cast truncates constant value
+BUILD: [01:0000000815:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\tlv320aic3106.cpp(343) : warning C4310: cast truncates constant value
+BUILD: [01:0000000816:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\tlv320aic3106.cpp(344) : warning C4310: cast truncates constant value
+BUILD: [01:0000000819:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\mixerdrv.cpp(1122) : warning C6320: Exception-filter expression is the constant EXCEPTION_EXECUTE_HANDLER. This might mask exceptions that were not intended to be handled
+BUILD: [01:0000000820:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\strmctxt.cpp(920) : warning C6320: Exception-filter expression is the constant EXCEPTION_EXECUTE_HANDLER. This might mask exceptions that were not intended to be handled
+BUILD: [01:0000000821:WARNN ] d:\wince700\platform\am33x_bsp\src\drivers\wavedev2\wavemain.cpp(699) : warning C6320: Exception-filter expression is the constant EXCEPTION_EXECUTE_HANDLER. This might mask exceptions that were not intended to be handled
+BUILD: [03:0000000901:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\testI2c\".
+BUILD: [03:0000000902:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testi2c\testi2c.cpp(262) : warning C4101: 'hI2C' : unreferenced local variable
+BUILD: [02:0000000903:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\testSerial\".
+BUILD: [02:0000000904:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testserial\testserial.cpp(20) : warning C6273: Non-integer passed as parameter '2' when integer is required in call to 'wprintf': if a pointer value is being passed, %p should be used
+BUILD: [03:0000000912:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testi2c\testi2c.cpp(140) : warning C6054: String 'line' might not be zero-terminated: Lines: 65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 77, 78, 79, 82, 87, 88, 89, 98, 99, 100, 101, 102, 103, 105, 106, 112, 118, 119, 124, 126, 127, 128, 129, 131, 132, 133, 126, 127, 131, 132, 133, 126, 139, 140
+BUILD: [03:0000000958:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\APPS\UARTTEST\DEVICE\".
+BUILD: [03:0000000959:WARNN ] d:\wince700\platform\am33x_bsp\src\test\apps\uarttest\common\uarttest.cpp(1352) : warning C6211: Leaking memory 'pRxBuffer' due to an exception. Consider using a local catch block to clean up memory: Lines: 1299, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314, 1315, 1317, 1319, 1320, 1323, 1328, 1330, 1331, 1334, 1335, 1340, 1345, 1352, 1353, 1360
+BUILD: [01:0000000995:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\APPS\WAVEVOL\".
+BUILD: [01:0000000996:WARNN ] d:\wince700\platform\am33x_bsp\src\test\apps\wavevol\volume.cpp(167) : warning C4244: 'argument' : conversion from 'UINT' to 'WORD', possible loss of data
+BUILD: [01:0000000997:WARNN ] d:\wince700\platform\am33x_bsp\src\test\apps\wavevol\volume.cpp(150) : warning C4701: potentially uninitialized local variable 'dwVolume' used
+BUILD: [01:0000000998:WARNN ] d:\wince700\platform\am33x_bsp\src\test\apps\wavevol\volume.cpp(162) : warning C4701: potentially uninitialized local variable 'deviceId' used
+BUILD: [03:0000001070:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\testSpi\".
+BUILD: [03:0000001071:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testspi\testspi.cpp(213) : warning C4018: '<' : signed/unsigned mismatch
+BUILD: [03:0000001072:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testspi\testspi.cpp(252) : warning C4018: '<' : signed/unsigned mismatch
+BUILD: [03:0000001073:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testspi\testspi.cpp(271) : warning C4101: 'hI2C' : unreferenced local variable
+BUILD: [03:0000001079:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testspi\testspi.cpp(255) : warning C6271: Extra argument passed to 'wprintf': parameter '2' is not used by the format string
+BUILD: [01:0000001083:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\DRIVERS\EDMATEST\".
+BUILD: [01:0000001084:WARNN ] d:\wince700\platform\am33x_bsp\src\test\drivers\edmatest\edma_test.c(18) : warning C4005: 'ZONE_ERROR' : macro redefinition
+BUILD: [01:0000001086:WARNN ] d:\wince700\platform\am33x_bsp\src\test\drivers\edmatest\edma_test.c(21) : warning C4005: 'ZONE_INIT' : macro redefinition
+BUILD: [02:0000001088:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\DRIVERS\RNDTEST\".
+BUILD: [02:0000001089:WARNN ] d:\wince700\platform\am33x_bsp\src\test\drivers\rndtest\rndtest.c(102) : warning C4702: unreachable code
+BUILD: [01:0000001155:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\test\testNAND\Driver\".
+BUILD: [01:0000001156:WARNN ] d:\wince700\platform\am33x_bsp\src\test\testnand\driver\nand_test_driver.c(246) : warning C4013: 'SOCGetGPMCAddress' undefined; assuming extern returning int
+BUILD: [01:0000001309:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BOOTLOADER\EBOOT\NAND\".
+BUILD: [01:0000001310:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000001311:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\main.c(221) : warning C4013: 'HideLogo' undefined; assuming extern returning int
+BUILD: [01:0000001318:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\cfg.c(279) : warning C4047: '=' : 'DWORD' differs in levels of indirection from 'void *'
+BUILD: [01:0000001321:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\main.c(246) : warning C4706: assignment within conditional expression
+BUILD: [01:0000001359:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BOOTLOADER\EBOOT\SDMEMORY\".
+BUILD: [01:0000001360:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000001361:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\main.c(221) : warning C4013: 'HideLogo' undefined; assuming extern returning int
+BUILD: [01:0000001369:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\cfg.c(279) : warning C4047: '=' : 'DWORD' differs in levels of indirection from 'void *'
+BUILD: [01:0000001372:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\eboot\main.c(246) : warning C4706: assignment within conditional expression
+BUILD: [01:0000001411:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BOOTLOADER\XLDR\NAND\".
+BUILD: [01:0000001412:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000001413:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(234) : warning C4013: 'EnableDeviceClocks' undefined; assuming extern returning int
+BUILD: [01:0000001414:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(892) : warning C4189: 'buf' : local variable is initialized but not referenced
+BUILD: [01:0000001415:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(960) : warning C4127: conditional expression is constant
+BUILD: [01:0000001459:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BOOTLOADER\XLDR\SDMEMORY\".
+BUILD: [01:0000001460:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000001461:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(234) : warning C4013: 'EnableDeviceClocks' undefined; assuming extern returning int
+BUILD: [01:0000001462:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(892) : warning C4189: 'buf' : local variable is initialized but not referenced
+BUILD: [01:0000001463:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(960) : warning C4127: conditional expression is constant
+BUILD: [01:0000001500:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\BOOTLOADER\XLDR\UART\".
+BUILD: [01:0000001501:WARNN ] d:\wince700\platform\am33x_bsp\src\inc\bsp_padcfg.h(538) : warning C4189: 'cfg' : local variable is initialized but not referenced
+BUILD: [01:0000001502:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(234) : warning C4013: 'EnableDeviceClocks' undefined; assuming extern returning int
+BUILD: [01:0000001503:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(892) : warning C4189: 'buf' : local variable is initialized but not referenced
+BUILD: [01:0000001504:WARNN ] d:\wince700\platform\am33x_bsp\src\bootloader\xldr\platform.c(960) : warning C4127: conditional expression is constant
+BUILD: [01:0000001536:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\KITL\KITLDLL\".
+BUILD: [01:0000001537:WARNN ] d:\wince700\platform\am33x_bsp\src\kitl\kitldll\oemkitl.c(95) : warning C4245: '=' : conversion from 'int' to 'UINT32', signed/unsigned mismatch
+BUILD: [01:0000001538:WARNN ] d:\wince700\platform\am33x_bsp\src\kitl\kitldll\oemkitl.c(231) : warning C4057: 'function' : 'UINT32 *' differs in indirection to slightly different base types from 'DWORD *'
+BUILD: [01:0000001556:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\KITL\KITLREG\".
+BUILD: [01:0000001557:WARNN ] d:\wince700\platform\am33x_bsp\src\kitl\kitlreg\kitlreg.c(68) : warning C4057: 'function' : 'LPDWORD' differs in indirection to slightly different base types from 'UINT32 *'
+BUILD: [00:0000002028:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\UART\".
+BUILD: [00:0000002029:WARNN ] D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\UART\: Missing source file: D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_ti_uart.lib.
+BUILD: [03:0000010034:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\USB\USBFN\".
+BUILD: [03:0000010035:WARNN ] ufnmdd.lib(ufnmdd.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [03:0000010036:WARNN ] ufnmdd.lib(pipe.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [03:0000010037:WARNN ] ufnmdd.lib(descript.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [03:0000010038:WARNN ] ufnmdd.lib(transfer.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [03:0000010039:WARNN ] ufnmdd.lib(ufnbus.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [03:0000010040:WARNN ] ufnmdd.lib(enum.obj) : warning LNK4210: .CRT section exists; there may be unhandled static initializers or terminators
+BUILD: [01:0000013625:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\DISPLAY\".
+BUILD: [01:0000013626:WARNN ] ddi_powervr.lib(sgxpixfmts.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013628:WARNN ] ddi_powervr.lib(sgxutils_client.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013630:WARNN ] ddi_powervr.lib(sgxtransfer_buffer.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013632:WARNN ] ddi_powervr.lib(sgxtransfer_context.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013634:WARNN ] ddi_powervr.lib(sgxtransfer_utils.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013636:WARNN ] ddi_powervr.lib(sgxtransfer_queue.obj) : warning LNK4099: PDB 'srvclientsgx.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientsgx.pdb'; linking object as if no debug info
+BUILD: [01:0000013638:WARNN ] ddi_powervr.lib(osfunc_clientkm.obj) : warning LNK4099: PDB 'srvclientenvkmcmn.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientenvkmcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000013640:WARNN ] ddi_powervr.lib(pvr_bridge_clientkm.obj) : warning LNK4099: PDB 'srvclientenvkmcmn.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientenvkmcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000013642:WARNN ] ddi_powervr.lib(osfnex_clientkm.obj) : warning LNK4099: PDB 'srvclientenvkmcmn.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientenvkmcmn.pdb'; linking object as if no debug info
+BUILD: [01:0000013644:WARNN ] ddi_powervr.lib(pvr_glue.obj) : warning LNK4099: PDB 'srvclientenvkmcmn.pdb' was not found with 'D:\WINCE700\public\PowerVR\oak\lib\Rev125\ARMV7\retail\ddi_powervr.lib' or at 'D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platform\AM33X_BSP\target\ARMV7\retail\srvclientenvkmcmn.pdb'; linking object as if no debug info
+BUILD: [00:0000014137:WARNN ] Warning(s) in directory "D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\PRU\ce_pru_driver\".
+BUILD: [00:0000014138:WARNN ] D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\PRU\ce_pru_driver\: Missing source file: D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\pru_ce_driver.lib.
+BUILD: [00:0000014139:WARNN ] D:\WINCE700\platform\AM33X_BSP\SRC\DRIVERS\PRU\ce_pru_driver\: Missing source file: D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\pru_hal_common.lib.

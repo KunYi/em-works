@@ -1,0 +1,174 @@
+BUILD: [00:0000000000:PROGC ] Build started with parameters:
+BUILD: [00:0000000001:PROGC ] Build started in directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X
+BUILD: [00:0000000002:PROGC ] Running passes WCEFILES0, MIDL, MC, ASN, THUNK, PRECOMPHEADER, COMPILE, LOCALIZE, RENUMBERICONIDS, RES2RES, LIB, EXPLIB, LINK, MANAGEDRESX, MANAGEDMOD, MANAGEDDLL, MANAGEDEXE, MANAGEDWIN, POSTBUILD for ARM.
+BUILD: [00:0000000003:PROGC ] Loading database "D:\WINCE700\platform\common\BuildARMV7retail.dat".
+BUILD: [00:0000000004:PROGC ] Done.
+BUILD: [00:0000000005:PROGC ] Computing include file dependencies:
+BUILD: [01:0000000006:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GMiniport\
+BUILD: [01:0000000007:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GMiniport\.
+BUILD: [02:0000000008:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GKitl\
+BUILD: [02:0000000009:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GKitl\.
+BUILD: [03:0000000010:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\WATCHDOG\
+BUILD: [03:0000000011:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\WATCHDOG\.
+BUILD: [04:0000000012:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PADCFG\
+BUILD: [04:0000000013:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PADCFG\.
+BUILD: [03:0000000014:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PRCM\
+BUILD: [03:0000000015:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PRCM\.
+BUILD: [01:0000000016:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\INTR\
+BUILD: [01:0000000017:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\INTR\.
+BUILD: [02:0000000018:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\CPUIDLE\
+BUILD: [02:0000000019:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\CPUIDLE\.
+BUILD: [04:0000000020:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\SOCCFG\
+BUILD: [04:0000000021:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\SOCCFG\.
+BUILD: [02:0000000022:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CEDDK\MAP\
+BUILD: [02:0000000023:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CEDDK\MAP\.
+BUILD: [04:0000000024:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBCDMA\
+BUILD: [04:0000000025:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBCDMA\.
+BUILD: [01:0000000026:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBH\
+BUILD: [01:0000000027:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBH\.
+BUILD: [03:0000000028:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBFN\
+BUILD: [03:0000000029:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBFN\.
+BUILD: [03:0000000030:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBOTG\
+BUILD: [03:0000000031:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBOTG\.
+BUILD: [01:0000000032:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CM3\firmware\
+BUILD: [01:0000000033:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CM3\firmware\.
+BUILD: [02:0000000034:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\
+BUILD: [02:0000000035:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\.
+BUILD: [04:0000000036:PROGC ] Scan D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\
+BUILD: [04:0000000038:PROGC ] ReadSourcesFiles for project D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\.
+BUILD: [00:0000000039:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\". {log="D:\WINCE700\platform\common\src\soc\common_ti_v1\AM33X\bldsys.log(40)"}
+BUILD: [00:0000000042:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\". {log="D:\WINCE700\platform\common\src\soc\common_ti_v1\AM33X\bldsys.log(43)"}
+BUILD: [00:0000000044:PROGC ] Directory scanning complete.
+BUILD: [00:0000000045:PROGC ] Saving D:\WINCE700\platform\common\BuildARMV7retail.dat.
+BUILD: [00:0000000047:PROGC ] Saving Master Database complete.
+BUILD: [00:0000000048:PROGC ] Starting WCEFILES0 Pass.
+BUILD: [00:0000000049:PROGC ] Analyzing project dependency information for pass WCEFILES0.
+BUILD: [00:0000000050:PROGC ] Starting MIDL Pass.
+BUILD: [00:0000000051:PROGC ] Analyzing project dependency information for pass MIDL.
+BUILD: [00:0000000052:PROGC ] Starting MC Pass.
+BUILD: [00:0000000053:PROGC ] Analyzing project dependency information for pass MC.
+BUILD: [00:0000000054:PROGC ] Starting ASN Pass.
+BUILD: [00:0000000055:PROGC ] Analyzing project dependency information for pass ASN.
+BUILD: [00:0000000056:PROGC ] Starting THUNK Pass.
+BUILD: [00:0000000057:PROGC ] Analyzing project dependency information for pass THUNK.
+BUILD: [00:0000000058:PROGC ] Starting PRECOMPHEADER Pass.
+BUILD: [00:0000000059:PROGC ] Analyzing project dependency information for pass PRECOMPHEADER.
+BUILD: [00:0000000060:PROGC ] Starting COMPILE Pass.
+BUILD: [00:0000000061:PROGC ] Analyzing project dependency information for pass COMPILE.
+BUILD: [00:0000000062:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GMiniport\ directory.
+BUILD: [00:0000000064:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GKitl\ directory.
+BUILD: [00:0000000066:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\WATCHDOG\ directory.
+BUILD: [00:0000000069:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PADCFG\ directory.
+BUILD: [00:0000000073:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PRCM\ directory.
+BUILD: [01:0000000108:PROGC ] Compiling .\cpsw3g_ndis.c .\cpsw3g_adapter.c .\cpsw3g_mdio.c .\cpsw3g_intr.c .\cpsw3g_miniport.c .\cpsw3g_filter.c .\cpsw3g_phy.c .\cpsw3g_ale.c .\cpsw3g_spf.c
+BUILD: [02:0000000109:PROGC ] Compiling .\mdio.c .\cpsw3g.c
+BUILD: [04:0000000110:PROGC ] Compiling .\soc_padcfg.c
+BUILD: [03:0000000112:PROGC ] Compiling .\watchdog.c
+BUILD: [00:0000000120:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\INTR\ directory.
+BUILD: [04:0000000133:PROGC ] Compiling .\prcm_clock.c .\prcm_device.c .\prcm.c .\prcm_reset.c .\prcm_domain.c .\prcm_volt.c .\prcm_CM3.c .\prcm_mailbox.c
+BUILD: [00:0000000154:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\CPUIDLE\ directory.
+BUILD: [00:0000000156:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\SOCCFG\ directory.
+BUILD: [00:0000000161:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CEDDK\MAP\ directory.
+BUILD: [03:0000000187:PROGC ] Compiling .\devicemap.c .\soccfg.c
+BUILD: [02:0000000189:PROGC ] Assembling .\cpu.s
+BUILD: [01:0000000191:PROGC ] Compiling .\intr.c .\fiq.c .\map.c .\oem.c
+BUILD: [00:0000000202:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBCDMA\ directory.
+BUILD: [01:0000000213:PROGC ] Compiling .\map.c
+BUILD: [00:0000000217:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBH\ directory.
+BUILD: [01:0000000228:PROGC ] Compiling .\usbcdma.c
+BUILD: [00:0000000232:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBFN\ directory.
+BUILD: [01:0000000243:PROGC ] Compiling .\chw.cpp .\hcdpdd.cpp .\cpipe.cpp .\transfer.cpp .\cohcd.cpp .\cppidma.cpp .\testmode.cpp
+BUILD: [00:0000000254:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBOTG\ directory.
+BUILD: [01:0000000265:PROGC ] Compiling .\usbfnpdd.c .\usbperipheral.c .\cppidma.c
+BUILD: [00:0000000272:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CM3\firmware\ directory.
+BUILD: [00:0000000277:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\ directory.
+BUILD: [00:0000000282:PROGC ] Building COMPILE Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\ directory.
+BUILD: [01:0000000305:PROGC ] Compiling .\usbotgpdd.cpp
+BUILD: [02:0000000313:PROGC ] Compiling .\cm3image.c
+BUILD: [04:0000000319:PROGC ] Compiling .\main.c .\memcopy_drvr.c
+BUILD: [03:0000000322:PROGC ] Compiling .\pru.c
+BUILD: [00:0000000329:PROGC ] Starting LOCALIZE Pass.
+BUILD: [00:0000000330:PROGC ] Analyzing project dependency information for pass LOCALIZE.
+BUILD: [00:0000000331:PROGC ] Starting RENUMBERICONIDS Pass.
+BUILD: [00:0000000332:PROGC ] Analyzing project dependency information for pass RENUMBERICONIDS.
+BUILD: [00:0000000333:PROGC ] Starting RES2RES Pass.
+BUILD: [00:0000000334:PROGC ] Analyzing project dependency information for pass RES2RES.
+BUILD: [00:0000000335:PROGC ] Starting LIB Pass.
+BUILD: [00:0000000336:PROGC ] Analyzing project dependency information for pass LIB.
+BUILD: [00:0000000355:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GMiniport\ directory.
+BUILD: [00:0000000361:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CPSW3GKitl\ directory.
+BUILD: [00:0000000365:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\WATCHDOG\ directory.
+BUILD: [00:0000000369:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PADCFG\ directory.
+BUILD: [00:0000000393:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\PRCM\ directory.
+BUILD: [01:0000000426:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_cpsw3g_miniport_lib.lib
+BUILD: [03:0000000430:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_oal_watchdog.lib
+BUILD: [02:0000000433:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_cpsw3g_kitl_lib.lib
+BUILD: [04:0000000435:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_oal_padcfg.lib
+BUILD: [00:0000000473:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\INTR\ directory.
+BUILD: [04:0000000482:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_oal_prcm.lib
+BUILD: [00:0000000500:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\OAL\CPUIDLE\ directory.
+BUILD: [00:0000000506:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\SOCCFG\ directory.
+BUILD: [00:0000000513:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CEDDK\MAP\ directory.
+BUILD: [03:0000000541:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_soccfg.lib
+BUILD: [02:0000000544:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_oal_cpuidle.lib
+BUILD: [01:0000000546:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\oal_intr_am33x_ti_v1.lib
+BUILD: [00:0000000578:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBCDMA\ directory.
+BUILD: [01:0000000590:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_ceddk_map_lib.lib
+BUILD: [00:0000000613:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBH\ directory.
+BUILD: [01:0000000625:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_usbcdma_lib.lib
+BUILD: [00:0000000640:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBFN\ directory.
+BUILD: [01:0000000652:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_usbh.lib
+BUILD: [00:0000000669:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\USB\USBOTG\ directory.
+BUILD: [01:0000000681:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_usbfn.lib
+BUILD: [00:0000000694:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\CM3\firmware\ directory.
+BUILD: [00:0000000698:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\ directory.
+BUILD: [00:0000000710:PROGC ] Building LIB Pass in D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\ directory.
+BUILD: [04:0000000745:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\pru_ce_driver.lib
+BUILD: [01:0000000747:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_usbotg.lib
+BUILD: [03:0000000751:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\pru_hal_common.lib
+BUILD: [02:0000000753:PROGC ] Linking D:\WINCE700\OSDesigns\AM335X_OS\AM335X_OS\Wince700\AM33X_BSP_ARMV7_Retail\cesysgen\platcomm\AM33X_BSP\lib\ARMV7\retail\am33x_cm3_firmware.lib
+BUILD: [00:0000000780:PROGC ] Starting EXPLIB Pass.
+BUILD: [00:0000000781:PROGC ] Analyzing project dependency information for pass EXPLIB.
+BUILD: [00:0000000782:PROGC ] Starting LINK Pass.
+BUILD: [00:0000000783:PROGC ] Analyzing project dependency information for pass LINK.
+BUILD: [00:0000000784:PROGC ] Starting MANAGEDRESX Pass.
+BUILD: [00:0000000785:PROGC ] Analyzing project dependency information for pass MANAGEDRESX.
+BUILD: [00:0000000786:PROGC ] Starting MANAGEDMOD Pass.
+BUILD: [00:0000000787:PROGC ] Analyzing project dependency information for pass MANAGEDMOD.
+BUILD: [00:0000000788:PROGC ] Starting MANAGEDDLL Pass.
+BUILD: [00:0000000789:PROGC ] Analyzing project dependency information for pass MANAGEDDLL.
+BUILD: [00:0000000790:PROGC ] Starting MANAGEDEXE Pass.
+BUILD: [00:0000000791:PROGC ] Analyzing project dependency information for pass MANAGEDEXE.
+BUILD: [00:0000000792:PROGC ] Starting MANAGEDWIN Pass.
+BUILD: [00:0000000793:PROGC ] Analyzing project dependency information for pass MANAGEDWIN.
+BUILD: [00:0000000794:PROGC ] Starting POSTBUILD Pass.
+BUILD: [00:0000000795:PROGC ] Analyzing project dependency information for pass POSTBUILD.
+BUILD: [00:0000000796:PROGC ] Saving D:\WINCE700\platform\common\BuildARMV7retail.dat.
+BUILD: [00:0000000798:PROGC ] Done.
+BUILD: [00:0000000799:PROGC ]                        Files  Warnings  Errors
+BUILD: [00:0000000800:PROGC ] Midl                       0         0       0
+BUILD: [00:0000000801:PROGC ] Message                    0         0       0
+BUILD: [00:0000000802:PROGC ] Precomp Header             0         0       0
+BUILD: [00:0000000803:PROGC ] Resource                   0         0       0
+BUILD: [00:0000000804:PROGC ] XRPack                     0         0       0
+BUILD: [00:0000000805:PROGC ] MASM                       0         0       0
+BUILD: [00:0000000806:PROGC ] SHASM                      0         0       0
+BUILD: [00:0000000807:PROGC ] ARMASM                     1         0       0
+BUILD: [00:0000000808:PROGC ] MIPSASM                    0         0       0
+BUILD: [00:0000000809:PROGC ] C++                        2         0       0
+BUILD: [00:0000000810:PROGC ] C                         13         0       0
+BUILD: [00:0000000811:PROGC ] CheckLibs                  0         0       0
+BUILD: [00:0000000812:PROGC ] Static Libraries          16         0       0
+BUILD: [00:0000000813:PROGC ] Exe's                      0         0       0
+BUILD: [00:0000000814:PROGC ] Dll's                      0         0       0
+BUILD: [00:0000000815:PROGC ] Preprocess deffile         0         0       0
+BUILD: [00:0000000816:PROGC ] Resx                       0         0       0
+BUILD: [00:0000000817:PROGC ] CSharp Compile             0         0       0
+BUILD: [00:0000000818:PROGC ] VCProj Compile             0         0       0
+BUILD: [00:0000000819:PROGC ] Other                      0         5       0
+BUILD: [00:0000000820:PROGC ] 
+BUILD: [00:0000000821:PROGC ] Total                     32         5       0
+BUILD: [00:0000000822:PROGC ] 
+BUILD: [00:0000000823:PROGC ] 5 Warnings,  0 Errors
+BUILD: [00:0000000824:PROGC ] GetSystemTimes (seconds): Idle: 23    Kernel: 33    User: 14   
+BUILD: [00:0000000825:PROGC ] Elapsed  time  (seconds): 11   

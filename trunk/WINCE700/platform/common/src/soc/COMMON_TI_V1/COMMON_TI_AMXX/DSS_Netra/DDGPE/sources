@@ -1,0 +1,56 @@
+# All rights reserved ADENEO EMBEDDED 2010
+!if 0
+;================================================================================
+;             Texas Instruments OMAP(TM) Platform Software
+; (c) Copyright Texas Instruments, Incorporated. All Rights Reserved.
+;
+; Use of this software is controlled by the terms and conditions found
+; in the license agreement under which this software has been supplied.
+;
+;================================================================================
+!endif
+
+!INCLUDE "..\..\sources.inc"
+
+TARGETNAME=netra_ddgpe_dss
+TARGETTYPE=LIBRARY
+SYNCHRONIZE_DRAIN=1
+
+!IF "$(BSP_HDMI_720P_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_HDMI_720P_DISPLAY
+!ENDIF
+
+!IF "$(BSP_HDMI_1080P_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_HDMI_1080P_DISPLAY
+!ENDIF
+
+!IF "$(BSP_SVIDEO_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_SVIDEO_DISPLAY
+!ENDIF
+
+!IF "$(BSP_NTSC_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_NTSC_DISPLAY
+!ENDIF
+
+!IF "$(BSP_PAL_DISPLAY)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_PAL_DISPLAY
+!ENDIF
+
+CDEFINES=$(CDEFINES) -DDDI
+
+!IF "$(SYSGEN_POWERVR)" == "1"
+CDEFINES=$(CDEFINES) -DDDI -DSYSGEN_POWERVR
+!ENDIF
+
+INCLUDES=$(INCLUDES);..\INC
+
+SOURCES=            \
+    omap_ddgpe.cpp  \
+    omap_ddsurf.cpp \
+    omap_dmablt.cpp \
+    omap_optblt.cpp \
+    halcaps.cpp     \
+    haldebug.cpp    \
+    halsurf.cpp
+
+

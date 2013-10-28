@@ -1,0 +1,19 @@
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=am38xx_hdmi
+TARGETTYPE=LIBRARY
+
+#INCLUDES=$(INCLUDES)
+
+!IF "$(BSP_AM389X_HDMI)" == "" && "$(BSP_AM387X_HDMI)" == ""
+SKIPBUILD=1
+!ENDIF
+
+!IF "$(BSP_AM389X_HDMI)" == "1"
+CDEFINES=$(CDEFINES) -DCONFIG_ARCH_TI816X
+!ENDIF
+
+SOURCES = \
+    ti81xx_hdmi.c \
+    ti81xx_hdmi_lib.c

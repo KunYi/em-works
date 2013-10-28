@@ -1,0 +1,2 @@
+BUILD: [00:0000000039:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\". {log="D:\WINCE700\platform\common\src\soc\common_ti_v1\AM33X\bldsys.log(40)"}
+BUILD: [00:0000000042:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\". {log="D:\WINCE700\platform\common\src\soc\common_ti_v1\AM33X\bldsys.log(43)"}

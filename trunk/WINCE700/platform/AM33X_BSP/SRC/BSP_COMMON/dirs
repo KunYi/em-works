@@ -1,0 +1,9 @@
+DIRS=\
+	args\
+	stall\
+	BSP_PADCFG\
+	BSPCFG\
+	FUSE\
+        LCDC\
+	BOARD_DETECT\
+

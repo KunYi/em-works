@@ -1,0 +1,11 @@
+# All rights reserved ADENEO EMBEDDED 2010
+# All rights reserved Texas Instruments, Inc. 2010
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=am389x_emac
+TARGETTYPE=LIBRARY
+
+#INCLUDES=$(INCLUDES)
+
+
+SOURCES = emac_hlp.c

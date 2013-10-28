@@ -1,0 +1,21 @@
+!if 0
+Copyright (c) Mistral Software Pvt Ltd.  All rights reserved.
+!endif
+!if 0
+Use of this software is controlled by the terms and conditions found
+in the license agreement under which this software has been supplied.
+!endif
+
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=Am389xEmac
+TARGETTYPE=LIBRARY
+#RELEASETYPE=PLATFORM
+
+NOMIPS16CODE=1
+#!IF "$(BSP_BUILDING_SBOOT)" == "1" && "$(BSP_BUILDING_EBOOT)" == ""
+#SKIPBUILD=1
+#!ENDIF
+
+SOURCES=        \
+    Am389xEmac.c

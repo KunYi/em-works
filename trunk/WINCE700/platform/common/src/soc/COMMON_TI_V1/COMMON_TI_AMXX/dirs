@@ -1,0 +1,12 @@
+DIRS=\
+	DSS_Netra\
+	EDMA\
+	HDMI\
+	SERIAL\
+	BLOCK\
+	GPIO\
+	SDHC\
+	OAL\
+	SPI\
+	MCASP
+

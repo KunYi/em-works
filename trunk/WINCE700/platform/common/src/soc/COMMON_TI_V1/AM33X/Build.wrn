@@ -1,0 +1,6 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000039:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\".
+BUILD: [00:0000000040:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\uart\include\ does not exist.
+BUILD: [00:0000000041:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\oal\inc\ does not exist.
+BUILD: [00:0000000042:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\".
+BUILD: [00:0000000043:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\oal\inc\ does not exist.

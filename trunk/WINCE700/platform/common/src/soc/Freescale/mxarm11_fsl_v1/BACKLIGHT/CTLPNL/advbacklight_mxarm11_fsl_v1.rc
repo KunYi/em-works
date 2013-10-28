@@ -1,0 +1,65 @@
+//
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+//
+//
+// Use of this sample source code is subject to the terms of the Microsoft
+// license agreement under which you licensed this sample source code. If
+// you did not accept the terms of the license agreement, you are not
+// authorized to use this sample source code. For the terms of the license,
+// please see the license agreement between you and Microsoft or, if applicable,
+// see the LICENSE.RTF on your install media or the root of your tools installation.
+// THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+//
+//------------------------------------------------------------------------------
+
+/* Copyright (C) 2003, MOTOROLA, INC. All Rights Reserved
+ *
+ *  Copyright (C) 2004-2006, Freescale Semiconductor, Inc. All Rights Reserved.
+ *  THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+ *  AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+ *
+ *
+ *  File:       APPS/ADVBACKLIGHT/advbacklight.rc
+ *  Purpose:
+ *
+ *  Notes:      This is for WinCE only
+ *
+ *  Author:
+ *  Date:
+ *
+ *  Modifications:
+ *  MM/DD/YYYY      Initials        Change description
+ *  11/28/2003      SYF             Modified to support runtime backlight levels
+ *
+ */
+
+#include "resource.h"
+#include "windows.h"
+
+IDD_DLG DIALOG DISCARDABLE  0, 0, 132, 140
+STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | DS_CONTROL
+BEGIN
+    LTEXT           "Adjust back light levels:", IDC_STATIC, 5,4,245,8
+    
+    LTEXT           "On Battery:",IDC_STATIC,5,19,88,8
+    LTEXT           "Low",IDC_STATIC,5,28,18,8 // must be *before* the button & have the same mnemonic
+    CONTROL         "",IDC_TRACKBAR_BATT,"msctls_trackbar32",0x5|WS_TABSTOP,23,34,84,20
+    LTEXT           "High",IDC_STATIC,110,28,20,8 // must be *before* the button & have the same mnemonic
+    
+    LTEXT           "On AC:",IDC_STATIC,5,62,80,8
+    LTEXT           "Low",IDC_STATIC,5,72,18,8 // must be *before* the button & have the same mnemonic
+    CONTROL         "",IDC_TRACKBAR_AC,"msctls_trackbar32",0x5|WS_TABSTOP,23,78,84,20
+    LTEXT           "High",IDC_STATIC,110,72,20,8 // must be *before* the button & have the same mnemonic
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+/////////////////////////////////////////////////////////////////////////////
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_PRSHTITLE           "Advanced Backlight Options"
+    IDS_PRSHDIALOG          "Settings"
+END
+/////////////////////////////////////////////////////////////////////////////

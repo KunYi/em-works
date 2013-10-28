@@ -1,0 +1,8 @@
+DIRS=\
+	CPSW3GMiniport\
+	CPSW3GKitl\
+	OAL\
+	SOCCFG\
+	CEDDK\
+	USB
+
