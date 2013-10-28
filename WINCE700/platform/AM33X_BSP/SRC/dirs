@@ -1,0 +1,9 @@
+DIRS=\
+	bsp_common\
+	oal\
+	DRIVERS\
+	APP\
+	test\
+    BOOTLOADER\
+    KITL
+

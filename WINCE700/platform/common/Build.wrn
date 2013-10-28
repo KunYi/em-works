@@ -1,0 +1,14 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000280:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI\BOOT\FATFS\".
+BUILD: [00:0000000281:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI\BOOT\eboot\ does not exist.
+BUILD: [00:0000000290:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI\BOOT\SDMEMORY\".
+BUILD: [00:0000000291:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI\BOOT\eboot\ does not exist.
+BUILD: [00:0000000483:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\ce_pru_driver\".
+BUILD: [00:0000000484:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\uart\include\ does not exist.
+BUILD: [00:0000000485:WARNS ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\PRU\hal\common\src\".
+BUILD: [00:0000000487:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\oal\inc\ does not exist.
+BUILD: [00:0000000486:WARNS ] Directory: D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\AM33X\oal\inc\ does not exist.
+BUILD: [01:0000008232:WARNN ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI\DSS\DDGPE\".
+BUILD: [01:0000008233:WARNN ] haldebug.obj : warning LNK4221: no public symbols found; archive member will be inaccessible
+BUILD: [01:0000009565:WARNN ] Warning(s) in directory "D:\WINCE700\platform\common\src\soc\COMMON_TI_V1\COMMON_TI_AMXX\DSS_Netra\DDGPE\".
+BUILD: [01:0000009566:WARNN ] haldebug.obj : warning LNK4221: no public symbols found; archive member will be inaccessible

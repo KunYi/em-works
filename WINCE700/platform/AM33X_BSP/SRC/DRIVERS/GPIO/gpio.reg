@@ -1,0 +1,6 @@
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\AM33X_GPIO]
+    "Prefix"="GIO"
+    "Dll"="am33x_gpio.dll"
+    "Index"=dword:1
+    "order"=dword:0

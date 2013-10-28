@@ -1,0 +1,30 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this sample source code is subject to the terms of the Microsoft
+license agreement under which you licensed this sample source code. If
+you did not accept the terms of the license agreement, you are not
+authorized to use this sample source code. For the terms of the license,
+please see the license agreement between you and Microsoft or, if applicable,
+see the LICENSE.RTF on your install media or the root of your tools installation.
+THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+!endif
+
+
+TARGETNAME=campdd_imx27_ms_v2
+TARGETTYPE=LIBRARY
+
+DEFFILE=$(TARGETNAME).def
+WINCETARGETFILE0=$(_PLATCOMMONLIB)\$(_CPUINDPATH)\$(TARGETNAME).def
+
+INCLUDES=$(INCLUDES) \
+    $(_PLATFORMROOT)\common\src\soc\imx27_ms_v2\inc; \
+    $(_PUBLICROOT)\COMMON\oak\inc; \
+    $(_PUBLICROOT)\directx\sdk\inc; \
+
+SOURCES= \
+        PDD_Intf.cpp \
+        CamPddDevice.cpp \
+        csiclass.cpp \
+

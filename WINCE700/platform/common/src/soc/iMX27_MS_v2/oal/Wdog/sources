@@ -1,0 +1,30 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this sample source code is subject to the terms of the Microsoft
+license agreement under which you licensed this sample source code. If
+you did not accept the terms of the license agreement, you are not
+authorized to use this sample source code. For the terms of the license,
+please see the license agreement between you and Microsoft or, if applicable,
+see the LICENSE.RTF on your install media or the root of your tools installation.
+THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+!endif
+!if 0
+Copyright (c) 2004 Motorola Inc.  All rights reserved.
+
+Copyright (C) 2004-2006, Freescale Semiconductor, Inc. All Rights Reserved.
+THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+AND CONDITIONS OF THE APPLICABLE LICENSE AGREEME
+!endif
+
+TARGETNAME=oal_wdog_imx27_ms_v2
+TARGETTYPE=LIBRARY
+
+CDEFINES=$(CDEFINES) -DCEDDK_USEDDKMACRO
+
+INCLUDES=$(INCLUDES); \
+		 ..\..\inc; \
+
+SOURCES= \
+    wdog.c

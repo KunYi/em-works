@@ -1,0 +1,6 @@
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=am3xx_sdhc
+TARGETTYPE=LIBRARY
+
+SOURCES = sdhc.c

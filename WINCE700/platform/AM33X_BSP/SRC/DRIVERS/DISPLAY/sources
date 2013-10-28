@@ -1,0 +1,58 @@
+# All rights reserved ADENEO EMBEDDED 2010
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+
+!IF "$(BSP_AM33X_LCDC)" == ""
+SKIPBUILD=1
+!ENDIF
+
+WINCEOEM=1
+TARGETNAME=am33x_display
+TARGETTYPE=DYNLINK
+SYNCHRONIZE_DRAIN=1
+
+DLLENTRY=_DllMainCRTStartup
+
+SOURCES=
+
+SOURCELIBS= \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\omap_ddgpe_dss.lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\omap_ddgpe_lcdcai.lib \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\$(_SOC)_soccfg.lib     \
+    $(_PLATLIB)\$(_CPUDEPPATH)\am33x_lcdc.lib \
+    $(_PLATLIB)\$(_CPUDEPPATH)\bsp_stall.lib  \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ddgpe.lib \
+    $(_SYSGENOAKROOT)\lib\$(_CPUINDPATH)\gpe.lib \
+    $(_PLATLIB)\$(_CPUINDPATH)\ceddk.lib   \
+
+SOURCELIBS=$(SOURCELIBS) \
+    $(_PLATCOMMONLIB)\$(_CPUINDPATH)\omap35xx_ddgpe_neon.lib
+
+TARGETLIBS= \
+    $(_PLATLIB)\$(_CPUDEPPATH)\ceddk.lib \
+    $(_SYSGENSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+    
+!IF "$(SYSGEN_POWERVR)" == ""
+TARGETLIBS=$(TARGETLIBS) \
+    $(_PLATCOMMONLIB)\$(_CPUDEPPATH)\omap_dss_entry.lib
+!ELSE
+!IF "$(SYSGEN_PVR_SGXCOREREV_121)" == "1" 
+TARGETLIBS=$(TARGETLIBS) \
+    $(_PUBLICROOT)\PowerVR\oak\lib\Rev121\$(_TGTCPU)\$(WINCEDEBUG)\ddi_powervr.lib
+!ENDIF
+!IF "$(SYSGEN_PVR_SGXCOREREV_125)" == "1" 
+TARGETLIBS=$(TARGETLIBS) \
+    $(_PUBLICROOT)\PowerVR\oak\lib\Rev125\$(_TGTCPU)\$(WINCEDEBUG)\ddi_powervr.lib
+!ENDIF	
+!ENDIF
+
+FILE_VIEW_RESOURCE_FOLDER= \
+    dss.reg \

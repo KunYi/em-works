@@ -1,0 +1,15 @@
+# All rights reserved ADENEO EMBEDDED 2010
+!INCLUDE "..\sources.inc"
+
+TARGETNAME=$(AM3517)_campdd
+TARGETTYPE=LIBRARY
+
+INCLUDES=\
+	$(INCLUDES); \
+	$(_PUBLICROOT)\directx\sdk\inc; \
+	$(_PLATFORMROOT)\COMMON\src\soc\COMMON_TI_V1\COMMON_TI\CAMERA\PDD
+
+SOURCES= \
+    IspCtrl.cpp \
+
+

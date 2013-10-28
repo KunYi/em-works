@@ -1,0 +1,19 @@
+;
+; Copyright (C) 2005-2006, Freescale Semiconductor, Inc. All Rights Reserved.
+; THIS SOURCE CODE, AND ITS USE AND DISTRIBUTION, IS SUBJECT TO THE TERMS
+; AND CONDITIONS OF THE APPLICABLE LICENSE AGREEMENT
+;
+
+LIBRARY MX31_xvc
+
+EXPORTS
+   XVC_Init
+   XVC_Deinit
+   XVC_Open
+   XVC_Close
+   XVC_Read
+   XVC_Write
+   XVC_Seek
+   XVC_PowerDown
+   XVC_PowerUp
+   XVC_IOControl

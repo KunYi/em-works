@@ -1,0 +1,30 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this sample source code is subject to the terms of the Microsoft
+; license agreement under which you licensed this sample source code. If
+; you did not accept the terms of the license agreement, you are not
+; authorized to use this sample source code. For the terms of the license,
+; please see the license agreement between you and Microsoft or, if applicable,
+; see the LICENSE.RTF on your install media or the root of your tools installation.
+; THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+;
+
+; This file is to be included in platform.reg if required.
+;
+; $(PCI_BUS_ROOT) is a variable that needs to be set in the including 
+; platform.reg. It's value will be something like 
+; HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PCI
+
+; USB - EHCI driver
+[$(PCI_BUS_ROOT)\Template\musbhcd]
+   "Prefix"="HCD"
+   "Dll"="musbhcd.dll"
+   "Order"=dword:45
+   "Class"=dword:0c
+   "SubClass"=dword:03
+   "ProgIF"=dword:20
+   "IsrDll"="giisr.dll"
+   "IsrHandler"="ISRHandler"
+   "HcdCapability"=dword:4      ;HCD_SUSPEND_ON_REQUEST
