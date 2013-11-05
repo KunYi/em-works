@@ -1,0 +1,6 @@
+
+DIRS=\
+	NAND\
+	SDMEMORY\
+    UART
+

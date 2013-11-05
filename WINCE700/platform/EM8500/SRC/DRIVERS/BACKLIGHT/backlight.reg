@@ -1,0 +1,26 @@
+; All rights reserved ADENEO EMBEDDED 2010
+IF BSP_BACKLIGHT
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Backlight]
+    "Prefix"="BKL"
+    "Dll"="backlight.dll"
+    "Index"=dword:1
+    "Order"=dword:25
+    "Flags"=dword:8 ;DEVFLAGS_NAKEDENTRIES
+    "IClass"=multi_sz:"{F922DDE3-6A6D-4775-B23C-6842DB4BF094}",
+                      "{0007AE3D-413C-4e7e-8786-E2A696E73A6E}"
+    "MinBrightness"=dword:0 ;Off
+    "MaxBrightness"=dword:FF;On
+    "SupportedDx"=dword:1F ; D0 | D1 | D3 | D4 (bitwise 00011111)    
+    "Gpio"=dword:7                  ; GPIO backlight control not implemented on this platform
+    ;"TLedChannel"=dword:0
+    "PowerMask"=dword:1F             ;support d0, d1, d2, d3, d4
+IF BSP_EVM2
+    ; D0..D4, full brightness = 100, full off = 0
+    "DutyCycles"=multi_sz:"64", "32", "32", "0", "0"
+ELSE
+    ; The hardware design is completely backwards from a standard PWM implementation.  
+    ; Full brightness can only be achieved by disabling the PWM.  The backlight can 
+    ; only be full disabled by setting PWM duty cycle to 100%
+    "DutyCycles"=multi_sz:"0", "32", "32", "64", "64"
+ENDIF
+ENDIF BSP_BACKLIGHT
