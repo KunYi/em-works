@@ -1,0 +1,284 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this sample source code is subject to the terms of the Microsoft
+; license agreement under which you licensed this sample source code. If
+; you did not accept the terms of the license agreement, you are not
+; authorized to use this sample source code. For the terms of the license,
+; please see the license agreement between you and Microsoft or, if applicable,
+; see the LICENSE.RTF on your install media or the root of your tools installation.
+; THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES OR INDEMNITIES.
+;
+;               Texas Instruments OMAP(TM) Platform Software
+; (c) Copyright Texas Instruments, Incorporated. All Rights Reserved.
+;
+;   Use of this software is controlled by the terms and conditions found
+;   in the license agreement under which this software has been supplied.
+;
+;===============================================================================
+
+#define PLAT_TEST_DIR $(_TARGETPLATROOT)\src\test
+#define PLAT_DRIVERS_DIR $(_TARGETPLATROOT)\src\drivers
+#define PLAT_APP_DIR $(_TARGETPLATROOT)\src\app
+
+#include "$(_TARGETPLATROOT)\SRC\INC\image_cfg.h"
+
+;===============================================================================
+; UART driver
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\UART\uart.reg"
+
+;===============================================================================
+; MCSPI driver
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\MCSPI\mcspi.reg"
+
+;===============================================================================
+; Keypad driver
+#include "$(PLAT_DRIVERS_DIR)\KEYPAD\keypad.reg"
+
+;===============================================================================
+; Ethernet driver
+IF BSP_ETH_CPSW3G_DRIVER
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\EMAC\cpsw3gMiniport.reg"
+ENDIF BSP_ETH_CPSW3G_DRIVER
+
+IF BSP_ETH_CPGMAC_KITL_DRIVER
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\EMAC\cpgmacKitlMiniport.reg"
+ENDIF BSP_ETH_CPGMAC_KITL_DRIVER
+
+IF BSP_ETH_CPGMAC_DRIVER    
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\EMAC\cpgmacMiniport.reg"
+ENDIF BSP_ETH_CPGMAC_DRIVER
+
+;===============================================================================
+; USB driver
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\USB\USBCDMA\usbcdma.reg"
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\USB\USBH\usbh.reg"
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\USB\USBFN\usbfn.reg"
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\USB\USBOTG\usbotg.reg"
+
+;;===============================================================================
+;; enable telnet server
+[HKEY_LOCAL_MACHINE\Comm\TELNETD]
+    "IsEnabled"=dword:1
+    "UseAuthentication"=dword:0
+;
+;;===============================================================================
+;; enable ftp server
+[HKEY_LOCAL_MACHINE\COMM\FTPD]
+    "IsEnabled"=dword:1
+    "UseAuthentication"=dword:0
+    "AllowAnonymous"=dword:1
+    "AllowAnonymousUpload"=dword:1
+    "AllowAnonymousVroots"=dword:1
+    "DefaultDir"="\\"
+
+;===============================================================================
+#if defined BSP_AM33X_GPIO
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\GPIO\gpio.reg"
+#endif
+
+;===============================================================================
+; @CESYSGEN IF CE_MODULES_FSDMGR
+IF BSP_NAND
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\BLOCK\NAND\NAND.reg"
+#include "$(PLAT_TEST_DIR)\testNAND\Driver\nand_test_driver.reg"
+ENDIF
+; @CESYSGEN ENDIF CE_MODULES_FSDMGR
+
+;===============================================================================
+; @CESYSGEN IF CE_MODULES_SDBUS
+IF BSP_SDHC
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\SDHC\IMPL\sdhc.reg"
+ENDIF
+; @CESYSGEN ENDIF CE_MODULES_SDBUS
+
+;===============================================================================
+; AM335x Display driver (LCDC)
+; @CESYSGEN IF CE_MODULES_DISPLAY
+#include "$(PLAT_DRIVERS_DIR)\display\display.reg"
+; @CESYSGEN ENDIF CE_MODULES_DISPLAY
+
+;===============================================================================
+; backlight driver
+; @CESYSGEN IF DEVICE_PMIF
+#include "$(PLAT_DRIVERS_DIR)\backlight\backlight.reg"
+; @CESYSGEN ENDIF DEVICE_PMIF
+
+;===============================================================================
+; touchscreen driver
+; @CESYSGEN IF CE_MODULES_POINTER
+; @CESYSGEN IF GWES_TCHUI
+#include "$(PLAT_DRIVERS_DIR)\touch\tsc_touch.reg"
+; @CESYSGEN ENDIF GWES_TCHUI
+; @CESYSGEN ENDIF CE_MODULES_POINTER
+
+;===============================================================================
+;-- I2C Proxy Driver -----------------------------------------------------------
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2CPROXY1]
+    "Prefix"="I2C"
+    "Dll"="i2cproxy.dll"
+    "Index"=dword:1
+    "Order"=dword:100  
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2CPROXY2]
+    "Prefix"="I2C"
+    "Dll"="i2cproxy.dll"
+    "Index"=dword:2
+    "Order"=dword:100
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\I2CPROXY3]
+    "Prefix"="I2C"
+    "Dll"="i2cproxy.dll"
+    "Index"=dword:3
+    "Order"=dword:100  
+
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\TxtShell\Extensions]
+    "OMAP Extension"="omap_shell.dll"
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\ProxyDriver]
+    "Prefix"="PXY"
+    "Dll"="proxydriver.dll"
+    "Index"=dword:1
+    "Order"=dword:100
+
+;===============================================================================
+; EDMA Driver
+
+;IF BSP_NOEDMA !
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Edma]
+    "Dll"="edmadrvr.dll"
+    "Prefix"="EDM"
+    "Index"=dword:1
+    "Order"=dword:1
+    "Flags"=dword:0
+    "Priority256"=dword:46
+
+;ENDIF BSP_NOEDMA !
+
+;===============================================================================
+; EDMA Test Driver
+
+;IF BSP_NOEDMA !
+;IF BSP_INCLUDE_TEST_APPS
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\EdmaTest]
+    "Dll"="edma_test.dll"
+    "Prefix"="EDT"
+    "Index"=dword:1
+    "Order"=dword:20
+    "Flags"=dword:0                      
+
+;ENDIF BSP_INCLUDE_TEST_APPS
+;ENDIF BSP_NOEDMA !
+
+;===============================================================================
+
+;[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\RndTst]
+    ;"Dll"="rndtst.dll"
+    ;"Prefix"="RDT"
+    ;"Index"=dword:1
+    ;"Order"=dword:1
+    ;"Flags"=dword:0                      
+;
+;===============================================================================
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\NLED\am33x_nled.reg"
+
+;===============================================================================
+
+;-- WAVEDEV2 Driver ------------------------------------------------------------
+IF BSP_WAVEDEV2
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\WaVEDEV2\am33x_wavedev2.reg"
+ENDIF
+
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\DRIVERS\CM3\firmware\cm3fw.reg"
+#include "$(_PLATFORMROOT)\AM33x_BSP\SRC\APP\EBOOT_CFG\ebootCfg.reg"
+
+;===============================================================================
+
+; @CESYSGEN IF CPLMAIN_DISPLAY
+[HKEY_CURRENT_USER\ControlPanel\Desktop]
+; @CESYSGEN IF IMAGING_IMG_JPEGDECODER
+    "wallpaper"="\\Windows\\wallpaper.jpg"
+; @CESYSGEN ELSE
+; @CESYSGEN ENDIF IMAGING_IMG_JPEGDECODER
+; @CESYSGEN ENDIF CPLMAIN_DISPLAY
+
+
+; @CESYSGEN IF CE_MODULES_RAMDISK
+; HIVE BOOT SECTION
+[HKEY_LOCAL_MACHINE\System\StorageManager\AutoLoad\RAMDisk]
+    "DriverPath"="Drivers\\BlockDevice\\RAMDisk"
+    "LoadFlags"=dword:1
+    "BootPhase"=dword:0
+    "DefaultFileSystem"="FATFS"
+
+[HKEY_LOCAL_MACHINE\Drivers\BlockDevice\RAMDisk]
+    "Dll"="ramdisk.dll"
+    "Prefix"="DSK"
+    "FriendlyName"="RAM Disk Driver"
+    "Order"=dword:0
+    "Ioctl"=dword:4
+    "IClass"=multi_sz:"{A4E7EDDA-E575-4252-9D6B-4195D48BB865}"
+    "Profile"="RAMDisk"
+    "Size"=dword:$(IMAGE_WINCE_RAM_DISK_SIZE_HEX)
+    "Address"=dword:$(IMAGE_WINCE_RAM_DISK_CA_HEX)
+
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\RAMDisk]
+    "AutoPart"=dword:1
+    "AutoFormat"=dword:1
+
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\RAMDisk\FATFS]
+	"Flags"=dword:14
+    "FormatTFAT"=dword:1
+IF IMGREGHIVE !    
+    "MountAsBootable"=dword:1     
+ENDIF    
+    "MountAsRoot"=dword:1
+    "MountPermanent"=dword:1     ; Do not allow un-mounting (else we d fail to flush the registry) 
+; END HIVE BOOT SECTION   
+
+; @CESYSGEN IF CE_MODULES_FSREPLXFILT
+; HIVE BOOT SECTION
+[HKEY_LOCAL_MACHINE\System\StorageManager\Profiles\RAMDISK\FATFS\Filters\fsreplxfilt]
+    "Dll"="fsreplxfilt.dll"
+    "Order"=dword:1 ; must be loaded before other filters
+; END HIVE BOOT SECTION
+; @CESYSGEN ENDIF CE_MODULES_FSREPLXFILT
+; @CESYSGEN ENDIF CE_MODULES_RAMDISK
+
+IF IMGBOOTTEST
+[HKEY_LOCAL_MACHINE\init]
+"Launch200"="bootStress.exe"
+ENDIF IMGBOOTTEST
+
+; Disabling save password because it doesnt seem to work if RDP is not in OS-design
+; @CESYSGEN IF CE_MODULES_CREDMAN
+[HKEY_LOCAL_MACHINE\Comm\Security]
+	"DisallowSavedNetworkPasswords"=dword:1
+; @CESYSGEN ENDIF CE_MODULES_CREDMAN
+
+
+;===============================================================================
+
+;-- PRU Driver -----------------------------------------------------------------
+IF BSP_PRU
+; PRU driver used by the PRU Software UART serial driver
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PRU]
+    "Prefix"="PRU"
+    "Dll"="prudrvr.dll"
+    "Index"=dword:1
+    "Order"=dword:30
+    ; Physical IRQ number of first PRU interrupt.
+    ; These are allocated sequentially starting from IrqBase. 
+    "IrqBase"=dword:14
+    ; IST priority
+    "Priority256"=dword:40
+    "IClass"="{A32942B7-920C-486b-B0E6-92A702A99B35}"
+    
+ENDIF BSP_PRU
+
+
